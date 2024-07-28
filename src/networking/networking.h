@@ -5,36 +5,6 @@
 #include <common_structs.h>
 #include <SDL2/SDL_net.h>
 
-#ifdef _WIN32
-#include <windows.h>
-#else
-
-// temporary fix
-#define WINAPI
-// Typedefs for ANSI C
-typedef unsigned char  BYTE;
-typedef unsigned short USHORT;
-typedef int            LONG;
-typedef unsigned int   DWORD;
-typedef unsigned long  DWORD_PTR;
-typedef long           LONG_PTR;
-typedef long           INT_PTR;
-typedef long long      LONGLONG;
-typedef unsigned long long ULONGLONG;
-typedef void         * HANDLE;
-typedef void         * LPOVERLAPPED; // Unsupported on Linux and Mac
-typedef char           TCHAR;
-typedef unsigned int   LCID;
-typedef LONG         * PLONG;
-typedef DWORD        * LPDWORD;
-typedef BYTE         * LPBYTE;
-typedef const char   * LPCTSTR;
-typedef const char   * LPCSTR;
-typedef char         * LPTSTR;
-typedef char         * LPSTR;
-typedef void         * LPVOID;
-#endif
-
 #define NETWORK_MAX_PLAYERS 8
 #define NETWORK_USERNAME_LENGTH 32
 
@@ -86,7 +56,7 @@ void networking_init(char* ip, uint16_t port);
 void networking_update(void);
 void networking_ready_up(bool);
 void networking_cleanup(SDLNet_SocketSet);
-DWORD WINAPI networking_loop(LPVOID);
+int networking_loop(void*);
 void handleReceivedData(const char *, size_t);
 void set_username(const char *username);
 

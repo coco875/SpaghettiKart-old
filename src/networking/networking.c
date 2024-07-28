@@ -3,35 +3,6 @@
 #include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
-#ifdef _WIN32
-#include <windows.h>
-#else
-
-// temporary fix
-#define WINAPI
-// Typedefs for ANSI C
-typedef unsigned char  BYTE;
-typedef unsigned short USHORT;
-typedef int            LONG;
-typedef unsigned int   DWORD;
-typedef unsigned long  DWORD_PTR;
-typedef long           LONG_PTR;
-typedef long           INT_PTR;
-typedef long long      LONGLONG;
-typedef unsigned long long ULONGLONG;
-typedef void         * HANDLE;
-typedef void         * LPOVERLAPPED; // Unsupported on Linux and Mac
-typedef char           TCHAR;
-typedef unsigned int   LCID;
-typedef LONG         * PLONG;
-typedef DWORD        * LPDWORD;
-typedef BYTE         * LPBYTE;
-typedef const char   * LPCTSTR;
-typedef const char   * LPCSTR;
-typedef char         * LPTSTR;
-typedef char         * LPSTR;
-typedef void         * LPVOID;
-#endif
 
 #include "networking.h"
 #include "main.h"
@@ -56,9 +27,7 @@ Network gNetwork = {
 // Global variables
 
 
-// HANDLE sNetworkThread;
 SDL_Thread *sNetworkThread;
-DWORD threadID;
 bool threadStarted = false;
 
 int isNetworkingThreadEnabled = true;
@@ -107,20 +76,9 @@ void networking_init(char* ip, uint16_t port) {
 
     // Ensure no thread is already running
     if (sNetworkThread != NULL) {
-        // WaitForSingleObject(sNetworkThread, INFINITE);
-        // CloseHandle(sNetworkThread);
         SDL_WaitThread(sNetworkThread, NULL);
         sNetworkThread = NULL;
     }
-
-    // sNetworkThread = CreateThread(
-    //     NULL,                   // default security attributes
-    //     0,                      // default stack size
-    //     networking_loop,      // thread function
-    //     NULL,                   // argument to thread function
-    //     0,                      // default creation flags
-    //     &threadID               // receive thread identifier
-    // );
     sNetworkThread = SDL_CreateThread(networking_loop, "NetworkingThread", NULL);
 
     if (sNetworkThread == NULL) {
@@ -131,7 +89,7 @@ void networking_init(char* ip, uint16_t port) {
     //sNetworkThread = std::thread(&GameInteractor::ReceiveFromServer, this);
 }
 
-DWORD WINAPI networking_loop(LPVOID arg) {
+int networking_loop(void* data) {
     while (isNetworkingThreadEnabled) {
         while (!gNetwork.isConnected && isNetworkingThreadEnabled) { // && isRemoteInteractorEnabled) {
             printf("[SpaghettiOnline] Attempting to make connection to server...\n");
