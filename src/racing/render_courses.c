@@ -26,6 +26,8 @@
 #include <assets/luigi_raceway_displaylists.h>
 #include <assets/royal_raceway_data.h>
 #include <assets/royal_raceway_displaylists.h>
+#include <assets/kalimari_desert_data.h>
+#include <assets/kalimari_desert_displaylists.h>
 
 s16 D_802B87B0 = 995;
 s16 D_802B87B4 = 1000;
@@ -1295,7 +1297,7 @@ void func_8029569C(void) {
             gSPDisplayList(gDisplayListHead++, d_course_toads_turnpike_dl_23930);
             break;
         case COURSE_KALAMARI_DESERT:
-            gSPDisplayList(gDisplayListHead++, d_course_kalimari_desert_dl_22E00);
+            gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual(0x07000000+0x22E00));
             break;
         case COURSE_SHERBET_LAND:
             gSPDisplayList(gDisplayListHead++, d_course_sherbet_land_dl_9AE8);
@@ -1561,7 +1563,8 @@ void func_80295D88(void) {
             D_8015F8E4 = gCourseMinY - 10.0f;
             break;
         case COURSE_KALAMARI_DESERT:
-            parse_course_displaylists((uintptr_t) d_course_kalimari_desert_addr);
+            TrackSectionsI *section11 = (TrackSectionsI *) LOAD_ASSET(d_course_kalimari_desert_addr);
+            parse_course_displaylists(section11);
             func_80295C6C();
             D_8015F8E4 = gCourseMinY - 10.0f;
             break;
