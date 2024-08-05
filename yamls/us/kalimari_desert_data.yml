@@ -420,19 +420,19 @@ d_course_kalimari_desert_unknown_waypoints:
 d_course_kalimari_desert_track_unknown_waypoints:
   symbol: d_course_kalimari_desert_track_unknown_waypoints
   type: mk64:TRACK_WAYPOINTS
-  offset: 0x6c60
+  offset: 0x6D48
   count: 75
 # todo need adjust count
 d_course_kalimari_desert_track_waypoints:
   symbol: d_course_kalimari_desert_track_waypoints
   type: mk64:TRACK_WAYPOINTS
-  offset: 0x6ec0
+  offset: 0x70F8
   count: 200
 # todo need adjust texture
 d_course_kalimari_desert_tree_tlut:
   symbol: d_course_kalimari_desert_tree_tlut
   type: texture
-  offset: 0x8380
+  offset: 0xA418
   width: 16
   height: 16
   format: rgba16
