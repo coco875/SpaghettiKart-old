@@ -427,7 +427,7 @@ d_course_kalimari_desert_track_waypoints:
   symbol: d_course_kalimari_desert_track_waypoints
   type: mk64:TRACK_WAYPOINTS
   offset: 0x70F8
-  count: 200
+  count: 664
 # todo need adjust texture
 d_course_kalimari_desert_tree_tlut:
   symbol: d_course_kalimari_desert_tree_tlut
