@@ -1060,25 +1060,25 @@ void render_kalimari_desert(struct UnkStruct_800DC5EC *arg0) {
         gDPSetCombineMode(gDisplayListHead++, G_CC_SHADE, G_CC_SHADE);
         gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
         // d_course_kalimari_desert_packed_dl_71C8
-        gSPDisplayList(gDisplayListHead++, ((uintptr_t)0x070071C8));
+        gSPDisplayList(gDisplayListHead++, ((uintptr_t)segmented_gfx_to_virtual(0x070071C8)));
     }
 
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEI, G_CC_MODULATEI);
     gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
-    render_course_segments((uintptr_t) kalimari_desert_dls, arg0);
+    render_course_segments(kalimari_desert_dls, arg0);
     // d_course_kalimari_desert_packed_dl_1ED8
-    gSPDisplayList(gDisplayListHead++, ((uintptr_t)0x07001ED8));
+    gSPDisplayList(gDisplayListHead++, ((uintptr_t)segmented_gfx_to_virtual(0x07001ED8)));
     // d_course_kalimari_desert_packed_dl_1B18
-    gSPDisplayList(gDisplayListHead++, ((uintptr_t)0x07001B18));
+    gSPDisplayList(gDisplayListHead++, ((uintptr_t)segmented_gfx_to_virtual(0x07001B18)));
     // d_course_kalimari_desert_packed_dl_8330
-    gSPDisplayList(gDisplayListHead++, ((uintptr_t)0x07008330));
+    gSPDisplayList(gDisplayListHead++, ((uintptr_t)segmented_gfx_to_virtual(0x07008330)));
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA);
     gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2);
     // d_course_kalimari_desert_packed_dl_998
-    gSPDisplayList(gDisplayListHead++, ((uintptr_t)0x07000998));
+    gSPDisplayList(gDisplayListHead++, ((uintptr_t)segmented_gfx_to_virtual(0x07000998)));
     // d_course_kalimari_desert_packed_dl_270
-    gSPDisplayList(gDisplayListHead++, ((uintptr_t)0x07000270));
+    gSPDisplayList(gDisplayListHead++, ((uintptr_t)segmented_gfx_to_virtual(0x07000270)));
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
