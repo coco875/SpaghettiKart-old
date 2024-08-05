@@ -421,7 +421,7 @@ d_course_kalimari_desert_track_unknown_waypoints:
   symbol: d_course_kalimari_desert_track_unknown_waypoints
   type: mk64:TRACK_WAYPOINTS
   offset: 0x6D48
-  count: 75
+  count: 76
 # todo need adjust count
 d_course_kalimari_desert_track_waypoints:
   symbol: d_course_kalimari_desert_track_waypoints
