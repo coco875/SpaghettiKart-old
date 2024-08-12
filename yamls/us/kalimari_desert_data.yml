@@ -432,7 +432,7 @@ d_course_kalimari_desert_tree_tlut:
   width: 16
   height: 16
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_cactus_model1:
   symbol: d_course_kalimari_desert_cactus_model1
   type: vtx
@@ -442,22 +442,19 @@ d_course_kalimari_desert_cactus_model2:
   symbol: d_course_kalimari_desert_cactus_model2
   type: vtx
   offset: 0x84e8
-  count: 4
+  count: 8
 d_course_kalimari_desert_dl_cactus1:
   symbol: d_course_kalimari_desert_dl_cactus1
   type: gfx
   offset: 0x8528
-  otr_mode: index
 d_course_kalimari_desert_dl_cactus2:
   symbol: d_course_kalimari_desert_dl_cactus2
   type: gfx
   offset: 0x8628
-  otr_mode: index
 d_course_kalimari_desert_dl_cactus3:
   symbol: d_course_kalimari_desert_dl_cactus3
   type: gfx
   offset: 0x8728
-  otr_mode: index
 d_course_kalimari_desert_crossing_sign_inactive_top_left:
   symbol: d_course_kalimari_desert_crossing_sign_inactive_top_left
   type: texture
@@ -465,7 +462,7 @@ d_course_kalimari_desert_crossing_sign_inactive_top_left:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_crossing_sign_inactive_top_right:
   symbol: d_course_kalimari_desert_crossing_sign_inactive_top_right
   type: texture
@@ -473,7 +470,7 @@ d_course_kalimari_desert_crossing_sign_inactive_top_right:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_crossing_sign_inactive_bottom_left:
   symbol: d_course_kalimari_desert_crossing_sign_inactive_bottom_left
   type: texture
@@ -481,7 +478,7 @@ d_course_kalimari_desert_crossing_sign_inactive_bottom_left:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_crossing_sign_inactive_bottom_right:
   symbol: d_course_kalimari_desert_crossing_sign_inactive_bottom_right
   type: texture
@@ -489,7 +486,7 @@ d_course_kalimari_desert_crossing_sign_inactive_bottom_right:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_crossing_sign_active_top_left:
   symbol: d_course_kalimari_desert_crossing_sign_active_top_left
   type: texture
@@ -497,7 +494,7 @@ d_course_kalimari_desert_crossing_sign_active_top_left:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_crossing_sign_active_top_right:
   symbol: d_course_kalimari_desert_crossing_sign_active_top_right
   type: texture
@@ -505,7 +502,7 @@ d_course_kalimari_desert_crossing_sign_active_top_right:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_crossing_sign_active_bottom_left:
   symbol: d_course_kalimari_desert_crossing_sign_active_bottom_left
   type: texture
@@ -513,7 +510,7 @@ d_course_kalimari_desert_crossing_sign_active_bottom_left:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_crossing_sign_active_bottom_right:
   symbol: d_course_kalimari_desert_crossing_sign_active_bottom_right
   type: texture
@@ -521,7 +518,7 @@ d_course_kalimari_desert_crossing_sign_active_bottom_right:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_crossing_signal_active_model:
   symbol: d_course_kalimari_desert_crossing_signal_active_model
   type: vtx
@@ -586,17 +583,14 @@ d_course_kalimari_desert_dl_crossing_right_active:
   symbol: d_course_kalimari_desert_dl_crossing_right_active
   type: gfx
   offset: 0x10ae8
-  otr_mode: index
 d_course_kalimari_desert_dl_crossing_left_active:
   symbol: d_course_kalimari_desert_dl_crossing_left_active
   type: gfx
   offset: 0x10c10
-  otr_mode: index
 d_course_kalimari_desert_dl_crossing_both_inactive:
   symbol: d_course_kalimari_desert_dl_crossing_both_inactive
   type: gfx
   offset: 0x10d38
-  otr_mode: index
 d_course_kalimari_desert_locomotive_64:
   symbol: d_course_kalimari_desert_locomotive_64
   type: texture
@@ -604,7 +598,7 @@ d_course_kalimari_desert_locomotive_64:
   width: 32
   height: 32
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_locomotive_cab_window:
   symbol: d_course_kalimari_desert_locomotive_cab_window
   type: texture
@@ -612,7 +606,7 @@ d_course_kalimari_desert_locomotive_cab_window:
   width: 64
   height: 32
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_locomotive_cab_window_front:
   symbol: d_course_kalimari_desert_locomotive_cab_window_front
   type: texture
@@ -620,7 +614,7 @@ d_course_kalimari_desert_locomotive_cab_window_front:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_locomotive_chassis:
   symbol: d_course_kalimari_desert_locomotive_chassis
   type: texture
@@ -628,7 +622,7 @@ d_course_kalimari_desert_locomotive_chassis:
   width: 32
   height: 32
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_locomotive_lamp:
   symbol: d_course_kalimari_desert_locomotive_lamp
   type: texture
@@ -636,7 +630,7 @@ d_course_kalimari_desert_locomotive_lamp:
   width: 32
   height: 32
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_locomotive_boiler:
   symbol: d_course_kalimari_desert_locomotive_boiler
   type: texture
@@ -644,7 +638,7 @@ d_course_kalimari_desert_locomotive_boiler:
   width: 32
   height: 32
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_carriage_railing:
   symbol: d_course_kalimari_desert_carriage_railing
   type: texture
@@ -652,7 +646,7 @@ d_course_kalimari_desert_carriage_railing:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_locomotive_tender:
   symbol: d_course_kalimari_desert_locomotive_tender
   type: texture
@@ -660,7 +654,7 @@ d_course_kalimari_desert_locomotive_tender:
   width: 64
   height: 32
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_railway_ballast:
   symbol: d_course_kalimari_desert_railway_ballast
   type: texture
@@ -668,7 +662,7 @@ d_course_kalimari_desert_railway_ballast:
   width: 32
   height: 32
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_carriage_lower:
   symbol: d_course_kalimari_desert_carriage_lower
   type: texture
@@ -676,7 +670,7 @@ d_course_kalimari_desert_carriage_lower:
   width: 32
   height: 32
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_carriage_door:
   symbol: d_course_kalimari_desert_carriage_door
   type: texture
@@ -684,7 +678,7 @@ d_course_kalimari_desert_carriage_door:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_carriage_window:
   symbol: d_course_kalimari_desert_carriage_window
   type: texture
@@ -692,7 +686,7 @@ d_course_kalimari_desert_carriage_window:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_locomotive_model_lod2:
   symbol: d_course_kalimari_desert_locomotive_model_lod2
   type: vtx
@@ -807,67 +801,54 @@ d_course_kalimari_desert_dl_1B7C0:
   symbol: d_course_kalimari_desert_dl_1B7C0
   type: gfx
   offset: 0x1b7c0
-  otr_mode: index
 d_course_kalimari_desert_dl_1B850:
   symbol: d_course_kalimari_desert_dl_1B850
   type: gfx
   offset: 0x1b850
-  otr_mode: index
 d_course_kalimari_desert_dl_1B950:
   symbol: d_course_kalimari_desert_dl_1B950
   type: gfx
   offset: 0x1b950
-  otr_mode: index
 d_course_kalimari_desert_dl_1B968:
   symbol: d_course_kalimari_desert_dl_1B968
   type: gfx
   offset: 0x1b968
-  otr_mode: index
 d_course_kalimari_desert_dl_1B978:
   symbol: d_course_kalimari_desert_dl_1B978
   type: gfx
   offset: 0x1b978
-  otr_mode: index
 d_course_kalimari_desert_dl_1B990:
   symbol: d_course_kalimari_desert_dl_1B990
   type: gfx
   offset: 0x1b990
-  otr_mode: index
 d_course_kalimari_desert_dl_1BD18:
   symbol: d_course_kalimari_desert_dl_1BD18
   type: gfx
   offset: 0x1bd18
-  otr_mode: index
 d_course_kalimari_desert_dl_1BD58:
   symbol: d_course_kalimari_desert_dl_1BD58
   type: gfx
   offset: 0x1bd58
-  otr_mode: index
 d_course_kalimari_desert_dl_1BEF8:
   symbol: d_course_kalimari_desert_dl_1BEF8
   type: gfx
   offset: 0x1bef8
-  otr_mode: index
 d_course_kalimari_desert_dl_1BF90:
   symbol: d_course_kalimari_desert_dl_1BF90
   type: gfx
   offset: 0x1bf90
-  otr_mode: index
 d_course_kalimari_desert_dl_1C0B0:
   symbol: d_course_kalimari_desert_dl_1C0B0
   type: gfx
   offset: 0x1c0b0
-  otr_mode: index
 d_course_kalimari_desert_dl_1C0E0:
   symbol: d_course_kalimari_desert_dl_1C0E0
   type: gfx
   offset: 0x1c0e0
-  otr_mode: index
 d_course_kalimari_desert_dl_1C0F0:
   symbol: d_course_kalimari_desert_dl_1C0F0
   type: gfx
   offset: 0x1c0f0
-  otr_mode: index
 d_course_kalimari_desert_locomotive_model_lod1:
   symbol: d_course_kalimari_desert_locomotive_model_lod1
   type: vtx
@@ -947,67 +928,54 @@ d_course_kalimari_desert_dl_1CFA8:
   symbol: d_course_kalimari_desert_dl_1CFA8
   type: gfx
   offset: 0x1cfa8
-  otr_mode: index
 d_course_kalimari_desert_dl_1D038:
   symbol: d_course_kalimari_desert_dl_1D038
   type: gfx
   offset: 0x1d038
-  otr_mode: index
 d_course_kalimari_desert_dl_1D138:
   symbol: d_course_kalimari_desert_dl_1D138
   type: gfx
   offset: 0x1d138
-  otr_mode: index
 d_course_kalimari_desert_dl_1D150:
   symbol: d_course_kalimari_desert_dl_1D150
   type: gfx
   offset: 0x1d150
-  otr_mode: index
 d_course_kalimari_desert_dl_1D160:
   symbol: d_course_kalimari_desert_dl_1D160
   type: gfx
   offset: 0x1d160
-  otr_mode: index
 d_course_kalimari_desert_dl_1D178:
   symbol: d_course_kalimari_desert_dl_1D178
   type: gfx
   offset: 0x1d178
-  otr_mode: index
 d_course_kalimari_desert_dl_1D418:
   symbol: d_course_kalimari_desert_dl_1D418
   type: gfx
   offset: 0x1d418
-  otr_mode: index
 d_course_kalimari_desert_dl_1D450:
   symbol: d_course_kalimari_desert_dl_1D450
   type: gfx
   offset: 0x1d450
-  otr_mode: index
 d_course_kalimari_desert_dl_1D540:
   symbol: d_course_kalimari_desert_dl_1D540
   type: gfx
   offset: 0x1d540
-  otr_mode: index
 d_course_kalimari_desert_dl_1D598:
   symbol: d_course_kalimari_desert_dl_1D598
   type: gfx
   offset: 0x1d598
-  otr_mode: index
 d_course_kalimari_desert_dl_1D630:
   symbol: d_course_kalimari_desert_dl_1D630
   type: gfx
   offset: 0x1d630
-  otr_mode: index
 d_course_kalimari_desert_dl_1D660:
   symbol: d_course_kalimari_desert_dl_1D660
   type: gfx
   offset: 0x1d660
-  otr_mode: index
 d_course_kalimari_desert_dl_1D670:
   symbol: d_course_kalimari_desert_dl_1D670
   type: gfx
   offset: 0x1d670
-  otr_mode: index
 d_course_kalimari_desert_locomotive_model_lod0:
   symbol: d_course_kalimari_desert_locomotive_model_lod0
   type: vtx
@@ -1082,67 +1050,54 @@ d_course_kalimari_desert_dl_1E2C8:
   symbol: d_course_kalimari_desert_dl_1E2C8
   type: gfx
   offset: 0x1e2c8
-  otr_mode: index
 d_course_kalimari_desert_dl_1E358:
   symbol: d_course_kalimari_desert_dl_1E358
   type: gfx
   offset: 0x1e358
-  otr_mode: index
 d_course_kalimari_desert_dl_1E458:
   symbol: d_course_kalimari_desert_dl_1E458
   type: gfx
   offset: 0x1e458
-  otr_mode: index
 d_course_kalimari_desert_dl_1E470:
   symbol: d_course_kalimari_desert_dl_1E470
   type: gfx
   offset: 0x1e470
-  otr_mode: index
 d_course_kalimari_desert_dl_1E480:
   symbol: d_course_kalimari_desert_dl_1E480
   type: gfx
   offset: 0x1e480
-  otr_mode: index
 d_course_kalimari_desert_dl_1E498:
   symbol: d_course_kalimari_desert_dl_1E498
   type: gfx
   offset: 0x1e498
-  otr_mode: index
 d_course_kalimari_desert_dl_1E6D8:
   symbol: d_course_kalimari_desert_dl_1E6D8
   type: gfx
   offset: 0x1e6d8
-  otr_mode: index
 d_course_kalimari_desert_dl_1E710:
   symbol: d_course_kalimari_desert_dl_1E710
   type: gfx
   offset: 0x1e710
-  otr_mode: index
 d_course_kalimari_desert_dl_1E800:
   symbol: d_course_kalimari_desert_dl_1E800
   type: gfx
   offset: 0x1e800
-  otr_mode: index
 d_course_kalimari_desert_dl_1E858:
   symbol: d_course_kalimari_desert_dl_1E858
   type: gfx
   offset: 0x1e858
-  otr_mode: index
 d_course_kalimari_desert_dl_1E8D0:
   symbol: d_course_kalimari_desert_dl_1E8D0
   type: gfx
   offset: 0x1e8d0
-  otr_mode: index
 d_course_kalimari_desert_dl_1E900:
   symbol: d_course_kalimari_desert_dl_1E900
   type: gfx
   offset: 0x1e900
-  otr_mode: index
 d_course_kalimari_desert_dl_1E910:
   symbol: d_course_kalimari_desert_dl_1E910
   type: gfx
   offset: 0x1e910
-  otr_mode: index
 d_course_kalimari_desert_tender_model_lod2:
   symbol: d_course_kalimari_desert_tender_model_lod2
   type: vtx
@@ -1172,32 +1127,26 @@ d_course_kalimari_desert_dl_1EFD8:
   symbol: d_course_kalimari_desert_dl_1EFD8
   type: gfx
   offset: 0x1efd8
-  otr_mode: index
 d_course_kalimari_desert_dl_1F050:
   symbol: d_course_kalimari_desert_dl_1F050
   type: gfx
   offset: 0x1f050
-  otr_mode: index
 d_course_kalimari_desert_dl_1F0D8:
   symbol: d_course_kalimari_desert_dl_1F0D8
   type: gfx
   offset: 0x1f0d8
-  otr_mode: index
 d_course_kalimari_desert_dl_1F1F8:
   symbol: d_course_kalimari_desert_dl_1F1F8
   type: gfx
   offset: 0x1f1f8
-  otr_mode: index
 d_course_kalimari_desert_dl_1F218:
   symbol: d_course_kalimari_desert_dl_1F218
   type: gfx
   offset: 0x1f218
-  otr_mode: index
 d_course_kalimari_desert_dl_1F228:
   symbol: d_course_kalimari_desert_dl_1F228
   type: gfx
   offset: 0x1f228
-  otr_mode: index
 d_course_kalimari_desert_tender_model_lod1:
   symbol: d_course_kalimari_desert_tender_model_lod1
   type: vtx
@@ -1217,32 +1166,26 @@ d_course_kalimari_desert_dl_1F570:
   symbol: d_course_kalimari_desert_dl_1F570
   type: gfx
   offset: 0x1f570
-  otr_mode: index
 d_course_kalimari_desert_dl_1F5E0:
   symbol: d_course_kalimari_desert_dl_1F5E0
   type: gfx
   offset: 0x1f5e0
-  otr_mode: index
 d_course_kalimari_desert_dl_1F6E0:
   symbol: d_course_kalimari_desert_dl_1F6E0
   type: gfx
   offset: 0x1f6e0
-  otr_mode: index
 d_course_kalimari_desert_dl_1F6F8:
   symbol: d_course_kalimari_desert_dl_1F6F8
   type: gfx
   offset: 0x1f6f8
-  otr_mode: index
 d_course_kalimari_desert_dl_1F708:
   symbol: d_course_kalimari_desert_dl_1F708
   type: gfx
   offset: 0x1f708
-  otr_mode: index
 d_course_kalimari_desert_dl_1F720:
   symbol: d_course_kalimari_desert_dl_1F720
   type: gfx
   offset: 0x1f720
-  otr_mode: index
 d_course_kalimari_desert_tender_model_lod0:
   symbol: d_course_kalimari_desert_tender_model_lod0
   type: vtx
@@ -1262,32 +1205,26 @@ d_course_kalimari_desert_dl_1F988:
   symbol: d_course_kalimari_desert_dl_1F988
   type: gfx
   offset: 0x1f988
-  otr_mode: index
 d_course_kalimari_desert_dl_1F9D8:
   symbol: d_course_kalimari_desert_dl_1F9D8
   type: gfx
   offset: 0x1f9d8
-  otr_mode: index
 d_course_kalimari_desert_dl_1FAD0:
   symbol: d_course_kalimari_desert_dl_1FAD0
   type: gfx
   offset: 0x1fad0
-  otr_mode: index
 d_course_kalimari_desert_dl_1FAE8:
   symbol: d_course_kalimari_desert_dl_1FAE8
   type: gfx
   offset: 0x1fae8
-  otr_mode: index
 d_course_kalimari_desert_dl_1FAF8:
   symbol: d_course_kalimari_desert_dl_1FAF8
   type: gfx
   offset: 0x1faf8
-  otr_mode: index
 d_course_kalimari_desert_dl_1FB10:
   symbol: d_course_kalimari_desert_dl_1FB10
   type: gfx
   offset: 0x1fb10
-  otr_mode: index
 d_course_kalimari_desert_carriage_chassis_model_lod2:
   symbol: d_course_kalimari_desert_carriage_chassis_model_lod2
   type: vtx
@@ -1347,62 +1284,50 @@ d_course_kalimari_desert_dl_20578:
   symbol: d_course_kalimari_desert_dl_20578
   type: gfx
   offset: 0x20578
-  otr_mode: index
 d_course_kalimari_desert_dl_20610:
   symbol: d_course_kalimari_desert_dl_20610
   type: gfx
   offset: 0x20610
-  otr_mode: index
 d_course_kalimari_desert_dl_20620:
   symbol: d_course_kalimari_desert_dl_20620
   type: gfx
   offset: 0x20620
-  otr_mode: index
 d_course_kalimari_desert_dl_20630:
   symbol: d_course_kalimari_desert_dl_20630
   type: gfx
   offset: 0x20630
-  otr_mode: index
 d_course_kalimari_desert_dl_20688:
   symbol: d_course_kalimari_desert_dl_20688
   type: gfx
   offset: 0x20688
-  otr_mode: index
 d_course_kalimari_desert_dl_208A0:
   symbol: d_course_kalimari_desert_dl_208A0
   type: gfx
   offset: 0x208a0
-  otr_mode: index
 d_course_kalimari_desert_dl_20928:
   symbol: d_course_kalimari_desert_dl_20928
   type: gfx
   offset: 0x20928
-  otr_mode: index
 d_course_kalimari_desert_dl_20980:
   symbol: d_course_kalimari_desert_dl_20980
   type: gfx
   offset: 0x20980
-  otr_mode: index
 d_course_kalimari_desert_dl_209C8:
   symbol: d_course_kalimari_desert_dl_209C8
   type: gfx
   offset: 0x209c8
-  otr_mode: index
 d_course_kalimari_desert_dl_209F8:
   symbol: d_course_kalimari_desert_dl_209F8
   type: gfx
   offset: 0x209f8
-  otr_mode: index
 d_course_kalimari_desert_dl_20A08:
   symbol: d_course_kalimari_desert_dl_20A08
   type: gfx
   offset: 0x20a08
-  otr_mode: index
 d_course_kalimari_desert_dl_20A20:
   symbol: d_course_kalimari_desert_dl_20A20
   type: gfx
   offset: 0x20a20
-  otr_mode: index
 d_course_kalimari_desert_carriage_chassis_model_lod1:
   symbol: d_course_kalimari_desert_carriage_chassis_model_lod1
   type: vtx
@@ -1452,57 +1377,46 @@ d_course_kalimari_desert_dl_21178:
   symbol: d_course_kalimari_desert_dl_21178
   type: gfx
   offset: 0x21178
-  otr_mode: index
 d_course_kalimari_desert_dl_21200:
   symbol: d_course_kalimari_desert_dl_21200
   type: gfx
   offset: 0x21200
-  otr_mode: index
 d_course_kalimari_desert_dl_21210:
   symbol: d_course_kalimari_desert_dl_21210
   type: gfx
   offset: 0x21210
-  otr_mode: index
 d_course_kalimari_desert_dl_21220:
   symbol: d_course_kalimari_desert_dl_21220
   type: gfx
   offset: 0x21220
-  otr_mode: index
 d_course_kalimari_desert_dl_21238:
   symbol: d_course_kalimari_desert_dl_21238
   type: gfx
   offset: 0x21238
-  otr_mode: index
 d_course_kalimari_desert_dl_21288:
   symbol: d_course_kalimari_desert_dl_21288
   type: gfx
   offset: 0x21288
-  otr_mode: index
 d_course_kalimari_desert_dl_21480:
   symbol: d_course_kalimari_desert_dl_21480
   type: gfx
   offset: 0x21480
-  otr_mode: index
 d_course_kalimari_desert_dl_214D0:
   symbol: d_course_kalimari_desert_dl_214D0
   type: gfx
   offset: 0x214d0
-  otr_mode: index
 d_course_kalimari_desert_dl_21518:
   symbol: d_course_kalimari_desert_dl_21518
   type: gfx
   offset: 0x21518
-  otr_mode: index
 d_course_kalimari_desert_dl_21540:
   symbol: d_course_kalimari_desert_dl_21540
   type: gfx
   offset: 0x21540
-  otr_mode: index
 d_course_kalimari_desert_dl_21550:
   symbol: d_course_kalimari_desert_dl_21550
   type: gfx
   offset: 0x21550
-  otr_mode: index
 d_course_kalimari_desert_carriage_model_lod0:
   symbol: d_course_kalimari_desert_carriage_model_lod0
   type: vtx
@@ -1537,57 +1451,46 @@ d_course_kalimari_desert_dl_219D8:
   symbol: d_course_kalimari_desert_dl_219D8
   type: gfx
   offset: 0x219d8
-  otr_mode: index
 d_course_kalimari_desert_dl_21A60:
   symbol: d_course_kalimari_desert_dl_21A60
   type: gfx
   offset: 0x21a60
-  otr_mode: index
 d_course_kalimari_desert_dl_21A70:
   symbol: d_course_kalimari_desert_dl_21A70
   type: gfx
   offset: 0x21a70
-  otr_mode: index
 d_course_kalimari_desert_dl_21A80:
   symbol: d_course_kalimari_desert_dl_21A80
   type: gfx
   offset: 0x21a80
-  otr_mode: index
 d_course_kalimari_desert_dl_21A98:
   symbol: d_course_kalimari_desert_dl_21A98
   type: gfx
   offset: 0x21a98
-  otr_mode: index
 d_course_kalimari_desert_dl_21AE8:
   symbol: d_course_kalimari_desert_dl_21AE8
   type: gfx
   offset: 0x21ae8
-  otr_mode: index
 d_course_kalimari_desert_dl_21BC0:
   symbol: d_course_kalimari_desert_dl_21BC0
   type: gfx
   offset: 0x21bc0
-  otr_mode: index
 d_course_kalimari_desert_dl_21C10:
   symbol: d_course_kalimari_desert_dl_21C10
   type: gfx
   offset: 0x21c10
-  otr_mode: index
 d_course_kalimari_desert_dl_21C58:
   symbol: d_course_kalimari_desert_dl_21C58
   type: gfx
   offset: 0x21c58
-  otr_mode: index
 d_course_kalimari_desert_dl_21C80:
   symbol: d_course_kalimari_desert_dl_21C80
   type: gfx
   offset: 0x21c80
-  otr_mode: index
 d_course_kalimari_desert_dl_21C90:
   symbol: d_course_kalimari_desert_dl_21C90
   type: gfx
   offset: 0x21c90
-  otr_mode: index
 d_course_kalimari_desert_unknown_model1:
   symbol: d_course_kalimari_desert_unknown_model1
   type: vtx
@@ -1605,22 +1508,19 @@ d_course_kalimari_desert_train_bogie:
   width: 32
   height: 64
   format: rgba16
-  ctype: u8
+  ctype: u16
 d_course_kalimari_desert_dl_22D28:
   symbol: d_course_kalimari_desert_dl_22D28
   type: gfx
   offset: 0x22d28
-  otr_mode: index
 d_course_kalimari_desert_dl_22D70:
   symbol: d_course_kalimari_desert_dl_22D70
   type: gfx
   offset: 0x22d70
-  otr_mode: index
 d_course_kalimari_desert_dl_22DB8:
   symbol: d_course_kalimari_desert_dl_22DB8
   type: gfx
   offset: 0x22db8
-  otr_mode: index
 d_course_kalimari_desert_dl_22E00:
   symbol: d_course_kalimari_desert_dl_22E00
   type: gfx
