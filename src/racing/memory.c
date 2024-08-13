@@ -54,6 +54,10 @@
 #include <assets/double_deck_vertices.h>
 #include <assets/double_deck_data.h>
 
+#include <assets/dks_jungle_parkway_displaylists.h>
+#include <assets/dks_jungle_parkway_vertices.h>
+#include <assets/dks_jungle_parkway_data.h>
+
 #include <assert.h>
 #include <course_offsets.h>
 
@@ -1598,12 +1602,12 @@ NewCourseTable gNewCourseTable[] = {
         .displaylists = d_course_double_deck_packed_dls,
         .dlSize = 234
     }, { // dk jungle
-        .data = NULL,
-        .vtx = NULL,
-        .vtxSize = 0,
-        .textures = NULL,
-        .displaylists = NULL,
-        .dlSize = 0
+        .data = d_course_dks_jungle_parkway_dl_0,
+        .vtx = d_course_dks_jungle_parkway_vertex,
+        .vtxSize = 5679,
+        .textures = dks_jungle_parkway_textures,
+        .displaylists = d_course_dks_jungle_parkway_packed_dls,
+        .dlSize = 4997
     }, { // big donut
         .data = d_course_big_donut_dl,
         .vtx = d_course_big_donut_vertex,

@@ -382,7 +382,7 @@ void func_80003040(void) {
             break;
         case COURSE_DK_JUNGLE:
             // d_course_dks_jungle_parkway_packed_dl_3FA8
-            find_vtx_and_set_colours(0x07003FA8, 0x78, 0xFF, 0xFF, 0xFF);
+            find_vtx_and_set_colours(segmented_gfx_to_virtual(0x07003FA8), 0x78, 0xFF, 0xFF, 0xFF);
             break;
         default:
             break;

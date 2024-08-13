@@ -18,7 +18,6 @@
 #include "courses/koopa_troopa_beach/course_displaylists.h"
 #include "courses/luigi_raceway/course_displaylists.h"
 #include "courses/banshee_boardwalk/course_displaylists.h"
-#include "courses/dks_jungle_parkway/course_displaylists.h"
 #include "courses/rainbow_road/course_displaylists.h"
 #include "courses/yoshi_valley/course_displaylists.h"
 #include "courses/bowsers_castle/course_displaylists.h"
