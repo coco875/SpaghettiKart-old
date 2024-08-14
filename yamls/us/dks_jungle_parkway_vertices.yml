@@ -1,6 +1,6 @@
 :config:
   segments:
-    - [0x0F, 0x89bEE8]
+    - [0x0F, 0x956670]
   header:
     code:
       - '#include <libultraship.h>'

@@ -1,7 +1,7 @@
 :config:
   vram:
     addr: 0x800E8700 # not used for anything
-    offset: 0x8A5f9C
+    offset: 0x960ACC
   no_compression: true
   header:
     code:
@@ -13,5 +13,5 @@
 d_course_dks_jungle_parkway_packed_dls:
   symbol: d_course_dks_jungle_parkway_packed_dls
   type: blob
-  offset: 0x8A5f9C
+  offset: 0x960ACC
   size: 0x341E
