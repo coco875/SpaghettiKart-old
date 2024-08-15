@@ -83,6 +83,7 @@ void parse_course_displaylists(TrackSectionsI *addr) {
         section++;
         addr++;
     }
+    section->addr = 0;
     section = &trackSectionsBuffer[0];
     //section->surfaceType = addr->surfaceType;
     //section->flags = addr->flags;
