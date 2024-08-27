@@ -67,7 +67,7 @@ void func_80027024(s32, s32, s32);
 
 /* This is where I'd put my static data, if I had any */
 
-extern struct_D_802F1F80 *gPlayerPalette;
+extern struct_D_802F1F80* gPlayerPalette;
 
 extern s32 D_80164A28;
 extern s16 gPlayersToRenderPlayerId[];
@@ -123,9 +123,8 @@ extern u32 gKartPeachWheels1[];
 extern u32 gKartWarioWheels0[];
 extern u32 gKartWarioWheels1[];
 
-
-extern u32 *gKartWheels0[];
-extern u32 *gKartWheels1[];
+extern u32* gKartWheels0[];
+extern u32* gKartWheels1[];
 
 extern u16** gKartWheels0[];
 extern u16** gKartWheels1[];

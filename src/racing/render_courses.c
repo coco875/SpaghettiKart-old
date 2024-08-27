@@ -980,45 +980,53 @@ void render_moo_moo_farm(struct UnkStruct_800DC5EC* arg0) {
     render_course_segments(moo_moo_farm_dls, arg0);
 
     if ((temp_s0 < 14) && (temp_s0 > 10)) {
-        if ((temp_s1 == 2) || (temp_s1 == 3) || (temp_s1 == 1))
+        if ((temp_s1 == 2) || (temp_s1 == 3) || (temp_s1 == 1)) {
             gSPDisplayList(gDisplayListHead++, d_course_moo_moo_farm_dl_13FF8);
+        }
 
     } else if (temp_s0 < 16) {
         gSPDisplayList(gDisplayListHead++, d_course_moo_moo_farm_dl_13FF8);
     } else if (temp_s0 < 19) {
-        if (temp_s1 != 2)
+        if (temp_s1 != 2) {
             gSPDisplayList(gDisplayListHead++, d_course_moo_moo_farm_dl_13FF8);
+        }
 
     } else if (temp_s0 < 20) {
-        if (temp_s1 == 0)
+        if (temp_s1 == 0) {
             gSPDisplayList(gDisplayListHead++, d_course_moo_moo_farm_dl_13FF8);
+        }
     }
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEI, G_CC_MODULATEI);
     gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
 
     if ((temp_s0 >= 16) && (temp_s0 < 24)) {
-        if ((temp_s1 == 2) || (temp_s1 == 3))
+        if ((temp_s1 == 2) || (temp_s1 == 3)) {
             // d_course_moo_moo_farm_packed_dl_5410
             gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual(0x07005410));
+        }
 
     } else if (temp_s0 < 9) {
-        if (temp_s1 == 2)
+        if (temp_s1 == 2) {
             // d_course_moo_moo_farm_packed_dl_5410
             gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual(0x07005410));
+        }
     }
     if (temp_s0 < 4) {
-        if (temp_s1 != 0)
+        if (temp_s1 != 0) {
             gSPDisplayList(gDisplayListHead++, d_course_moo_moo_farm_dl_14060);
+        }
 
     } else if (temp_s0 < 8) {
-        if (temp_s1 == 2)
+        if (temp_s1 == 2) {
             gSPDisplayList(gDisplayListHead++, d_course_moo_moo_farm_dl_14060);
+        }
 
     } else if (temp_s0 >= 22) {
         gSPDisplayList(gDisplayListHead++, d_course_moo_moo_farm_dl_14060);
     } else if (temp_s0 >= 18) {
-        if ((temp_s1 == 0) || (temp_s1 == 3))
+        if ((temp_s1 == 0) || (temp_s1 == 3)) {
             gSPDisplayList(gDisplayListHead++, d_course_moo_moo_farm_dl_14060);
+        }
     }
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA);
     gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2);

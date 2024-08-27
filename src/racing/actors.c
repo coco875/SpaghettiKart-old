@@ -407,17 +407,17 @@ void func_802977E4(Player* arg0) {
 
 // Generate the red shell tlut by invert green the green one
 void init_red_shell_texture(void) {
-    s16 *tlut = (s16 *) LOAD_ASSET(common_tlut_green_shell);
-    s16 *red_shell_texture = (s16 *) &gTLUTRedShell[0];
-    s16 *green_shell_texture = (s16 *) tlut;
+    s16* tlut = (s16*) LOAD_ASSET(common_tlut_green_shell);
+    s16* red_shell_texture = (s16*) &gTLUTRedShell[0];
+    s16* green_shell_texture = (s16*) tlut;
     s16 color_pixel, red_color, green_color, blue_color, alpha_color;
     s32 i;
-    
+
     for (i = 0; i < 256; i++) {
         color_pixel = BSWAP16(*green_shell_texture);
-        red_color   = BSWAP16(color_pixel & 0xF800);
+        red_color = BSWAP16(color_pixel & 0xF800);
         green_color = BSWAP16(color_pixel & 0x7C0);
-        blue_color  = BSWAP16(color_pixel & 0x3E);
+        blue_color = BSWAP16(color_pixel & 0x3E);
         alpha_color = BSWAP16(color_pixel & 0x1);
 
         *red_shell_texture = (red_color >> 5) | (green_color << 5) | blue_color | alpha_color; // Invert green to red
@@ -484,7 +484,7 @@ void render_cows(Camera* camera, Mat4 arg1, UNUSED struct Actor* actor) {
     Vec3f sp88;
     u32 soundThing = SOUND_ARG_LOAD(0x19, 0x01, 0x90, 0x4D);
 
-    var_t1 = (struct ActorSpawnData *) LOAD_ASSET(d_course_moo_moo_farm_cow_spawn);
+    var_t1 = (struct ActorSpawnData*) LOAD_ASSET(d_course_moo_moo_farm_cow_spawn);
     D_8015F704 = 6.4e7f;
     gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA);
@@ -550,7 +550,7 @@ void render_cows(Camera* camera, Mat4 arg1, UNUSED struct Actor* actor) {
 
 void evaluate_collision_player_palm_trees(Player* player) {
     Vec3f pos;
-    struct UnkActorSpawnData *data = (struct UnkActorSpawnData *) LOAD_ASSET(d_course_dks_jungle_parkway_tree_spawn);
+    struct UnkActorSpawnData* data = (struct UnkActorSpawnData*) LOAD_ASSET(d_course_dks_jungle_parkway_tree_spawn);
 
     while (data->pos[0] != END_OF_SPAWN_DATA) {
         pos[0] = data->pos[0] * gCourseDirection;
@@ -584,7 +584,7 @@ void evaluate_collision_players_palm_trees(void) {
 }
 
 void func_80298D10(void) {
-    struct UnkActorSpawnData *temp_v1 = (struct UnkActorSpawnData *) LOAD_ASSET(d_course_dks_jungle_parkway_tree_spawn);
+    struct UnkActorSpawnData* temp_v1 = (struct UnkActorSpawnData*) LOAD_ASSET(d_course_dks_jungle_parkway_tree_spawn);
 
     while (temp_v1->pos[0] != END_OF_SPAWN_DATA) {
         temp_v1->pos[1] = temp_v1->unk8;
@@ -593,8 +593,8 @@ void func_80298D10(void) {
     }
 }
 
-void render_palm_trees(Camera *camera, Mat4 arg1, UNUSED struct Actor *actor) {
-    struct UnkActorSpawnData *var_s1 = (struct UnkActorSpawnData *) LOAD_ASSET(d_course_dks_jungle_parkway_tree_spawn);
+void render_palm_trees(Camera* camera, Mat4 arg1, UNUSED struct Actor* actor) {
+    struct UnkActorSpawnData* var_s1 = (struct UnkActorSpawnData*) LOAD_ASSET(d_course_dks_jungle_parkway_tree_spawn);
     UNUSED s32 pad;
     Vec3f spD4;
     f32 var_f22;
@@ -811,9 +811,9 @@ UNUSED void func_8029AE14() {
 
 #include "actors/falling_rock/render.inc.c"
 
-void spawn_piranha_plants(const char *spawnData) {
-    struct ActorSpawnData *temp_s0 = (struct ActorSpawnData *) LOAD_ASSET(spawnData);
-    struct PiranhaPlant *temp_v1;
+void spawn_piranha_plants(const char* spawnData) {
+    struct ActorSpawnData* temp_s0 = (struct ActorSpawnData*) LOAD_ASSET(spawnData);
+    struct PiranhaPlant* temp_v1;
     UNUSED s32 pad;
     Vec3f startingPos;
     Vec3f startingVelocity;
@@ -841,9 +841,9 @@ void spawn_piranha_plants(const char *spawnData) {
     }
 }
 
-void spawn_palm_trees(struct ActorSpawnData *spawnData) {
-    struct ActorSpawnData *temp_s0 = (struct ActorSpawnData *) LOAD_ASSET(spawnData);
-    struct PalmTree *temp_v1;
+void spawn_palm_trees(struct ActorSpawnData* spawnData) {
+    struct ActorSpawnData* temp_s0 = (struct ActorSpawnData*) LOAD_ASSET(spawnData);
+    struct PalmTree* temp_v1;
     Vec3f startingPos;
     Vec3f startingVelocity;
     Vec3s startingRot;
@@ -869,15 +869,15 @@ void spawn_palm_trees(struct ActorSpawnData *spawnData) {
 #include "actors/falling_rock/update.inc.c"
 
 // Trees, cacti, shrubs, etc.
-void spawn_foliage(const char *actor) {
+void spawn_foliage(const char* actor) {
     UNUSED s32 pad[4];
     Vec3f position;
     Vec3f velocity;
     Vec3s rotation;
     UNUSED s16 pad2;
     s16 actorType;
-    struct Actor *temp_s0;
-    struct ActorSpawnData *var_s3;
+    struct Actor* temp_s0;
+    struct ActorSpawnData* var_s3;
 
     var_s3 = (struct ActorSpawnData*) LOAD_ASSET(actor);
     vec3f_set(velocity, 0.0f, 0.0f, 0.0f);
@@ -949,14 +949,14 @@ void spawn_foliage(const char *actor) {
     }
 }
 
-void spawn_all_item_boxes(const char *spawnData) {
+void spawn_all_item_boxes(const char* spawnData) {
     s16 temp_s1;
     f32 temp_f0;
     Vec3f startingPos;
     Vec3f startingVelocity;
     Vec3s startingRot;
-    struct ActorSpawnData *temp_s0 = (struct ActorSpawnData *) LOAD_ASSET(spawnData);
-    //struct ItemBox *itemBox;
+    struct ActorSpawnData* temp_s0 = (struct ActorSpawnData*) LOAD_ASSET(spawnData);
+    // struct ItemBox *itemBox;
 
     if ((gModeSelection == TIME_TRIALS) || (gPlaceItemBoxes == 0)) {
         return;
@@ -1168,10 +1168,10 @@ void spawn_course_actors(void) {
 /**
  * @brief Loads actor textures, course specific actor textures.
  * Calls to spawn_course_vehicles and place_course_actors
- * 
+ *
  */
 void init_actors_and_load_textures(void) {
-    set_segment_base_addr_x64(3, (void *) gNextFreeMemoryAddress);
+    set_segment_base_addr_x64(3, (void*) gNextFreeMemoryAddress);
     D_802BA050 = dma_textures(gTextureGreenShell0, 0x00000257U, 0x00000400U);
     dma_textures(gTextureGreenShell1, 0x00000242U, 0x00000400U);
     dma_textures(gTextureGreenShell2, 0x00000259U, 0x00000400U);
@@ -1459,9 +1459,9 @@ struct test {
 
 UNUSED void prototype_actor_spawn_data(Player* player, uintptr_t arg1) {
     Vec3f sp64;
-    struct test *var_s0;
+    struct test* var_s0;
 
-    var_s0 = (struct test *) arg1;
+    var_s0 = (struct test*) arg1;
     while (var_s0->thing[0] != END_OF_SPAWN_DATA) {
         sp64[0] = var_s0->thing[0] * gCourseDirection;
         sp64[1] = var_s0->thing[1];

@@ -24,7 +24,7 @@ void __osViSwapContext() {
         s1->x.scale = s0->comRegs.xScale;
     }
     if (s1->state & 4) {
-        sp34 = (u32)(s0->fldRegs[field].yScale & 0xfff);
+        sp34 = (u32) (s0->fldRegs[field].yScale & 0xfff);
         s1->y.scale = s1->y.factor * sp34;
         s1->y.scale |= s0->fldRegs[field].yScale & ~0xfff;
     } else {

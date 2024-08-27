@@ -1,8 +1,9 @@
 #pragma once
 
-namespace SF64 {
+namespace SF64;
+{
     enum class ResourceType {
-    // SF64
+        // SF64
         AnimData = 0x414E494D,     // ANIM
         ColPoly = 0x43504C59,      // CPLY
         EnvSettings = 0x454E5653,  // ENVS
@@ -18,17 +19,18 @@ namespace SF64 {
         Vec3s = 0x56433353,        // VC3S
         GenericArray = 0x47415252, // GARR
     };
-} // namespace SOH
+} // namespace SF64
 
-namespace MK64 {
+namespace MK64;
+{
     enum class ResourceType {
         MK_Array = 0x4F415252,     // OARR
         CourseVertex = 0x43565458, // CVTX
         TrackSection = 0x5343544E, // SCTN
         Waypoints = 0x57505453,    // WPTS
-        Metadata  = 0x4D444154,    // MDAT
+        Metadata = 0x4D444154,     // MDAT
         SpawnData = 0x53444154,    // SDAT
-        UnkSpawnData = 0x55534454,     // USDT
-        KartAI = 0x44424856, // DBHV
+        UnkSpawnData = 0x55534454, // USDT
+        KartAI = 0x44424856,       // DBHV
     };
 }

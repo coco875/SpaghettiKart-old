@@ -307,7 +307,8 @@ void func_80003040(void) {
     destroy_all_actors();
     switch (gCurrentCourseId) {
         case COURSE_MARIO_RACEWAY: {
-            struct ActorSpawnData *a_d_course_mario_raceway_tree_spawns = (struct ActorSpawnData *) LOAD_ASSET(d_course_mario_raceway_tree_spawns);
+            struct ActorSpawnData* a_d_course_mario_raceway_tree_spawns =
+                (struct ActorSpawnData*) LOAD_ASSET(d_course_mario_raceway_tree_spawns);
             dma_textures(gTextureTrees1, 0x35B, 0x800);
             spawn_foliage(a_d_course_mario_raceway_tree_spawns);
             break;
