@@ -17,6 +17,7 @@
 #include "math_util.h"
 #include "main.h"
 #include "menus.h"
+#include "port/Engine.h"
 
 Vp D_802B8880[] = {
     { { { 640, 480, 511, 0 }, { 640, 480, 511, 0 } } },

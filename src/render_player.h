@@ -123,12 +123,6 @@ extern u32 gKartPeachWheels1[];
 extern u32 gKartWarioWheels0[];
 extern u32 gKartWarioWheels1[];
 
-extern u32* gKartWheels0[];
-extern u32* gKartWheels1[];
-
-extern u16** gKartWheels0[];
-extern u16** gKartWheels1[];
-
 // These all come the kart data stuff, they should end up in their own inc.c eventually
 #ifdef TARGET_N64
 extern u8* gKartMario168Wheel0[];

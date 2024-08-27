@@ -1181,7 +1181,7 @@ UNUSED void func_802B8414(uintptr_t addr, Mat4 arg1, s16 arg2, s16 arg3, s32 arg
     UNUSED s32 pad2[3];
     Lights1* var_s0;
 
-    var_s0 = (Lights1*) VIRTUAL_TO_PHYSICAL2(gSegmentTable[segment] + offset);
+    var_s0 = (Lights1*) addr;
     sins(arg3);
     coss(arg3);
     sins(arg2);

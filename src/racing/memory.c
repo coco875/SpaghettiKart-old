@@ -483,7 +483,7 @@ UNUSED u8* func_802A841C(u8* arg0, s32 arg1, s32 arg2) {
     return temp_v0;
 }
 
-u8* dma_textures(u8 texture[], size_t arg1, size_t arg2) {
+u8* dma_textures(const char* texture, size_t arg1, size_t arg2) {
     u8* temp_v0;
     void* temp_a0;
 #ifdef TARGET_N64
@@ -1089,7 +1089,8 @@ void displaylist_unpack(uintptr_t* data, uintptr_t finalDisplaylistOffset, u32 a
     uintptr_t offset = SEGMENT_OFFSET(data);
     u8* packed_dl = VIRTUAL_TO_PHYSICAL2(gSegmentTable[segment] + offset);
 #else
-    u8* packed_dl = data;
+    u8* packed_dl = finalDisplaylistOffset;
+    Gfx* gfx = data;
 #endif
 
 #ifdef TARGET_N64

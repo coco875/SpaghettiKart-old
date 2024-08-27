@@ -1171,7 +1171,7 @@ void func_80091B78(void) {
         gNextFreeMemoryAddress = gFreeMemoryResetAnchor;
 #ifdef TARGET_N64
         set_segment_base_addr(6, decompress_segments((u8*) STARTUP_LOGO_ROM_START, (u8*) STARTUP_LOGO_ROM_END));
-#else
+#endif
     }
     gNextFreeMemoryAddress = gFreeMemoryResetAnchor;
     // Hypothetically, this should be a ptr... But only hypothetically.
@@ -3726,10 +3726,10 @@ void func_80099AEC(void) {
     if (size % 8) {
         size = ((size / 8) * 8) + 8;
     }
-    osInvalDCache(D_8018D9B4, var_s0);
+    osInvalDCache(D_8018D9B4, size);
 #ifdef TARGET_N64
     osPiStartDma(&sp68, 0, 0, (uintptr_t) &_textures_0aSegmentRomStart[SEGMENT_OFFSET(temp_s2->textureData)],
-                 D_8018D9B4, var_s0, &gDmaMesgQueue);
+                 D_8018D9B4, size, &gDmaMesgQueue);
 #endif
     osRecvMesg(&gDmaMesgQueue, &sp64, 1);
     while (1) {
@@ -3746,10 +3746,10 @@ void func_80099AEC(void) {
             if (size % 8) {
                 size = ((size / 8) * 8) + 8;
             }
-            osInvalDCache(D_8018D9B4 + sp60 * 4, var_s0);
+            osInvalDCache(D_8018D9B4 + sp60 * 4, size);
 #ifdef TARGET_N64
             osPiStartDma(&sp68, 0, 0, (uintptr_t) &_textures_0aSegmentRomStart[SEGMENT_OFFSET(temp_s2->textureData)],
-                         D_8018D9B4 + sp60 * 4, var_s0, &gDmaMesgQueue);
+                         D_8018D9B4 + sp60 * 4, size, &gDmaMesgQueue);
 #endif
         }
 #ifdef TARGET_N64
@@ -3776,10 +3776,10 @@ void func_80099AEC(void) {
             if (size % 8) {
                 size = ((size / 8) * 8) + 8;
             }
-            osInvalDCache(D_8018D9B4, var_s0);
+            osInvalDCache(D_8018D9B4, size);
 #ifdef TARGET_N64
             osPiStartDma(&sp68, 0, 0, (uintptr_t) &_textures_0aSegmentRomStart[SEGMENT_OFFSET(temp_s2->textureData)],
-                         D_8018D9B4, var_s0, &gDmaMesgQueue);
+                         D_8018D9B4, size, &gDmaMesgQueue);
 #endif
         }
 #ifdef TARGET_N64
