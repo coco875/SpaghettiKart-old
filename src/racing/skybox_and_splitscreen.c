@@ -462,12 +462,12 @@ void func_802A4A0C(Vtx* vtx, struct UnkStruct_800DC5EC* arg1, UNUSED s32 arg2, U
     // Widescreen skybox
     vtx[0].v.ob[0] = OTRGetRectDimensionFromRightEdge(SCREEN_WIDTH);
     vtx[1].v.ob[0] = OTRGetRectDimensionFromRightEdge(SCREEN_WIDTH);
-    vtx[2].v.ob[0] = -OTRGetRectDimensionFromLeftEdge(0);
-    vtx[3].v.ob[0] = -OTRGetRectDimensionFromLeftEdge(0);
+    vtx[2].v.ob[0] = OTRGetRectDimensionFromLeftEdge(0);
+    vtx[3].v.ob[0] = OTRGetRectDimensionFromLeftEdge(0);
     vtx[4].v.ob[0] = OTRGetRectDimensionFromRightEdge(SCREEN_WIDTH);
     vtx[5].v.ob[0] = OTRGetRectDimensionFromRightEdge(SCREEN_WIDTH);
-    vtx[6].v.ob[0] = -OTRGetRectDimensionFromLeftEdge(0);
-    vtx[7].v.ob[0] = -OTRGetRectDimensionFromLeftEdge(0);
+    vtx[6].v.ob[0] = OTRGetRectDimensionFromLeftEdge(0);
+    vtx[7].v.ob[0] = OTRGetRectDimensionFromLeftEdge(0);
 
     sp5C[0] = 0.0f;
     sp5C[1] = 0.0f;
