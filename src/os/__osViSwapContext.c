@@ -1,12 +1,12 @@
 #include "libultra_internal.h"
 #include "hardware.h"
 
-extern OSViContext *__osViNext;
-extern OSViContext *__osViCurr;
+extern OSViContext* __osViNext;
+extern OSViContext* __osViCurr;
 
 void __osViSwapContext() {
-    register OSViMode *s0;
-    register OSViContext *s1;
+    register OSViMode* s0;
+    register OSViContext* s1;
     u32 origin;
     u32 hStart;
     u32 sp34;
