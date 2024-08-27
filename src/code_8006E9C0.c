@@ -828,8 +828,8 @@ void init_course_object(void) {
         case COURSE_BANSHEE_BOARDWALK:
             if (gGamestate != CREDITS_SEQUENCE) {
                 objectId = indexObjectList1[0];
-                init_texture_object(objectId, d_course_banshee_boardwalk_bat_tlut, *d_course_banshee_boardwalk_bat,
-                                    0x20U, (u16) 0x00000040);
+                init_texture_object(objectId, d_course_banshee_boardwalk_bat_tlut, sBoardwalkTexList, 0x20U,
+                                    (u16) 0x00000040);
                 gObjectList[objectId].orientation[0] = 0;
                 gObjectList[objectId].orientation[1] = 0;
                 gObjectList[objectId].orientation[2] = 0x8000;
