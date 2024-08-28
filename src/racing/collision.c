@@ -863,9 +863,13 @@ s32 is_colliding_with_drivable_surface(Collision *collision, f32 boundingBoxSize
 
 /**
  * Wall collision
-*/
-s32 is_colliding_with_wall2(Collision *arg, f32 boundingBoxSize, f32 x1, f32 y1, f32 z1, u16 surfaceIndex, f32 posX, f32 posY, f32 posZ) {
-    CollisionTriangle *triangle = &gCollisionMesh[surfaceIndex];
+ */
+s32 is_colliding_with_wall2(Collision* arg, f32 boundingBoxSize, f32 x1, f32 y1, f32 z1, u16 surfaceIndex, f32 posX,
+                            f32 posY, f32 posZ) {
+    if (CVarGetInteger("gNoWallColision", 0)) {
+        return NO_COLLISION;
+    }
+    CollisionTriangle* triangle = &gCollisionMesh[surfaceIndex];
     UNUSED s32 pad[6];
     f32 x4;
     f32 y4;
@@ -1043,10 +1047,14 @@ s32 is_colliding_with_wall2(Collision *arg, f32 boundingBoxSize, f32 x1, f32 y1,
 
 /**
  * This is actually more like colliding with face X/Y/Z
-*/
-s32 is_colliding_with_wall1(Collision *arg, f32 boundingBoxSize, f32 x1, f32 y1, f32 z1, u16 surfaceIndex, f32 posX, f32 posY, f32 posZ) {
-    CollisionTriangle *triangle = &gCollisionMesh[surfaceIndex];
-    s32 flag = 1;
+ */
+s32 is_colliding_with_wall1(Collision* arg, f32 boundingBoxSize, f32 x1, f32 y1, f32 z1, u16 surfaceIndex, f32 posX,
+                            f32 posY, f32 posZ) {
+    if (CVarGetInteger("gNoWallColision", 0)) {
+        return NO_COLLISION;
+    }
+    CollisionTriangle* triangle = &gCollisionMesh[surfaceIndex];
+    s32 b = 1;
     UNUSED s32 pad[7];
     f32 y4;
     f32 z4;
