@@ -14,13 +14,13 @@ jobs:
       - run: cat /etc/os-release
       - name: Install git
         run: |
-          dnf install git
+          dnf install git -y
       - uses: actions/checkout@v4.1.1
         with:
           submodules: "true"
       - name: Install dependencies
         run: |
-          dnf install gcc gcc-c++ cmake ninja-build lsb_release SDL2-devel libpng-devel libzip-devel libzip-tools json-devel tinyxml2-devel spdlog-devel boost-devel SDL2_net-devel
+          dnf install gcc gcc-c++ cmake ninja-build lsb_release SDL2-devel libpng-devel libzip-devel libzip-tools json-devel tinyxml2-devel spdlog-devel boost-devel SDL2_net-devel -y
       - name: Build
         run: |
           cmake -H. -Bbuild-cmake -GNinja
