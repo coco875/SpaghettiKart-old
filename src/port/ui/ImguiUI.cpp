@@ -453,10 +453,11 @@ void DrawEnhancementsMenu() {
                                     { .tooltip = "Renders game objects regardless of camera distance" });
             UIWidgets::CVarCheckbox("Select any star from menu", "gCompletedGame",
                                     { .tooltip = "Unlocks extra mode and sets all gold cups." });
-            UIWidgets::CVarCheckbox("Disable wall collision", "gNoWallColision",
+            UIWidgets::CVarCheckbox("Disable Wall Collision", "gNoWallColision",
                                     { .tooltip = "Disable wall collision." });
-            UIWidgets::CVarSliderFloat("min height when wall are disable", "gMinHeight", -50.0f, 50.0f, 0.0f,
-                                       { .tooltip = "Disable wall collision." });
+            UIWidgets::CVarSliderFloat(
+                "Min Height", "gMinHeight", -50.0f, 50.0f, 0.0f,
+                { .tooltip = "When Disable Wall Collision are enable what is the minimal height you can get." });
             ImGui::EndMenu();
         }
 
