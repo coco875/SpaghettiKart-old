@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: fedora:35
+    container: fedora:40
     steps:
       - run: cat /etc/os-release
       - name: Install git
