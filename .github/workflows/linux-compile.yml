@@ -15,7 +15,7 @@ jobs:
           submodules: "true"
       - name: Install dependencies
         run: |
-          sudo apt-get install gcc g++ git cmake ninja-build lsb-release libsdl2-dev libpng-dev libsdl2-net-dev libzip-dev zipcmp zipmerge ziptool nlohmann-json3-dev libtinyxml2-dev libspdlog-dev libboost-dev libopengl-dev tinyxml2
+          sudo apt-get install gcc g++ git cmake ninja-build lsb-release libsdl2-dev libpng-dev libsdl2-net-dev libzip-dev zipcmp zipmerge ziptool nlohmann-json3-dev libtinyxml2-dev libspdlog-dev libboost-dev libopengl-dev
       - name: Build
         run: |
           cmake -H. -Bbuild-cmake -GNinja
