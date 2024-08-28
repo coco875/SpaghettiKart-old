@@ -9,13 +9,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: fedora:35
     steps:
+      - run: cat /etc/os-release
       - uses: actions/checkout@v4.1.1
         with:
           submodules: "true"
       - name: Install dependencies
         run: |
-          sudo apt-get install gcc g++ git cmake ninja-build lsb-release libsdl2-dev libpng-dev libsdl2-net-dev libzip-dev zipcmp zipmerge ziptool nlohmann-json3-dev libtinyxml2-dev libspdlog-dev libboost-dev libopengl-dev
+          dnf install gcc gcc-c++ git cmake ninja-build lsb_release SDL2-devel libpng-devel libzip-devel libzip-tools json-devel tinyxml2-devel spdlog-devel boost-devel SDL2_net-devel
       - name: Build
         run: |
           cmake -H. -Bbuild-cmake -GNinja
