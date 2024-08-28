@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     container: fedora:35
     steps:
-      - run: cat /etc/os-release
       - uses: actions/checkout@v4.1.1
         with:
           submodules: "true"
+      - run: cat /etc/os-release
       - name: Install dependencies
         run: |
           dnf install gcc gcc-c++ git cmake ninja-build lsb_release SDL2-devel libpng-devel libzip-devel libzip-tools json-devel tinyxml2-devel spdlog-devel boost-devel SDL2_net-devel
