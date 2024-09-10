@@ -27,6 +27,7 @@
 #include "src/data/some_data.h"
 #include "effects.h"
 #include <assets/boo_frames.h>
+#include "registry.h"
 
 void init_hud(void) {
 
@@ -764,6 +765,7 @@ void func_80070714(void) {
 const char* sBoardwalkTexList[] = { gTextureBat1, gTextureBat2, gTextureBat3, gTextureBat4 };
 
 void init_course_object(void) {
+    init_new_actor();
     s32 objectId;
     s32 i;
 

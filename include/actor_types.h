@@ -4,6 +4,7 @@
 #include <libultraship.h>
 #include <macros.h>
 #include <common_structs.h>
+#include "camera.h"
 
 // #pragma GCC diagnostic push
 // #pragma GCC diagnostic ignored "-Wmicrosoft-extension"
@@ -129,6 +130,10 @@ struct Actor {
     /* 0x18 */ Vec3f pos;
     /* 0x24 */ Vec3f velocity;
     /* 0x30 */ Collision unk30;
+    // new api to prepare when actor will be transform to a real class
+    uint8_t uuid[16];
+    void (*render)(struct Actor*, Camera*, Mat4);
+    void (*update)(struct Actor*);
 }; // size = 0x70
 
 // Duplicate declare for simplicity when externing actors & packed files.

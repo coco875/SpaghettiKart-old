@@ -32,6 +32,7 @@
 #include <assets/dks_jungle_parkway_data.h>
 #include <assets/wario_stadium_data.h>
 #include <assets/frappe_snowland_data.h>
+#include "registry.h"
 
 // Appears to be textures
 // or tluts
@@ -2429,6 +2430,7 @@ void render_item_boxes(struct UnkStruct_800DC5EC* arg0) {
 
 void render_course_actors(struct UnkStruct_800DC5EC* arg0) {
     Camera* camera = arg0->camera;
+    new_render_actor(camera, D_801502C0);
     u16 pathCounter = arg0->pathCounter;
     UNUSED s32 pad[12];
     s32 i;
@@ -2580,6 +2582,7 @@ void render_course_actors(struct UnkStruct_800DC5EC* arg0) {
 }
 
 void update_course_actors(void) {
+    new_update_actor();
     struct Actor* actor;
     s32 i;
     for (i = 0; i < ACTOR_LIST_SIZE; i++) {
