@@ -22,6 +22,11 @@ extern "C" int register_actor(ActorConstructor init) {
     return id;
 }
 
+extern "C" void spawn_new_actor(int id, Vec3f pos, Vec3s rot, Vec3f velocity) {
+    int index = add_actor_to_empty_slot(pos, rot, velocity, id);
+    gActorRegistry[id](&gActorList[index]);
+}
+
 void custom_update(struct Actor* actor) {
 }
 
