@@ -125,6 +125,8 @@ void cleanup_red_and_green_shells(struct ShellActor* shell) {
 
 // Sets introductory values for a new actor (ex. Banana).
 void actor_init(struct Actor* actor, Vec3f startingPos, Vec3s startingRot, Vec3f startingVelocity, s16 actorType) {
+    actor->update = NULL;
+    actor->render = NULL;
     vec3f_copy_return(actor->pos, startingPos);
     vec3s_copy(actor->rot, startingRot);
     vec3f_copy_return(actor->velocity, startingVelocity);

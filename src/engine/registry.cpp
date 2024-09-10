@@ -26,7 +26,7 @@ void custom_update(struct Actor* actor) {
 }
 
 void custom_render(struct Actor* actor, Camera* camera, Mat4 arg1) {
-    render_actor_banana(camera, arg1, actor);
+    render_actor_banana(camera, arg1, (BananaActor*) actor);
 }
 
 void custom_init(struct Actor* actor) {
@@ -37,14 +37,18 @@ void custom_init(struct Actor* actor) {
 // will replace update_course_actors and update_object and use a vec instead
 extern "C" void new_update_actor() {
     for (int i = 0; i < ACTOR_LIST_SIZE; i++) {
-        gActorList[i].update(&gActorList[i]);
+        if (gActorList[i].update != NULL) {
+            gActorList[i].update(&gActorList[i]);
+        }
     }
 }
 
 // will replace render_course_actors and render_object and use a vec instead
 extern "C" void new_render_actor(Camera* camera, Mat4 arg1) {
     for (int i = 0; i < ACTOR_LIST_SIZE; i++) {
-        gActorList[i].render(&gActorList[i], camera, arg1);
+        if (gActorList[i].render != NULL) {
+            gActorList[i].render(&gActorList[i], camera, arg1);
+        }
     }
 }
 
