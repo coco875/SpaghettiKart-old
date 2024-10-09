@@ -423,30 +423,31 @@ void func_8028EC98(s32 arg0) {
 
     func_800029B0();
 
-    if (GetCourse() == GetMarioRaceway() || GetCourse() == GetRoyalRaceway() || GetCourse() == GetLuigiRaceway() ||
-        GetCourse() == GetWarioStadium()) {
+    if (gCurrentCourseId == GetMarioRaceway() || gCurrentCourseId == GetRoyalRaceway() ||
+        gCurrentCourseId == GetLuigiRaceway() || gCurrentCourseId == GetWarioStadium()) {
         func_800C8EAC(3);
-    } else if (GetCourse() == GetToadsTurnpike()) {
+    } else if (gCurrentCourseId == GetToadsTurnpike()) {
         func_800C8EAC(21);
-    } else if (GetCourse() == GetYoshiValley() || GetCourse() == GetMooMooFarm()) {
+    } else if (gCurrentCourseId == GetYoshiValley() || gCurrentCourseId == GetMooMooFarm()) {
         func_800C8EAC(4);
-    } else if (GetCourse() == GetChocoMountain() || GetCourse() == GetBlockFort() || GetCourse() == GetDoubleDeck()) {
+    } else if (gCurrentCourseId == GetChocoMountain() || gCurrentCourseId == GetBlockFort() ||
+               gCurrentCourseId == GetDoubleDeck()) {
         func_800C8EAC(5);
-    } else if (GetCourse() == GetKalimariDesert()) {
+    } else if (gCurrentCourseId == GetKalimariDesert()) {
         func_800C8EAC(10);
-    } else if (GetCourse() == GetKoopaTroopaBeach()) {
+    } else if (gCurrentCourseId == GetKoopaTroopaBeach()) {
         func_800C8EAC(6);
-    } else if (GetCourse() == GetBowsersCastle()) {
+    } else if (gCurrentCourseId == GetBowsersCastle()) {
         func_800C8EAC(9);
-    } else if (GetCourse() == GetBansheeBoardwalk()) {
+    } else if (gCurrentCourseId == GetBansheeBoardwalk()) {
         func_800C8EAC(7);
-    } else if (GetCourse() == GetFrappeSnowland() || GetCourse() == GetSherbetLand()) {
+    } else if (gCurrentCourseId == GetFrappeSnowland() || gCurrentCourseId == GetSherbetLand()) {
         func_800C8EAC(8);
-    } else if (GetCourse() == GetRainbowRoad()) {
+    } else if (gCurrentCourseId == GetRainbowRoad()) {
         func_800C8EAC(18);
-    } else if (GetCourse() == GetDkJungle()) {
+    } else if (gCurrentCourseId == GetDkJungle()) {
         func_800C8EAC(19);
-    } else if (GetCourse() == GetSkyscraper() || GetCourse() == GetBigDonut()) {
+    } else if (gCurrentCourseId == GetSkyscraper() || gCurrentCourseId == GetBigDonut()) {
         func_800C8EAC(25);
     }
 }
@@ -915,9 +916,9 @@ void func_8028FCBC(void) {
             func_8028F914();
             if (D_802BA034 == 1.0f) {
                 if (gActiveScreenMode != SCREEN_MODE_1P) {
-                    if (GetCourse() == GetLuigiRaceway()) {
+                    if (gCurrentCourseId == GetLuigiRaceway()) {
                         func_802A7940();
-                    } else if (GetCourse() == GetWarioStadium()) {
+                    } else if (gCurrentCourseId == GetWarioStadium()) {
                         func_802A7728();
                     }
                 }

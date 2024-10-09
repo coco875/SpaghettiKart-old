@@ -30,7 +30,7 @@
 
 extern s32 D_802BA038;
 extern s16 D_802BA048;
-s16 gCurrentCourseId = 0;
+// s16 gCurrentCourseId = 0;
 s16 gCurrentlyLoadedCourseId = 0xFF;
 u16 D_800DC5A8 = 0;
 s32 D_800DC5AC = 0;
@@ -225,9 +225,9 @@ void setup_race(void) {
         D_8015F8D0[1] = (f32) (D_80164490->posY - 15);
         ;
         D_8015F8D0[2] = D_80164490->posZ;
-        if (GetCourse() == GetToadsTurnpike()) {
+        if (gCurrentCourseId == GetToadsTurnpike()) {
             D_8015F8D0[0] = (gIsMirrorMode != 0) ? D_80164490->posX + 138.0f : D_80164490->posX - 138.0f;
-        } else if (GetCourse() == GetWarioStadium()) {
+        } else if (gCurrentCourseId == GetWarioStadium()) {
             D_8015F8D0[0] = (gIsMirrorMode != 0) ? D_80164490->posX + 12.0f : D_80164490->posX - 12.0f;
         } else {
             D_8015F8D0[0] = D_80164490->posX;

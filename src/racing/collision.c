@@ -46,7 +46,7 @@ f32 func_802AAB4C(Player* player) {
 
     playerX = player->pos[0];
     playerZ = player->pos[2];
-    if (GetCourse() == GetBowsersCastle()) {
+    if (gCurrentCourseId == GetBowsersCastle()) {
         if (playerX > 1859.0f) {
             return D_8015F8E4;
         }
@@ -60,7 +60,7 @@ f32 func_802AAB4C(Player* player) {
             return D_8015F8E4;
         }
         return 20.0f;
-    } else if (GetCourse() == GetKoopaTroopaBeach()) {
+    } else if (gCurrentCourseId == GetKoopaTroopaBeach()) {
         if (playerX > 239.0f) {
             return D_8015F8E4;
         }
@@ -74,12 +74,12 @@ f32 func_802AAB4C(Player* player) {
             return D_8015F8E4;
         }
         return 0.8f;
-    } else if (GetCourse() == GetSherbetLand()) {
+    } else if (gCurrentCourseId == GetSherbetLand()) {
         if ((get_surface_type(player->collision.meshIndexZX) & 0xFF) == SNOW) {
             return (f32) (gCourseMinY - 0xA);
         }
         return D_8015F8E4;
-    } else if (GetCourse() == GetDkJungle()) {
+    } else if (gCurrentCourseId == GetDkJungle()) {
         temp_v1 = get_track_section_id(player->collision.meshIndexZX) & 0xFF;
         if (temp_v1 == 0xFF) {
             if ((get_surface_type(player->collision.meshIndexZX) & 0xFF) == CAVE) {

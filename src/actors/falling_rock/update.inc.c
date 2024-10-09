@@ -33,7 +33,7 @@ struct ActorSpawnData* rocks;
 void spawn_falling_rocks(const char* spawnData) {
 #ifndef TARGET_N64
     struct ActorSpawnData* temp_s0;
-    if (GetCourse() == GetTestCourse()) {
+    if (gCurrentCourseId == GetTestCourse()) {
         temp_s0 = (struct ActorSpawnData*) spawnData;
     } else {
         temp_s0 = (struct ActorSpawnData*) LOAD_ASSET(spawnData);

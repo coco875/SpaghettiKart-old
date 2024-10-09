@@ -191,7 +191,7 @@ void func_8006F008(void) {
     D_8018D308 = 255;
     D_8018D310 = 255;
     D_8018D318 = 255;
-    if (GetCourse() != GetPodiumCeremony()) {
+    if (gCurrentCourseId != GetPodiumCeremony()) {
         func_8006EEE8((s32) gCurrentCourseId);
     }
     CourseManager_MinimapSettings();
@@ -353,7 +353,7 @@ void func_8006F008(void) {
         return;
     }
     if (gPlayerCount == 2) {
-        if (GetCourse() != GetToadsTurnpike()) {
+        if (gCurrentCourseId != GetToadsTurnpike()) {
             D_8018D2C0[1] = 265;
             D_8018D2C0[0] = D_8018D2C0[1];
         } else {

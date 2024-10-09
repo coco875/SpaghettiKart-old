@@ -459,7 +459,7 @@ void func_800729EC(s32 objectIndex) {
     D_8018D2BC = 1;
     D_8018D2A4 = 1;
 
-    if (GetCourse() != GetYoshiValley()) {
+    if (gCurrentCourseId != GetYoshiValley()) {
         for (i = 0; i < gPlayerCount; i++) {
             playerHUD[i].unk_81 = temp_v1;
         }
@@ -1337,7 +1337,7 @@ void func_80074924(s32 objectIndex) {
     object = &gObjectList[objectIndex];
     object->sizeScaling = 0.15f;
 
-    if (GetCourse() == GetMarioRaceway()) {
+    if (gCurrentCourseId == GetMarioRaceway()) {
         sp2C = random_int(0x00C8U);
         sp28 = random_int(D_80165748);
         sp24 = random_int(0x0096U);
@@ -1345,7 +1345,7 @@ void func_80074924(s32 objectIndex) {
         object->origin_pos[0] = (f32) ((((f64) D_80165718 + 100.0) - (f64) sp2C) * (f64) xOrientation);
         object->origin_pos[1] = (f32) (D_80165720 + sp28);
         object->origin_pos[2] = (f32) (((f64) D_80165728 + 200.0) - (f64) sp24);
-    } else if (GetCourse() == GetRoyalRaceway()) {
+    } else if (gCurrentCourseId == GetRoyalRaceway()) {
         sp2C = random_int(0x0168U);
         sp28 = random_int(D_80165748);
         sp24 = random_int(0x00B4U);
@@ -1353,7 +1353,7 @@ void func_80074924(s32 objectIndex) {
         object->origin_pos[0] = (f32) ((((f64) D_80165718 + 180.0) - (f64) sp2C) * (f64) xOrientation);
         object->origin_pos[1] = (f32) (D_80165720 + sp28);
         object->origin_pos[2] = (f32) (((f64) D_80165728 + 200.0) - (f64) sp24);
-    } else if (GetCourse() == GetLuigiRaceway()) {
+    } else if (gCurrentCourseId == GetLuigiRaceway()) {
         sp2C = random_int(0x012CU);
         sp28 = random_int(D_80165748);
         sp24 = random_int(0x0096U);
@@ -2427,19 +2427,19 @@ void init_object_leaf_particle(s32 objectIndex, Vec3f arg1, s32 num) {
     gObjectList[objectIndex].sizeScaling = 0.1f;
     gObjectList[objectIndex].surfaceHeight = arg1[1];
 
-    if (GetCourse() == GetMarioRaceway()) {
+    if (gCurrentCourseId == GetMarioRaceway()) {
         object_origin_pos_randomize_around_xyz(objectIndex, arg1[0], arg1[1] + 25.0, arg1[2], 0x14, 0x1E, 0x14);
         gObjectList[objectIndex].unk_034 = 1.5f;
         gObjectList[objectIndex].velocity[1] = 1.5f;
-    } else if (GetCourse() == GetYoshiValley()) {
+    } else if (gCurrentCourseId == GetYoshiValley()) {
         object_origin_pos_randomize_around_xyz(objectIndex, arg1[0], arg1[1] + 25.0, arg1[2], 0x14, 0x1E, 0x14);
         gObjectList[objectIndex].unk_034 = 2.0f;
         gObjectList[objectIndex].velocity[1] = 2.0f;
-    } else if (GetCourse() == GetRoyalRaceway()) {
+    } else if (gCurrentCourseId == GetRoyalRaceway()) {
         object_origin_pos_randomize_around_xyz(objectIndex, arg1[0], arg1[1] + 30.0, arg1[2], 0x10, 0x28, 0x10);
         gObjectList[objectIndex].unk_034 = 2.0f;
         gObjectList[objectIndex].velocity[1] = 2.0f;
-    } else if (GetCourse() == GetLuigiRaceway()) {
+    } else if (gCurrentCourseId == GetLuigiRaceway()) {
         object_origin_pos_randomize_around_xyz(objectIndex, arg1[0], arg1[1] + 25.0, arg1[2], 0x14, 0x1E, 0x14);
         gObjectList[objectIndex].unk_034 = 1.5f;
         gObjectList[objectIndex].velocity[1] = 1.0f;
@@ -2995,13 +2995,13 @@ void func_800791F0(s32 objectIndex, s32 playerId) {
 
     if ((gObjectList[objectIndex].unk_0D8 != 3) && (gObjectList[objectIndex].unk_0D8 != 7)) {
         func_800722CC(objectIndex, 1);
-        if (GetCourse() == GetSherbetLand()) {
+        if (gCurrentCourseId == GetSherbetLand()) {
             player->unk_0CA &= 0xFFEF;
         }
     } else {
         // ?????
     }
-    if (GetCourse() == GetSherbetLand()) {
+    if (gCurrentCourseId == GetSherbetLand()) {
         func_800722CC(objectIndex, 0x00000010);
         player->unk_0CA &= 0xFFDF;
     }
@@ -3180,7 +3180,7 @@ void func_800797AC(s32 playerId) {
 
     objectIndex = gIndexLakituList[playerId];
     player = &gPlayerOne[playerId];
-    if ((GetCourse() == GetSherbetLand()) && (player->unk_0CA & 1)) {
+    if ((gCurrentCourseId == GetSherbetLand()) && (player->unk_0CA & 1)) {
         init_object(objectIndex, 7);
         player->unk_0CA |= 0x10;
     } else {

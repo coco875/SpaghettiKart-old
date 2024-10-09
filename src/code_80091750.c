@@ -2456,7 +2456,7 @@ void func_80095574(void) {
         if ((gCurrentCourseId >= (NUM_COURSES - 1)) || (gCurrentCourseId < 0)) {
             gCurrentCourseId = 0;
         }
-        print_str_num(0x00000050, 0x0000006E, "map_number", GetCourseIndex());
+        print_str_num(0x00000050, 0x0000006E, "map_number", gCurrentCourseId);
         // This isn't functionally equivallent, but who cares.
         if (gCurrentCourseId < COURSE_TOADS_TURNPIKE) {
             var_v0 = 0;
@@ -5077,8 +5077,8 @@ void func_8009CE64(s32 arg0) {
                 }
             }
 
-            if (GetCourse() == GetBlockFort() || GetCourse() == GetSkyscraper() || GetCourse() == GetDoubleDeck() ||
-                GetCourse() == GetBigDonut()) {
+            if (gCurrentCourseId == GetBlockFort() || gCurrentCourseId == GetSkyscraper() ||
+                gCurrentCourseId == GetDoubleDeck() || gCurrentCourseId == GetBigDonut()) {
 
                 gModeSelection = BATTLE;
                 if (gPlayerCountSelection1 == 1) {

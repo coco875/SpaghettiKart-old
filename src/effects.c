@@ -1700,7 +1700,7 @@ void func_80090178(Player* player, s8 playerId, Vec3f arg2, Vec3f arg3) {
     f32 sp18[4] = { 10.0f, -10.0f, -575.0f, 575.0f };
     f32 sp08[4] = { 575.0f, -575.0f, 10.0f, -10.0f };
 
-    if (GetCourse() == GetYoshiValley()) {
+    if (gCurrentCourseId == GetYoshiValley()) {
         test = player->nearestWaypointId;
         temp_v1 = &D_80164550[gCopyPathIndexByPlayerId[playerId]][test];
         arg2[0] = temp_v1->posX;
@@ -1712,28 +1712,28 @@ void func_80090178(Player* player, s8 playerId, Vec3f arg2, Vec3f arg3) {
         arg3[0] = temp_v1->posX;
         arg3[1] = temp_v1->posY;
         arg3[2] = temp_v1->posZ;
-    } else if (GetCourse() == GetBlockFort()) {
+    } else if (gCurrentCourseId == GetBlockFort()) {
         arg2[0] = spF8[playerId];
         arg2[1] = 0.0f;
         arg2[2] = spE8[playerId];
         arg3[0] = spD8[playerId];
         arg3[1] = 0.0f;
         arg3[2] = spC8[playerId];
-    } else if (GetCourse() == GetSkyscraper()) {
+    } else if (gCurrentCourseId == GetSkyscraper()) {
         arg2[0] = spB8[playerId];
         arg2[1] = 480.0f;
         arg2[2] = spA8[playerId];
         arg3[0] = sp98[playerId];
         arg3[1] = 480.0f;
         arg3[2] = sp88[playerId];
-    } else if (GetCourse() == GetDoubleDeck()) {
+    } else if (gCurrentCourseId == GetDoubleDeck()) {
         arg2[0] = sp78[playerId];
         arg2[1] = 0.0f;
         arg2[2] = sp68[playerId];
         arg3[0] = sp58[playerId];
         arg3[1] = 0.0f;
         arg3[2] = sp48[playerId];
-    } else if (GetCourse() == GetBigDonut()) {
+    } else if (gCurrentCourseId == GetBigDonut()) {
         arg2[0] = sp38[playerId];
         arg2[1] = 200.0f;
         arg2[2] = sp28[playerId];
@@ -1801,14 +1801,14 @@ void func_80090868(Player* player) {
         player->unk_0CA |= 2;
         player->unk_0C8 = 0;
         if ((player->unk_0DE & 1) == 1) {
-            if ((GetCourse() == GetBowsersCastle()) || (GetCourse() == GetBigDonut())) {
+            if ((gCurrentCourseId == GetBowsersCastle()) || (gCurrentCourseId == GetBigDonut())) {
                 player->unk_0CA |= 0x1000;
             } else {
                 player->unk_0CA |= 0x2000;
             }
 
-            if ((GetCourse() == GetSherbetLand()) || (GetCourse() == GetSkyscraper()) ||
-                (GetCourse() == GetRainbowRoad())) {
+            if ((gCurrentCourseId == GetSherbetLand()) || (gCurrentCourseId == GetSkyscraper()) ||
+                (gCurrentCourseId == GetRainbowRoad())) {
                 player->unk_0CA &= ~0x3000;
             }
         }

@@ -53,7 +53,7 @@ s32 func_80290C20(Camera* camera) {
 void parse_course_displaylists(const char* asset) {
     TrackSections* section;
 
-    if (GetCourse() == GetTestCourse()) {
+    if (gCurrentCourseId == GetTestCourse()) {
         section = (TrackSections*) asset;
     } else {
         section = (TrackSections*) LOAD_ASSET(asset);
@@ -138,7 +138,7 @@ void render_course_segments(const char* addr[], struct UnkStruct_800DC5EC* arg1)
                 index = sp1E;
             }
         } else {
-            if (GetCourse() == GetBowsersCastle()) {
+            if (gCurrentCourseId == GetBowsersCastle()) {
                 if ((temp_v0_3 >= 0x11) && (temp_v0_3 < 0x18)) {
                     index = temp_v0_3;
                 } else if ((temp_v0_3 == 255) && (sp1E != 255)) {
@@ -148,7 +148,7 @@ void render_course_segments(const char* addr[], struct UnkStruct_800DC5EC* arg1)
                 } else {
                     index = arg1->pathCounter;
                 }
-            } else if (GetCourse() == GetChocoMountain()) {
+            } else if (gCurrentCourseId == GetChocoMountain()) {
                 if ((temp_v0_3 >= 0xE) && (temp_v0_3 < 0x16)) {
                     index = temp_v0_3;
                 } else if ((temp_v0_3 == 255) && (sp1E != 255)) {
@@ -181,7 +181,7 @@ void render_course_segments(const char* addr[], struct UnkStruct_800DC5EC* arg1)
     index = ((index - 1) * 4) + direction;
     gSPDisplayList(gDisplayListHead++, addr[index]);
 
-    if (CVarGetInteger("gDisableLod", 0) == 1 && (GetCourse() == GetBowsersCastle()) &&
+    if (CVarGetInteger("gDisableLod", 0) == 1 && (gCurrentCourseId == GetBowsersCastle()) &&
         (index < 20 || index > 99)) { // always render higher version of bowser statue
         gDisplayListHead--;
         gSPDisplayList(gDisplayListHead++, d_course_bowsers_castle_dl_9148); // use credit version of the course
@@ -1803,10 +1803,10 @@ void func_802966A0(void) {
 }
 
 void func_802969F8(void) {
-    if (GetCourse() == GetMooMooFarm()) {
+    if (gCurrentCourseId == GetMooMooFarm()) {
         D_8015F702 = 0;
         D_8015F700 = 200;
-    } else if (GetCourse() == GetKoopaTroopaBeach()) {
+    } else if (gCurrentCourseId == GetKoopaTroopaBeach()) {
         D_8015F8E8 = -0.1f;
         D_8015F8E4 = 0.0f;
     }

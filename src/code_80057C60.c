@@ -794,7 +794,7 @@ void render_object_for_player(s32 cameraId) {
 }
 
 void render_snowing_effect(s32 arg0) {
-    if (GetCourse() == GetFrappeSnowland()) {
+    if (gCurrentCourseId == GetFrappeSnowland()) {
         if (gGamestate != 9) {
             if ((D_8015F894 == 0) && (gPlayerCountSelection1 == 1)) {
                 render_object_snowflakes_particles();
@@ -802,7 +802,7 @@ void render_snowing_effect(s32 arg0) {
         } else {
             render_object_snowflakes_particles();
         }
-    } else if (GetCourse() == GetSherbetLand()) {
+    } else if (gCurrentCourseId == GetSherbetLand()) {
         render_ice_block(arg0);
     }
 }
@@ -1562,7 +1562,7 @@ void func_8005A3C0(void) {
 }
 
 void func_8005A71C(void) {
-    if (GetCourse() == GetBowsersCastle()) {
+    if (gCurrentCourseId == GetBowsersCastle()) {
         func_80081210();
     }
 }
@@ -1643,7 +1643,7 @@ void update_object(void) {
         func_80074EE8();
     }
     func_80076F2C();
-    if ((s16) GetCourse() != GetFrappeSnowland()) {
+    if ((s16) gCurrentCourseId != GetFrappeSnowland()) {
         update_leaf();
     }
 }
@@ -2593,7 +2593,7 @@ void func_8005CB60(s32 playerId, s32 lapCount) {
                 case 1: /* switch 1 */
                     func_80079084(playerId);
                     func_800C9060(playerId, SOUND_ARG_LOAD(0x19, 0x00, 0xF0, 0x15));
-                    if ((GetCourse() == GetLuigiRaceway()) && (D_80165898 == 0) &&
+                    if ((gCurrentCourseId == GetLuigiRaceway()) && (D_80165898 == 0) &&
                         (gModeSelection != (s32) TIME_TRIALS)) {
                         D_80165898 = 1;
                     }
@@ -2615,7 +2615,7 @@ void func_8005CB60(s32 playerId, s32 lapCount) {
                     if (D_8018D114 == 2) {
                         D_80165800[playerId] = 0;
                     }
-                    if (GetCourse() == GetYoshiValley()) {
+                    if (gCurrentCourseId == GetYoshiValley()) {
                         playerHUD[playerId].unk_81 = 1;
                     }
                     playerHUD[playerId].lap1CompletionTimeX = 0x0140;
@@ -2930,22 +2930,22 @@ void func_8005DAF4(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                     func_8005D794(player, &player->unk_258[10 + arg1], var_f2, var_f12, var_f14, (s8) surfaceType,
                                   (s8) var_t3);
                     func_8005D7D8(&player->unk_258[10 + arg1], 2, 0.46f);
-                    if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
+                    if ((gCurrentCourseId == GetChocoMountain()) || (gCurrentCourseId == GetRoyalRaceway())) {
                         func_8005DAD8(&player->unk_258[10 + arg1], 1, 0, 0x0080);
                     }
-                    if (GetCourse() == GetKalimariDesert()) {
+                    if (gCurrentCourseId == GetKalimariDesert()) {
                         func_8005DAD8(&player->unk_258[10 + arg1], 7, 0, 0x0080);
                     }
-                    if (GetCourse() == GetMooMooFarm()) {
+                    if (gCurrentCourseId == GetMooMooFarm()) {
                         func_8005DAD8(&player->unk_258[10 + arg1], 8, 0, 0x0080);
                     }
-                    if (GetCourse() == GetWarioStadium()) {
+                    if (gCurrentCourseId == GetWarioStadium()) {
                         func_8005DAD8(&player->unk_258[10 + arg1], 9, 0, 0x0080);
                     }
-                    if (GetCourse() == GetYoshiValley()) {
+                    if (gCurrentCourseId == GetYoshiValley()) {
                         func_8005DAD8(&player->unk_258[10 + arg1], 10, 0, 0x0080);
                     }
-                    if (GetCourse() == GetDkJungle()) {
+                    if (gCurrentCourseId == GetDkJungle()) {
                         func_8005DAD8(&player->unk_258[10 + arg1], 11, 0, 0x0080);
                     }
                     player->unk_258[10 + arg1].unk_03A = random_int(0x0010U);
@@ -2954,22 +2954,22 @@ void func_8005DAF4(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                 func_8005D794(player, &player->unk_258[10 + arg1], var_f2, var_f12, var_f14, (s8) surfaceType,
                               (s8) var_t3);
                 func_8005D7D8(&player->unk_258[10 + arg1], 2, 0.46f);
-                if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
+                if ((gCurrentCourseId == GetChocoMountain()) || (gCurrentCourseId == GetRoyalRaceway())) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 1, 0, 0x0080);
                 }
-                if (GetCourse() == GetKalimariDesert()) {
+                if (gCurrentCourseId == GetKalimariDesert()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 7, 0, 0x0080);
                 }
-                if (GetCourse() == GetMooMooFarm()) {
+                if (gCurrentCourseId == GetMooMooFarm()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 8, 0, 0x0080);
                 }
-                if (GetCourse() == GetWarioStadium()) {
+                if (gCurrentCourseId == GetWarioStadium()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 9, 0, 0x0080);
                 }
-                if (GetCourse() == GetYoshiValley()) {
+                if (gCurrentCourseId == GetYoshiValley()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 10, 0, 0x0080);
                 }
-                if (GetCourse() == GetDkJungle()) {
+                if (gCurrentCourseId == GetDkJungle()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 11, 0, 0x0080);
                 }
                 player->unk_258[10 + arg1].unk_03A = random_int(0x0010U);
@@ -3196,44 +3196,44 @@ void func_8005ED48(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                 ((player->unk_258[10 + arg2].unk_01E > 0) || (player->unk_258[10 + arg2].unk_01C == 0))) {
                 func_8005D794(player, &player->unk_258[10 + arg1], var_f0, var_f2, var_f12, surfaceType, var_t3);
                 func_8005D7D8(&player->unk_258[10 + arg1], 5, 0.46f);
-                if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
+                if ((gCurrentCourseId == GetChocoMountain()) || (gCurrentCourseId == GetRoyalRaceway())) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 1, 0, 0x0080);
                 }
-                if (GetCourse() == GetKalimariDesert()) {
+                if (gCurrentCourseId == GetKalimariDesert()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 7, 0, 0x0080);
                 }
-                if (GetCourse() == GetMooMooFarm()) {
+                if (gCurrentCourseId == GetMooMooFarm()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 8, 0, 0x0080);
                 }
-                if (GetCourse() == GetWarioStadium()) {
+                if (gCurrentCourseId == GetWarioStadium()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 9, 0, 0x0080);
                 }
-                if (GetCourse() == GetYoshiValley()) {
+                if (gCurrentCourseId == GetYoshiValley()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 10, 0, 0x0080);
                 }
-                if (GetCourse() == GetDkJungle()) {
+                if (gCurrentCourseId == GetDkJungle()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 11, 0, 0x0080);
                 }
                 player->unk_258[10 + arg1].unk_03A = random_int(0x0010U);
             } else if (player->unk_258[10 + arg2].unk_01E > 0) {
                 func_8005D794(player, &player->unk_258[10 + arg1], var_f0, var_f2, var_f12, surfaceType, var_t3);
                 func_8005D7D8(&player->unk_258[10 + arg1], 5, 0.46f);
-                if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
+                if ((gCurrentCourseId == GetChocoMountain()) || (gCurrentCourseId == GetRoyalRaceway())) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 1, 0, 0x0080);
                 }
-                if (GetCourse() == GetKalimariDesert()) {
+                if (gCurrentCourseId == GetKalimariDesert()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 7, 0, 0x0080);
                 }
-                if (GetCourse() == GetMooMooFarm()) {
+                if (gCurrentCourseId == GetMooMooFarm()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 8, 0, 0x0080);
                 }
-                if (GetCourse() == GetWarioStadium()) {
+                if (gCurrentCourseId == GetWarioStadium()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 9, 0, 0x0080);
                 }
-                if (GetCourse() == GetYoshiValley()) {
+                if (gCurrentCourseId == GetYoshiValley()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 0x000A, 0, 0x0080);
                 }
-                if (GetCourse() == GetDkJungle()) {
+                if (gCurrentCourseId == GetDkJungle()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 0x000B, 0, 0x0080);
                 }
                 player->unk_258[10 + arg1].unk_03A = random_int(0x0010U);
@@ -3397,44 +3397,44 @@ void func_8005F90C(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                 ((player->unk_258[10 + arg2].unk_01E > 0) || (player->unk_258[10 + arg2].unk_01C == 0))) {
                 func_8005D794(player, &player->unk_258[10 + arg1], var_f0, var_f2, var_f12, surfaceType, var_t1);
                 func_8005D7D8(&player->unk_258[10 + arg1], 4, 0.46f);
-                if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
+                if ((gCurrentCourseId == GetChocoMountain()) || (gCurrentCourseId == GetRoyalRaceway())) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 1, 0, 0x0080);
                 }
-                if (GetCourse() == GetKalimariDesert()) {
+                if (gCurrentCourseId == GetKalimariDesert()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 7, 0, 0x0080);
                 }
-                if (GetCourse() == GetMooMooFarm()) {
+                if (gCurrentCourseId == GetMooMooFarm()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 8, 0, 0x0080);
                 }
-                if (GetCourse() == GetWarioStadium()) {
+                if (gCurrentCourseId == GetWarioStadium()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 9, 0, 0x0080);
                 }
-                if (GetCourse() == GetYoshiValley()) {
+                if (gCurrentCourseId == GetYoshiValley()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 0x000A, 0, 0x0080);
                 }
-                if (GetCourse() == GetDkJungle()) {
+                if (gCurrentCourseId == GetDkJungle()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 0x000B, 0, 0x0080);
                 }
                 player->unk_258[10 + arg1].unk_03A = random_int(0x0010U);
             } else if (player->unk_258[10 + arg2].unk_01E > 0) {
                 func_8005D794(player, &player->unk_258[10 + arg1], var_f0, var_f2, var_f12, surfaceType, var_t1);
                 func_8005D7D8(&player->unk_258[10 + arg1], 4, 0.46f);
-                if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
+                if ((gCurrentCourseId == GetChocoMountain()) || (gCurrentCourseId == GetRoyalRaceway())) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 1, 0, 0x0080);
                 }
-                if (GetCourse() == GetKalimariDesert()) {
+                if (gCurrentCourseId == GetKalimariDesert()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 7, 0, 0x0080);
                 }
-                if (GetCourse() == GetMooMooFarm()) {
+                if (gCurrentCourseId == GetMooMooFarm()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 8, 0, 0x0080);
                 }
-                if (GetCourse() == GetWarioStadium()) {
+                if (gCurrentCourseId == GetWarioStadium()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 9, 0, 0x0080);
                 }
-                if (GetCourse() == GetYoshiValley()) {
+                if (gCurrentCourseId == GetYoshiValley()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 0x000A, 0, 0x0080);
                 }
-                if (GetCourse() == GetDkJungle()) {
+                if (gCurrentCourseId == GetDkJungle()) {
                     func_8005DAD8(&player->unk_258[10 + arg1], 0x000B, 0, 0x0080);
                 }
                 player->unk_258[10 + arg1].unk_03A = random_int(0x0010U);
@@ -3633,13 +3633,13 @@ void func_800608E0(Player* player, s16 arg1, UNUSED s32 arg2, s8 arg3, UNUSED s8
         var_f0 = 0.0f;
     }
     sp4C = (D_801652A0[arg3] - player->pos[1]) - 3.0f;
-    if ((player->unk_0DE & 1) && (GetCourse() != GetKoopaTroopaBeach())) {
+    if ((player->unk_0DE & 1) && (gCurrentCourseId != GetKoopaTroopaBeach())) {
         var_f0 = 2.5f;
         sp4C = (f32) ((f64) (D_801652A0[arg3] - player->pos[1]) + 0.1);
     }
     func_8005D794(player, &player->unk_258[arg1], 0.0f, 0.0f, 0.0f, (s8) 0, (s8) 0);
     func_8005D7D8(&player->unk_258[arg1], 3, var_f0);
-    if ((GetCourse() == GetBowsersCastle()) || (GetCourse() == GetBigDonut())) {
+    if ((gCurrentCourseId == GetBowsersCastle()) || (gCurrentCourseId == GetBigDonut())) {
         func_8005D800(&player->unk_258[arg1], 0, 0x00AF);
     } else {
         func_8005D800(&player->unk_258[arg1], 0x00FFFFFF, 0x00CF);
@@ -3653,7 +3653,7 @@ void func_800608E0(Player* player, s16 arg1, UNUSED s32 arg2, s8 arg3, UNUSED s8
 }
 
 void func_80060B14(Player* player, s16 arg1, s32 arg2, s8 arg3, s8 arg4) {
-    if ((GetCourse() != GetSkyscraper()) && (GetCourse() != GetRainbowRoad())) {
+    if ((gCurrentCourseId != GetSkyscraper()) && (gCurrentCourseId != GetRainbowRoad())) {
         if ((arg1 == 0) && ((player->unk_258[arg2].unk_01E > 0) || (player->unk_258[arg2].unk_01C == 0))) {
             func_800608E0(player, arg1, arg2, arg3, arg4);
         } else if (player->unk_258[arg2].unk_01E > 0) {
@@ -3669,10 +3669,10 @@ void func_80060BCC(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
     f32 sp48;
     f32 sp44;
 
-    if (GetCourse() == GetSkyscraper()) {
+    if (gCurrentCourseId == GetSkyscraper()) {
         return;
     }
-    if (GetCourse() == GetRainbowRoad()) {
+    if (gCurrentCourseId == GetRainbowRoad()) {
         return;
     }
     sp54 = random_int(0x0168U) - 0xB4;
@@ -3707,7 +3707,7 @@ void func_80060F50(Player* player, s16 arg1, UNUSED s32 arg2, s8 arg3, UNUSED s8
     func_8005D794(player, &player->unk_258[arg1], 0.0f, 0.0f, 0.0f, 0, 0);
     func_8005D7D8(&player->unk_258[arg1], 5, 4.0f);
 
-    if ((GetCourse() == GetBowsersCastle()) || (GetCourse() == GetBigDonut())) {
+    if ((gCurrentCourseId == GetBowsersCastle()) || (gCurrentCourseId == GetBigDonut())) {
         func_8005D800(&player->unk_258[arg1], 0xFF0000, 0xFF);
     } else {
         func_8005D800(&player->unk_258[arg1], 0xFFFFFF, 0xFF);
@@ -4053,22 +4053,22 @@ void func_800624D8(Player* player, UNUSED s32 arg1, UNUSED s32 arg2, UNUSED s8 a
     switch (player->surfaceType) {
         case DIRT:
             for (var_s1 = 0; var_s1 < 10; var_s1++) {
-                if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
+                if ((gCurrentCourseId == GetChocoMountain()) || (gCurrentCourseId == GetRoyalRaceway())) {
                     func_8005DAD8(&player->unk_258[0x1E + var_s1], 1, 0, 0x00A8);
                 }
-                if (GetCourse() == GetKalimariDesert()) {
+                if (gCurrentCourseId == GetKalimariDesert()) {
                     func_8005DAD8(&player->unk_258[0x1E + var_s1], 7, 0, 0x00A8);
                 }
-                if (GetCourse() == GetMooMooFarm()) {
+                if (gCurrentCourseId == GetMooMooFarm()) {
                     func_8005DAD8(&player->unk_258[0x1E + var_s1], 8, 0, 0x00A8);
                 }
-                if (GetCourse() == GetWarioStadium()) {
+                if (gCurrentCourseId == GetWarioStadium()) {
                     func_8005DAD8(&player->unk_258[0x1E + var_s1], 9, 0, 0x00A8);
                 }
-                if (GetCourse() == GetYoshiValley()) {
+                if (gCurrentCourseId == GetYoshiValley()) {
                     func_8005DAD8(&player->unk_258[0x1E + var_s1], 0x000A, 0, 0x00A8);
                 }
-                if (GetCourse() == GetDkJungle()) {
+                if (gCurrentCourseId == GetDkJungle()) {
                     func_8005DAD8(&player->unk_258[0x1E + var_s1], 0x000B, 0, 0x00A8);
                 }
                 func_80062484(player, &player->unk_258[0x1E + var_s1], var_s1);
@@ -4623,7 +4623,7 @@ void func_80064184(Player* player, s16 arg1, s8 arg2, UNUSED s8 arg3) {
     f32 sp3C;
 
     sp40 = D_801652A0[arg2] - player->pos[1] - 3.0f;
-    if (((player->unk_0DE & 1) != 0) && (GetCourse() != GetKoopaTroopaBeach())) {
+    if (((player->unk_0DE & 1) != 0) && (gCurrentCourseId != GetKoopaTroopaBeach())) {
         sp40 = D_801652A0[arg2] - player->pos[1] + 0.1;
     }
 

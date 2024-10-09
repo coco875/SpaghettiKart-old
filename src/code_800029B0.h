@@ -35,6 +35,7 @@ void clear_nmi_buffer(void);
 void func_80003040(void);
 
 extern s16 gCurrentCourseId; // D_800DC5A0
+#define gCurrentCourseId GetCourseIndex()
 extern s16 gCurrentlyLoadedCourseId;
 extern u16 D_800DC5A8;
 extern s32 D_800DC5AC;
