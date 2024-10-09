@@ -22,7 +22,7 @@
 #include <assert.h>
 #include <course_offsets.h>
 
-#include "engine/courses/Course.h"
+#include "engine/Course.h"
 
 #include <stdio.h>
 

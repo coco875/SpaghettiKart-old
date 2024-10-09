@@ -39,7 +39,7 @@
 
 #include "engine/Engine.h"
 #include "port/Game.h"
-#include "engine/courses/Course.h"
+#include "engine/Course.h"
 
 s32 unk_code_80005FD0_pad[24];
 Collision D_80162E70;

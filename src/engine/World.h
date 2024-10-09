@@ -30,7 +30,6 @@ class World {
         RGB8 FloorTopLeft;
     } SkyboxColours;
 
-
     typedef struct {
         const char* Name;
         const char* DebugName;
@@ -38,7 +37,7 @@ class World {
         const char* AIBehaviour;
         float AIMaximumSeparation;
         float AIMinimumSeparation;
-        int16_t *SomePtr;
+        int16_t* SomePtr;
         uint32_t AISteeringSensitivity;
         _struct_gCoursePathSizes_0x10 PathSizes;
         Vec4f D_0D009418;
@@ -47,15 +46,15 @@ class World {
         Vec4f D_0D009808;
         const char* PathTable[4];
         const char* PathTable2[4];
-        CloudData *Clouds;
-        CloudData *CloudList;
+        CloudData* Clouds;
+        CloudData* CloudList;
         int32_t MinimapFinishlineX;
         int32_t MinimapFinishlineY;
         SkyboxColours Skybox;
     } Properties;
 
-public:
-    //Actor actors;
+  public:
+    // Actor actors;
     virtual ~World() = default;
     explicit World();
 
@@ -63,13 +62,12 @@ public:
 
     virtual Object* SpawnObject(std::unique_ptr<GameObject> object);
 
-
     virtual CProperties* GetCourseProps();
     virtual void UpdateObjects();
-    virtual void RenderObjects(Camera *camera);
+    virtual void RenderObjects(Camera* camera);
     virtual void ExpiredObjects();
     virtual void DestroyObjects();
-    virtual Object *GetObjectByIndex(size_t);
+    virtual Object* GetObjectByIndex(size_t);
 
     Cup* AddCup(const char* name, std::vector<Course*> courses);
     Cup* GetCup();
@@ -83,7 +81,6 @@ public:
 
     World* GetWorld();
 
-
     // These are only for browsing through the course list
     void SetCourse(const char*);
     void NextCourse(void);
@@ -94,7 +91,7 @@ public:
     Course* CurrentCourse;
     Cup* CurrentCup;
 
-    std::vector<std::shared_ptr<Cup>> Cups;
+    std::vector<Cup*> Cups;
     size_t CupIndex = 1;
 
     std::vector<std::unique_ptr<GameObject>> GameObjects;
@@ -102,9 +99,7 @@ public:
 
     std::vector<Course*> Courses;
     size_t CourseIndex = 0; // For browsing courses.
-private:
-
+  private:
 };
 
 extern World gWorldInstance;
-

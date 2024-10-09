@@ -18,7 +18,7 @@
 #include "main.h"
 #include "menus.h"
 #include "port/Engine.h"
-#include "engine/courses/Course.h"
+#include "engine/Course.h"
 #include "engine/Engine.h"
 #include "port/Game.h"
 

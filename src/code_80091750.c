@@ -45,7 +45,7 @@
 #include "port/Game.h"
 
 #include "engine/Engine.h"
-#include "engine/courses/Course.h"
+#include "engine/Course.h"
 
 const char* GetCupName(void);
 

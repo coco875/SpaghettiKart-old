@@ -1,46 +1,44 @@
 #include <libultraship.h>
 #include "World.h"
 #include "Cup.h"
-#include "courses/Course.h"
+#include "Course.h"
 
 extern "C" {
-   #include "camera.h"
-   #include "objects.h"
-   #include "main.h"
-   #include "engine/Engine.h"
-   #include "defines.h"
+#include "camera.h"
+#include "objects.h"
+#include "main.h"
+#include "engine/Engine.h"
+#include "defines.h"
 }
 
-World::World() {}
+World::World() {
+}
 
 Course* CurrentCourse;
 Cup* CurrentCup;
 
 Cup* World::AddCup(const char* name, std::vector<Course*> courses) {
     // Create a new unique_ptr for Cup
-    auto cup = std::make_shared<Cup>(name, courses);
-
-    // Get raw pointer before moving the ownership
-    Cup* tmp = cup.get();
+    Cup* cup = new Cup(name, courses);
 
     // Add the Cup to the container
-    Cups.push_back(std::move(cup));
+    Cups.push_back(cup);
 
     // Return the raw pointer to the Cup
-    return tmp;
+    return cup;
 }
 
 Cup* World::GetCup() {
-    return Cups[CupIndex].get();
+    return Cups[CupIndex];
 }
 
 void World::SetCourseFromCup() {
     CurrentCourse = CurrentCup->GetCourse();
 }
 
-//const char* World::GetCupName() {
-//    //return this->Cups[CupIndex].Name;
-//}
+// const char* World::GetCupName() {
+//     //return this->Cups[CupIndex].Name;
+// }
 
 void World::SetCupIndex(int16_t courseId) {
 
@@ -61,7 +59,7 @@ u32 World::NextCup() {
 
     if (this->CupIndex < Cups.size() - 2) {
         CupIndex++;
-        CurrentCup = Cups[CupIndex].get();
+        CurrentCup = Cups[CupIndex];
         return CupIndex;
     }
 }
@@ -69,13 +67,13 @@ u32 World::NextCup() {
 u32 World::PreviousCup() {
     if (CupIndex > 0) {
         CupIndex--;
-        CurrentCup = Cups[CupIndex].get();
+        CurrentCup = Cups[CupIndex];
         return CupIndex;
     }
 }
 
 void World::SetCup() {
-    CurrentCup = Cups[CupIndex].get();
+    CurrentCup = Cups[CupIndex];
     CurrentCup->CursorPosition = 0;
 }
 
@@ -86,7 +84,7 @@ CProperties* World::GetCourseProps() {
     return nullptr;
 }
 
-void World::SetCourse(const char*name) {
+void World::SetCourse(const char* name) {
     for (size_t i = 0; i < Courses.size(); i++) {
         if (Courses[i]->Props.Name == name) {
             CurrentCourse = Courses[i];
@@ -126,21 +124,21 @@ void World::UpdateObjects() {
     }
 }
 
-void World::RenderObjects(Camera *camera) {
+void World::RenderObjects(Camera* camera) {
     for (const auto& object : this->GameObjects) {
         object->Render(camera);
     }
 }
 
 void World::ExpiredObjects() {
-    this->GameObjects.erase(
-        std::remove_if(this->GameObjects.begin(), this->GameObjects.end(),
-                        [](const std::unique_ptr<GameObject>& object) { return object->uuid == 0; }), // Example condition
-        this->GameObjects.end());
+    this->GameObjects.erase(std::remove_if(this->GameObjects.begin(), this->GameObjects.end(),
+                                           [](const std::unique_ptr<GameObject>& object) {
+                                               return object->uuid == 0;
+                                           }), // Example condition
+                            this->GameObjects.end());
 }
 
 void World::DestroyObjects() {
-
 }
 
 Object* World::GetObjectByIndex(size_t index) {

@@ -27,6 +27,8 @@
 
 #include "engine/courses/PodiumCeremony.h"
 
+#include "engine/Registry.h"
+
 extern "C" {
 #include "main.h"
 #include "audio/load.h"
@@ -93,39 +95,46 @@ void CustomEngineInit() {
     gTestCourse = new TestCourse();
 
     /* Add all courses to the global course list */
-    gWorldInstance.Courses.push_back(gMarioRaceway);
-    gWorldInstance.Courses.push_back(gChocoMountain);
-    gWorldInstance.Courses.push_back(gBowsersCastle);
-    gWorldInstance.Courses.push_back(gBansheeBoardwalk);
-    gWorldInstance.Courses.push_back(gYoshiValley);
-    gWorldInstance.Courses.push_back(gFrappeSnowland);
-    gWorldInstance.Courses.push_back(gKoopaTroopaBeach);
-    gWorldInstance.Courses.push_back(gRoyalRaceway);
-    gWorldInstance.Courses.push_back(gLuigiRaceway);
-    gWorldInstance.Courses.push_back(gMooMooFarm);
-    gWorldInstance.Courses.push_back(gToadsTurnpike);
-    gWorldInstance.Courses.push_back(gKalimariDesert);
-    gWorldInstance.Courses.push_back(gSherbetLand);
-    gWorldInstance.Courses.push_back(gRainbowRoad);
-    gWorldInstance.Courses.push_back(gWarioStadium);
-    gWorldInstance.Courses.push_back(gBlockFort);
-    gWorldInstance.Courses.push_back(gSkyscraper);
-    gWorldInstance.Courses.push_back(gDoubleDeck);
-    gWorldInstance.Courses.push_back(gDkJungle);
-    gWorldInstance.Courses.push_back(gBigDonut);
-    gWorldInstance.Courses.push_back(gTestCourse);
+    registryCourse("mk64:mario_raceway", []() { return gMarioRaceway; });
+    registryCourse("mk64:choco_mountain", []() { return gChocoMountain; });
+    registryCourse("mk64:bowser_calstle", []() { return gBowsersCastle; });
+    registryCourse("mk64:banshee_boardwalk", []() { return gBansheeBoardwalk; });
+    registryCourse("mk64:yoshi_valley", []() { return gYoshiValley; });
+    registryCourse("mk64:frappe_snowland", []() { return gFrappeSnowland; });
+    registryCourse("mk64:koopa_troopa_beach", []() { return gKoopaTroopaBeach; });
+    registryCourse("mk64:royal_raceway", []() { return gRoyalRaceway; });
+    registryCourse("mk64:luigi_raceway", []() { return gLuigiRaceway; });
+    registryCourse("mk64:moo_moo_farm", []() { return gMooMooFarm; });
+    registryCourse("mk64:toads_turnpike", []() { return gToadsTurnpike; });
+    registryCourse("mk64:kalimari_desert", []() { return gKalimariDesert; });
+    registryCourse("mk64:sherbet_land", []() { return gSherbetLand; });
+    registryCourse("mk64:rainbow_road", []() { return gRainbowRoad; });
+    registryCourse("mk64:wario_stadium", []() { return gWarioStadium; });
+    registryCourse("mk64:block_fort", []() { return gBlockFort; });
+    registryCourse("mk64:skyscraper", []() { return gSkyscraper; });
+    registryCourse("mk64:double_deck", []() { return gDoubleDeck; });
+    registryCourse("mk64:dk_jungle", []() { return gDkJungle; });
+    registryCourse("mk64:big_donut", []() { return gBigDonut; });
+    registryCourse("mk64:test_course", []() { return gTestCourse; });
 
     /* Instantiate Cups */
-    Cup* mushroom = gWorldInstance.AddCup(
-        "mushroom cup", std::vector<Course*>{ gLuigiRaceway, gMooMooFarm, gKoopaTroopaBeach, gKalimariDesert });
-    Cup* flower = gWorldInstance.AddCup(
-        "flower cup", std::vector<Course*>{ gToadsTurnpike, gFrappeSnowland, gChocoMountain, gMarioRaceway });
-    Cup* star = gWorldInstance.AddCup(
-        "star cup", std::vector<Course*>{ gWarioStadium, gSherbetLand, gRoyalRaceway, gBowsersCastle });
-    Cup* special = gWorldInstance.AddCup(
-        "special cup", std::vector<Course*>{ gDkJungle, gYoshiValley, gBansheeBoardwalk, gRainbowRoad });
-    Cup* battle =
-        gWorldInstance.AddCup("battle", std::vector<Course*>{ gBigDonut, gBlockFort, gDoubleDeck, gSkyscraper });
+    Cup* mushroom =
+        new Cup("mushroom cup", std::vector<Course*>{ gLuigiRaceway, gMooMooFarm, gKoopaTroopaBeach, gKalimariDesert });
+    registryCup("mk64:mushroom_cup", [mushroom]() { return mushroom; });
+
+    Cup* flower =
+        new Cup("flower cup", std::vector<Course*>{ gToadsTurnpike, gFrappeSnowland, gChocoMountain, gMarioRaceway });
+    registryCup("mk64:flower_cup", [flower]() { return flower; });
+
+    Cup* star = new Cup("star cup", std::vector<Course*>{ gWarioStadium, gSherbetLand, gRoyalRaceway, gBowsersCastle });
+    registryCup("mk64:star_cup", [star]() { return star; });
+
+    Cup* special =
+        new Cup("special cup", std::vector<Course*>{ gDkJungle, gYoshiValley, gBansheeBoardwalk, gRainbowRoad });
+    registryCup("mk64:special_cup", [special]() { return special; });
+
+    Cup* battle = new Cup("battle", std::vector<Course*>{ gBigDonut, gBlockFort, gDoubleDeck, gSkyscraper });
+    registryCup("mk64:battle", [battle]() { return battle; });
 
     /* Set default course; mario raceway */
     gWorldInstance.CurrentCourse = gMarioRaceway;
