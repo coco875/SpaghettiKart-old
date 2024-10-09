@@ -120,20 +120,17 @@ void CustomEngineInit() {
     /* Instantiate Cups */
     Cup* mushroom =
         new Cup("mushroom cup", std::vector<Course*>{ gLuigiRaceway, gMooMooFarm, gKoopaTroopaBeach, gKalimariDesert });
-    registryCup("mk64:mushroom_cup", [mushroom]() { return mushroom; });
-
     Cup* flower =
         new Cup("flower cup", std::vector<Course*>{ gToadsTurnpike, gFrappeSnowland, gChocoMountain, gMarioRaceway });
-    registryCup("mk64:flower_cup", [flower]() { return flower; });
-
     Cup* star = new Cup("star cup", std::vector<Course*>{ gWarioStadium, gSherbetLand, gRoyalRaceway, gBowsersCastle });
-    registryCup("mk64:star_cup", [star]() { return star; });
-
     Cup* special =
         new Cup("special cup", std::vector<Course*>{ gDkJungle, gYoshiValley, gBansheeBoardwalk, gRainbowRoad });
-    registryCup("mk64:special_cup", [special]() { return special; });
-
     Cup* battle = new Cup("battle", std::vector<Course*>{ gBigDonut, gBlockFort, gDoubleDeck, gSkyscraper });
+
+    registryCup("mk64:mushroom_cup", [mushroom]() { return mushroom; });
+    registryCup("mk64:flower_cup", [flower]() { return flower; });
+    registryCup("mk64:star_cup", [star]() { return star; });
+    registryCup("mk64:special_cup", [special]() { return special; });
     registryCup("mk64:battle", [battle]() { return battle; });
 
     /* Set default course; mario raceway */
