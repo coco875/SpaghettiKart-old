@@ -9,36 +9,36 @@
 #include "BombKart.h"
 
 extern "C" {
-    #include "main.h"
-    #include "camera.h"
-    #include "course_offsets.h"
-    #include "code_800029B0.h"
-    #include "render_courses.h"
-    #include "code_8006E9C0.h"
-    #include "code_80057C60.h"
-    #include "defines.h"
-    #include "math_util.h"
-    #include "external.h"
-    #include "code_80005FD0.h"
-    #include "spawn_players.h"
-    #include "render_objects.h"
-    #include "assets/common_data.h"
-    #include "save.h"
-    #include "staff_ghosts.h"
-    #include "actors.h"
-    #include "collision.h"
-    #include "memory.h"
-    typedef struct {
+#include "main.h"
+#include "camera.h"
+#include "course_offsets.h"
+#include "code_800029B0.h"
+#include "render_courses.h"
+#include "code_8006E9C0.h"
+#include "code_80057C60.h"
+#include "defines.h"
+#include "math_util.h"
+#include "external.h"
+#include "code_80005FD0.h"
+#include "spawn_players.h"
+#include "render_objects.h"
+#include "assets/common_data.h"
+#include "save.h"
+#include "staff_ghosts.h"
+#include "actors.h"
+#include "collision.h"
+#include "memory.h"
+typedef struct {
     Gfx* addr;
     u8 surfaceType;
     u8 sectionId;
     u16 flags;
-    } TrackSections;
-    extern Gfx test_course_dls[];
-    extern Vtx mario_Plane_001_mesh_vtx_1[];
-    extern Gfx mario_Plane_001_mesh[];
-    extern TrackWaypoint test_course_path[];
-    extern TrackSections test_course_addr[];
+} TrackSections;
+extern Gfx test_course_dls[];
+extern Vtx mario_Plane_001_mesh_vtx_1[];
+extern Gfx mario_Plane_001_mesh[];
+extern TrackWaypoint test_course_path[];
+extern TrackSections test_course_addr[];
 }
 
 TestCourse::TestCourse() {
@@ -59,7 +59,7 @@ TestCourse::TestCourse() {
     Props.NearPersp = 9.0f;
     Props.FarPersp = 4500.0f;
 
-    Props.PathSizes = {52, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    Props.PathSizes = { 52, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     Props.D_0D009418[0] = 4.1666665f;
     Props.D_0D009418[1] = 5.5833334f;
@@ -81,34 +81,34 @@ TestCourse::TestCourse() {
     Props.D_0D009808[2] = 5.75f;
     Props.D_0D009808[3] = 6.3333334f;
 
-    //Props.PathTable[0] = test_course_path;
+    // Props.PathTable[0] = test_course_path;
     Props.PathTable[1] = NULL;
     Props.PathTable[2] = NULL;
     Props.PathTable[3] = NULL;
 
-    //Props.PathTable2[0] = test_course_path;
+    // Props.PathTable2[0] = test_course_path;
     Props.PathTable2[1] = NULL;
     Props.PathTable2[2] = NULL;
     Props.PathTable2[3] = NULL;
 
-    Props.Clouds = gKalimariDesertClouds;
-    Props.CloudList = gLuigiRacewayClouds;
+    Props.Clouds = gKalimariDesertIdClouds;
+    Props.CloudList = gLuigiRacewayIdClouds;
     Props.MinimapFinishlineX = 0;
     Props.MinimapFinishlineY = 0;
 
-    Props.Skybox.TopRight = {120, 140, 188};
-    Props.Skybox.BottomRight = {216, 232, 248};
-    Props.Skybox.BottomLeft = {216, 232, 248};
-    Props.Skybox.TopLeft = {40, 184, 208};
-    Props.Skybox.FloorTopRight = {0, 0, 0};
-    Props.Skybox.FloorBottomRight = {0, 0, 0};
-    Props.Skybox.FloorBottomLeft = {0, 0, 0};
-    Props.Skybox.FloorTopLeft = {0, 0, 0};
+    Props.Skybox.TopRight = { 120, 140, 188 };
+    Props.Skybox.BottomRight = { 216, 232, 248 };
+    Props.Skybox.BottomLeft = { 216, 232, 248 };
+    Props.Skybox.TopLeft = { 40, 184, 208 };
+    Props.Skybox.FloorTopRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomLeft = { 0, 0, 0 };
+    Props.Skybox.FloorTopLeft = { 0, 0, 0 };
 }
 
 void TestCourse::Load() {
     gSegmentTable[4] = reinterpret_cast<uintptr_t>(&mario_Plane_001_mesh_vtx_1[0]);
-    //gSegmentTable[7] = reinterpret_cast<uintptr_t>(&gfx[0]);
+    // gSegmentTable[7] = reinterpret_cast<uintptr_t>(&gfx[0]);
 }
 
 void TestCourse::LoadTextures() {
@@ -125,33 +125,28 @@ void TestCourse::LoadTextures() {
 }
 
 void TestCourse::SpawnActors() {
-struct ActorSpawnData itemboxes[] = {
-    {    40, 0, -800, 0},
-    {    -40, 0, -800, 0},
-    {    0, 0, -800, 0},
-    {    999, 6, 482, 0},
-    {    1064, 8, 275, {0}},
-    {   1028, 5, -39 , {0}},
-    {    320, 0, 1020, {0}},
-    {   293, 0, 950, {0}},
-    {{ -32768, 0,    0 }, {0}},
-};
+    struct ActorSpawnData itemboxes[] = {
+        { 40, 0, -800, 0 },      { -40, 0, -800, 0 },     { 0, 0, -800, 0 },
+        { 999, 6, 482, 0 },      { 1064, 8, 275, { 0 } }, { 1028, 5, -39, { 0 } },
+        { 320, 0, 1020, { 0 } }, { 293, 0, 950, { 0 } },  { { -32768, 0, 0 }, { 0 } },
+    };
 
-struct ActorSpawnData rocks[] = {
-    {{   200, 3000, 200 }, {0}},
-    {{   350, 2500, 300 }, {1}},
-    {{   400, 2000, 350 }, {2}},
-    {{ -32768,   0,   0 }, {0}},
-};
-    spawn_all_item_boxes((const char*)itemboxes);
-    spawn_falling_rocks((const char*)rocks);
+    struct ActorSpawnData rocks[] = {
+        { { 200, 3000, 200 }, { 0 } },
+        { { 350, 2500, 300 }, { 1 } },
+        { { 400, 2000, 350 }, { 2 } },
+        { { -32768, 0, 0 }, { 0 } },
+    };
+    spawn_all_item_boxes((const char*) itemboxes);
+    spawn_falling_rocks((const char*) rocks);
 }
 
-void TestCourse::Init() {}
+void TestCourse::Init() {
+}
 
 // Likely sets minimap boundaries
 void TestCourse::MinimapSettings() {
-    D_8018D220 = reinterpret_cast<uint8_t (*)[1024]>(dma_textures(gTextureExhaust5, 0x443, 0x1000));
+    D_8018D220 = reinterpret_cast<uint8_t(*)[1024]>(dma_textures(gTextureExhaust5, 0x443, 0x1000));
     D_8018D2A0 = 0.022f;
     D_8018D2E0 = 6;
     D_8018D2E8 = 28;
@@ -162,13 +157,14 @@ void TestCourse::MinimapSettings() {
     D_80165728 = -240;
 }
 
-void TestCourse::InitCourseObjects() {}
+void TestCourse::InitCourseObjects() {
+}
 
-void TestCourse::SomeSounds() {}
+void TestCourse::SomeSounds() {
+}
 
 void TestCourse::WhatDoesThisDo(Player* player, int8_t playerId) {
-    if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x19B) &&
-        ((s16) gNearestWaypointByPlayerId[playerId] < 0x1B9)) {
+    if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x19B) && ((s16) gNearestWaypointByPlayerId[playerId] < 0x1B9)) {
         if (D_80165300[playerId] != 1) {
             func_800CA288(playerId, 0x55);
         }
@@ -182,8 +178,7 @@ void TestCourse::WhatDoesThisDo(Player* player, int8_t playerId) {
 }
 
 void TestCourse::WhatDoesThisDoAI(Player* player, int8_t playerId) {
-    if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x19B) &&
-        ((s16) gNearestWaypointByPlayerId[playerId] < 0x1B9)) {
+    if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x19B) && ((s16) gNearestWaypointByPlayerId[playerId] < 0x1B9)) {
         if (D_80165300[playerId] != 1) {
             func_800CA2E4(playerId, 0x55);
         }
@@ -213,12 +208,15 @@ void TestCourse::SpawnBombKarts() {
 // Positions the finishline on the minimap
 void TestCourse::MinimapFinishlinePosition() {
     //! todo: Place hard-coded values here.
-    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY, (u8*) common_texture_minimap_finish_line);
+    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY,
+                            (u8*) common_texture_minimap_finish_line);
 }
 
-void TestCourse::SetStaffGhost() {}
+void TestCourse::SetStaffGhost() {
+}
 
-void TestCourse::BeginPlay() {  }
+void TestCourse::BeginPlay() {
+}
 void TestCourse::Render(struct UnkStruct_800DC5EC* arg0) {
     gSPSetGeometryMode(gDisplayListHead++, G_SHADING_SMOOTH);
     gSPClearGeometryMode(gDisplayListHead++, G_LIGHTING);
@@ -237,14 +235,16 @@ void TestCourse::Render(struct UnkStruct_800DC5EC* arg0) {
 void TestCourse::RenderCredits() {
 }
 
-void TestCourse::Collision() {}
+void TestCourse::Collision() {
+}
 
 void TestCourse::GenerateCollision() {
     generate_collision_mesh_with_defaults(mario_Plane_001_mesh);
 
-    parse_course_displaylists((const char*)test_course_addr);
+    parse_course_displaylists((const char*) test_course_addr);
     func_80295C6C();
     D_8015F8E4 = gCourseMinY - 10.0f;
 }
 
-void TestCourse::Destroy() { }
+void TestCourse::Destroy() {
+}

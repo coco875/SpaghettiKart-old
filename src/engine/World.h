@@ -76,7 +76,8 @@ class World {
     virtual void SetCupIndex(int16_t courseId);
     virtual u32 NextCup();
     virtual u32 PreviousCup();
-    virtual void SetCourseFromCup();
+    void SetCourseFromCup();
+    void SetCourseFromId(int id);
     void SetCup();
 
     World* GetWorld();

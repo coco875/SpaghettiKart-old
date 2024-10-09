@@ -189,7 +189,7 @@ void setup_race(void) {
         gCourseDirection = 1.0f;
     }
     if (gModeSelection == GRAND_PRIX) {
-        gCurrentCourseId = gCupCourseOrder[gCupSelection][gCourseIndexInCup];
+        // gCurrentCourseId = gCupCourseOrder[gCupSelection][gCourseIndexInCup];
         // Skip for debug menu
         if (gDebugMenuSelection < DEBUG_MENU) {
             SetCourseFromCup();

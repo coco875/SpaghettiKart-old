@@ -10,26 +10,26 @@
 #include "kalimari_desert_data.h"
 
 extern "C" {
-    #include "main.h"
-    #include "camera.h"
-    #include "course_offsets.h"
-    #include "code_800029B0.h"
-    #include "render_courses.h"
-    #include "code_8006E9C0.h"
-    #include "code_80057C60.h"
-    #include "defines.h"
-    #include "math_util.h"
-    #include "external.h"
-    #include "code_80005FD0.h"
-    #include "spawn_players.h"
-    #include "render_objects.h"
-    #include "assets/common_data.h"
-    #include "save.h"
-    #include "staff_ghosts.h"
-    #include "actors.h"
-    #include "collision.h"
-    #include "memory.h"
-    extern const char *kalimari_desert_dls[];
+#include "main.h"
+#include "camera.h"
+#include "course_offsets.h"
+#include "code_800029B0.h"
+#include "render_courses.h"
+#include "code_8006E9C0.h"
+#include "code_80057C60.h"
+#include "defines.h"
+#include "math_util.h"
+#include "external.h"
+#include "code_80005FD0.h"
+#include "spawn_players.h"
+#include "render_objects.h"
+#include "assets/common_data.h"
+#include "save.h"
+#include "staff_ghosts.h"
+#include "actors.h"
+#include "collision.h"
+#include "memory.h"
+extern const char* kalimari_desert_dls[];
 }
 
 KalimariDesert::KalimariDesert() {
@@ -50,7 +50,7 @@ KalimariDesert::KalimariDesert() {
     Props.NearPersp = 10.0f;
     Props.FarPersp = 7000.0f;
 
-    Props.PathSizes = {0x2BC, 1, 1, 1, 0x226, 0, 0, 0, 0, 0, 0};
+    Props.PathSizes = { 0x2BC, 1, 1, 1, 0x226, 0, 0, 0, 0, 0, 0 };
 
     Props.D_0D009418[0] = 4.1666665f;
     Props.D_0D009418[1] = 5.5833334f;
@@ -82,19 +82,19 @@ KalimariDesert::KalimariDesert() {
     Props.PathTable2[2] = NULL;
     Props.PathTable2[3] = NULL;
 
-    Props.Clouds = gKalimariDesertClouds;
-    Props.CloudList = gKalimariDesertClouds;
+    Props.Clouds = gKalimariDesertIdClouds;
+    Props.CloudList = gKalimariDesertIdClouds;
     Props.MinimapFinishlineX = 0;
     Props.MinimapFinishlineY = 0;
 
-    Props.Skybox.TopRight = {195, 231, 255};
-    Props.Skybox.BottomRight = {255, 192, 0};
-    Props.Skybox.BottomLeft = {255, 192, 0};
-    Props.Skybox.TopLeft = {195, 231, 255};
-    Props.Skybox.FloorTopRight = {255, 192, 0};
-    Props.Skybox.FloorBottomRight = {0, 0, 0};
-    Props.Skybox.FloorBottomLeft = {0, 0, 0};
-    Props.Skybox.FloorTopLeft = {255, 192, 0};
+    Props.Skybox.TopRight = { 195, 231, 255 };
+    Props.Skybox.BottomRight = { 255, 192, 0 };
+    Props.Skybox.BottomLeft = { 255, 192, 0 };
+    Props.Skybox.TopLeft = { 195, 231, 255 };
+    Props.Skybox.FloorTopRight = { 255, 192, 0 };
+    Props.Skybox.FloorBottomRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomLeft = { 0, 0, 0 };
+    Props.Skybox.FloorTopLeft = { 255, 192, 0 };
 }
 
 void KalimariDesert::LoadTextures() {
@@ -136,13 +136,14 @@ void KalimariDesert::SpawnActors() {
     rrxing->crossingId = 0;
 }
 
-void KalimariDesert::Init() {}
+void KalimariDesert::Init() {
+}
 
 // Likely sets minimap boundaries
 void KalimariDesert::MinimapSettings() {
     D_8018D2C0[0] = 263;
     D_8018D2D8[0] = 165;
-    D_8018D220 = reinterpret_cast<uint8_t (*)[1024]>(dma_textures(gTextureExhaust5, 0x443, 0x1000));
+    D_8018D220 = reinterpret_cast<uint8_t(*)[1024]>(dma_textures(gTextureExhaust5, 0x443, 0x1000));
     D_8018D2A0 = 0.015f;
     D_8018D2E0 = 55;
     D_8018D2E8 = 27;
@@ -173,11 +174,14 @@ void KalimariDesert::RenderCourseObjects(s32 cameraId) {
     render_object_trains_smoke_particles(cameraId);
 }
 
-void KalimariDesert::SomeSounds() {}
+void KalimariDesert::SomeSounds() {
+}
 
-void KalimariDesert::WhatDoesThisDo(Player* player, int8_t playerId) {}
+void KalimariDesert::WhatDoesThisDo(Player* player, int8_t playerId) {
+}
 
-void KalimariDesert::WhatDoesThisDoAI(Player* player, int8_t playerId) {}
+void KalimariDesert::WhatDoesThisDoAI(Player* player, int8_t playerId) {
+}
 
 void KalimariDesert::SpawnBombKarts() {
     World* world = GetWorld();
@@ -196,10 +200,12 @@ void KalimariDesert::SpawnBombKarts() {
 // Positions the finishline on the minimap
 void KalimariDesert::MinimapFinishlinePosition() {
     //! todo: Place hard-coded values here.
-    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY, (u8*) common_texture_minimap_finish_line);
+    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY,
+                            (u8*) common_texture_minimap_finish_line);
 }
 
-void KalimariDesert::SetStaffGhost() {}
+void KalimariDesert::SetStaffGhost() {
+}
 
 void KalimariDesert::SpawnVehicles() {
     s16 trainCarYRot;
@@ -229,19 +235,19 @@ void KalimariDesert::SpawnVehicles() {
         tempLocomotive->velocity[2] = tempLocomotive->position[2] - origZPos;
         vec3s_set(trainCarRot, 0, trainCarYRot, 0);
         tempLocomotive->actorIndex = add_actor_to_empty_slot(tempLocomotive->position, trainCarRot,
-                                                                tempLocomotive->velocity, ACTOR_TRAIN_ENGINE);
+                                                             tempLocomotive->velocity, ACTOR_TRAIN_ENGINE);
 
         tempTender = &gTrainList[loopIndex].tender;
         if (tempTender->isActive == 1) {
             origXPos = tempTender->position[0];
             origZPos = tempTender->position[2];
-            trainCarYRot = update_vehicle_following_waypoint(
-                tempTender->position, (s16*) &tempTender->waypointIndex, gTrainList[loopIndex].speed);
+            trainCarYRot = update_vehicle_following_waypoint(tempTender->position, (s16*) &tempTender->waypointIndex,
+                                                             gTrainList[loopIndex].speed);
             tempTender->velocity[0] = tempTender->position[0] - origXPos;
             tempTender->velocity[2] = tempTender->position[2] - origZPos;
             vec3s_set(trainCarRot, 0, trainCarYRot, 0);
-            tempTender->actorIndex = add_actor_to_empty_slot(tempTender->position, trainCarRot,
-                                                                tempTender->velocity, ACTOR_TRAIN_TENDER);
+            tempTender->actorIndex =
+                add_actor_to_empty_slot(tempTender->position, trainCarRot, tempTender->velocity, ACTOR_TRAIN_TENDER);
         }
 
         for (loopIndex2 = 0; loopIndex2 < NUM_PASSENGER_CAR_ENTRIES; loopIndex2++) {
@@ -249,15 +255,13 @@ void KalimariDesert::SpawnVehicles() {
             if (tempPassengerCar->isActive == 1) {
                 origXPos = tempPassengerCar->position[0];
                 origZPos = tempPassengerCar->position[2];
-                trainCarYRot = update_vehicle_following_waypoint(tempPassengerCar->position,
-                                                                    (s16*) &tempPassengerCar->waypointIndex,
-                                                                    gTrainList[loopIndex].speed);
+                trainCarYRot = update_vehicle_following_waypoint(
+                    tempPassengerCar->position, (s16*) &tempPassengerCar->waypointIndex, gTrainList[loopIndex].speed);
                 tempPassengerCar->velocity[0] = tempPassengerCar->position[0] - origXPos;
                 tempPassengerCar->velocity[2] = tempPassengerCar->position[2] - origZPos;
                 vec3s_set(trainCarRot, 0, trainCarYRot, 0);
-                tempPassengerCar->actorIndex =
-                    add_actor_to_empty_slot(tempPassengerCar->position, trainCarRot, tempPassengerCar->velocity,
-                                            ACTOR_TRAIN_PASSENGER_CAR);
+                tempPassengerCar->actorIndex = add_actor_to_empty_slot(
+                    tempPassengerCar->position, trainCarRot, tempPassengerCar->velocity, ACTOR_TRAIN_PASSENGER_CAR);
             }
         }
     }
@@ -267,7 +271,8 @@ void KalimariDesert::UpdateVehicles() {
     update_vehicle_trains();
 }
 
-void KalimariDesert::BeginPlay() {  }
+void KalimariDesert::BeginPlay() {
+}
 void KalimariDesert::Render(struct UnkStruct_800DC5EC* arg0) {
     func_802B5D64(D_800DC610, D_802B87D4, 0, 1);
 
@@ -279,33 +284,34 @@ void KalimariDesert::Render(struct UnkStruct_800DC5EC* arg0) {
         gDPSetCombineMode(gDisplayListHead++, G_CC_SHADE, G_CC_SHADE);
         gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
         // d_course_kalimari_desert_packed_dl_71C8
-        gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*)0x070071C8)));
+        gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*) 0x070071C8)));
     }
 
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEI, G_CC_MODULATEI);
     gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
     render_course_segments(kalimari_desert_dls, arg0);
     // d_course_kalimari_desert_packed_dl_1ED8
-    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*)0x07001ED8)));
+    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*) 0x07001ED8)));
     // d_course_kalimari_desert_packed_dl_1B18
-    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*)0x07001B18)));
+    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*) 0x07001B18)));
     // d_course_kalimari_desert_packed_dl_8330
-    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*)0x07008330)));
+    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*) 0x07008330)));
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA);
     gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2);
     // d_course_kalimari_desert_packed_dl_998
-    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*)0x07000998)));
+    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*) 0x07000998)));
     // d_course_kalimari_desert_packed_dl_270
-    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*)0x07000270)));
+    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*) 0x07000270)));
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
 void KalimariDesert::RenderCredits() {
-    gSPDisplayList(gDisplayListHead++, (Gfx*)(d_course_kalimari_desert_dl_22E00));
+    gSPDisplayList(gDisplayListHead++, (Gfx*) (d_course_kalimari_desert_dl_22E00));
 }
 
-void KalimariDesert::Collision() {}
+void KalimariDesert::Collision() {
+}
 
 void KalimariDesert::GenerateCollision() {
     parse_course_displaylists(d_course_kalimari_desert_addr);
@@ -313,4 +319,5 @@ void KalimariDesert::GenerateCollision() {
     D_8015F8E4 = gCourseMinY - 10.0f;
 }
 
-void KalimariDesert::Destroy() { }
+void KalimariDesert::Destroy() {
+}

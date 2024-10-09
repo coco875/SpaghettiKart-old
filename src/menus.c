@@ -1034,7 +1034,7 @@ void splash_menu_act(struct Controller* controller, u16 arg1) {
                 if (btnAndStick & R_JPAD) {
                     play_sound2(SOUND_MENU_CURSOR_MOVE);
                     NextCourse();
-                    gCurrentCourseId = GetCourseIndex();
+                    // gCurrentCourseId = GetCourseIndex();
                     // if (gCurrentCourseId < (NUM_COURSES - 2)) {
                     //     gCurrentCourseId += 1;
                     // } else {
@@ -1044,7 +1044,7 @@ void splash_menu_act(struct Controller* controller, u16 arg1) {
                 if (btnAndStick & L_JPAD) {
                     play_sound2(SOUND_MENU_CURSOR_MOVE);
                     PreviousCourse();
-                    gCurrentCourseId = GetCourseIndex();
+                    // gCurrentCourseId = GetCourseIndex();
                     // if (gCurrentCourseId > 0) {
                     //     gCurrentCourseId -= 1;
                     // } else {
@@ -1715,7 +1715,7 @@ void course_select_menu_act(struct Controller* arg0, u16 arg1) {
                 D_800DC540 = GetCupIndex();
                 //! @todo SetCourse();
                 SetCup();
-                gCurrentCourseId = gCupCourseOrder[gCupSelection][gCourseIndexInCup];
+                // gCurrentCourseId = gCupCourseOrder[gCupSelection][gCourseIndexInCup];
                 SetCourseFromCup();
                 if ((buttonAndStickPress & B_BUTTON) != 0) {
                     func_8009E208();
@@ -1730,7 +1730,7 @@ void course_select_menu_act(struct Controller* arg0, u16 arg1) {
                         //! @todo SetCourse() to course one;
                         SetCupCursorPosition(COURSE_ONE);
                         SetCourseFromCup();
-                        gCurrentCourseId = gCupCourseOrder[gCupSelection][COURSE_ONE];
+                        // gCurrentCourseId = gCupCourseOrder[gCupSelection][COURSE_ONE];
                         gMenuTimingCounter = 0;
                     }
                     func_800B44AC();
@@ -1751,7 +1751,7 @@ void course_select_menu_act(struct Controller* arg0, u16 arg1) {
                     play_sound2(SOUND_MENU_CURSOR_MOVE);
                 }
 
-                gCurrentCourseId = gCupCourseOrder[gCupSelection][gCourseIndexInCup];
+                // gCurrentCourseId = gCupCourseOrder[gCupSelection][gCourseIndexInCup];
                 SetCourseFromCup();
                 if ((buttonAndStickPress & B_BUTTON) != 0) {
                     if (D_8018EDEC == 2) {

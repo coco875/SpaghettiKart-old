@@ -1,3 +1,5 @@
+#pragma once
+
 #include <libultraship.h>
 #include "engine/Engine.h"
 
@@ -86,49 +88,28 @@ void* GetCourse(void);
 
 void SetCourseByClass(void* course);
 
-void* GetMarioRaceway(void);
-
-void* GetLuigiRaceway(void);
-
-void* GetChocoMountain(void);
-
-void* GetBowsersCastle(void);
-
-void* GetBansheeBoardwalk(void);
-
-void* GetYoshiValley(void);
-
-void* GetFrappeSnowland(void);
-
-void* GetKoopaTroopaBeach(void);
-
-void* GetRoyalRaceway(void);
-
-void* GetMooMooFarm(void);
-
-void* GetToadsTurnpike(void);
-
-void* GetKalimariDesert(void);
-
-void* GetSherbetLand(void);
-
-void* GetRainbowRoad(void);
-
-void* GetWarioStadium(void);
-
-void* GetBlockFort(void);
-
-void* GetSkyscraper(void);
-
-void* GetDoubleDeck(void);
-
-void* GetDkJungle(void);
-
-void* GetBigDonut(void);
-
-void* GetPodiumCeremony(void);
-
-void* GetTestCourse(void);
+int gMarioRacewayId;
+int gChocoMountainId;
+int gBowsersCastleId;
+int gBansheeBoardwalkId;
+int gYoshiValleyId;
+int gFrappeSnowlandId;
+int gKoopaTroopaBeachId;
+int gRoyalRacewayId;
+int gLuigiRacewayId;
+int gMooMooFarmId;
+int gToadsTurnpikeId;
+int gKalimariDesertId;
+int gSherbetLandId;
+int gRainbowRoadId;
+int gWarioStadiumId;
+int gBlockFortId;
+int gSkyscraperId;
+int gDoubleDeckId;
+int gDkJungleId;
+int gBigDonutId;
+int gPodiumCeremonyId;
+int gTestCourseId;
 #ifdef __cplusplus
 }
 #endif

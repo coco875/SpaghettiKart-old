@@ -10,27 +10,27 @@
 #include "assets/wario_stadium_data.h"
 
 extern "C" {
-    #include "main.h"
-    #include "camera.h"
-    #include "course_offsets.h"
-    #include "code_800029B0.h"
-    #include "render_courses.h"
-    #include "code_8006E9C0.h"
-    #include "code_80057C60.h"
-    #include "defines.h"
-    #include "math_util.h"
-    #include "external.h"
-    #include "code_80005FD0.h"
-    #include "spawn_players.h"
-    #include "render_objects.h"
-    #include "assets/common_data.h"
-    #include "save.h"
-    #include "staff_ghosts.h"
-    #include "actors.h"
-    #include "collision.h"
-    #include "memory.h"
-    extern const char *wario_stadium_dls[];
-    extern s16 currentScreenSection;
+#include "main.h"
+#include "camera.h"
+#include "course_offsets.h"
+#include "code_800029B0.h"
+#include "render_courses.h"
+#include "code_8006E9C0.h"
+#include "code_80057C60.h"
+#include "defines.h"
+#include "math_util.h"
+#include "external.h"
+#include "code_80005FD0.h"
+#include "spawn_players.h"
+#include "render_objects.h"
+#include "assets/common_data.h"
+#include "save.h"
+#include "staff_ghosts.h"
+#include "actors.h"
+#include "collision.h"
+#include "memory.h"
+extern const char* wario_stadium_dls[];
+extern s16 currentScreenSection;
 }
 
 WarioStadium::WarioStadium() {
@@ -51,7 +51,7 @@ WarioStadium::WarioStadium() {
     Props.NearPersp = 10.0f;
     Props.FarPersp = 4800.0f;
 
-    Props.PathSizes = {0x640, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    Props.PathSizes = { 0x640, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     Props.D_0D009418[0] = 4.1666665f;
     Props.D_0D009418[1] = 5.5833334f;
@@ -83,19 +83,19 @@ WarioStadium::WarioStadium() {
     Props.PathTable2[2] = NULL;
     Props.PathTable2[3] = NULL;
 
-    Props.Clouds = gWarioStadiumStars;
-    Props.CloudList = gWarioStadiumStars;
+    Props.Clouds = gWarioStadiumIdStars;
+    Props.CloudList = gWarioStadiumIdStars;
     Props.MinimapFinishlineX = 0;
     Props.MinimapFinishlineY = 0;
 
-    Props.Skybox.TopRight = {20, 30, 56};
-    Props.Skybox.BottomRight = {40, 60, 110};
-    Props.Skybox.BottomLeft = {40, 60, 110};
-    Props.Skybox.TopLeft = {20, 30, 56};
-    Props.Skybox.FloorTopRight = {0, 0, 0};
-    Props.Skybox.FloorBottomRight = {0, 0, 0};
-    Props.Skybox.FloorBottomLeft = {0, 0, 0};
-    Props.Skybox.FloorTopLeft = {0, 0, 0};
+    Props.Skybox.TopRight = { 20, 30, 56 };
+    Props.Skybox.BottomRight = { 40, 60, 110 };
+    Props.Skybox.BottomLeft = { 40, 60, 110 };
+    Props.Skybox.TopLeft = { 20, 30, 56 };
+    Props.Skybox.FloorTopRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomLeft = { 0, 0, 0 };
+    Props.Skybox.FloorTopLeft = { 0, 0, 0 };
 }
 
 void WarioStadium::LoadTextures() {
@@ -118,7 +118,8 @@ void WarioStadium::SpawnActors() {
     add_actor_to_empty_slot(position, rotation, velocity, ACTOR_WARIO_SIGN);
 }
 
-void WarioStadium::Init() {}
+void WarioStadium::Init() {
+}
 void WarioStadium::InitClouds() {
     init_stars(this->Props.Clouds);
 }
@@ -135,7 +136,8 @@ void WarioStadium::MinimapSettings() {
     D_8018D2E8 = 35;
 }
 
-void WarioStadium::InitCourseObjects() {}
+void WarioStadium::InitCourseObjects() {
+}
 
 void WarioStadium::SomeSounds() {
     vec3f_set(D_8015F748, 298.0f, 202.0f, -850.0f);
@@ -148,9 +150,11 @@ void WarioStadium::SomeSounds() {
     func_800C9D80(D_8015F778, D_802B91C8, 0x5103700B);
 }
 
-void WarioStadium::WhatDoesThisDo(Player* player, int8_t playerId) {}
+void WarioStadium::WhatDoesThisDo(Player* player, int8_t playerId) {
+}
 
-void WarioStadium::WhatDoesThisDoAI(Player* player, int8_t playerId) {}
+void WarioStadium::WhatDoesThisDoAI(Player* player, int8_t playerId) {
+}
 
 void WarioStadium::SpawnBombKarts() {
     World* world = GetWorld();
@@ -169,12 +173,15 @@ void WarioStadium::SpawnBombKarts() {
 // Positions the finishline on the minimap
 void WarioStadium::MinimapFinishlinePosition() {
     //! todo: Place hard-coded values here.
-    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY, (u8*) common_texture_minimap_finish_line);
+    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY,
+                            (u8*) common_texture_minimap_finish_line);
 }
 
-void WarioStadium::SetStaffGhost() {}
+void WarioStadium::SetStaffGhost() {
+}
 
-void WarioStadium::BeginPlay() {  }
+void WarioStadium::BeginPlay() {
+}
 void WarioStadium::Render(struct UnkStruct_800DC5EC* arg0) {
     s16 prevFrame;
 
@@ -187,7 +194,7 @@ void WarioStadium::Render(struct UnkStruct_800DC5EC* arg0) {
         gDPSetCombineMode(gDisplayListHead++, G_CC_SHADE, G_CC_SHADE);
         gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
         // d_course_wario_stadium_packed_dl_A0C8
-        gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*)0x0700A0C8));
+        gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*) 0x0700A0C8));
     }
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATERGBA, G_CC_MODULATERGBA);
     gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
@@ -195,12 +202,12 @@ void WarioStadium::Render(struct UnkStruct_800DC5EC* arg0) {
     render_course_segments(wario_stadium_dls, arg0);
 
     // d_course_wario_stadium_packed_dl_A228
-    gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*)0x0700A228));
+    gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*) 0x0700A228));
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA);
     gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
     // d_course_wario_stadium_packed_dl_A88
-    gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*)0x07000A88));
+    gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*) 0x07000A88));
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     D_800DC5DC = 88;
@@ -264,31 +271,33 @@ void WarioStadium::Render(struct UnkStruct_800DC5EC* arg0) {
 }
 
 void WarioStadium::RenderCredits() {
-    gSPDisplayList(gDisplayListHead++, (Gfx*)(d_course_wario_stadium_dl_CA78));
+    gSPDisplayList(gDisplayListHead++, (Gfx*) (d_course_wario_stadium_dl_CA78));
 }
 
-void WarioStadium::Collision() {}
+void WarioStadium::Collision() {
+}
 
 void WarioStadium::GenerateCollision() {
     parse_course_displaylists(d_course_wario_stadium_addr);
     func_80295C6C();
     D_8015F8E4 = gCourseMinY - 10.0f;
     // d_course_wario_stadium_packed_dl_C50
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07000C50), 100, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07000C50), 100, 255, 255, 255);
     // d_course_wario_stadium_packed_dl_BD8
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07000BD8), 100, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07000BD8), 100, 255, 255, 255);
     // d_course_wario_stadium_packed_dl_B60
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07000B60), 100, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07000B60), 100, 255, 255, 255);
     // d_course_wario_stadium_packed_dl_AE8
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07000AE8), 100, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07000AE8), 100, 255, 255, 255);
     // d_course_wario_stadium_packed_dl_CC8
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07000CC8), 100, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07000CC8), 100, 255, 255, 255);
     // d_course_wario_stadium_packed_dl_D50
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07000D50), 100, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07000D50), 100, 255, 255, 255);
     // d_course_wario_stadium_packed_dl_DD0
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07000DD0), 100, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07000DD0), 100, 255, 255, 255);
     // d_course_wario_stadium_packed_dl_E48
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07000E48), 100, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07000E48), 100, 255, 255, 255);
 }
 
-void WarioStadium::Destroy() { }
+void WarioStadium::Destroy() {
+}

@@ -7572,7 +7572,7 @@ void func_8001BE78(void) {
 
 void func_8001C05C(void) {
     init_segment_racing();
-    gCurrentCourseId = COURSE_AWARD_CEREMONY;
+    // gCurrentCourseId = COURSE_AWARD_CEREMONY;
     SetCourseByClass(GetPodiumCeremony());
     D_8016347C = 0;
     D_8016347E = 0;

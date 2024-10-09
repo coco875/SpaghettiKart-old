@@ -17,23 +17,16 @@ World::World() {
 Course* CurrentCourse;
 Cup* CurrentCup;
 
-Cup* World::AddCup(const char* name, std::vector<Course*> courses) {
-    // Create a new unique_ptr for Cup
-    Cup* cup = new Cup(name, courses);
-
-    // Add the Cup to the container
-    Cups.push_back(cup);
-
-    // Return the raw pointer to the Cup
-    return cup;
-}
-
 Cup* World::GetCup() {
     return Cups[CupIndex];
 }
 
 void World::SetCourseFromCup() {
-    CurrentCourse = CurrentCup->GetCourse();
+    CurrentCourse = Courses[CurrentCup->GetCourseId()];
+}
+
+void World::SetCourseFromId(int id) {
+    CurrentCourse = Courses[id];
 }
 
 // const char* World::GetCupName() {

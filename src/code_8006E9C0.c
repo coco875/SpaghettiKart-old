@@ -705,10 +705,10 @@ void func_8007055C(void) {
     switch (gCurrentCourseId) {
         case COURSE_MARIO_RACEWAY:
             // Uses Kalimari Desert's clouds for initialization?
-            // init_clouds(gKalimariDesertClouds);
+            // init_clouds(gKalimariDesertIdClouds);
             break;
             // case COURSE_YOSHI_VALLEY:
-            //     init_clouds(gYoshiValleyMooMooFarmClouds);
+            //     init_clouds(gYoshiValleyIdMooMooFarmClouds);
             //     break;
             // case COURSE_FRAPPE_SNOWLAND:
             //     if (gPlayerCount == 1) {
@@ -723,31 +723,31 @@ void func_8007055C(void) {
             //     D_8018D1F0 = var_s0;
             //     break;
             // case COURSE_KOOPA_BEACH:
-            //     init_clouds(gKoopaTroopaBeachClouds);
+            //     init_clouds(gKoopaTroopaBeachIdClouds);
             //     break;
             // case COURSE_ROYAL_RACEWAY:
-            //     init_clouds(gRoyalRacewayClouds);
+            //     init_clouds(gRoyalRacewayIdClouds);
             //     break;
             // case COURSE_LUIGI_RACEWAY:
-            //     init_clouds(gLuigiRacewayClouds);
+            //     init_clouds(gLuigiRacewayIdClouds);
             //     break;
             // case COURSE_MOO_MOO_FARM:
-            //     init_clouds(gYoshiValleyMooMooFarmClouds);
+            //     init_clouds(gYoshiValleyIdMooMooFarmClouds);
             //     break;
             // case COURSE_TOADS_TURNPIKE:
-            //     init_stars(gToadsTurnpikeRainbowRoadStars);
+            //     init_stars(gToadsTurnpikeIdRainbowRoadStars);
             //     break;
             // case COURSE_KALAMARI_DESERT:
-            //     init_clouds(gKalimariDesertClouds);
+            //     init_clouds(gKalimariDesertIdClouds);
             //     break;
             // case COURSE_SHERBET_LAND:
-            //     init_clouds(gSherbetLandClouds);
+            //     init_clouds(gSherbetLandIdClouds);
             //     break;
             // case COURSE_RAINBOW_ROAD:
-            //     init_stars(gToadsTurnpikeRainbowRoadStars);
+            //     init_stars(gToadsTurnpikeIdRainbowRoadStars);
             //     break;
             // case COURSE_WARIO_STADIUM:
-            //     init_stars(gWarioStadiumStars);
+            //     init_stars(gWarioStadiumIdStars);
             //     break;
     }
     func_8008C23C();

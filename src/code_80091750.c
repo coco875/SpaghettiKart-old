@@ -2454,7 +2454,7 @@ void func_80095574(void) {
             debug_print_str2(0x000000AA, 0x00000064, "off");
         }
         if ((gCurrentCourseId >= (NUM_COURSES - 1)) || (gCurrentCourseId < 0)) {
-            gCurrentCourseId = 0;
+            // gCurrentCourseId = 0;
         }
         print_str_num(0x00000050, 0x0000006E, "map_number", gCurrentCourseId);
         // This isn't functionally equivallent, but who cares.
@@ -4945,7 +4945,7 @@ void func_8009CE64(s32 arg0) {
                     switch (gNextDemoId) { /* switch 4 */
                         case 0:            /* switch 4 */
                             SetCourseByClass(GetMarioRaceway());
-                            gCurrentCourseId = 0;
+                            // gCurrentCourseId = 0;
                             gScreenModeSelection = 0;
                             gPlayerCountSelection1 = 1;
                             gPlayerCount = 1;
@@ -4954,7 +4954,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 1: /* switch 4 */
                             SetCourseByClass(GetLuigiRaceway());
-                            gCurrentCourseId = (s16) 1;
+                            // gCurrentCourseId = (s16) 1;
                             gScreenModeSelection = (s32) 1;
                             gPlayerCountSelection1 = 2;
                             gPlayerCount = (s8) 2;
@@ -4964,7 +4964,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 2: /* switch 4 */
                             SetCourseByClass(GetKalimariDesert());
-                            gCurrentCourseId = COURSE_KALAMARI_DESERT;
+                            // gCurrentCourseId = COURSE_KALAMARI_DESERT;
                             gScreenModeSelection = 0;
                             gPlayerCountSelection1 = (s32) 1;
                             gPlayerCount = 1;
@@ -4973,7 +4973,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 3: /* switch 4 */
                             SetCourseByClass(GetWarioStadium());
-                            gCurrentCourseId = 0x000E;
+                            // gCurrentCourseId = 0x000E;
                             gScreenModeSelection = 3;
                             gPlayerCountSelection1 = 3;
                             gPlayerCount = (s8) 3;
@@ -4984,7 +4984,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 4: /* switch 4 */
                             SetCourseByClass(GetBowsersCastle());
-                            gCurrentCourseId = 2;
+                            // gCurrentCourseId = 2;
                             gScreenModeSelection = 0;
                             gPlayerCountSelection1 = (s32) 1;
                             gPlayerCount = 1;
@@ -4993,7 +4993,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 5: /* switch 4 */
                             SetCourseByClass(GetSherbetLand());
-                            gCurrentCourseId = 0x000C;
+                            // gCurrentCourseId = 0x000C;
                             gScreenModeSelection = 3;
                             gPlayerCountSelection1 = 4;
                             gPlayerCount = 4;

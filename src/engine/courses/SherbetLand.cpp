@@ -10,26 +10,26 @@
 #include "assets/sherbet_land_data.h"
 
 extern "C" {
-    #include "main.h"
-    #include "camera.h"
-    #include "course_offsets.h"
-    #include "code_800029B0.h"
-    #include "render_courses.h"
-    #include "code_8006E9C0.h"
-    #include "code_80057C60.h"
-    #include "defines.h"
-    #include "math_util.h"
-    #include "external.h"
-    #include "code_80005FD0.h"
-    #include "spawn_players.h"
-    #include "render_objects.h"
-    #include "assets/common_data.h"
-    #include "save.h"
-    #include "staff_ghosts.h"
-    #include "actors.h"
-    #include "collision.h"
-    #include "memory.h"
-    extern const char *sherbet_land_dls[];
+#include "main.h"
+#include "camera.h"
+#include "course_offsets.h"
+#include "code_800029B0.h"
+#include "render_courses.h"
+#include "code_8006E9C0.h"
+#include "code_80057C60.h"
+#include "defines.h"
+#include "math_util.h"
+#include "external.h"
+#include "code_80005FD0.h"
+#include "spawn_players.h"
+#include "render_objects.h"
+#include "assets/common_data.h"
+#include "save.h"
+#include "staff_ghosts.h"
+#include "actors.h"
+#include "collision.h"
+#include "memory.h"
+extern const char* sherbet_land_dls[];
 }
 
 SherbetLand::SherbetLand() {
@@ -50,7 +50,7 @@ SherbetLand::SherbetLand() {
     Props.NearPersp = 9.0f;
     Props.FarPersp = 4500.0f;
 
-    Props.PathSizes = {0x2BC, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    Props.PathSizes = { 0x2BC, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     Props.D_0D009418[0] = 4.1666665f;
     Props.D_0D009418[1] = 5.5833334f;
@@ -82,19 +82,19 @@ SherbetLand::SherbetLand() {
     Props.PathTable2[2] = NULL;
     Props.PathTable2[3] = NULL;
 
-    Props.Clouds = gSherbetLandClouds;
-    Props.CloudList = gSherbetLandClouds;
+    Props.Clouds = gSherbetLandIdClouds;
+    Props.CloudList = gSherbetLandIdClouds;
     Props.MinimapFinishlineX = 0;
     Props.MinimapFinishlineY = 0;
 
-    Props.Skybox.TopRight = {128, 184, 248};
-    Props.Skybox.BottomRight = {216, 232, 248};
-    Props.Skybox.BottomLeft = {216, 232, 248};
-    Props.Skybox.TopLeft = {128, 184, 248};
-    Props.Skybox.FloorTopRight = {216, 232, 248};
-    Props.Skybox.FloorBottomRight = {128, 184, 248};
-    Props.Skybox.FloorBottomLeft = {128, 184, 248};
-    Props.Skybox.FloorTopLeft = {216, 232, 248};
+    Props.Skybox.TopRight = { 128, 184, 248 };
+    Props.Skybox.BottomRight = { 216, 232, 248 };
+    Props.Skybox.BottomLeft = { 216, 232, 248 };
+    Props.Skybox.TopLeft = { 128, 184, 248 };
+    Props.Skybox.FloorTopRight = { 216, 232, 248 };
+    Props.Skybox.FloorBottomRight = { 128, 184, 248 };
+    Props.Skybox.FloorBottomLeft = { 128, 184, 248 };
+    Props.Skybox.FloorTopLeft = { 216, 232, 248 };
 }
 
 void SherbetLand::LoadTextures() {
@@ -104,11 +104,12 @@ void SherbetLand::SpawnActors() {
     spawn_all_item_boxes(d_course_sherbet_land_item_box_spawns);
 }
 
-void SherbetLand::Init() {}
+void SherbetLand::Init() {
+}
 
 // Likely sets minimap boundaries
 void SherbetLand::MinimapSettings() {
-    D_8018D220 = reinterpret_cast<uint8_t (*)[1024]>(dma_textures(gTextureExhaust1, 0x485, 0xC00));
+    D_8018D220 = reinterpret_cast<uint8_t(*)[1024]>(dma_textures(gTextureExhaust1, 0x485, 0xC00));
     D_8018D2A0 = 0.015f;
     D_8018D2C0[0] = 262;
     D_8018D2E0 = 52;
@@ -141,9 +142,11 @@ void SherbetLand::RenderCourseObjects(s32 cameraId) {
 void SherbetLand::SomeSounds() {
 }
 
-void SherbetLand::WhatDoesThisDo(Player* player, int8_t playerId) {}
+void SherbetLand::WhatDoesThisDo(Player* player, int8_t playerId) {
+}
 
-void SherbetLand::WhatDoesThisDoAI(Player* player, int8_t playerId) {}
+void SherbetLand::WhatDoesThisDoAI(Player* player, int8_t playerId) {
+}
 
 void SherbetLand::SpawnBombKarts() {
     World* world = GetWorld();
@@ -162,12 +165,15 @@ void SherbetLand::SpawnBombKarts() {
 // Positions the finishline on the minimap
 void SherbetLand::MinimapFinishlinePosition() {
     //! todo: Place hard-coded values here.
-    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY, (u8*) common_texture_minimap_finish_line);
+    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY,
+                            (u8*) common_texture_minimap_finish_line);
 }
 
-void SherbetLand::SetStaffGhost() {}
+void SherbetLand::SetStaffGhost() {
+}
 
-void SherbetLand::BeginPlay() {  }
+void SherbetLand::BeginPlay() {
+}
 void SherbetLand::Render(struct UnkStruct_800DC5EC* arg0) {
     gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     gSPClearGeometryMode(gDisplayListHead++, G_LIGHTING);
@@ -178,19 +184,21 @@ void SherbetLand::Render(struct UnkStruct_800DC5EC* arg0) {
 }
 
 void SherbetLand::RenderCredits() {
-    gSPDisplayList(gDisplayListHead++, (Gfx*)(d_course_sherbet_land_dl_9AE8));
+    gSPDisplayList(gDisplayListHead++, (Gfx*) (d_course_sherbet_land_dl_9AE8));
 }
 
-void SherbetLand::Collision() {}
+void SherbetLand::Collision() {
+}
 
 void SherbetLand::GenerateCollision() {
     parse_course_displaylists(d_course_sherbet_land_addr);
     func_80295C6C();
     D_8015F8E4 = -18.0f;
     // d_course_sherbet_land_packed_dl_1EB8
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07001EB8), -0x4C, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07001EB8), -0x4C, 255, 255, 255);
     // d_course_sherbet_land_packed_dl_2308
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07002308), -0x6A, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07002308), -0x6A, 255, 255, 255);
 }
 
-void SherbetLand::Destroy() { }
+void SherbetLand::Destroy() {
+}

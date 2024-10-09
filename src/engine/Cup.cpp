@@ -1,7 +1,7 @@
 #include "Cup.h"
 #include "Course.h"
 
-Cup::Cup(const char* name, std::vector<Course*> courses) {
+Cup::Cup(const char* name, std::vector<int> courses) {
     this->Name = name;
     this->Courses = courses;
 
@@ -22,7 +22,7 @@ void Cup::Previous() {
     }
 }
 
-Course* Cup::GetCourse() {
+int Cup::GetCourseId() {
     return Courses[CursorPosition];
 }
 

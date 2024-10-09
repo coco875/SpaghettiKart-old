@@ -12,14 +12,14 @@ class Cup {
     const char* Name;
     u8* Thumbnail;
     size_t CursorPosition = 0; // Course index in cup
-    std::vector<Course*> Courses;
+    std::vector<int> Courses;
 
-    explicit Cup(const char* name, std::vector<Course*> courses);
+    explicit Cup(const char* name, std::vector<int> courses);
 
     virtual void ShuffleCourses();
 
     virtual void Next();
     virtual void Previous();
-    virtual Course* GetCourse();
+    virtual int GetCourseId();
     virtual size_t GetSize();
 };

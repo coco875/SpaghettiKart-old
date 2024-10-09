@@ -16,6 +16,7 @@
 #include "code_80057C60.h"
 #include "defines.h"
 #include "port/Game.h"
+#include "code_800029B0.h"
 
 void func_80086E70(s32 objectIndex) {
     gObjectList[objectIndex].unk_0AE = 1; // * 0xE0)) = 1;

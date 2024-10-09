@@ -1,4 +1,19 @@
 #include "Course.h"
 
-int registryCourse(char* idName, std::function<Course*()> courseFunction);
-int registryCup(char* idName, std::function<Cup*()> cupFunction);
+template <typename T> struct infoRegister {
+    char* nameId;
+    std::function<T*()> f;
+};
+
+template <typename T> class Registry {
+  public:
+    std::vector<infoRegister<T>> types;
+    Registry();
+    int add(char* name, std::function<T*()>);
+    T* getWithNameId(char* nameId);
+    T* getWithId(int id);
+    ~Registry();
+};
+
+int addCourse(char* nameId, Course* course);
+int addCup(char* nameId, Cup* cup);

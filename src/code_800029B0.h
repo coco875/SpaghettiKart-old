@@ -5,6 +5,7 @@
 #include <libultraship.h>
 #include <actor_types.h>
 #include "camera.h"
+#include "port/Game.h"
 
 struct UnkStruct_800DC5EC {
     /* 0x00 */ struct Controller* controllers; // gControllers ptr 800F6910
@@ -34,7 +35,7 @@ void func_80002DAC(void);
 void clear_nmi_buffer(void);
 void func_80003040(void);
 
-extern s16 gCurrentCourseId; // D_800DC5A0
+// extern s16 gCurrentCourseId; // D_800DC5A0
 #define gCurrentCourseId GetCourseIndex()
 extern s16 gCurrentlyLoadedCourseId;
 extern u16 D_800DC5A8;

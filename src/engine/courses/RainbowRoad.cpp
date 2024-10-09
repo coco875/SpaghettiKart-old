@@ -10,26 +10,26 @@
 #include "assets/rainbow_road_data.h"
 
 extern "C" {
-    #include "main.h"
-    #include "camera.h"
-    #include "course_offsets.h"
-    #include "code_800029B0.h"
-    #include "render_courses.h"
-    #include "code_8006E9C0.h"
-    #include "code_80057C60.h"
-    #include "defines.h"
-    #include "math_util.h"
-    #include "external.h"
-    #include "code_80005FD0.h"
-    #include "spawn_players.h"
-    #include "render_objects.h"
-    #include "assets/common_data.h"
-    #include "save.h"
-    #include "staff_ghosts.h"
-    #include "actors.h"
-    #include "collision.h"
-    #include "memory.h"
-    extern const char *rainbow_road_dls[];
+#include "main.h"
+#include "camera.h"
+#include "course_offsets.h"
+#include "code_800029B0.h"
+#include "render_courses.h"
+#include "code_8006E9C0.h"
+#include "code_80057C60.h"
+#include "defines.h"
+#include "math_util.h"
+#include "external.h"
+#include "code_80005FD0.h"
+#include "spawn_players.h"
+#include "render_objects.h"
+#include "assets/common_data.h"
+#include "save.h"
+#include "staff_ghosts.h"
+#include "actors.h"
+#include "collision.h"
+#include "memory.h"
+extern const char* rainbow_road_dls[];
 }
 
 RainbowRoad::RainbowRoad() {
@@ -50,7 +50,7 @@ RainbowRoad::RainbowRoad() {
     Props.NearPersp = 2.0f;
     Props.FarPersp = 2700.0f;
 
-    Props.PathSizes = {0x76C, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    Props.PathSizes = { 0x76C, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     Props.D_0D009418[0] = 4.1666665f;
     Props.D_0D009418[1] = 5.5833334f;
@@ -82,19 +82,19 @@ RainbowRoad::RainbowRoad() {
     Props.PathTable2[2] = NULL;
     Props.PathTable2[3] = NULL;
 
-    Props.Clouds = gToadsTurnpikeRainbowRoadStars;
-    Props.CloudList = gToadsTurnpikeRainbowRoadStars;
+    Props.Clouds = gToadsTurnpikeIdRainbowRoadStars;
+    Props.CloudList = gToadsTurnpikeIdRainbowRoadStars;
     Props.MinimapFinishlineX = 0;
     Props.MinimapFinishlineY = 0;
 
-    Props.Skybox.TopRight = {0, 0, 0};
-    Props.Skybox.BottomRight = {0, 0, 0};
-    Props.Skybox.BottomLeft = {0, 0, 0};
-    Props.Skybox.TopLeft = {0, 0, 0};
-    Props.Skybox.FloorTopRight = {0, 0, 0};
-    Props.Skybox.FloorBottomRight = {0, 0, 0};
-    Props.Skybox.FloorBottomLeft = {0, 0, 0};
-    Props.Skybox.FloorTopLeft = {0, 0, 0};
+    Props.Skybox.TopRight = { 0, 0, 0 };
+    Props.Skybox.BottomRight = { 0, 0, 0 };
+    Props.Skybox.BottomLeft = { 0, 0, 0 };
+    Props.Skybox.TopLeft = { 0, 0, 0 };
+    Props.Skybox.FloorTopRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomLeft = { 0, 0, 0 };
+    Props.Skybox.FloorTopLeft = { 0, 0, 0 };
 }
 
 void RainbowRoad::LoadTextures() {
@@ -104,7 +104,8 @@ void RainbowRoad::SpawnActors() {
     spawn_all_item_boxes(d_course_rainbow_road_item_box_spawns);
 }
 
-void RainbowRoad::Init() {}
+void RainbowRoad::Init() {
+}
 
 void RainbowRoad::InitClouds() {
     init_stars(this->Props.Clouds);
@@ -152,9 +153,11 @@ void RainbowRoad::RenderCourseObjects(s32 cameraId) {
 void RainbowRoad::SomeSounds() {
 }
 
-void RainbowRoad::WhatDoesThisDo(Player* player, int8_t playerId) {}
+void RainbowRoad::WhatDoesThisDo(Player* player, int8_t playerId) {
+}
 
-void RainbowRoad::WhatDoesThisDoAI(Player* player, int8_t playerId) {}
+void RainbowRoad::WhatDoesThisDoAI(Player* player, int8_t playerId) {
+}
 
 void RainbowRoad::SpawnBombKarts() {
     World* world = GetWorld();
@@ -173,12 +176,15 @@ void RainbowRoad::SpawnBombKarts() {
 // Positions the finishline on the minimap
 void RainbowRoad::MinimapFinishlinePosition() {
     //! todo: Place hard-coded values here.
-    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY, (u8*) common_texture_minimap_finish_line);
+    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY,
+                            (u8*) common_texture_minimap_finish_line);
 }
 
-void RainbowRoad::SetStaffGhost() {}
+void RainbowRoad::SetStaffGhost() {
+}
 
-void RainbowRoad::BeginPlay() {}
+void RainbowRoad::BeginPlay() {
+}
 void RainbowRoad::Render(struct UnkStruct_800DC5EC* arg0) {
     gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     gSPSetGeometryMode(gDisplayListHead++, G_SHADING_SMOOTH);
@@ -188,10 +194,11 @@ void RainbowRoad::Render(struct UnkStruct_800DC5EC* arg0) {
 }
 
 void RainbowRoad::RenderCredits() {
-    gSPDisplayList(gDisplayListHead++, (Gfx*)(d_course_rainbow_road_dl_16220));
+    gSPDisplayList(gDisplayListHead++, (Gfx*) (d_course_rainbow_road_dl_16220));
 }
 
-void RainbowRoad::Collision() {}
+void RainbowRoad::Collision() {
+}
 
 void RainbowRoad::GenerateCollision() {
     D_800DC5C8 = 1;
@@ -199,14 +206,14 @@ void RainbowRoad::GenerateCollision() {
     func_80295C6C();
     D_8015F8E4 = 0.0f;
     // d_course_rainbow_road_packed_dl_2068
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07002068), -0x6A, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07002068), -0x6A, 255, 255, 255);
     // d_course_rainbow_road_packed_dl_1E18
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07001E18), -0x6A, 255, 255, 255);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07001E18), -0x6A, 255, 255, 255);
     // d_course_rainbow_road_packed_dl_1318
-    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07001318), 255, 255, 255, 0);
+    find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07001318), 255, 255, 255, 0);
     if (gGamestate != CREDITS_SEQUENCE) {
         // d_course_rainbow_road_packed_dl_1FB8
-        find_vtx_and_set_colours(segmented_gfx_to_virtual((void*)0x07001FB8), -0x6A, 255, 255, 255);
+        find_vtx_and_set_colours(segmented_gfx_to_virtual((void*) 0x07001FB8), -0x6A, 255, 255, 255);
     }
 }
 
@@ -214,4 +221,5 @@ void RainbowRoad::Waypoints(Player* player, int8_t playerId) {
     player->nearestWaypointId = gCopyNearestWaypointByPlayerId[playerId];
 }
 
-void RainbowRoad::Destroy() {}
+void RainbowRoad::Destroy() {
+}

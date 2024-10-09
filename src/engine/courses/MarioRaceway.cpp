@@ -9,27 +9,27 @@
 #include "BombKart.h"
 
 extern "C" {
-    #include "main.h"
-    #include "camera.h"
-    #include "course_offsets.h"
-    #include "code_800029B0.h"
-    #include "render_courses.h"
-    #include "code_8006E9C0.h"
-    #include "code_80057C60.h"
-    #include "defines.h"
-    #include "math_util.h"
-    #include "external.h"
-    #include "code_80005FD0.h"
-    #include "spawn_players.h"
-    #include "render_objects.h"
-    #include "assets/common_data.h"
-    #include "save.h"
-    #include "staff_ghosts.h"
-    #include "actors.h"
-    #include "mario_raceway_data.h"
-    #include "collision.h"
-    #include "memory.h"
-    extern const char *mario_raceway_dls[];
+#include "main.h"
+#include "camera.h"
+#include "course_offsets.h"
+#include "code_800029B0.h"
+#include "render_courses.h"
+#include "code_8006E9C0.h"
+#include "code_80057C60.h"
+#include "defines.h"
+#include "math_util.h"
+#include "external.h"
+#include "code_80005FD0.h"
+#include "spawn_players.h"
+#include "render_objects.h"
+#include "assets/common_data.h"
+#include "save.h"
+#include "staff_ghosts.h"
+#include "actors.h"
+#include "mario_raceway_data.h"
+#include "collision.h"
+#include "memory.h"
+extern const char* mario_raceway_dls[];
 }
 
 MarioRaceway::MarioRaceway() {
@@ -52,7 +52,7 @@ MarioRaceway::MarioRaceway() {
     Props.NearPersp = 9.0f;
     Props.FarPersp = 4500.0f;
 
-    Props.PathSizes = {600, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    Props.PathSizes = { 600, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     Props.D_0D009418[0] = 4.1666665f;
     Props.D_0D009418[1] = 5.5833334f;
@@ -84,19 +84,19 @@ MarioRaceway::MarioRaceway() {
     Props.PathTable2[2] = NULL;
     Props.PathTable2[3] = NULL;
 
-    Props.Clouds = gKalimariDesertClouds;
-    Props.CloudList = gLuigiRacewayClouds;
+    Props.Clouds = gKalimariDesertIdClouds;
+    Props.CloudList = gLuigiRacewayIdClouds;
     Props.MinimapFinishlineX = 0;
     Props.MinimapFinishlineY = 0;
 
-    Props.Skybox.TopRight = {0, 184, 248};
-    Props.Skybox.BottomRight = {216, 232, 248};
-    Props.Skybox.BottomLeft = {216, 232, 248};
-    Props.Skybox.TopLeft = {0, 184, 248};
-    Props.Skybox.FloorTopRight = {0, 0, 0};
-    Props.Skybox.FloorBottomRight = {0, 0, 0};
-    Props.Skybox.FloorBottomLeft = {0, 0, 0};
-    Props.Skybox.FloorTopLeft = {0, 0, 0};
+    Props.Skybox.TopRight = { 0, 184, 248 };
+    Props.Skybox.BottomRight = { 216, 232, 248 };
+    Props.Skybox.BottomLeft = { 216, 232, 248 };
+    Props.Skybox.TopLeft = { 0, 184, 248 };
+    Props.Skybox.FloorTopRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomLeft = { 0, 0, 0 };
+    Props.Skybox.FloorTopLeft = { 0, 0, 0 };
 }
 
 void MarioRaceway::LoadTextures() {
@@ -129,11 +129,12 @@ void MarioRaceway::SpawnActors() {
     actor->flags |= 0x4000;
 }
 
-void MarioRaceway::Init() {}
+void MarioRaceway::Init() {
+}
 
 // Likely sets minimap boundaries
 void MarioRaceway::MinimapSettings() {
-    D_8018D220 = reinterpret_cast<uint8_t (*)[1024]>(dma_textures(gTextureExhaust5, 0x443, 0x1000));
+    D_8018D220 = reinterpret_cast<uint8_t(*)[1024]>(dma_textures(gTextureExhaust5, 0x443, 0x1000));
     D_8018D2A0 = 0.022f;
     D_8018D2E0 = 6;
     D_8018D2E8 = 28;
@@ -162,8 +163,7 @@ void MarioRaceway::SomeSounds() {
 }
 
 void MarioRaceway::WhatDoesThisDo(Player* player, int8_t playerId) {
-    if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x19B) &&
-        ((s16) gNearestWaypointByPlayerId[playerId] < 0x1B9)) {
+    if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x19B) && ((s16) gNearestWaypointByPlayerId[playerId] < 0x1B9)) {
         if (D_80165300[playerId] != 1) {
             func_800CA288(playerId, 0x55);
         }
@@ -177,8 +177,7 @@ void MarioRaceway::WhatDoesThisDo(Player* player, int8_t playerId) {
 }
 
 void MarioRaceway::WhatDoesThisDoAI(Player* player, int8_t playerId) {
-    if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x19B) &&
-        ((s16) gNearestWaypointByPlayerId[playerId] < 0x1B9)) {
+    if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x19B) && ((s16) gNearestWaypointByPlayerId[playerId] < 0x1B9)) {
         if (D_80165300[playerId] != 1) {
             func_800CA2E4(playerId, 0x55);
         }
@@ -208,7 +207,8 @@ void MarioRaceway::SpawnBombKarts() {
 // Positions the finishline on the minimap
 void MarioRaceway::MinimapFinishlinePosition() {
     //! todo: Place hard-coded values here.
-    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY, (u8*) common_texture_minimap_finish_line);
+    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY,
+                            (u8*) common_texture_minimap_finish_line);
 }
 
 void MarioRaceway::SetStaffGhost() {
@@ -224,7 +224,8 @@ void MarioRaceway::SetStaffGhost() {
     D_80162DE4 = 0;
 }
 
-void MarioRaceway::BeginPlay() {  }
+void MarioRaceway::BeginPlay() {
+}
 void MarioRaceway::Render(struct UnkStruct_800DC5EC* arg0) {
     u16 sp22 = arg0->pathCounter;
     u16 temp_t0 = arg0->playerDirection;
@@ -331,10 +332,11 @@ void MarioRaceway::Render(struct UnkStruct_800DC5EC* arg0) {
 }
 
 void MarioRaceway::RenderCredits() {
-    gSPDisplayList(gDisplayListHead++, (Gfx*)(d_course_mario_raceway_dl_9348));
+    gSPDisplayList(gDisplayListHead++, (Gfx*) (d_course_mario_raceway_dl_9348));
 }
 
-void MarioRaceway::Collision() {}
+void MarioRaceway::Collision() {
+}
 
 void MarioRaceway::GenerateCollision() {
     generate_collision_mesh_with_defaults(segmented_gfx_to_virtual(reinterpret_cast<void*>(0x07001140)));
@@ -351,4 +353,5 @@ void MarioRaceway::GenerateCollision() {
     D_8015F8E4 = gCourseMinY - 10.0f;
 }
 
-void MarioRaceway::Destroy() { }
+void MarioRaceway::Destroy() {
+}
