@@ -401,7 +401,7 @@ void func_802A487C(Vtx* arg0, UNUSED struct UnkStruct_800DC5EC* arg1, UNUSED s32
                    UNUSED f32* arg4) {
 
     init_rdp();
-    if (gCurrentCourseId != GetRainbowRoad()) {
+    if (gCurrentCourseId != COURSE_RAINBOW_ROAD) {
 
         gDPSetRenderMode(gDisplayListHead++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
         gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER | G_LIGHTING);
@@ -478,7 +478,7 @@ void func_802A4A0C(Vtx* vtx, struct UnkStruct_800DC5EC* arg1, UNUSED s32 arg2, U
     gSPMatrix(gDisplayListHead++, LOAD_ASSET(D_0D008E98), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPVertex(gDisplayListHead++, &vtx[0], 4, 0);
     gSP2Triangles(gDisplayListHead++, 0, 3, 1, 0, 1, 3, 2, 0);
-    if (gCurrentCourseId == GetRainbowRoad()) {
+    if (gCurrentCourseId == COURSE_RAINBOW_ROAD) {
         gSPVertex(gDisplayListHead++, &vtx[4], 4, 0);
         gSP2Triangles(gDisplayListHead++, 0, 3, 1, 0, 1, 3, 2, 0);
     }

@@ -53,7 +53,7 @@ s32 func_80290C20(Camera* camera) {
 void parse_course_displaylists(const char* asset) {
     TrackSections* section;
 
-    if (gCurrentCourseId == GetTestCourse()) {
+    if (gCurrentCourseId == gTestCourseId) {
         section = (TrackSections*) asset;
     } else {
         section = (TrackSections*) LOAD_ASSET(asset);
@@ -138,7 +138,7 @@ void render_course_segments(const char* addr[], struct UnkStruct_800DC5EC* arg1)
                 index = sp1E;
             }
         } else {
-            if (gCurrentCourseId == GetBowsersCastle()) {
+            if (gCurrentCourseId == COURSE_BOWSER_CASTLE) {
                 if ((temp_v0_3 >= 0x11) && (temp_v0_3 < 0x18)) {
                     index = temp_v0_3;
                 } else if ((temp_v0_3 == 255) && (sp1E != 255)) {
@@ -148,7 +148,7 @@ void render_course_segments(const char* addr[], struct UnkStruct_800DC5EC* arg1)
                 } else {
                     index = arg1->pathCounter;
                 }
-            } else if (gCurrentCourseId == GetChocoMountain()) {
+            } else if (gCurrentCourseId == COURSE_CHOCO_MOUNTAIN) {
                 if ((temp_v0_3 >= 0xE) && (temp_v0_3 < 0x16)) {
                     index = temp_v0_3;
                 } else if ((temp_v0_3 == 255) && (sp1E != 255)) {
@@ -181,7 +181,7 @@ void render_course_segments(const char* addr[], struct UnkStruct_800DC5EC* arg1)
     index = ((index - 1) * 4) + direction;
     gSPDisplayList(gDisplayListHead++, addr[index]);
 
-    if (CVarGetInteger("gDisableLod", 0) == 1 && (gCurrentCourseId == GetBowsersCastle()) &&
+    if (CVarGetInteger("gDisableLod", 0) == 1 && (gCurrentCourseId == COURSE_BOWSER_CASTLE) &&
         (index < 20 || index > 99)) { // always render higher version of bowser statue
         gDisplayListHead--;
         gSPDisplayList(gDisplayListHead++, d_course_bowsers_castle_dl_9148); // use credit version of the course
@@ -244,6 +244,8 @@ void func_8029122C(struct UnkStruct_800DC5EC* arg0, s32 playerId) {
     }
     mtxf_identity(matrix);
     render_set_position(matrix, 0);
+    /// @todo need to make an equivalent in the new api
+#if 0
     switch (gCurrentCourseId) {
         case COURSE_BOWSER_CASTLE:
             if (gActiveScreenMode != SCREEN_MODE_1P) {
@@ -527,6 +529,7 @@ void func_8029122C(struct UnkStruct_800DC5EC* arg0, s32 playerId) {
             gDPPipeSync(gDisplayListHead++);
             break;
     }
+#endif
 }
 
 void render_mario_raceway(struct UnkStruct_800DC5EC* arg0) {
@@ -1803,10 +1806,10 @@ void func_802966A0(void) {
 }
 
 void func_802969F8(void) {
-    if (gCurrentCourseId == GetMooMooFarm()) {
+    if (gCurrentCourseId == COURSE_MOO_MOO_FARM) {
         D_8015F702 = 0;
         D_8015F700 = 200;
-    } else if (gCurrentCourseId == GetKoopaTroopaBeach()) {
+    } else if (gCurrentCourseId == COURSE_KOOPA_BEACH) {
         D_8015F8E8 = -0.1f;
         D_8015F8E4 = 0.0f;
     }

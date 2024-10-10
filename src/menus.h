@@ -94,7 +94,8 @@ extern const s8 gGameModePlayerColumnDefault[][3];
 extern const s8 gGameModePlayerColumnExtra[][3];
 extern const s32 gGameModePlayerSelection[][3];
 extern const s8 D_800F2BAC[8];
-extern const s16 gCupCourseOrder[NUM_CUPS][NUM_COURSES_PER_CUP];
+extern const int* gCupCourseOrder[NUM_CUPS][NUM_COURSES_PER_CUP];
+#define gCupCourseOrder *gCupCourseOrder
 
 extern const union GameModePack gSoundMenuPack;
 

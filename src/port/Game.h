@@ -10,7 +10,8 @@ u32 WorldNextCup(void);
 
 u32 WorldPreviousCup(void);
 
-void SetCupIndex(int16_t courseId);
+void SetCourseFromId(int courseId);
+void SetCupIndex(int cupId);
 void SetCup();
 u32 GetCupIndex(void);
 
@@ -88,28 +89,28 @@ void* GetCourse(void);
 
 void SetCourseByClass(void* course);
 
-int gMarioRacewayId;
-int gChocoMountainId;
-int gBowsersCastleId;
-int gBansheeBoardwalkId;
-int gYoshiValleyId;
-int gFrappeSnowlandId;
-int gKoopaTroopaBeachId;
-int gRoyalRacewayId;
-int gLuigiRacewayId;
-int gMooMooFarmId;
-int gToadsTurnpikeId;
-int gKalimariDesertId;
-int gSherbetLandId;
-int gRainbowRoadId;
-int gWarioStadiumId;
-int gBlockFortId;
-int gSkyscraperId;
-int gDoubleDeckId;
-int gDkJungleId;
-int gBigDonutId;
-int gPodiumCeremonyId;
-int gTestCourseId;
+extern int gMarioRacewayId;
+extern int gChocoMountainId;
+extern int gBowsersCastleId;
+extern int gBansheeBoardwalkId;
+extern int gYoshiValleyId;
+extern int gFrappeSnowlandId;
+extern int gKoopaTroopaBeachId;
+extern int gRoyalRacewayId;
+extern int gLuigiRacewayId;
+extern int gMooMooFarmId;
+extern int gToadsTurnpikeId;
+extern int gKalimariDesertId;
+extern int gSherbetLandId;
+extern int gRainbowRoadId;
+extern int gWarioStadiumId;
+extern int gBlockFortId;
+extern int gSkyscraperId;
+extern int gDoubleDeckId;
+extern int gDkJungleId;
+extern int gBigDonutId;
+extern int gPodiumCeremonyId;
+extern int gTestCourseId;
 #ifdef __cplusplus
 }
 #endif

@@ -1,4 +1,5 @@
 #include "Course.h"
+#include "Cup.h"
 
 template <typename T> struct infoRegister {
     char* nameId;
@@ -12,7 +13,6 @@ template <typename T> class Registry {
     int add(char* name, std::function<T*()>);
     T* getWithNameId(char* nameId);
     T* getWithId(int id);
-    ~Registry();
 };
 
 int addCourse(char* nameId, Course* course);

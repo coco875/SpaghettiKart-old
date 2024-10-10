@@ -1263,7 +1263,7 @@ void change_player_color_effect_cmy(UNUSED Player* player, s8 arg1, s32 arg2, f3
  * Sort of an atmospheric effect.
  */
 bool is_player_under_light_luigi_raceway(Player* player, s8 arg1) {
-    if (gCurrentCourseId == GetLuigiRaceway()) {
+    if (gCurrentCourseId == COURSE_LUIGI_RACEWAY) {
         if (((gNearestWaypointByPlayerId[arg1] >= 0x14F) && (gNearestWaypointByPlayerId[arg1] < 0x158)) ||
             ((gNearestWaypointByPlayerId[arg1] >= 0x15E) && (gNearestWaypointByPlayerId[arg1] < 0x164)) ||
             ((gNearestWaypointByPlayerId[arg1] >= 0x169) && (gNearestWaypointByPlayerId[arg1] < 0x170)) ||
@@ -1281,7 +1281,7 @@ bool is_player_under_light_luigi_raceway(Player* player, s8 arg1) {
 }
 
 void render_light_environment_on_player(Player* player, s8 arg1) {
-    if (gCurrentCourseId == GetBowsersCastle()) {
+    if (gCurrentCourseId == COURSE_BOWSER_CASTLE) {
         if (((gNearestWaypointByPlayerId[arg1] >= 0x15) && (gNearestWaypointByPlayerId[arg1] < 0x2A)) ||
             ((gNearestWaypointByPlayerId[arg1] >= 0x14D) && (gNearestWaypointByPlayerId[arg1] < 0x15C)) ||
             ((gNearestWaypointByPlayerId[arg1] >= 0x1D1) && (gNearestWaypointByPlayerId[arg1] < 0x1E4)) ||
@@ -1304,7 +1304,7 @@ void render_light_environment_on_player(Player* player, s8 arg1) {
             change_player_color_effect_cmy(player, arg1, 0, 0.3f);
             D_80164B80[arg1] = 0;
         }
-    } else if (gCurrentCourseId == GetBansheeBoardwalk()) {
+    } else if (gCurrentCourseId == COURSE_BANSHEE_BOARDWALK) {
         if (((gNearestWaypointByPlayerId[arg1] >= 0xD) && (gNearestWaypointByPlayerId[arg1] < 0x15)) ||
             ((gNearestWaypointByPlayerId[arg1] >= 0x29) && (gNearestWaypointByPlayerId[arg1] < 0x39)) ||
             ((gNearestWaypointByPlayerId[arg1] >= 0x46) && (gNearestWaypointByPlayerId[arg1] < 0x4E)) ||

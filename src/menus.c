@@ -120,18 +120,19 @@ const s32 gGameModePlayerSelection[][3] = {
 const s8 D_800F2BAC[] = {
     MARIO, LUIGI, PEACH, TOAD, YOSHI, DK, WARIO, BOWSER,
 };
-
-const s16 gCupCourseOrder[5][4] = {
+#undef gCupCourseOrder
+// need to be completly replace
+const int* gCupCourseOrder[5][4] = {
     // mushroom cup
-    { COURSE_LUIGI_RACEWAY, COURSE_MOO_MOO_FARM, COURSE_KOOPA_BEACH, COURSE_KALAMARI_DESERT },
+    { &COURSE_LUIGI_RACEWAY, &COURSE_MOO_MOO_FARM, &COURSE_KOOPA_BEACH, &COURSE_KALAMARI_DESERT },
     // flower cup
-    { COURSE_TOADS_TURNPIKE, COURSE_FRAPPE_SNOWLAND, COURSE_CHOCO_MOUNTAIN, COURSE_MARIO_RACEWAY },
+    { &COURSE_TOADS_TURNPIKE, &COURSE_FRAPPE_SNOWLAND, &COURSE_CHOCO_MOUNTAIN, &COURSE_MARIO_RACEWAY },
     // star cup
-    { COURSE_WARIO_STADIUM, COURSE_SHERBET_LAND, COURSE_ROYAL_RACEWAY, COURSE_BOWSER_CASTLE },
+    { &COURSE_WARIO_STADIUM, &COURSE_SHERBET_LAND, &COURSE_ROYAL_RACEWAY, &COURSE_BOWSER_CASTLE },
     // special cup
-    { COURSE_DK_JUNGLE, COURSE_YOSHI_VALLEY, COURSE_BANSHEE_BOARDWALK, COURSE_RAINBOW_ROAD },
+    { &COURSE_DK_JUNGLE, &COURSE_YOSHI_VALLEY, &COURSE_BANSHEE_BOARDWALK, &COURSE_RAINBOW_ROAD },
     // battle mode
-    { COURSE_BIG_DONUT, COURSE_BLOCK_FORT, COURSE_DOUBLE_DECK, COURSE_SKYSCRAPER },
+    { &COURSE_BIG_DONUT, &COURSE_BLOCK_FORT, &COURSE_DOUBLE_DECK, &COURSE_SKYSCRAPER },
 };
 
 const s8 D_800F2BDC[4] = { 1, 0, 0, 0 };
@@ -833,7 +834,8 @@ void logo_intro_menu_act(struct Controller* arg0, UNUSED u16 arg1) {
     gCCSelection = CC_100;
     gCupSelection = 1;
     gCourseIndexInCup = 0;
-    gCurrentCourseId = 0;
+    // gCurrentCourseId = 0;
+    SetCourseFromId(0);
     gScreenModeSelection = SCREEN_MODE_1P;
     gCharacterSelections[0] = 0;
     gModeSelection = GRAND_PRIX;

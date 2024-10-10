@@ -2487,11 +2487,11 @@ void func_8004F020(s32 arg0) {
 
     var_f2 = ((D_8018D2C0[arg0] + D_8018D2F0) - (D_8018D2B0 / 2)) + D_8018D2E0;
     var_f0 = ((D_8018D2D8[arg0] + D_8018D2F8) - (D_8018D2B8 / 2)) + D_8018D2E8;
-    if (gCurrentCourseId == GetMarioRaceway()) {
+    if (gCurrentCourseId == COURSE_MARIO_RACEWAY) {
         var_f0 = var_f0 - 2.0;
-    } else if (gCurrentCourseId == GetChocoMountain()) {
+    } else if (gCurrentCourseId == COURSE_CHOCO_MOUNTAIN) {
         var_f0 = var_f0 - 16.0;
-    } else if (gCurrentCourseId == GetKalimariDesert()) {
+    } else if (gCurrentCourseId == COURSE_KALAMARI_DESERT) {
         var_f0 = var_f0 + 4.0;
     }
 
@@ -2737,7 +2737,7 @@ void draw_lap_count(s16 lapX, s16 lapY, s8 lap) {
 }
 
 void func_8004FDB4(f32 arg0, f32 arg1, s16 arg2, s16 arg3, s16 characterId, s32 arg5, s32 arg6, s32 arg7, s32 arg8) {
-    if ((gCurrentCourseId == GetYoshiValley()) && (arg3 < 3) && (arg8 == 0)) {
+    if ((gCurrentCourseId == COURSE_YOSHI_VALLEY) && (arg3 < 3) && (arg8 == 0)) {
         func_80042330((s32) arg0, (s32) arg1, 0U, 1.0f);
         gSPDisplayList(gDisplayListHead++, D_0D007DB8);
         func_8004B35C(0x000000FF, 0x000000FF, 0x000000FF, D_8018D3E0);
@@ -3034,7 +3034,7 @@ void func_80050E34(s32 playerId, s32 arg1) {
         spB8 = 0;
     }
 
-    if ((gCurrentCourseId == GetYoshiValley()) && (lapCount < 3)) {
+    if ((gCurrentCourseId == COURSE_YOSHI_VALLEY) && (lapCount < 3)) {
         gSPDisplayList(gDisplayListHead++, D_0D007DB8);
         gDPLoadTLUT_pal256(gDisplayListHead++, common_tlut_portrait_bomb_kart_and_question_mark);
         rsp_load_texture(common_texture_portrait_question_mark, 0x00000020, 0x00000020);
@@ -3212,16 +3212,16 @@ void func_80051C60(s16 arg0, s32 arg1) {
     Object* object;
 
     if (D_801658FE == 0) {
-        if (gCurrentCourseId == GetKoopaTroopaBeach()) {
+        if (gCurrentCourseId == COURSE_KOOPA_BEACH) {
             var_s5 = arg0;
-        } else if (gCurrentCourseId == GetMooMooFarm()) {
+        } else if (gCurrentCourseId == COURSE_MOO_MOO_FARM) {
             var_s5 = arg0 - 0x10;
-        } else if (gCurrentCourseId == GetYoshiValley()) {
+        } else if (gCurrentCourseId == COURSE_YOSHI_VALLEY) {
             var_s5 = arg0 - 0x10;
         } else {
             var_s5 = arg0 + 0x10;
         }
-    } else if (gCurrentCourseId == GetKoopaTroopaBeach()) {
+    } else if (gCurrentCourseId == COURSE_KOOPA_BEACH) {
         var_s5 = arg0 * 2;
     } else {
         var_s5 = arg0 + 0x20;
@@ -3253,11 +3253,11 @@ void func_80051EF8(void) {
     s16 temp_a0;
 
     temp_a0 = 0xF0 - D_800DC5EC->cameraHeight;
-    if (gCurrentCourseId == GetKoopaTroopaBeach()) {
+    if (gCurrentCourseId == COURSE_KOOPA_BEACH) {
         temp_a0 = temp_a0 - 0x30;
-    } else if (gCurrentCourseId == GetMooMooFarm()) {
+    } else if (gCurrentCourseId == COURSE_MOO_MOO_FARM) {
         temp_a0 = temp_a0 - 0x40;
-    } else if (gCurrentCourseId == GetYoshiValley()) {
+    } else if (gCurrentCourseId == COURSE_YOSHI_VALLEY) {
         temp_a0 = temp_a0 - 0x40;
     } else {
         temp_a0 = temp_a0 - 0x30;
@@ -3269,11 +3269,11 @@ void func_80051F9C(void) {
     s16 temp_a0;
 
     temp_a0 = 0xF0 - D_800DC5F0->cameraHeight;
-    if (gCurrentCourseId == GetKoopaTroopaBeach()) {
+    if (gCurrentCourseId == COURSE_KOOPA_BEACH) {
         temp_a0 = temp_a0 - 0x30;
-    } else if (gCurrentCourseId == GetMooMooFarm()) {
+    } else if (gCurrentCourseId == COURSE_MOO_MOO_FARM) {
         temp_a0 = temp_a0 - 0x40;
-    } else if (gCurrentCourseId == GetYoshiValley()) {
+    } else if (gCurrentCourseId == COURSE_YOSHI_VALLEY) {
         temp_a0 = temp_a0 - 0x40;
     } else {
         temp_a0 = temp_a0 - 0x30;

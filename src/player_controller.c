@@ -1706,7 +1706,7 @@ void func_8002C11C(Player* player) {
 }
 
 void func_8002C17C(Player* player, s8 playerId) {
-    if (gCurrentCourseId == GetYoshiValley()) {
+    if (gCurrentCourseId == COURSE_YOSHI_VALLEY) {
         if ((player->collision.surfaceDistance[2] >= 600.0f) && (D_80165330[playerId] == 0)) {
             D_80165330[playerId] = 1;
             gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
@@ -1719,7 +1719,7 @@ void func_8002C17C(Player* player, s8 playerId) {
                 D_80165330[playerId] = 0;
             }
         }
-    } else if (gCurrentCourseId == GetFrappeSnowland()) {
+    } else if (gCurrentCourseId == COURSE_FRAPPE_SNOWLAND) {
         if ((player->surfaceType == SNOW_OFFROAD) && (D_80165330[playerId] == 0)) {
             D_80165330[playerId] = 1;
             gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
@@ -1729,7 +1729,7 @@ void func_8002C17C(Player* player, s8 playerId) {
             gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
             gCopyPathIndexByPlayerId[playerId] = gPathIndexByPlayerId[playerId];
         }
-    } else if (gCurrentCourseId == GetRoyalRaceway()) {
+    } else if (gCurrentCourseId == COURSE_ROYAL_RACEWAY) {
         if (((player->effects & BOOST_RAMP_ASPHALT_EFFECT) != 0) && (D_80165330[playerId] == 0)) {
             D_80165330[playerId] = 1;
             gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
@@ -1739,7 +1739,7 @@ void func_8002C17C(Player* player, s8 playerId) {
             gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
             gCopyPathIndexByPlayerId[playerId] = gPathIndexByPlayerId[playerId];
         }
-    } else if (gCurrentCourseId == GetRainbowRoad()) {
+    } else if (gCurrentCourseId == COURSE_RAINBOW_ROAD) {
         if ((player->collision.surfaceDistance[2] >= 600.0f) && (D_80165330[playerId] == 0)) {
             D_80165330[playerId] = 1;
             gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
@@ -1773,9 +1773,9 @@ void func_8002C4F8(Player* player, s8 arg1) {
         if ((player->unk_0DE & 4) != 4) {
             player->unk_0DE |= 8;
             player->unk_0DE |= 4;
-            if ((gCurrentCourseId != GetKoopaTroopaBeach()) && (gCurrentCourseId != GetSkyscraper()) &&
-                (gCurrentCourseId != GetRainbowRoad()) && ((player->type & PLAYER_HUMAN) == PLAYER_HUMAN)) {
-                if ((gCurrentCourseId == GetBowsersCastle()) || (gCurrentCourseId == GetBigDonut())) {
+            if ((gCurrentCourseId != COURSE_KOOPA_BEACH) && (gCurrentCourseId != COURSE_SKYSCRAPER) &&
+                (gCurrentCourseId != COURSE_RAINBOW_ROAD) && ((player->type & PLAYER_HUMAN) == PLAYER_HUMAN)) {
+                if ((gCurrentCourseId == COURSE_BOWSER_CASTLE) || (gCurrentCourseId == COURSE_BIG_DONUT)) {
                     func_800C9060((u8) arg1, 0x1900801CU);
                 } else {
                     func_800C9060((u8) arg1, 0x19008008U);
@@ -1783,8 +1783,8 @@ void func_8002C4F8(Player* player, s8 arg1) {
             }
         }
     }
-    if ((gCurrentCourseId == GetKoopaTroopaBeach()) || (gCurrentCourseId == GetSkyscraper()) ||
-        (gCurrentCourseId == GetRainbowRoad())) {
+    if ((gCurrentCourseId == COURSE_KOOPA_BEACH) || (gCurrentCourseId == COURSE_SKYSCRAPER) ||
+        (gCurrentCourseId == COURSE_RAINBOW_ROAD)) {
         player->unk_0DE &= ~0x000C;
     }
     if ((player->boundingBoxSize < (D_801652A0[arg1] - player->pos[1])) &&
@@ -2249,7 +2249,7 @@ void func_8002D268(Player* player, UNUSED Camera* camera, s8 screenId, s8 player
             player->unk_DB4.unkC = 1.5f;
             if (((player->type & PLAYER_HUMAN) == PLAYER_HUMAN) &&
                 ((player->type & PLAYER_INVISIBLE_OR_BOMB) != PLAYER_INVISIBLE_OR_BOMB)) {
-                if (((player->unk_0C2 < 0xB) && (player->unk_0C2 >= 4)) && (gCurrentCourseId == GetBowsersCastle())) {
+                if (((player->unk_0C2 < 0xB) && (player->unk_0C2 >= 4)) && (gCurrentCourseId == COURSE_BOWSER_CASTLE)) {
                     func_800CADD0((u8) playerId, player->unk_0C2 / 14.0f);
                 } else {
                     func_800CADD0((u8) playerId, player->unk_0C2 / 25.0f);

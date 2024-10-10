@@ -714,7 +714,7 @@ void race_logic_loop(void) {
             break;
 
         case SCREEN_MODE_2P_SPLITSCREEN_VERTICAL:
-            if (gCurrentCourseId == GetDkJungle()) {
+            if (gCurrentCourseId == COURSE_DK_JUNGLE) {
                 gTickSpeed = 3;
             } else {
                 gTickSpeed = 2;
@@ -759,7 +759,7 @@ void race_logic_loop(void) {
 
         case SCREEN_MODE_2P_SPLITSCREEN_HORIZONTAL:
 
-            if (gCurrentCourseId == GetDkJungle()) {
+            if (gCurrentCourseId == COURSE_DK_JUNGLE) {
                 gTickSpeed = 3;
             } else {
                 gTickSpeed = 2;
@@ -806,6 +806,8 @@ void race_logic_loop(void) {
 
         case SCREEN_MODE_3P_4P_SPLITSCREEN:
             if (gPlayerCountSelection1 == 3) {
+/// @todo need a course equivalent
+#if 0
                 switch (gCurrentCourseId) {
                     case COURSE_BOWSER_CASTLE:
                     case COURSE_MOO_MOO_FARM:
@@ -817,8 +819,11 @@ void race_logic_loop(void) {
                         gTickSpeed = 2;
                         break;
                 }
+#endif
             } else {
                 // Four players
+                /// @todo need a course equivalent
+#if 0
                 switch (gCurrentCourseId) {
                     case COURSE_BLOCK_FORT:
                     case COURSE_DOUBLE_DECK:
@@ -832,6 +837,7 @@ void race_logic_loop(void) {
                         gTickSpeed = 3;
                         break;
                 }
+#endif
             }
             if (gIsGamePaused == 0) {
                 for (i = 0; i < gTickSpeed; i++) {

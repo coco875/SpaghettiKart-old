@@ -29,6 +29,8 @@
 
 #include "engine/Registry.h"
 
+#include "port/Game.h"
+
 extern "C" {
 #include "main.h"
 #include "audio/load.h"
@@ -73,7 +75,7 @@ int gTestCourseId;
 
 void CustomEngineInit() {
     /* Add all courses to the global course list */
-    gMarioRacewayId = addCourse("mk64:mario_raceway", new MarioRaceway());
+    COURSE_MARIO_RACEWAY = addCourse("mk64:mario_raceway", new MarioRaceway());
     gChocoMountainId = addCourse("mk64:choco_mountain", new ChocoMountain());
     gBowsersCastleId = addCourse("mk64:bowser_calstle", new BowsersCastle());
     gBansheeBoardwalkId = addCourse("mk64:banshee_boardwalk", new BansheeBoardwalk());
@@ -101,7 +103,7 @@ void CustomEngineInit() {
                                                                           gKoopaTroopaBeachId, gKalimariDesertId }));
     int flowerid =
         addCup("mk64:flower_cup", new Cup("flower cup", std::vector<int>{ gToadsTurnpikeId, gFrappeSnowlandId,
-                                                                          gChocoMountainId, gMarioRacewayId }));
+                                                                          gChocoMountainId, COURSE_MARIO_RACEWAY }));
     addCup("mk64:star_cup",
            new Cup("star cup", std::vector<int>{ gWarioStadiumId, gSherbetLandId, gRoyalRacewayId, gBowsersCastleId }));
     addCup("mk64:special_cup", new Cup("special cup", std::vector<int>{ gDkJungleId, gYoshiValleyId,
@@ -110,7 +112,7 @@ void CustomEngineInit() {
            new Cup("battle", std::vector<int>{ gBigDonutId, gBlockFortId, gDoubleDeckId, gSkyscraperId }));
 
     /* Set default course; mario raceway */
-    SetCourseFromId(gMarioRacewayId);
+    SetCourseFromId(COURSE_MARIO_RACEWAY);
     SetCupIndex(flowerid);
     gWorldInstance.CurrentCup->CursorPosition = 3;
 }
@@ -125,7 +127,7 @@ u32 WorldPreviousCup(void) {
 }
 
 void SetCourseFromId(int courseId) {
-    gWorldInstance.SetCourseFromId(gMarioRacewayId);
+    gWorldInstance.SetCourseFromId(courseId);
 }
 
 void SetCupIndex(int cupId) {

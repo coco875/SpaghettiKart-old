@@ -978,7 +978,7 @@ void func_80089020(s32 playerId, f32* arg1) {
         var_f2 = -*arg1;
     }
     if (player->effects & 0xC0) {
-        if (gCurrentCourseId == GetSherbetLand()) {
+        if (gCurrentCourseId == COURSE_SHERBET_LAND) {
             if (var_f2 <= 0.5) {
                 var_f0 = 0.025f;
             } else if (var_f2 <= 2.0) {
@@ -999,7 +999,7 @@ void func_80089020(s32 playerId, f32* arg1) {
                 var_f0 = 0.25f;
             }
         }
-    } else if (gCurrentCourseId == GetSherbetLand()) {
+    } else if (gCurrentCourseId == COURSE_SHERBET_LAND) {
         if (var_f2 <= 0.5) {
             var_f0 = 0.025f;
         } else if (var_f2 <= 2.0) {

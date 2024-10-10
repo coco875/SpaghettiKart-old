@@ -34,8 +34,8 @@ void World::SetCourseFromId(int id) {
 // }
 
 void World::SetCupIndex(int16_t courseId) {
-
     this->CupIndex = courseId;
+    CurrentCup = Cups[courseId];
 }
 
 u32 World::GetCupIndex() {

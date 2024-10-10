@@ -63,6 +63,7 @@ void func_80280038(void) {
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxLookAt[0]),
               G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     // gCurrentCourseId = gCreditsCourseId;
+    SetCourseFromId(gCreditsCourseId);
     mtxf_identity(matrix);
     render_set_position(matrix, 0);
     render_course(D_800DC5EC);
@@ -129,6 +130,7 @@ void load_credits(void) {
     Camera* camera = &cameras[0];
 
     // gCurrentCourseId = gCreditsCourseId;
+    SetCourseFromId(gCreditsCourseId);
     D_800DC5B4 = 1;
     creditsRenderMode = 1;
     func_802A4D18();

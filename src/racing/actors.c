@@ -897,15 +897,15 @@ void spawn_foliage(const char* actor) {
         position[2] = var_s3->pos[2];
         position[1] = var_s3->pos[1];
 
-        if (gCurrentCourseId == GetMarioRaceway()) {
+        if (gCurrentCourseId == COURSE_MARIO_RACEWAY) {
             actorType = 2;
-        } else if (gCurrentCourseId == GetBowsersCastle()) {
+        } else if (gCurrentCourseId == COURSE_BOWSER_CASTLE) {
             actorType = 0x0021;
-        } else if (gCurrentCourseId == GetYoshiValley()) {
+        } else if (gCurrentCourseId == COURSE_YOSHI_VALLEY) {
             actorType = 3;
-        } else if (gCurrentCourseId == GetFrappeSnowland()) {
+        } else if (gCurrentCourseId == COURSE_FRAPPE_SNOWLAND) {
             actorType = 0x001D;
-        } else if (gCurrentCourseId == GetRoyalRaceway()) {
+        } else if (gCurrentCourseId == COURSE_ROYAL_RACEWAY) {
             switch (var_s3->signedSomeId) {
                 case 6:
                     actorType = 0x001C;
@@ -914,11 +914,11 @@ void spawn_foliage(const char* actor) {
                     actorType = 4;
                     break;
             }
-        } else if (gCurrentCourseId == GetLuigiRaceway()) {
+        } else if (gCurrentCourseId == COURSE_LUIGI_RACEWAY) {
             actorType = 0x001A;
-        } else if (gCurrentCourseId == GetMooMooFarm()) {
+        } else if (gCurrentCourseId == COURSE_MOO_MOO_FARM) {
             actorType = 0x0013;
-        } else if (gCurrentCourseId == GetKalimariDesert()) {
+        } else if (gCurrentCourseId == COURSE_KALAMARI_DESERT) {
             switch (var_s3->signedSomeId) {
                 case 5:
                     actorType = 0x001E;
@@ -954,7 +954,7 @@ void spawn_all_item_boxes(const char* spawnData) {
     Vec3f startingVelocity;
     Vec3s startingRot;
     struct ActorSpawnData* temp_s0;
-    if (gCurrentCourseId == GetTestCourse()) {
+    if (gCurrentCourseId == gTestCourseId) {
         temp_s0 = (struct ActorSpawnData*) spawnData;
     } else {
         temp_s0 = (struct ActorSpawnData*) LOAD_ASSET(spawnData);
@@ -1655,8 +1655,8 @@ bool collision_tree(Player* player, struct Actor* actor) {
     actorPos[0] = actor->pos[0];
     actorPos[1] = actor->pos[1];
     actorPos[2] = actor->pos[2];
-    if (((gCurrentCourseId == GetMarioRaceway()) || (gCurrentCourseId == GetYoshiValley()) ||
-         (gCurrentCourseId == GetRoyalRaceway()) || (gCurrentCourseId == GetLuigiRaceway())) &&
+    if (((gCurrentCourseId == COURSE_MARIO_RACEWAY) || (gCurrentCourseId == COURSE_YOSHI_VALLEY) ||
+         (gCurrentCourseId == COURSE_ROYAL_RACEWAY) || (gCurrentCourseId == COURSE_LUIGI_RACEWAY)) &&
         (player->unk_094 > 1.0f)) {
         spawn_leaf(actorPos, 0);
     }
@@ -2510,9 +2510,9 @@ void render_course_actors(struct UnkStruct_800DC5EC* arg0) {
                 break;
         }
     }
-    if (gCurrentCourseId == GetMooMooFarm()) {
+    if (gCurrentCourseId == COURSE_MOO_MOO_FARM) {
         render_cows(camera, D_801502C0, actor);
-    } else if (gCurrentCourseId == GetDkJungle()) {
+    } else if (gCurrentCourseId == COURSE_DK_JUNGLE) {
         render_palm_trees(camera, D_801502C0, actor);
     }
 }

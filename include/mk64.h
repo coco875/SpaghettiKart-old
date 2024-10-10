@@ -31,6 +31,7 @@ extern "C" {
 // Border Height Define for NTSC Versions
 #define BORDER_HEIGHT 1
 
+#if 0
 typedef enum {
     /* 0x00 */ COURSE_MARIO_RACEWAY = 0,
     /* 0x01 */ COURSE_CHOCO_MOUNTAIN,
@@ -55,6 +56,31 @@ typedef enum {
     /* 0x14 */ COURSE_AWARD_CEREMONY,
     /* 0x15 */ NUM_COURSES
 } COURSES;
+#endif
+
+#define COURSE_MARIO_RACEWAY gMarioRacewayId
+#define COURSE_CHOCO_MOUNTAIN gChocoMountainId
+#define COURSE_BOWSER_CASTLE gBowsersCastleId
+#define COURSE_BANSHEE_BOARDWALK gBansheeBoardwalkId
+#define COURSE_YOSHI_VALLEY gYoshiValleyId
+#define COURSE_FRAPPE_SNOWLAND gFrappeSnowlandId
+#define COURSE_KOOPA_BEACH gKoopaTroopaBeachId
+#define COURSE_ROYAL_RACEWAY gRoyalRacewayId
+#define COURSE_LUIGI_RACEWAY gLuigiRacewayId
+#define COURSE_MOO_MOO_FARM gMooMooFarmId
+#define COURSE_TOADS_TURNPIKE gToadsTurnpikeId
+#define COURSE_KALAMARI_DESERT gKalimariDesertId
+#define COURSE_SHERBET_LAND gSherbetLandId
+#define COURSE_RAINBOW_ROAD gRainbowRoadId
+#define COURSE_WARIO_STADIUM gWarioStadiumId
+#define COURSE_BLOCK_FORT gBlockFortId
+#define COURSE_SKYSCRAPER gSkyscraperId
+#define COURSE_DOUBLE_DECK gDoubleDeckId
+#define COURSE_DK_JUNGLE gDkJungleId
+#define COURSE_BIG_DONUT gBigDonutId
+#define COURSE_AWARD_CEREMONY gPodiumCeremonyId
+// need to remove that to be a fonction/vector for function who use it
+#define NUM_COURSES 0x15
 
 #define COURSE_NULL 0xFF
 
