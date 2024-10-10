@@ -6,6 +6,7 @@
 #include "spline.h"
 #include <assets/other_textures.h>
 #include "objects.h"
+#include <mk64.h>
 
 extern Vtx D_800E49C0[];
 extern Vtx D_800E4AC0[];
@@ -20,7 +21,7 @@ extern Vtx D_800E5210[];
 extern Vtx gBalloonVertexPlane1[];
 extern Vtx gBalloonVertexPlane2[];
 extern u8* gCourseOutlineTextures[];
-extern s16 D_800E5520[];
+extern s16 D_800E5520[NUM_COURSES];
 extern s16 D_800E5548[];
 extern u16 D_800E55A0[];
 extern u16 D_800E55B0[];

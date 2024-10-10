@@ -2017,6 +2017,9 @@ void func_8004D37C(s32 arg0, s32 arg1, u8* texture, s32 arg3, s32 arg4, s32 arg5
     img = texture;
     gSPDisplayList(gDisplayListHead++, D_0D007FE0);
     func_8004B414(arg3, arg4, arg5, arg6);
+    if (height == 0) {
+        height = 1;
+    }
 
     for (i = 0; i < arg8 / height; i++) {
         func_80044F34(img, width, height);

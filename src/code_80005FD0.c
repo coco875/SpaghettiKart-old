@@ -1887,6 +1887,9 @@ void func_80009B60(s32 playerId) {
                     }
                 }
                 if (gCurrentCourseId == COURSE_AWARD_CEREMONY) {
+                    if (gWaypointCountByPathIndex[playerId] == 0) {
+                        gWaypointCountByPathIndex[playerId] = gWaypointCountByPathIndex[0];
+                    }
                     switch (D_80163410[playerId]) { /* switch 3; irregular */
                         case 3:                     /* switch 3 */
                             D_80162FA0[0] = D_80163418[playerId];

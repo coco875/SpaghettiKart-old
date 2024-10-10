@@ -66,7 +66,7 @@ s16* D_800DCBB4[] = {
 #include "assets/course_metadata/D_800DCBB4.inc.c"
 };
 
-BombKartSpawn gBombKartSpawns[][NUM_BOMB_KARTS_MAX] = {
+BombKartSpawn gBombKartSpawns[NUM_COURSES][NUM_BOMB_KARTS_MAX] = {
 #include "assets/course_metadata/gBombKartSpawns.inc.c"
 };
 

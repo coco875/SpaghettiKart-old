@@ -80,7 +80,7 @@ typedef enum {
 #define COURSE_BIG_DONUT gBigDonutId
 #define COURSE_AWARD_CEREMONY gPodiumCeremonyId
 // need to remove that to be a fonction/vector for function who use it
-#define NUM_COURSES 0x15
+#define NUM_COURSES 0x100
 
 #define COURSE_NULL 0xFF
 

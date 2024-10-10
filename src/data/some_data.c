@@ -2,6 +2,7 @@
 #include <common_structs.h>
 #include <assets/other_textures.h>
 #include "some_data.h"
+#include <mk64.h>
 
 Vtx D_800E49C0[] = {
     { { { 9, 18, -6 }, 0, { 4032, 0 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
@@ -191,7 +192,7 @@ Vtx gBalloonVertexPlane2[] = {
 //     #include "assets/code/some_data/gTLUTOnomatopoeia.rgba16.inc.c"
 // };
 
-u8* gCourseOutlineTextures[] = {
+u8* gCourseOutlineTextures[NUM_COURSES] = {
     gTextureCourseOutlineMarioRaceway,     gTextureCourseOutlineChocoMountain, gTextureCourseOutlineBowsersCastle,
     gTextureCourseOutlineBansheeBoardwalk, gTextureCourseOutlineYoshiValley,   gTextureCourseOutlineFrappeSnowland,
     gTextureCourseOutlineKoopaTroopaBeach, gTextureCourseOutlineRoyalRaceway,  gTextureCourseOutlineLuigiRaceway,
@@ -201,12 +202,12 @@ u8* gCourseOutlineTextures[] = {
     gTextureCourseOutlineDksJungleParkway, gTextureCourseOutlineBigDonut,
 };
 
-s16 D_800E5520[] = {
+s16 D_800E5520[NUM_COURSES] = {
     0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0c00, 0x0800,
     0x1000, 0x0c00, 0x0800, 0x0c00, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800,
 };
 
-s16 D_800E5548[] = {
+s16 D_800E5548[NUM_COURSES * 2] = {
     0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040,
     0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0060, 0x0040, 0x0040, 0x0080, 0x0040,
     0x0040, 0x0060, 0x0040, 0x0040, 0x0040, 0x0060, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040,

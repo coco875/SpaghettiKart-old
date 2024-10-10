@@ -75,7 +75,7 @@ int gTestCourseId;
 
 void CustomEngineInit() {
     /* Add all courses to the global course list */
-    COURSE_MARIO_RACEWAY = addCourse("mk64:mario_raceway", new MarioRaceway());
+    gMarioRacewayId = addCourse("mk64:mario_raceway", new MarioRaceway());
     gChocoMountainId = addCourse("mk64:choco_mountain", new ChocoMountain());
     gBowsersCastleId = addCourse("mk64:bowser_calstle", new BowsersCastle());
     gBansheeBoardwalkId = addCourse("mk64:banshee_boardwalk", new BansheeBoardwalk());

@@ -350,7 +350,7 @@ const s8 gPerCupIndexByCourseId[] = {
 const s8 D_800EFD64[] = { 0, 1, 4, 3, 5, 6, 2, 7 };
 
 // Maps course IDs (as defined in the COURSES enum) to the cup they belong to
-s8 gCupSelectionByCourseId[] = {
+s8 gCupSelectionByCourseId[NUM_COURSES] = {
 #include "assets/course_metadata/gCupSelectionByCourseId.inc.c"
 };
 
