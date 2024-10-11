@@ -2464,7 +2464,7 @@ void func_80095574(void) {
         } else {
             var_v0 = 8;
         }
-        debug_print_str2(var_v0 + 0xB9, 0x0000006E, GetCoursePropsA()->DebugName);
+        debug_print_str2(var_v0 + 0xB9, 0x0000006E, CourseManager_GetProps()->DebugName);
         debug_print_str2(0x00000050, 0x00000078, "screen_mode");
         debug_print_str2(0x000000AA, 0x00000078, gDebugScreenModeNames[D_8018EDF1]);
         debug_print_str2(0x00000050, 0x00000082, "player");

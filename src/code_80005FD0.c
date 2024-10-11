@@ -4212,10 +4212,8 @@ void kart_ai_behaviour_start(s32 playerId, Player* player) {
     s32 behaviourType;
     UNUSED s32 test;
 
-    KartAIBehaviour* beh = (KartAIBehaviour*) LOAD_ASSET(CourseManager_GetProps()->AIBehaviour);
-
     sCurrentKartAIBehaviour =
-        &((KartAIBehaviour*) LOAD_ASSET(CourseManager_GetProps()->AIBehaviour))[gCurrentKartAIBehaviourId[playerId]];
+        &gCoursesKartAIBehaviour[gCurrentCourseId][gCurrentKartAIBehaviourId[playerId]];
 
     playerWaypoint = gNearestWaypointByPlayerId[playerId];
 
@@ -4224,7 +4222,7 @@ void kart_ai_behaviour_start(s32 playerId, Player* player) {
     behaviourType = sCurrentKartAIBehaviour->type;
 
     if ((waypointStart == -1) && (waypointEnd == -1)) {
-        sCurrentKartAIBehaviour = &((KartAIBehaviour*) LOAD_ASSET(CourseManager_GetProps()->AIBehaviour))[0];
+        sCurrentKartAIBehaviour = &gCoursesKartAIBehaviour[gCurrentCourseId][0];
         reset_kart_ai_behaviour_none(playerId);
         return;
     }
@@ -4279,8 +4277,7 @@ void kart_ai_behaviour_end(s32 playerIndex, Player* player) {
     u32 waypointEnd;
     s32 behaviourType;
 
-    sCurrentKartAIBehaviour = &(
-        (KartAIBehaviour*) LOAD_ASSET(CourseManager_GetProps()->AIBehaviour))[gPreviousKartAIBehaviourId[playerIndex]];
+    sCurrentKartAIBehaviour = &gCoursesKartAIBehaviour[gCurrentCourseId][gPreviousKartAIBehaviourId[playerIndex]];
     nearestWaypoint = gNearestWaypointByPlayerId[playerIndex];
     behaviourType = sCurrentKartAIBehaviour->type;
     waypointEnd = sCurrentKartAIBehaviour->waypointEnd;

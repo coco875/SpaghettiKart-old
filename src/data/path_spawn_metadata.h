@@ -24,7 +24,9 @@ extern f32 gKartAICourseMaximumSeparation[];
 extern f32 gKartAICourseMinimumSeparation[];
 extern s16 D_800DCAF4[];
 extern s16 D_800DCB34[];
+#if 0
 extern s16* D_800DCBB4[];
+#endif
 extern BombKartSpawn gBombKartSpawns[][NUM_BOMB_KARTS_MAX];
 extern _struct_gCoursePathSizes_0x10 gCoursePathSizes[];
 extern s32 D_800DDB20;

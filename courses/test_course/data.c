@@ -1,6 +1,7 @@
 #include "waypoints.h"
 #include "course.h"
 #include <libultra/gbi.h>
+#include <mk64.h>
 
 extern Gfx mario_Plane_001_mesh[];
 
@@ -70,6 +71,6 @@ TrackWaypoint test_course_path[] = {
 };
 
 TrackSections test_course_addr[] = {
-    { mario_Plane_001_mesh, 255,  255, 0x0000 },
+    { mario_Plane_001_mesh, GRASS,  255, 0x0000 },
     { 0x00000000, 0, 0, 0x00000 },
 };
