@@ -139,7 +139,6 @@ void SetCup() {
 }
 
 u32 GetCupIndex(void) {
-    printf("Cup Index: %d\n", gWorldInstance.GetCupIndex());
     return gWorldInstance.GetCupIndex();
 }
 

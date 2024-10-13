@@ -241,7 +241,7 @@ extern "C" void load_wasm() {
                 printf("error read binary\n");
             }
             load_mod_wasm_file((char*) name.c_str(), buffer, size);
-            mod_call_function_wasm((char*) name.c_str(), "init", 0, NULL);
+            wasm_application_execute_main(get_mods_instance((char*) name.c_str()), 0, NULL);
         }
     }
     // buffer = read_wasm_binary_to_buffer("test.wasm", &size);

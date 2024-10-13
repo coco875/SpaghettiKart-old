@@ -114,8 +114,6 @@ void ToadsTurnpike::SpawnActors() {
     D_8015F8E4 = gCourseMinY - 10.0f;
 }
 
-void ToadsTurnpike::Init() {
-}
 void ToadsTurnpike::InitClouds() {
     init_stars(this->Props.Clouds);
 }

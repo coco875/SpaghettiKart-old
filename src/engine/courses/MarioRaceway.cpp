@@ -38,7 +38,6 @@ MarioRaceway::MarioRaceway() {
     this->gfxSize = 3367;
     this->textures = mario_raceway_textures;
 
-    Props.Id = "mk:mario_raceway";
     Props.Name = "Mario Raceway";
     Props.DebugName = "m circuit";
     Props.CourseLength = "567m";
@@ -127,9 +126,6 @@ void MarioRaceway::SpawnActors() {
     position[0] *= gCourseDirection;
     actor = &gActorList[add_actor_to_empty_slot(position, rotation, velocity, ACTOR_MARIO_SIGN)];
     actor->flags |= 0x4000;
-}
-
-void MarioRaceway::Init() {
 }
 
 // Likely sets minimap boundaries

@@ -45,7 +45,6 @@ TestCourse::TestCourse() {
     this->gfxSize = 100;
     this->textures = NULL;
 
-    Props.Id = "mk:test_course";
     Props.Name = "Test Course";
     Props.DebugName = "test track";
     Props.CourseLength = "100m";
@@ -139,9 +138,6 @@ void TestCourse::SpawnActors() {
     };
     spawn_all_item_boxes((const char*) itemboxes);
     spawn_falling_rocks((const char*) rocks);
-}
-
-void TestCourse::Init() {
 }
 
 // Likely sets minimap boundaries

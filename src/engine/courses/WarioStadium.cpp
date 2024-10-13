@@ -118,8 +118,6 @@ void WarioStadium::SpawnActors() {
     add_actor_to_empty_slot(position, rotation, velocity, ACTOR_WARIO_SIGN);
 }
 
-void WarioStadium::Init() {
-}
 void WarioStadium::InitClouds() {
     init_stars(this->Props.Clouds);
 }

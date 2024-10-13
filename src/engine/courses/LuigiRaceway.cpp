@@ -39,7 +39,6 @@ LuigiRaceway::LuigiRaceway() {
     this->gfxSize = 6377;
     this->textures = luigi_raceway_textures;
 
-    Props.Id = "mk:luigi_raceway";
     Props.Name = "luigi raceway";
     Props.DebugName = "l circuit";
     Props.CourseLength = "717m";
@@ -107,9 +106,6 @@ void LuigiRaceway::LoadTextures() {
 void LuigiRaceway::SpawnActors() {
     spawn_foliage(d_course_luigi_raceway_tree_spawn);
     spawn_all_item_boxes(d_course_luigi_raceway_item_box_spawns);
-}
-
-void LuigiRaceway::Init() {
 }
 
 // Likely sets minimap boundaries

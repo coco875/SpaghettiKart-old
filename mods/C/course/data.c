@@ -1,6 +1,20 @@
-#include <libultraship.h>
+#include <mk64/course.h>
+#include <mk64/common_structs.h>
 #include <libultra/gbi.h>
-#include "assets/other_textures.h"
+
+CourseVtx test_course_vertices[] = {
+    // Top-left vertex (x, y, z), texture coord (tc), color and alpha (ca)
+    { { -100, 100, 0 }, { 0, 0 }, { MACRO_COLOR_FLAG(0xFF, 0x00, 0x00, 0), 0x00 } }, // Red
+
+    // Top-right vertex
+    { { 100, 100, 0 }, { 1024, 0 }, { MACRO_COLOR_FLAG(0x00, 0xFF, 0x00, 0), 0x00 } }, // Green
+
+    // Bottom-right vertex
+    { { 100, -100, 0 }, { 1024, 1024 }, { MACRO_COLOR_FLAG(0x00, 0x00, 0xFF, 0), 0x00 } }, // Blue
+
+    // Bottom-left vertex
+    { { -100, -100, 0 }, { 0, 1024 }, { MACRO_COLOR_FLAG(0xFF, 0xFF, 0x00, 0), 0x00 } }, // Yellow
+};
 
 Lights1 mario_f3dlite_material_009_lights = gdSPDefLights1(0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x49, 0x49, 0x49);
 
@@ -324,7 +338,7 @@ Gfx mat_mario_f3dlite_material_009[] = {
                        0, 0, ENVIRONMENT),
     gsDPSetAlphaDither(G_AD_NOISE),
     gsSPTexture(65535, 65535, 0, 0, 1),
-    gsDPSetTextureImage(G_IM_FMT_I, G_IM_SIZ_8b_LOAD_BLOCK, 1, gTextureRoad2),
+    gsDPSetTextureImage(G_IM_FMT_I, G_IM_SIZ_8b_LOAD_BLOCK, 1, "__OTR__other_textures/road_2"),
     gsDPSetTile(G_IM_FMT_I, G_IM_SIZ_8b_LOAD_BLOCK, 0, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 0, 0,
                 G_TX_WRAP | G_TX_NOMIRROR, 0, 0),
     gsDPLoadBlock(7, 0, 0, 1023, 256),
@@ -347,7 +361,7 @@ Gfx mat_mario_f3dlite_material[] = {
     gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT, TEXEL0, 0, SHADE, 0, 0, 0, 0, ENVIRONMENT),
     gsDPSetAlphaDither(G_AD_NOISE),
     gsSPTexture(65535, 65535, 0, 0, 1),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b_LOAD_BLOCK, 1, gTextureGrass1),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b_LOAD_BLOCK, 1, "__OTR__other_textures/grass_1"),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b_LOAD_BLOCK, 0, 0, 7, 0, G_TX_WRAP, 0, 0, G_TX_WRAP, 0, 0),
     gsDPLoadBlock(7, 0, 0, 1023, 256),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, 0, 0, G_TX_WRAP, 5, 0, G_TX_WRAP, 5, 0),
@@ -379,4 +393,74 @@ Gfx mario_Plane_001_mesh[] = {
     gsDPSetCombineLERP(0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT, 0, 0, 0, SHADE, 0, 0, 0, ENVIRONMENT),
     gsSPTexture(65535, 65535, 0, 0, 0),
     gsSPEndDisplayList(),
+};
+
+Gfx test_course_data_dl[] = {
+    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA),
+    gsDPSetRenderMode(G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2),
+    gsSPClearGeometryMode(G_CULL_BACK),
+    gsSPDisplayList(mario_Plane_001_mesh),
+};
+
+TrackWaypoint test_course_path[] = {
+    { 0, 0, 0, 0 },
+    { 0, 0, -100, 1 },
+    { 0, 0, -200, 1 },
+    { 0, 0, -300, 1 },
+    { 0, 0, -400, 1 },
+    { 0, 0, -500, 1 },
+    { 0, 0, -600, 1 },
+    { 0, 0, -700, 1 },
+    { 0, 0, -800, 1 },
+    { 0, 0, -900, 1 },
+    { 0, 0, -1000, 1 },
+    { 0, 0, -1096, 1 }, // Main point 1
+    { 100, 0, -1090, 2 },
+    { 200, 0, -1085, 2 },
+    { 300, 0, -1080, 2 },
+    { 400, 0, -1075, 2 },
+    { 500, 0, -1072, 2 }, // Curve begins to smooth here
+    { 600, 0, -1068, 2 },
+    { 700, 0, -1065, 2 },
+    { 800, 0, -1063, 2 },
+    { 900, 0, -1061, 2 },
+    { 984, 0, -1060, 2 }, // Main point 2
+    { 990, 0, -900, 3 },
+    { 995, 0, -800, 3 },
+    { 997, 0, -700, 3 },
+    { 998, 0, -600, 3 },
+    { 999, 0, -500, 3 },
+    { 999, 0, -400, 3 },
+    { 999, 0, -300, 3 },
+    { 999, 0, -200, 3 },
+    { 999, 0, -100, 3 },
+    { 999, 0, 0, 3 },
+    { 999, 0, 100, 3 },
+    { 999, 0, 200, 3 },
+    { 999, 0, 300, 3 },
+    { 999, 0, 400, 3 },
+    { 999, 0, 500, 3 },
+    { 999, 0, 600, 3 },
+    { 999, 0, 700, 3 },
+    { 999, 0, 800, 3 },
+    { 999, 0, 900, 3 },
+    { 999, 0, 940, 3 }, // Main point 3
+    { 900, 0, 945, 4 },
+    { 800, 0, 945, 4 },
+    { 700, 0, 947, 4 },
+    { 600, 0, 948, 4 },
+    { 500, 0, 949, 4 },
+    { 400, 0, 949, 4 },
+    { 300, 0, 949, 4 },
+    { 200, 0, 950, 4 },
+    { 100, 0, 950, 4 },
+    { 0, 0, 950, 1 }, // Main point 4
+
+    // End of path
+    { -32768, -32768, -32768, 0 } // Terminator
+};
+
+TrackSections test_course_addr[] = {
+    { mario_Plane_001_mesh, 0, 255, 0x0000 },
+    { 0x00000000, 0, 0, 0x00000 },
 };

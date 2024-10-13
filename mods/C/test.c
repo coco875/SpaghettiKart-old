@@ -40,11 +40,8 @@ void some_render() {
     post_debug_print();
 }
 
-void init() {
+int main() {
     printf("init test\n");
     test_course_id = Course_get_id_from_id_name("mk64:test_course");
     hook_render(some_render);
-}
-
-int main() {
 }

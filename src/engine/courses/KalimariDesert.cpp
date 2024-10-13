@@ -136,9 +136,6 @@ void KalimariDesert::SpawnActors() {
     rrxing->crossingId = 0;
 }
 
-void KalimariDesert::Init() {
-}
-
 // Likely sets minimap boundaries
 void KalimariDesert::MinimapSettings() {
     D_8018D2C0[0] = 263;

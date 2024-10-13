@@ -4,30 +4,29 @@
 #include "Course.h"
 
 extern "C" {
-    #include "assets/skyscraper_vertices.h"
-    #include "assets/skyscraper_displaylists.h"
-    #include "assets/skyscraper_data.h"
-    #include "course_offsets.h"
-    #include "camera.h"
-    #include "data/some_data.h"
-    #include "objects.h"
-    #include "path_spawn_metadata.h"
-    extern const course_texture skyscraper_textures[];
+#include "assets/skyscraper_vertices.h"
+#include "assets/skyscraper_displaylists.h"
+#include "assets/skyscraper_data.h"
+#include "course_offsets.h"
+#include "camera.h"
+#include "data/some_data.h"
+#include "objects.h"
+#include "path_spawn_metadata.h"
+extern const course_texture skyscraper_textures[];
 }
 
 class Skyscraper : public Course {
-public:
-    virtual ~Skyscraper() = default;  // Virtual destructor for proper cleanup in derived classes
+  public:
+    virtual ~Skyscraper() = default; // Virtual destructor for proper cleanup in derived classes
 
     // Constructor
     explicit Skyscraper();
 
-//    virtual void Load(const char* courseVtx, 
-//                  course_texture* textures, const char* displaylists, size_t dlSize);
+    //    virtual void Load(const char* courseVtx,
+    //                  course_texture* textures, const char* displaylists, size_t dlSize);
     virtual void LoadTextures() override;
     virtual void SpawnActors() override;
-    virtual void Init() override;
-    //virtual void InitClouds() override;
+    // virtual void InitClouds() override;
     virtual void MinimapSettings() override;
     virtual void InitCourseObjects() override;
     virtual void SomeSounds() override;
@@ -37,7 +36,7 @@ public:
     virtual void SetStaffGhost() override;
     virtual void BeginPlay() override;
     virtual void Render(struct UnkStruct_800DC5EC*) override;
-    virtual void RenderCredits() override;    
+    virtual void RenderCredits() override;
     virtual void Collision() override;
     virtual void SpawnBombKarts() override;
     virtual void GenerateCollision() override;

@@ -104,9 +104,6 @@ void RainbowRoad::SpawnActors() {
     spawn_all_item_boxes(d_course_rainbow_road_item_box_spawns);
 }
 
-void RainbowRoad::Init() {
-}
-
 void RainbowRoad::InitClouds() {
     init_stars(this->Props.Clouds);
 }

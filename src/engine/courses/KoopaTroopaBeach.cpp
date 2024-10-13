@@ -39,7 +39,6 @@ KoopaTroopaBeach::KoopaTroopaBeach() {
     this->gfxSize = 5720;
     this->textures = koopa_troopa_beach_textures;
 
-    Props.Id = "mk:koopa_beach";
     Props.Name = "koopa troopa beach";
     Props.DebugName = "beach";
     Props.CourseLength = "691m";
@@ -106,9 +105,6 @@ void KoopaTroopaBeach::SpawnActors() {
     init_actor_hot_air_balloon_item_box(328.0f * gCourseDirection, 70.0f, 2541.0f);
     spawn_all_item_boxes(d_course_koopa_troopa_beach_item_box_spawns);
     spawn_palm_trees(d_course_koopa_troopa_beach_tree_spawn);
-}
-
-void KoopaTroopaBeach::Init() {
 }
 
 // Likely sets minimap boundaries
