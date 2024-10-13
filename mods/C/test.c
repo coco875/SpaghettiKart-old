@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #define IMPORT_FUNC(return_type, name) __attribute__((import_name(#name))) return_type name
 
@@ -21,14 +22,27 @@ void testfunc() {
     printf("call testfunc with the function test\n");
 }
 
+IMPORT_FUNC(uint64_t, GetCurrentCourse)();
+IMPORT_FUNC(uint64_t, Course_get_ptr_from_id_name)(char*);
+
+uint64_t test_course_id;
+
+IMPORT_FUNC(int, GetCurrentCourseId)();
+IMPORT_FUNC(int, Course_get_id_from_id_name)(char*);
+
 void some_render() {
     load_debug_font();
-    debug_print_str2(0, 0, "hello");
+    if (GetCurrentCourseId() == Course_get_id_from_id_name("mk64:test_course")) {
+        debug_print_str2(0, 0, "it's a debug course");
+    } else {
+        debug_print_str2(0, 0, "it's a regular course");
+    }
     post_debug_print();
 }
 
 void init() {
     printf("init test\n");
+    test_course_id = Course_get_id_from_id_name("mk64:test_course");
     hook_render(some_render);
 }
 

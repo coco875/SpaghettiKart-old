@@ -362,12 +362,12 @@ extern "C"
     int
     main(int argc, char* argv[]) {
 #endif
-    load_wasm();
     GameEngine::Create();
     // audio_init();
     // sound_init();
 
     CustomEngineInit();
+    load_wasm();
     thread5_game_loop();
     while (WindowIsRunning()) {
         push_frame();

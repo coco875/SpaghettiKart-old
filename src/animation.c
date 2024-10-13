@@ -7,6 +7,7 @@
 #include <main.h>
 #include <libultra/gbi.h>
 #include "code_80057C60.h"
+#include "align_asset_macro.h"
 
 Vec3s sOriginalPosAnimation;
 s16 isNotTheFirst;
@@ -98,7 +99,7 @@ void render_limb_or_add_mtx(Armature* arg0, s16* arg1, AnimationLimbVector arg2,
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL2(&gGfxPool->mtxHud[gMatrixHudCount++]),
               G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     if (virtualModel != NULL) {
-        model = segmented_to_virtual(virtualModel);
+        model = LOAD_ASSET(virtualModel);
         gSPDisplayList(gDisplayListHead++, model);
     }
 }

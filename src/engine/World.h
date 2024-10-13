@@ -104,3 +104,4 @@ class World {
 };
 
 extern World gWorldInstance;
+uint64_t GetCurrentCourse();

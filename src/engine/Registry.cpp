@@ -5,25 +5,33 @@
 #include "Course.h"
 #include "World.h"
 
-template <typename T> Registry<T>::Registry() {
+template <class T> Registry<T>::Registry() {
 }
 
-template <typename T> int Registry<T>::add(char* nameId, std::function<T*()> fun) {
+template <class T> int Registry<T>::add(char* nameId, std::function<T*()> fun) {
     int id = types.size();
     types.push_back({ nameId, fun });
     return id;
 }
 
-template <typename T> T* Registry<T>::getWithNameId(char* nameId) {
+template <class T> T* Registry<T>::getWithNameId(char* nameId) {
     for (infoRegister<T> r : types) {
-        if (strcmp(r.nameId, nameId) != 0) {
+        if (strcmp(r.nameId, nameId) == 0) {
             return r.f();
         }
     }
 }
 
-template <typename T> T* Registry<T>::getWithId(int id) {
+template <class T> T* Registry<T>::getWithId(int id) {
     return types[id].f();
+}
+
+template <class T> int Registry<T>::fromNameIdGetId(char* nameId) {
+    for (int i = 0; i < types.size(); i++) {
+        if (strcmp(types[i].nameId, nameId) == 0) {
+            return i;
+        }
+    }
 }
 
 Registry<Course> registryCourse;
@@ -40,3 +48,6 @@ int addCup(char* nameId, Cup* cup) {
     gWorldInstance.Cups.push_back(registrycup.getWithId(id));
     return id;
 }
+
+template class Registry<Course>; // really dumb
+template class Registry<Cup>;

@@ -20,6 +20,8 @@ extern "C" {
 #include <common_data.h>
 #include <data_segment2.h>
 #include <render_objects.h>
+#include "World.h"
+#include "Registry.h"
 
 struct mod_instance {
     wasm_exec_env_t exec_env;
@@ -139,11 +141,33 @@ void debug_print_str2_wrapper(wasm_exec_env_t exec_env, uint32 x, uint32 y, char
     debug_print_str2(x, y, str);
 }
 
+uint64_t GetCurrentCourse_wrapper(wasm_exec_env_t exec_env) {
+    return GetCurrentCourse();
+}
+
+uint64_t Course_get_ptr_from_id_name(wasm_exec_env_t exec_env, char* nameId) {
+    return (uint64_t) registryCourse.getWithNameId(nameId);
+}
+
+int GetCurrentCourseId(wasm_exec_env_t exec_env) {
+    return gWorldInstance.CourseIndex;
+}
+
+int Course_get_id_from_id_name(wasm_exec_env_t exec_env, char* nameId) {
+    return registryCourse.fromNameIdGetId(nameId);
+}
+
 /* the native functions that will be exported to WASM app */
 static NativeSymbol native_symbols[] = {
-    EXPORT_WASM_API_WITH_SIG(call_extern_function, "($$ii)i"), EXPORT_WASM_API_WITH_SIG(hook_render, "(i)"),
-    EXPORT_WASM_API_WITH_SIG(post_debug_print, "()"),          EXPORT_WASM_API_WITH_SIG2(load_debug_font, "()"),
+    EXPORT_WASM_API_WITH_SIG(call_extern_function, "($$ii)i"),
+    EXPORT_WASM_API_WITH_SIG(hook_render, "(i)"),
+    EXPORT_WASM_API_WITH_SIG(post_debug_print, "()"),
+    EXPORT_WASM_API_WITH_SIG2(load_debug_font, "()"),
     EXPORT_WASM_API_WITH_SIG2(debug_print_str2, "(ii$)"),
+    EXPORT_WASM_API_WITH_SIG2(GetCurrentCourse, "()I"),
+    EXPORT_WASM_API_WITH_SIG(Course_get_ptr_from_id_name, "($)I"),
+    EXPORT_WASM_API_WITH_SIG(GetCurrentCourseId, "()i"),
+    EXPORT_WASM_API_WITH_SIG(Course_get_id_from_id_name, "($)i"),
     // EXPORT_WASM_API_WITH_SIG(display_input_read, "(*)i"),
     // EXPORT_WASM_API_WITH_SIG(display_flush, "(iiii*)")
 };

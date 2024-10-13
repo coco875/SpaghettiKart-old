@@ -21,6 +21,10 @@ Cup* World::GetCup() {
     return Cups[CupIndex];
 }
 
+uint64_t GetCurrentCourse() {
+    return (uint64_t) gWorldInstance.CurrentCourse;
+}
+
 void World::SetCourseFromCup() {
     CurrentCourse = Courses[CurrentCup->GetCourseId()];
 }
