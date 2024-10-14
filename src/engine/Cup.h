@@ -9,6 +9,8 @@ class Course; // <-- Forward declare
 
 class Cup {
   public:
+    int Id;
+    char * NameId;
     const char* Name;
     u8* Thumbnail;
     size_t CursorPosition = 0; // Course index in cup

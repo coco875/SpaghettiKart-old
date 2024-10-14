@@ -2,6 +2,7 @@
 #include "World.h"
 #include "Cup.h"
 #include "Course.h"
+#include <port/Game.h>
 
 extern "C" {
 #include "camera.h"

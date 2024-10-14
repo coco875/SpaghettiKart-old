@@ -4,6 +4,8 @@
 #include "engine/Engine.h"
 
 #ifdef __cplusplus
+#include "engine/World.h"
+extern World gWorldInstance;
 extern "C" {
 #endif
 u32 WorldNextCup(void);

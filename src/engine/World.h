@@ -41,8 +41,6 @@ class World {
     void SetCourseFromId(int id);
     void SetCup();
 
-    World* GetWorld();
-
     // These are only for browsing through the course list
     void SetCourse(const char*);
     void NextCourse(void);
@@ -64,5 +62,4 @@ class World {
   private:
 };
 
-extern World gWorldInstance;
 uint64_t GetCurrentCourse();

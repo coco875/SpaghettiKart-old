@@ -186,11 +186,6 @@ void Course::SpawnBombKarts() {
     //    GetWorld()->SpawnBombKarts();
 }
 
-World* Course::GetWorld() {
-    return nullptr;
-    //&gWorldInstance;
-}
-
 void Course::Waypoints(Player* player, int8_t playerId) {
     player->nearestWaypointId = gNearestWaypointByPlayerId[playerId];
     if (player->nearestWaypointId < 0) {
@@ -218,5 +213,3 @@ void Course::Water() {
 
 void Course::Destroy() {
 }
-
-Course* currentCourse = nullptr;

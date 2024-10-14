@@ -72,7 +72,6 @@ class Course {
     virtual void GenerateCollision();
     virtual void Water();
     virtual void Destroy();
-    virtual World* GetWorld();
 };
 
 #endif

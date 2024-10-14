@@ -1,14 +1,11 @@
 #include "Course.h"
 #include "Cup.h"
-
-template <class T> struct infoRegister {
-    char* nameId;
-    std::function<T*()> f;
-};
+#include <unordered_map>
 
 template <class T> class Registry {
   public:
-    std::vector<infoRegister<T>> types;
+    std::vector<std::function<T*()>> constructor;
+    std::unordered_map<std::string, int> types;
     Registry();
     int add(char* name, std::function<T*()>);
     T* getWithNameId(char* nameId);

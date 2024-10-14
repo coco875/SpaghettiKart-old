@@ -21,6 +21,7 @@ extern "C" {
 #include <data_segment2.h>
 #include <render_objects.h>
 #include "World.h"
+#include "port/Game.h"
 #include "Registry.h"
 
 struct mod_instance {

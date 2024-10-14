@@ -18,8 +18,8 @@ typedef struct {
 } SkyboxColours;
 
 typedef struct {
-    int id;
-    const char* nameId;
+    int Id;
+    const char* NameId;
     const char* Name;
     const char* DebugName;
     const char* CourseLength;
