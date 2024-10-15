@@ -1,0 +1,8 @@
+:config:
+  header:
+    header:
+      - '#include <align_asset_macro.h>'
+mario_Plane_001_mesh:
+  symbol: mario_Plane_001_mesh
+  type: gfx
+  offset: 0x1200

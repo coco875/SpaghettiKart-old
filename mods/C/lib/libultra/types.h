@@ -1,7 +1,7 @@
 #ifndef ULTRA64_TYPES_H
 #define ULTRA64_TYPES_H
 
-#include <stdint.h>
+// #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
 

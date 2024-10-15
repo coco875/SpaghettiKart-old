@@ -1,0 +1,27 @@
+2290ebdeeb2a913dde7dd68a70811e161ccf547e:
+  name: Test Course
+  path: yamls
+  config:
+    gbi: F3DEX_MK64
+    sort: OFFSET
+    output:
+      binary: test.otr
+      headers: include/assets
+      code: assets/code
+  segments:
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000
+    - 0x000000

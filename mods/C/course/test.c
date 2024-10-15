@@ -2,6 +2,8 @@
 #include <mk64/common_structs.h>
 #include <libultra/gbi.h>
 
+char txt[] = "HELLO";
+
 CourseVtx test_course_vertices[] = {
     // Top-left vertex (x, y, z), texture coord (tc), color and alpha (ca)
     { { -100, 100, 0 }, { 0, 0 }, { MACRO_COLOR_FLAG(0xFF, 0x00, 0x00, 0), 0x00 } }, // Red

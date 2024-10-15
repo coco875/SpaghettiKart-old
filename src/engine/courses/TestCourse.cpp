@@ -111,16 +111,6 @@ void TestCourse::Load() {
 }
 
 void TestCourse::LoadTextures() {
-    dma_textures(gTextureTrees1, 0x0000035BU, 0x00000800U);
-    D_802BA058 = dma_textures(gTexturePiranhaPlant1, 0x000003E8U, 0x00000800U);
-    dma_textures(gTexturePiranhaPlant2, 0x000003E8U, 0x00000800U);
-    dma_textures(gTexturePiranhaPlant3, 0x000003E8U, 0x00000800U);
-    dma_textures(gTexturePiranhaPlant4, 0x000003E8U, 0x00000800U);
-    dma_textures(gTexturePiranhaPlant5, 0x000003E8U, 0x00000800U);
-    dma_textures(gTexturePiranhaPlant6, 0x000003E8U, 0x00000800U);
-    dma_textures(gTexturePiranhaPlant7, 0x000003E8U, 0x00000800U);
-    dma_textures(gTexturePiranhaPlant8, 0x000003E8U, 0x00000800U);
-    dma_textures(gTexturePiranhaPlant9, 0x000003E8U, 0x00000800U);
 }
 
 void TestCourse::SpawnActors() {
@@ -210,17 +200,6 @@ void TestCourse::SetStaffGhost() {
 void TestCourse::BeginPlay() {
 }
 void TestCourse::Render(struct UnkStruct_800DC5EC* arg0) {
-    gSPSetGeometryMode(gDisplayListHead++, G_SHADING_SMOOTH);
-    gSPClearGeometryMode(gDisplayListHead++, G_LIGHTING);
-    func_802B5D64(D_800DC610, D_802B87D4, 0, 1);
-    gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
-    gSPSetGeometryMode(gDisplayListHead++, G_SHADING_SMOOTH);
-
-    if (func_80290C20(arg0->camera) == 1) {
-        gDPSetCombineMode(gDisplayListHead++, G_CC_SHADE, G_CC_SHADE);
-        gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);
-        // d_course_big_donut_packed_dl_DE8
-    }
     gSPDisplayList(gDisplayListHead++, mario_Plane_001_mesh);
 }
 

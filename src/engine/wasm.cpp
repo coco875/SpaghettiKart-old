@@ -158,6 +158,10 @@ int Course_get_id_from_id_name(wasm_exec_env_t exec_env, char* nameId) {
     return registryCourse.fromNameIdGetId(nameId);
 }
 
+void gSPDisplayList_wrapper(wasm_exec_env_t exec_env, char* asset) {
+    gSPDisplayList(gDisplayListHead++, (Gfx*) asset);
+}
+
 /* the native functions that will be exported to WASM app */
 static NativeSymbol native_symbols[] = {
     EXPORT_WASM_API_WITH_SIG(call_extern_function, "($$ii)i"),
@@ -169,6 +173,7 @@ static NativeSymbol native_symbols[] = {
     EXPORT_WASM_API_WITH_SIG(Course_get_ptr_from_id_name, "($)I"),
     EXPORT_WASM_API_WITH_SIG(GetCurrentCourseId, "()i"),
     EXPORT_WASM_API_WITH_SIG(Course_get_id_from_id_name, "($)i"),
+    EXPORT_WASM_API_WITH_SIG2(gSPDisplayList, "($)"),
     // EXPORT_WASM_API_WITH_SIG(display_input_read, "(*)i"),
     // EXPORT_WASM_API_WITH_SIG(display_flush, "(iiii*)")
 };

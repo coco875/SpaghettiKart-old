@@ -1,7 +1,6 @@
 #ifndef COURSE_H
 #define COURSE_H
 
-#include <stdint.h>
 #include <libultra/types.h>
 #include <libultra/gbi.h>
 #include "common_structs.h"
