@@ -20,9 +20,9 @@ $(MOD_NAME).otr:
 	cp $(MOD_NAME).otr ../../build/mods/$(MOD_NAME).otr
 
 %.bin: %.c
-	gcc -c $< -o $(@:.bin=.o) -Ilib -m32 -mbig-endian -DF3DEX_GBI
-	ld -t -e 0 -Tdata=00000000 -Map $(@:.bin=.map) -o $(@:.bin=.elf) $(@:.bin=.o) --no-check-sections
-	objcopy -O binary --only-section=.data $(@:.bin=.elf) $@
+	mips64-elf-gcc -c $< -o $(@:.bin=.o) -Ilib -mips3 -march=vr4300 -mfix4300 -mabi=32 -DF3DEX_GBI
+	mips64-elf-ld -t -e 0 -Tdata=00000000 -Map $(@:.bin=.map) -o $(@:.bin=.elf) $(@:.bin=.o) --no-check-sections
+	mips64-elf-objcopy -O binary --only-section=.data $(@:.bin=.elf) $@
 
 clean:
 	rm $(MOD_NAME).wasm $(MOD_NAME).otr torch.hash.yml

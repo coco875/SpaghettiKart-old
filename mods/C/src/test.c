@@ -33,13 +33,13 @@ IMPORT_FUNC(int, GetCurrentCourseId)();
 IMPORT_FUNC(int, Course_get_id_from_id_name)(char*);
 
 void some_render() {
-    // load_debug_font();
-    // if (GetCurrentCourseId() == Course_get_id_from_id_name("mk64:test_course")) {
-    //     debug_print_str2(0, 0, "it's a debug course");
-    // } else {
-    //     debug_print_str2(0, 0, "it's a regular course");
-    // }
-    // post_debug_print();
+    load_debug_font();
+    if (GetCurrentCourseId() == Course_get_id_from_id_name("mk64:test_course")) {
+        debug_print_str2(0, 0, "it's a debug course");
+    } else {
+        debug_print_str2(0, 0, "it's a regular course");
+    }
+    post_debug_print();
     gSPDisplayList(mario_Plane_001_mesh);
 }
 
@@ -47,4 +47,6 @@ int main() {
     printf("init test\n");
     test_course_id = Course_get_id_from_id_name("mk64:test_course");
     hook_render(some_render);
+    printf("end init\n");
+    return 0;
 }

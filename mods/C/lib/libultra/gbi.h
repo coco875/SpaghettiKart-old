@@ -3,8 +3,6 @@
 #ifndef ULTRA64_GBI_H
 #define ULTRA64_GBI_H
 
-#define F3DEX_GBI
-
 #ifdef _MSC_VER
 #ifndef u8
 #define u8 uint8_t

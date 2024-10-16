@@ -126,7 +126,6 @@ typedef struct {
     void (*generate_collision)();
     void (*water)();
     void (*destroy)();
-
 } Course;
 
 #endif
