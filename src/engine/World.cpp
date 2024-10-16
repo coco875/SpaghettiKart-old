@@ -1,7 +1,7 @@
 #include <libultraship.h>
 #include "World.h"
 #include "Cup.h"
-#include "courses/Course.h"
+#include "Course.h"
 #include "vehicles/Vehicle.h"
 #include "vehicles/Train.h"
 #include "vehicles/Boat.h"

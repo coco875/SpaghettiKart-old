@@ -164,6 +164,7 @@ u32 WorldPreviousCup(void) {
 }
 
 void CourseManager_SetCup(void* cup) {
+
     gWorldInstance.SetCup((Cup*) cup);
 }
 
