@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _GAME_H
+#define _GAME_H
 
 #include <libultraship.h>
 #include "engine/Engine.h"
@@ -7,7 +8,9 @@
 #include "engine/World.h"
 extern World gWorldInstance;
 extern "C" {
+#include "camera.h"
 #endif
+
 u32 WorldNextCup(void);
 
 u32 WorldPreviousCup(void);
@@ -29,6 +32,8 @@ void SetCourse(const char* name);
 
 void NextCourse();
 void PreviousCourse();
+
+void CourseManager_SetCup(void*);
 
 void CourseManager_SpawnVehicles();
 
@@ -116,3 +121,5 @@ extern int gTestCourseId;
 #ifdef __cplusplus
 }
 #endif
+
+#endif // _GAME_H

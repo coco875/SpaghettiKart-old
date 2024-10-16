@@ -3,6 +3,12 @@
 #include <libultraship.h>
 #include "GameObject.h"
 #include "Cup.h"
+#include "vehicles/Vehicle.h"
+#include "vehicles/Train.h"
+#include "vehicles/Car.h"
+#include "TrainCrossing.h"
+#include <memory>
+#include "Actor.h"
 
 extern "C" {
 #include "camera.h"
@@ -12,6 +18,10 @@ extern "C" {
 
 class Cup; // <-- Forward declaration
 class Course;
+class AVehicle;
+class ATrain;
+class ACar;
+class TrainCrossing;
 
 class World {
   public:
@@ -19,27 +29,31 @@ class World {
     virtual ~World() = default;
     explicit World();
 
-    // virtual Actor* SpawnActor(std::unique_ptr<GameActor> actor);
+    void AddCourse(Course* course);
 
-    virtual Object* SpawnObject(std::unique_ptr<GameObject> object);
+    AActor* AddActor(std::unique_ptr<AActor> actor);
+    void TickActors();
+    void DrawActors(Camera* camera);
+    void RemoveExpiredActors();
 
-    virtual CProperties* GetCourseProps();
-    virtual void UpdateObjects();
-    virtual void RenderObjects(Camera* camera);
-    virtual void ExpiredObjects();
-    virtual void DestroyObjects();
-    virtual Object* GetObjectByIndex(size_t);
+    Object* AddObject(std::unique_ptr<GameObject> object);
 
-    Cup* AddCup(const char* name, std::vector<Course*> courses);
-    Cup* GetCup();
+    CProperties* GetCourseProps();
+    void TickObjects();
+    void DrawObjects(Camera* camera);
+    void ExpiredObjects();
+    void DestroyObjects();
+    Object* GetObjectByIndex(size_t);
+
+    void AddCup(Cup*);
+    void SetCup(Cup* cup);
     const char* GetCupName();
-    virtual u32 GetCupIndex();
-    virtual void SetCupIndex(int16_t courseId);
-    virtual u32 NextCup();
-    virtual u32 PreviousCup();
+    u32 GetCupIndex();
+    u32 NextCup();
+    u32 PreviousCup();
     void SetCourseFromCup();
-    void SetCourseFromId(int id);
-    void SetCup();
+
+    World* GetWorld(void);
 
     // These are only for browsing through the course list
     void SetCourse(const char*);
@@ -55,7 +69,19 @@ class World {
     size_t CupIndex = 1;
 
     std::vector<std::unique_ptr<GameObject>> GameObjects;
-    // std::vector<std::unique_ptr<GameActor>> GameActors;
+    std::vector<std::unique_ptr<AActor>> Actors;
+
+    void AddBoat(f32 speed, uint32_t waypoint);
+    void AddTrain(size_t numCarriages, f32 speed, uint32_t waypoint);
+    void AddTruck(f32 speedA, f32 speedB, TrackWaypoint* path, uint32_t waypoint);
+    void AddBus(f32 speedA, f32 speedB, TrackWaypoint* path, uint32_t waypoint);
+    void AddTankerTruck(f32 speedA, f32 speedB, TrackWaypoint* path, uint32_t waypoint);
+    void AddCar(f32 speedA, f32 speedB, TrackWaypoint* path, uint32_t waypoint);
+    std::vector<std::unique_ptr<AVehicle>> Vehicles;
+    void ResetVehicles(void);
+
+    TrainCrossing* AddCrossing(Vec3f position, u32 waypointMin, u32 waypointMax, f32 approachRadius, f32 exitRadius);
+    std::vector<std::shared_ptr<TrainCrossing>> Crossings;
 
     std::vector<Course*> Courses;
     size_t CourseIndex = 0; // For browsing courses.

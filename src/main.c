@@ -670,6 +670,7 @@ void race_logic_loop(void) {
                     func_8028F474();
                     func_80059AC8();
                     update_course_actors();
+                    CourseManager_TickActors();
                     func_802966A0();
                     func_8028FCBC();
                 }
@@ -972,7 +973,6 @@ void game_state_handler(void) {
             credits_loop();
             break;
     }
-    call_render_hook();
 }
 
 void interrupt_gfx_sptask(void) {
@@ -1285,6 +1285,9 @@ void thread5_iteration(void) {
     FB_CreateFramebuffers();
     read_controllers();
     game_state_handler();
+    
+    call_render_hook();
+    
     end_master_display_list();
     display_and_vsync();
 }

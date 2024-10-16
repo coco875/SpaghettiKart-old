@@ -696,6 +696,7 @@ void render_player_snow_effect_four(void) {
 void render_object_for_player(s32 cameraId) {
 
     CourseManager_RenderCourseObjects(cameraId);
+    CourseManager_TrainSmokeDraw(cameraId);
 
 #if 0
     switch (gCurrentCourseId) {
@@ -1571,6 +1572,7 @@ void func_8005A71C(void) {
 void update_object(void) {
 
     CourseManager_UpdateCourseObjects();
+    CourseManager_TrainSmokeTick();
 
 #if 0
     switch (gCurrentCourseId) {

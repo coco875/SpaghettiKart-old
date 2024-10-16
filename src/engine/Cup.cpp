@@ -1,9 +1,9 @@
 #include "Cup.h"
 #include "Course.h"
 
-Cup::Cup(const char* name, std::vector<int> courses) {
-    this->Name = name;
-    this->Courses = courses;
+Cup::Cup(const char* name, std::vector<Course*> courses) {
+    Name = name;
+    Courses = courses;
 
     if (Courses.size() != 4) {
         throw std::invalid_argument("A cup must contain exactly 4 courses.");
@@ -22,7 +22,14 @@ void Cup::Previous() {
     }
 }
 
-int Cup::GetCourseId() {
+void Cup::SetCourse(size_t position) {
+    if ((position < 0) || (position >= Courses.size())) {
+        throw std::invalid_argument("Invalid course index.");
+    }
+    CursorPosition = position;
+}
+
+Course* Cup::GetCourse() {
     return Courses[CursorPosition];
 }
 

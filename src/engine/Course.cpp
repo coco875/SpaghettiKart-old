@@ -183,7 +183,6 @@ void Course::SetStaffGhost() {
 }
 
 void Course::SpawnBombKarts() {
-    //    GetWorld()->SpawnBombKarts();
 }
 
 void Course::Waypoints(Player* player, int8_t playerId) {

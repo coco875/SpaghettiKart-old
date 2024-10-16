@@ -1,8 +1,11 @@
 #include <libultraship.h>
 
+#include "Game.h"
+
 #include <Fast3D/gfx_pc.h>
 #include "Engine.h"
 #include "engine/World.h"
+#include "engine/courses/Course.h"
 #include "engine/courses/MarioRaceway.h"
 #include "engine/courses/ChocoMountain.h"
 #include "engine/courses/BowsersCastle.h"
@@ -30,6 +33,9 @@
 #include "engine/Registry.h"
 
 #include "port/Game.h"
+#include "engine/TrainCrossing.h"
+
+#include "Smoke.h"
 
 extern "C" {
 #include "main.h"
@@ -72,6 +78,12 @@ int gBigDonutId;
 int gPodiumCeremonyId;
 int gTestCourseId;
 }
+
+Cup* gMushroomCup;
+Cup* gFlowerCup;
+Cup* gStarCup;
+Cup* gSpecialCup;
+Cup* gBattleCup;
 
 void CustomEngineInit() {
     /* Add all courses to the global course list */
@@ -118,9 +130,6 @@ void CustomEngineInit() {
 }
 
 extern "C" {
-u32 WorldNextCup(void) {
-    return gWorldInstance.NextCup();
-}
 
 u32 WorldPreviousCup(void) {
     return gWorldInstance.PreviousCup();
@@ -144,6 +153,22 @@ u32 GetCupIndex(void) {
 
 const char* GetCupName(void) {
     return gWorldInstance.Cups[gWorldInstance.CupIndex]->Name;
+}
+
+u32 WorldNextCup(void) {
+    return gWorldInstance.NextCup();
+}
+
+u32 WorldPreviousCup(void) {
+    return gWorldInstance.PreviousCup();
+}
+
+void CourseManager_SetCup(void* cup) {
+    gWorldInstance.SetCup((Cup*) cup);
+}
+
+void* GetCup() {
+    return gWorldInstance.CurrentCup;
 }
 
 void LoadCourse() {
@@ -178,10 +203,71 @@ void CourseManager_SpawnVehicles() {
     }
 }
 
-void CourseManager_UpdateVehicles() {
-    if (gWorldInstance.CurrentCourse) {
-        gWorldInstance.CurrentCourse->UpdateVehicles();
+void CourseManager_VehiclesSpawn() {
+    for (auto& vehicle : gWorldInstance.Vehicles) {
+        if (vehicle) {
+            vehicle->Spawn();
+        }
     }
+}
+
+void CourseManager_VehiclesTick() {
+    for (auto& vehicle : gWorldInstance.Vehicles) {
+        if (vehicle) {
+            vehicle->Tick();
+        }
+    }
+}
+
+void CourseManager_VehiclesCollision(s32 playerId, Player* player) {
+    for (auto& vehicle : gWorldInstance.Vehicles) {
+        if (vehicle) {
+            vehicle->Collision(playerId, player);
+        }
+    }
+}
+
+void CourseManager_RenderTrucks(s32 playerId) {
+    for (auto& vehicle : gWorldInstance.Vehicles) {
+        if (vehicle) {
+            vehicle->Draw(playerId);
+        }
+    }
+}
+
+void CourseManager_ResetVehicles(void) {
+    gWorldInstance.ResetVehicles();
+}
+
+void CourseManager_CrossingTrigger() {
+    for (auto& crossing : gWorldInstance.Crossings) {
+        if (crossing) {
+            crossing->CrossingTrigger();
+        }
+    }
+}
+
+void CourseManager_AICrossingBehaviour(s32 playerId) {
+    for (auto& crossing : gWorldInstance.Crossings) {
+        if (crossing) {
+            crossing->AICrossingBehaviour(playerId);
+        }
+    }
+}
+
+s32 CourseManager_GetCrossingOnTriggered(uintptr_t* crossing) {
+    TrainCrossing* ptr = (TrainCrossing*) crossing;
+    if (ptr) {
+        return ptr->OnTriggered;
+    }
+}
+
+void CourseManager_TrainSmokeTick(void) {
+    TrainSmokeTick();
+}
+
+void CourseManager_TrainSmokeDraw(s32 cameraId) {
+    TrainSmokeDraw(cameraId);
 }
 
 void CourseManager_LoadTextures() {
@@ -199,6 +285,21 @@ void CourseManager_RenderCourse(struct UnkStruct_800DC5EC* arg0) {
 void CourseManager_RenderCredits() {
     if (gWorldInstance.CurrentCourse) {
         gWorldInstance.CurrentCourse->RenderCredits();
+    }
+}
+
+void CourseManager_TickActors() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.TickActors();
+    }
+}
+
+void SetCourseFromCup() {
+    gWorldInstance.SetCourseFromCup();
+}
+void CourseManager_DrawActors(Camera* camera) {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.DrawActors(camera);
     }
 }
 
@@ -322,15 +423,12 @@ size_t GetCupCursorPosition() {
 }
 
 void SetCupCursorPosition(size_t position) {
-    gWorldInstance.CurrentCup->CursorPosition = position;
+    gWorldInstance.CurrentCup->SetCourse(position);
+    // gWorldInstance.CurrentCup->CursorPosition = position;
 }
 
 size_t GetCupSize() {
     return gWorldInstance.CurrentCup->GetSize();
-}
-
-void SetCourseFromCup() {
-    gWorldInstance.SetCourseFromCup();
 }
 
 void* GetCourse(void) {

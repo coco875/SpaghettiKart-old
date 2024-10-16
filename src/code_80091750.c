@@ -76,8 +76,7 @@ struct_8018E768_entry D_8018E768[D_8018E768_SIZE];
 s32 gCycleFlashMenu;
 s8 D_8018E7AC[5];
 u32 D_8018E7B8[5];
-u32 D_8018E7D0[4];
-s32 D_8018E7E0;
+u32 D_8018E7D0[5];
 struct UnkStruct_8018E7E8 D_8018E7E8[D_8018E7E8_SIZE];
 struct UnkStruct_8018E7E8 D_8018E810[D_8018E810_SIZE];
 s8 D_8018E838[4]; // Import to C was required for matching.
@@ -4946,6 +4945,7 @@ void func_8009CE64(s32 arg0) {
                     switch (gNextDemoId) { /* switch 4 */
                         case 0:            /* switch 4 */
                             SetCourseFromId(COURSE_MARIO_RACEWAY);
+                            CourseManager_SetCup(GetFlowerCup());
                             // gCurrentCourseId = 0;
                             gScreenModeSelection = 0;
                             gPlayerCountSelection1 = 1;
@@ -4955,6 +4955,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 1: /* switch 4 */
                             SetCourseFromId(COURSE_LUIGI_RACEWAY);
+                            CourseManager_SetCup(GetMushroomCup());
                             // gCurrentCourseId = (s16) 1;
                             gScreenModeSelection = (s32) 1;
                             gPlayerCountSelection1 = 2;
@@ -4965,6 +4966,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 2: /* switch 4 */
                             SetCourseFromId(COURSE_KALAMARI_DESERT);
+                            CourseManager_SetCup(GetMushroomCup());
                             // gCurrentCourseId = COURSE_KALAMARI_DESERT;
                             gScreenModeSelection = 0;
                             gPlayerCountSelection1 = (s32) 1;
@@ -4974,6 +4976,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 3: /* switch 4 */
                             SetCourseFromId(COURSE_WARIO_STADIUM);
+                            CourseManager_SetCup(GetStarCup());
                             // gCurrentCourseId = 0x000E;
                             gScreenModeSelection = 3;
                             gPlayerCountSelection1 = 3;
@@ -4985,6 +4988,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 4: /* switch 4 */
                             SetCourseFromId(COURSE_BOWSER_CASTLE);
+                            CourseManager_SetCup(GetStarCup());
                             // gCurrentCourseId = 2;
                             gScreenModeSelection = 0;
                             gPlayerCountSelection1 = (s32) 1;
@@ -4994,6 +4998,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 5: /* switch 4 */
                             SetCourseFromId(COURSE_SHERBET_LAND);
+                            CourseManager_SetCup(GetFlowerCup());
                             // gCurrentCourseId = 0x000C;
                             gScreenModeSelection = 3;
                             gPlayerCountSelection1 = 4;
@@ -5012,8 +5017,8 @@ void func_8009CE64(s32 arg0) {
                         gNextDemoId = 0;
                     }
                     printf("\nSELECTED!!!!!\n");
-                    // SetCupIndex(gCurrentCourseId); // World->GetCourse
-                    gCupSelection = GetCupIndex(); // gCupSelectionByCourseId[gCurrentCourseId];
+
+                    // gCupSelection = GetCupIndex(); // gCupSelectionByCourseId[gCurrentCourseId];
                     D_800DC540 = (s32) GetCupIndex();
                     gCourseIndexInCup = GetCupCursorPosition();
                     // gCupCourseSelection = (s8) gPerCupIndexByCourseId[gCurrentCourseId];

@@ -1,8 +1,16 @@
 #include <libultraship.h>
 #include "World.h"
 #include "Cup.h"
-#include "Course.h"
-#include <port/Game.h>
+#include "courses/Course.h"
+#include "vehicles/Vehicle.h"
+#include "vehicles/Train.h"
+#include "vehicles/Boat.h"
+#include "vehicles/Truck.h"
+#include "vehicles/Bus.h"
+#include "vehicles/TankerTruck.h"
+#include "vehicles/Car.h"
+#include "TrainCrossing.h"
+#include <memory>
 
 extern "C" {
 #include "camera.h"
@@ -42,6 +50,54 @@ void World::SetCupIndex(int16_t courseId) {
     this->CupIndex = courseId;
     CurrentCup = Cups[courseId];
 }
+// Required for spawning vehicles in divisions across path points
+static size_t trains;
+static size_t trucks;
+static size_t busses;
+static size_t tankerTrucks;
+static size_t cars;
+static size_t boats;
+void World::AddTrain(size_t numCarriages, f32 speed, uint32_t waypoint) {
+    Vehicles.push_back(std::make_unique<ATrain>(trains, numCarriages, speed, waypoint));
+    trains++;
+}
+
+void World::AddBoat(f32 speed, uint32_t waypoint) {
+    Vehicles.push_back(std::make_unique<ABoat>(boats, speed, waypoint));
+    boats++;
+}
+
+void World::AddTruck(f32 speedA, f32 speedB, TrackWaypoint* path, uint32_t waypoint) {
+    Vehicles.push_back(std::make_unique<ATruck>(trucks, speedA, speedB, path, waypoint));
+    trucks++;
+}
+
+void World::AddBus(f32 speedA, f32 speedB, TrackWaypoint* path, uint32_t waypoint) {
+    Vehicles.push_back(std::make_unique<ABus>(busses, speedA, speedB, path, waypoint));
+    busses++;
+}
+
+void World::AddTankerTruck(f32 speedA, f32 speedB, TrackWaypoint* path, uint32_t waypoint) {
+    Vehicles.push_back(std::make_unique<ATankerTruck>(tankerTrucks, speedA, speedB, path, waypoint));
+    tankerTrucks++;
+}
+
+void World::AddCar(f32 speedA, f32 speedB, TrackWaypoint* path, uint32_t waypoint) {
+    Vehicles.push_back(std::make_unique<ACar>(cars, speedA, speedB, path, waypoint));
+    cars++;
+}
+
+void World::ResetVehicles(void) {
+    trains = trucks = busses = tankerTrucks = cars = boats = 0;
+    Vehicles.clear();
+}
+
+TrainCrossing* World::AddCrossing(Vec3f position, u32 waypointMin, u32 waypointMax, f32 approachRadius,
+                                  f32 exitRadius) {
+    auto crossing = std::make_shared<TrainCrossing>(position, waypointMin, waypointMax, approachRadius, exitRadius);
+    Crossings.push_back(crossing);
+    return crossing.get();
+}
 
 u32 World::GetCupIndex() {
     return this->CupIndex;
@@ -55,7 +111,7 @@ u32 World::NextCup() {
         hack = 2;
     }
 
-    if (this->CupIndex < Cups.size() - 2) {
+    if (CupIndex < Cups.size() - hack) {
         CupIndex++;
         CurrentCup = Cups[CupIndex];
         return CupIndex;
@@ -83,8 +139,9 @@ CProperties* World::GetCourseProps() {
 }
 
 void World::SetCourse(const char* name) {
+    //! @todo Use content dictionary instead
     for (size_t i = 0; i < Courses.size(); i++) {
-        if (Courses[i]->Props.Name == name) {
+        if (strcmp(Courses[i]->Props.Name, name) == 0) {
             CurrentCourse = Courses[i];
             break;
         }
@@ -110,21 +167,46 @@ void World::PreviousCourse() {
     gWorldInstance.CurrentCourse = Courses[CourseIndex];
 }
 
-Object* World::SpawnObject(std::unique_ptr<GameObject> object) {
+Object* World::AddObject(std::unique_ptr<GameObject> object) {
     GameObject* rawPtr = object.get();
-    this->GameObjects.push_back(std::move(object));
+    GameObjects.push_back(std::move(object));
     return &rawPtr->o;
 }
 
-void World::UpdateObjects() {
-    for (const auto& object : this->GameObjects) {
-        object->Update();
+AActor* World::AddActor(std::unique_ptr<AActor> actor) {
+    AActor* rawPtr = actor.get();
+    Actors.push_back(std::move(actor));
+    return rawPtr;
+}
+
+void World::TickActors() {
+    for (auto& actor : Actors) {
+        actor->Tick();
     }
 }
 
-void World::RenderObjects(Camera* camera) {
+void World::DrawActors(Camera* camera) {
+    for (auto& actor : Actors) {
+        actor->Draw(camera);
+    }
+}
+
+void RemoveExpiredActors() {
+    // Actors.erase(
+    //     std::remove_if(Actors.begin(), Actors.end(),
+    //                     [](const std::unique_ptr<AActor>& actor) { return actor->uuid == 0; }), // Example condition
+    //     Actors.end());
+}
+
+void World::TickObjects() {
     for (const auto& object : this->GameObjects) {
-        object->Render(camera);
+        object->Tick();
+    }
+}
+
+void World::DrawObjects(Camera* camera) {
+    for (const auto& object : this->GameObjects) {
+        object->Draw(camera);
     }
 }
 
