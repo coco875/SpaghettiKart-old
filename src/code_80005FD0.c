@@ -1678,16 +1678,16 @@ void func_80009B60(s32 playerId) {
         if (!(player->unk_0CA & 2) && !(player->unk_0CA & 8)) {
             D_80163448 = gPathIndexByPlayerId[playerId];
             func_80008DC0(D_80163448);
-            //if (GetCourse() == GetKalimariDesert()) {
-                CourseManager_VehiclesCollision(playerId, player);
-                //func_80012DC0(playerId, player);
-                if (playerId == 0) {
-                    CourseManager_CrossingTrigger();
-                    //func_80013054();
-                }
+            // if (GetCourse() == GetKalimariDesert()) {
+            CourseManager_VehiclesCollision(playerId, player);
+            // func_80012DC0(playerId, player);
+            if (playerId == 0) {
+                CourseManager_CrossingTrigger();
+                // func_80013054();
+            }
             //}
             if (GetCourse() == GetDkJungle()) {
-                //func_80013854(player);
+                // func_80013854(player);
             } else if (GetCourse() == GetToadsTurnpike()) {
                 func_800148C4(playerId, player);
                 func_80014A18(playerId, player);
@@ -1774,7 +1774,7 @@ void func_80009B60(s32 playerId) {
                         D_80163210[playerId] = CourseManager_GetProps()->D_0D009568[gCCSelection];
                     }
                     CourseManager_AICrossingBehaviour(playerId);
-                    //check_ai_crossing_distance(playerId);
+                    // check_ai_crossing_distance(playerId);
                     func_8000D3B8(playerId);
                     func_8000D438(playerId, D_801630E0);
                     temp_f0 = D_80162FA0[0] - player->pos[0];
@@ -1989,7 +1989,7 @@ void func_80009B60(s32 playerId) {
                 player->effects &= ~0x00200000;
                 D_80163210[playerId] = D_8016320C;
                 CourseManager_AICrossingBehaviour(playerId);
-                //check_ai_crossing_distance(playerId);
+                // check_ai_crossing_distance(playerId);
                 func_80008424(playerId, D_8016320C, player);
             }
         }
@@ -4164,10 +4164,10 @@ void kart_ai_behaviour_start(s32 playerId, Player* player) {
     s32 behaviourType;
     UNUSED s32 test;
 
-    KartAIBehaviour *beh = (KartAIBehaviour*)LOAD_ASSET(CourseManager_GetProps()->AIBehaviour);
+    KartAIBehaviour* beh = (KartAIBehaviour*) LOAD_ASSET(CourseManager_GetProps()->AIBehaviour);
 
-    sCurrentKartAIBehaviour = 
-        &((KartAIBehaviour*)LOAD_ASSET(CourseManager_GetProps()->AIBehaviour))[gCurrentKartAIBehaviourId[playerId]];
+    sCurrentKartAIBehaviour =
+        &((KartAIBehaviour*) LOAD_ASSET(CourseManager_GetProps()->AIBehaviour))[gCurrentKartAIBehaviourId[playerId]];
 
     playerWaypoint = gNearestWaypointByPlayerId[playerId];
 
@@ -4342,7 +4342,8 @@ void generate_ferry_waypoints(void) {
     D_80162EB2 = -40;
 }
 
-void spawn_vehicle_on_road(Vec3f position, Vec3s rotation, Vec3f velocity, s32 waypointIndex, s32 someMultiplierTheSequel, f32 speed) {
+void spawn_vehicle_on_road(Vec3f position, Vec3s rotation, Vec3f velocity, s32 waypointIndex,
+                           s32 someMultiplierTheSequel, f32 speed) {
     f32 origXPos;
     UNUSED f32 pad;
     f32 origZPos;
@@ -4350,14 +4351,12 @@ void spawn_vehicle_on_road(Vec3f position, Vec3s rotation, Vec3f velocity, s32 w
     origXPos = position[0];
     origZPos = position[2];
     if (D_8016347A == 0) {
-        func_8000D6D0(position, (s16*) &waypointIndex, speed,
-                      someMultiplierTheSequel, 0, 3);
+        func_8000D6D0(position, (s16*) &waypointIndex, speed, someMultiplierTheSequel, 0, 3);
         rotation[0] = 0;
         rotation[1] = -0x8000;
         rotation[2] = 0;
     } else {
-        func_8000D940(position, (s16*) &waypointIndex, speed,
-                      someMultiplierTheSequel, 0);
+        func_8000D940(position, (s16*) &waypointIndex, speed, someMultiplierTheSequel, 0);
         rotation[0] = 0;
         rotation[1] = 0;
         rotation[2] = 0;
@@ -4440,9 +4439,9 @@ void init_vehicles_trains(size_t i, size_t numCarriages, f32 speed) {
 
     gTrainList[i].numCarriages = numCarriages;
 
-    //for (i = 0; i < NUM_TRAINS; i++) {
-    // outputs 160 or 392 depending on the train.
-    // Wraps the value around to always output a valid waypoint.
+    // for (i = 0; i < NUM_TRAINS; i++) {
+    //  outputs 160 or 392 depending on the train.
+    //  Wraps the value around to always output a valid waypoint.
     waypointOffset = (((i * gVehicle2DWaypointLength) / 2) + 160) % gVehicle2DWaypointLength;
 
     // 120.0f is about the maximum usable value

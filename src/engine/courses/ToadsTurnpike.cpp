@@ -12,29 +12,29 @@
 #include "engine/vehicles/Utils.h"
 
 extern "C" {
-    #include "main.h"
-    #include "camera.h"
-    #include "course_offsets.h"
-    #include "code_800029B0.h"
-    #include "render_courses.h"
-    #include "code_8006E9C0.h"
-    #include "code_80057C60.h"
-    #include "defines.h"
-    #include "math_util.h"
-    #include "external.h"
-    #include "code_80005FD0.h"
-    #include "spawn_players.h"
-    #include "render_objects.h"
-    #include "assets/common_data.h"
-    #include "save.h"
-    #include "staff_ghosts.h"
-    #include "actors.h"
-    #include "collision.h"
-    #include "memory.h"
-    #include "code_80086E70.h"
-    extern const char *d_course_toads_turnpike_dl_list[];
-    extern s16 currentScreenSection;
-    extern s8 gPlayerCount;
+#include "main.h"
+#include "camera.h"
+#include "course_offsets.h"
+#include "code_800029B0.h"
+#include "render_courses.h"
+#include "code_8006E9C0.h"
+#include "code_80057C60.h"
+#include "defines.h"
+#include "math_util.h"
+#include "external.h"
+#include "code_80005FD0.h"
+#include "spawn_players.h"
+#include "render_objects.h"
+#include "assets/common_data.h"
+#include "save.h"
+#include "staff_ghosts.h"
+#include "actors.h"
+#include "collision.h"
+#include "memory.h"
+#include "code_80086E70.h"
+extern const char* d_course_toads_turnpike_dl_list[];
+extern s16 currentScreenSection;
+extern s8 gPlayerCount;
 }
 
 ToadsTurnpike::ToadsTurnpike() {
@@ -58,7 +58,7 @@ ToadsTurnpike::ToadsTurnpike() {
     Props.NearPersp = 9.0f;
     Props.FarPersp = 4500.0f;
 
-    Props.PathSizes = {1000, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    Props.PathSizes = { 1000, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     Props.D_0D009418[0] = 4.1666665f;
     Props.D_0D009418[1] = 5.5833334f;
@@ -80,12 +80,12 @@ ToadsTurnpike::ToadsTurnpike() {
     Props.D_0D009808[2] = 5.75f;
     Props.D_0D009808[3] = 6.3333334f;
 
-    Props.PathTable[0] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_toads_turnpike_unknown_waypoints);
+    Props.PathTable[0] = (TrackWaypoint*) LOAD_ASSET_RAW(d_course_toads_turnpike_unknown_waypoints);
     Props.PathTable[1] = NULL;
     Props.PathTable[2] = NULL;
     Props.PathTable[3] = NULL;
 
-    Props.PathTable2[0] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_toads_turnpike_track_waypoints);
+    Props.PathTable2[0] = (TrackWaypoint*) LOAD_ASSET_RAW(d_course_toads_turnpike_track_waypoints);
     Props.PathTable2[1] = NULL;
     Props.PathTable2[2] = NULL;
     Props.PathTable2[3] = NULL;
@@ -95,21 +95,21 @@ ToadsTurnpike::ToadsTurnpike() {
     Props.MinimapFinishlineX = 0;
     Props.MinimapFinishlineY = 0;
 
-    Props.Skybox.TopRight = {0, 2, 94};
-    Props.Skybox.BottomRight = {209, 65, 23};
-    Props.Skybox.BottomLeft = {209, 65, 23};
-    Props.Skybox.TopLeft = {0, 2, 94};
-    Props.Skybox.FloorTopRight = {209, 65, 23};
-    Props.Skybox.FloorBottomRight = {0, 0, 0};
-    Props.Skybox.FloorBottomLeft = {0, 0, 0};
-    Props.Skybox.FloorTopLeft = {209, 65, 23};
+    Props.Skybox.TopRight = { 0, 2, 94 };
+    Props.Skybox.BottomRight = { 209, 65, 23 };
+    Props.Skybox.BottomLeft = { 209, 65, 23 };
+    Props.Skybox.TopLeft = { 0, 2, 94 };
+    Props.Skybox.FloorTopRight = { 209, 65, 23 };
+    Props.Skybox.FloorBottomRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomLeft = { 0, 0, 0 };
+    Props.Skybox.FloorTopLeft = { 209, 65, 23 };
 }
 
 void ToadsTurnpike::LoadTextures() {
 }
 
 void ToadsTurnpike::SpawnActors() {
-    spawn_all_item_boxes((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_toads_turnpike_item_box_spawns));
+    spawn_all_item_boxes((struct ActorSpawnData*) LOAD_ASSET_RAW(d_course_toads_turnpike_item_box_spawns));
 }
 
 void ToadsTurnpike::InitClouds() {
@@ -128,7 +128,8 @@ void ToadsTurnpike::MinimapSettings() {
     D_8018D2E8 = 44;
 }
 
-void ToadsTurnpike::SomeSounds() {}
+void ToadsTurnpike::SomeSounds() {
+}
 
 void ToadsTurnpike::WhatDoesThisDo(Player* player, int8_t playerId) {
     if ((player->type & PLAYER_CINEMATIC_MODE) != PLAYER_CINEMATIC_MODE) {
@@ -171,12 +172,15 @@ void ToadsTurnpike::SpawnBombKarts() {
 // Positions the finishline on the minimap
 void ToadsTurnpike::MinimapFinishlinePosition() {
     //! todo: Place hard-coded values here.
-    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY, (u8*) common_texture_minimap_finish_line);
+    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY,
+                            (u8*) common_texture_minimap_finish_line);
 }
 
-void ToadsTurnpike::SetStaffGhost() {}
+void ToadsTurnpike::SetStaffGhost() {
+}
 
-void ToadsTurnpike::BeginPlay() {}
+void ToadsTurnpike::BeginPlay() {
+}
 
 void ToadsTurnpike::Render(struct UnkStruct_800DC5EC* arg0) {
     func_802B5D64(D_800DC610, D_802B87D4, 0, 1);
@@ -195,20 +199,21 @@ void ToadsTurnpike::Render(struct UnkStruct_800DC5EC* arg0) {
     gDPSetRenderMode(gDisplayListHead++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_PASS2);
     // d_course_toads_turnpike_packed_dl_0
-    gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*)0x07000000));
+    gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*) 0x07000000));
     // d_course_toads_turnpike_packed_dl_68
-    gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*)0x07000068));
+    gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*) 0x07000068));
     // d_course_toads_turnpike_packed_dl_D8
-    gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*)0x070000D8));
+    gSPDisplayList(gDisplayListHead++, segmented_gfx_to_virtual((void*) 0x070000D8));
     gSPClearGeometryMode(gDisplayListHead++, G_FOG);
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
 }
 
 void ToadsTurnpike::RenderCredits() {
-    gSPDisplayList(gDisplayListHead++, (Gfx*)(d_course_toads_turnpike_dl_23930));
+    gSPDisplayList(gDisplayListHead++, (Gfx*) (d_course_toads_turnpike_dl_23930));
 }
 
-void ToadsTurnpike::Collision() {}
+void ToadsTurnpike::Collision() {
+}
 
 void ToadsTurnpike::SpawnVehicles() {
     f32 a = ((gCCSelection * 90.0) / 216.0f) + 4.583333333333333;
@@ -238,12 +243,12 @@ void ToadsTurnpike::SpawnVehicles() {
     } else { // All other modes
         for (size_t i = 0; i < NUM_RACE_BOX_TRUCKS; i++) {
             uint32_t waypoint = CalculateWaypointDistribution(i, NUM_RACE_BOX_TRUCKS, gWaypointCountByPathIndex[0], 0);
-            gWorldInstance.AddTruck(a, b,  &D_80164550[0][0], waypoint);
+            gWorldInstance.AddTruck(a, b, &D_80164550[0][0], waypoint);
         }
 
         for (size_t i = 0; i < NUM_RACE_SCHOOL_BUSES; i++) {
             waypoint = CalculateWaypointDistribution(i, NUM_RACE_SCHOOL_BUSES, gWaypointCountByPathIndex[0], 75);
-            gWorldInstance.AddBus(a, b,&D_80164550[0][0], waypoint);
+            gWorldInstance.AddBus(a, b, &D_80164550[0][0], waypoint);
         }
 
         for (size_t i = 0; i < NUM_RACE_TANKER_TRUCKS; i++) {
@@ -264,9 +269,10 @@ void ToadsTurnpike::GenerateCollision() {
     D_801625F0 = 4;
     D_802B87B0 = 993;
     D_802B87B4 = 1000;
-    parse_course_displaylists((TrackSectionsI*)LOAD_ASSET_RAW(d_course_toads_turnpike_addr));
+    parse_course_displaylists((TrackSectionsI*) LOAD_ASSET_RAW(d_course_toads_turnpike_addr));
     func_80295C6C();
     D_8015F8E4 = gCourseMinY - 10.0f;
 }
 
-void ToadsTurnpike::Destroy() { }
+void ToadsTurnpike::Destroy() {
+}

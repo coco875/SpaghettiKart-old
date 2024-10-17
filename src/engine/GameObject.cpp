@@ -4,17 +4,22 @@
 #include "World.h"
 
 extern "C" {
-    #include "camera.h"
+#include "camera.h"
 }
 
+// GameActor()
 
-    //GameActor()
+GameObject::GameObject() {
+}
 
-GameObject::GameObject() {}
-
-    // Virtual functions to be overridden by derived classes
-void GameObject::Tick() {  }
-void GameObject::Draw(Camera* camera) { }
-void GameObject::Collision() {}
-void GameObject::Expire() { }
-void GameObject::Destroy() { }
+// Virtual functions to be overridden by derived classes
+void GameObject::Tick() {
+}
+void GameObject::Draw(Camera* camera) {
+}
+void GameObject::Collision() {
+}
+void GameObject::Expire() {
+}
+void GameObject::Destroy() {
+}

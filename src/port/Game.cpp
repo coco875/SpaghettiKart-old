@@ -128,11 +128,16 @@ void CustomEngineInit() {
     gWorldInstance.AddCourse(gBigDonut);
     gWorldInstance.AddCourse(gTestCourse);
 
-    gMushroomCup = new Cup("mk:mushroom_cup", "mushroom cup", std::vector<Course*>{ gLuigiRaceway, gMooMooFarm, gKoopaTroopaBeach, gKalimariDesert });
-    gFlowerCup = new Cup("mk:flower_cup", "flower cup", std::vector<Course*>{ gToadsTurnpike, gFrappeSnowland, gChocoMountain, gMarioRaceway });
-    gStarCup = new Cup("mk:star_cup", "star cup", std::vector<Course*>{ gWarioStadium, gSherbetLand, gRoyalRaceway, gBowsersCastle });
-    gSpecialCup = new Cup("mk:special_cup", "special cup", std::vector<Course*>{ gDkJungle, gYoshiValley, gBansheeBoardwalk, gRainbowRoad });
-    gBattleCup = new Cup("mk:battle_cup", "battle", std::vector<Course*>{ gBigDonut, gBlockFort, gDoubleDeck, gSkyscraper });
+    gMushroomCup = new Cup("mk:mushroom_cup", "mushroom cup",
+                           std::vector<Course*>{ gLuigiRaceway, gMooMooFarm, gKoopaTroopaBeach, gKalimariDesert });
+    gFlowerCup = new Cup("mk:flower_cup", "flower cup",
+                         std::vector<Course*>{ gToadsTurnpike, gFrappeSnowland, gChocoMountain, gMarioRaceway });
+    gStarCup = new Cup("mk:star_cup", "star cup",
+                       std::vector<Course*>{ gWarioStadium, gSherbetLand, gRoyalRaceway, gBowsersCastle });
+    gSpecialCup = new Cup("mk:special_cup", "special cup",
+                          std::vector<Course*>{ gDkJungle, gYoshiValley, gBansheeBoardwalk, gRainbowRoad });
+    gBattleCup =
+        new Cup("mk:battle_cup", "battle", std::vector<Course*>{ gBigDonut, gBlockFort, gDoubleDeck, gSkyscraper });
 
     /* Instantiate Cups */
     gWorldInstance.AddCup(gMushroomCup);
@@ -149,407 +154,407 @@ void CustomEngineInit() {
 
 extern "C" {
 
-    World* GetWorld(void) {
-        return &gWorldInstance;
-    }
+World* GetWorld(void) {
+    return &gWorldInstance;
+}
 
-    u32 WorldNextCup(void) {
-        return gWorldInstance.NextCup();
-    }
+u32 WorldNextCup(void) {
+    return gWorldInstance.NextCup();
+}
 
-    u32 WorldPreviousCup(void) {
-        return gWorldInstance.PreviousCup();
-    }
+u32 WorldPreviousCup(void) {
+    return gWorldInstance.PreviousCup();
+}
 
-    void CourseManager_SetCup(void* cup) {
-        gWorldInstance.SetCup((Cup*)cup);
-    }
+void CourseManager_SetCup(void* cup) {
+    gWorldInstance.SetCup((Cup*) cup);
+}
 
-    void* GetCup() {
-        return gWorldInstance.CurrentCup;
-    }
+void* GetCup() {
+    return gWorldInstance.CurrentCup;
+}
 
-    u32 GetCupIndex(void) {
-        printf("Cup Index: %d\n", gWorldInstance.GetCupIndex());
-        return gWorldInstance.GetCupIndex();
-    }
+u32 GetCupIndex(void) {
+    printf("Cup Index: %d\n", gWorldInstance.GetCupIndex());
+    return gWorldInstance.GetCupIndex();
+}
 
-    const char* GetCupName(void) {
-        return gWorldInstance.CurrentCup->Name;
-    }
+const char* GetCupName(void) {
+    return gWorldInstance.CurrentCup->Name;
+}
 
-    void LoadCourse() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->Load();
+void LoadCourse() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->Load();
+    }
+}
+
+CProperties* GetCoursePropsA() {
+    return (CProperties*) gWorldInstance.GetCourseProps();
+}
+
+size_t GetCourseIndex() {
+    return gWorldInstance.CourseIndex;
+}
+
+void SetCourse(const char* name) {
+    gWorldInstance.SetCourse(name);
+}
+
+void NextCourse() {
+    gWorldInstance.NextCourse();
+}
+
+void PreviousCourse() {
+    gWorldInstance.PreviousCourse();
+}
+
+void CourseManager_SpawnVehicles() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->SpawnVehicles();
+    }
+}
+
+void CourseManager_VehiclesSpawn() {
+    for (auto& vehicle : gWorldInstance.Vehicles) {
+        if (vehicle) {
+            vehicle->Spawn();
         }
     }
+}
 
-    CProperties* GetCoursePropsA() {
-        return (CProperties*) gWorldInstance.GetCourseProps();
-    }
-
-    size_t GetCourseIndex() {
-        return gWorldInstance.CourseIndex;
-    }
-
-    void SetCourse(const char* name) {
-        gWorldInstance.SetCourse(name);
-    }
-
-    void NextCourse() {
-        gWorldInstance.NextCourse();
-    }
-
-    void PreviousCourse() {
-        gWorldInstance.PreviousCourse();
-    }
-
-    void CourseManager_SpawnVehicles() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->SpawnVehicles();
+void CourseManager_VehiclesTick() {
+    for (auto& vehicle : gWorldInstance.Vehicles) {
+        if (vehicle) {
+            vehicle->Tick();
         }
     }
+}
 
-    void CourseManager_VehiclesSpawn() {
-        for (auto& vehicle : gWorldInstance.Vehicles) {
-            if (vehicle) {
-                vehicle->Spawn();
-            }
+void CourseManager_VehiclesCollision(s32 playerId, Player* player) {
+    for (auto& vehicle : gWorldInstance.Vehicles) {
+        if (vehicle) {
+            vehicle->Collision(playerId, player);
         }
     }
+}
 
-    void CourseManager_VehiclesTick() {
-        for (auto& vehicle : gWorldInstance.Vehicles) {
-            if (vehicle) {
-                vehicle->Tick();
-            }
+void CourseManager_RenderTrucks(s32 playerId) {
+    for (auto& vehicle : gWorldInstance.Vehicles) {
+        if (vehicle) {
+            vehicle->Draw(playerId);
         }
     }
+}
 
-    void CourseManager_VehiclesCollision(s32 playerId, Player* player) {
-        for (auto& vehicle : gWorldInstance.Vehicles) {
-            if (vehicle) {
-                vehicle->Collision(playerId, player);
-            }
+void CourseManager_ResetVehicles(void) {
+    gWorldInstance.ResetVehicles();
+}
+
+void CourseManager_CrossingTrigger() {
+    for (auto& crossing : gWorldInstance.Crossings) {
+        if (crossing) {
+            crossing->CrossingTrigger();
         }
     }
+}
 
-    void CourseManager_RenderTrucks(s32 playerId) {
-        for (auto& vehicle : gWorldInstance.Vehicles) {
-            if (vehicle) {
-                vehicle->Draw(playerId);
-            }
+void CourseManager_AICrossingBehaviour(s32 playerId) {
+    for (auto& crossing : gWorldInstance.Crossings) {
+        if (crossing) {
+            crossing->AICrossingBehaviour(playerId);
         }
     }
+}
 
-    void CourseManager_ResetVehicles(void) {
-        gWorldInstance.ResetVehicles();
+s32 CourseManager_GetCrossingOnTriggered(uintptr_t* crossing) {
+    TrainCrossing* ptr = (TrainCrossing*) crossing;
+    if (ptr) {
+        return ptr->OnTriggered;
     }
+}
 
-    void CourseManager_CrossingTrigger() {
-        for (auto& crossing : gWorldInstance.Crossings) {
-            if (crossing) {
-                crossing->CrossingTrigger();
-            }
-        }
-    }
+void CourseManager_TrainSmokeTick(void) {
+    TrainSmokeTick();
+}
 
-    void CourseManager_AICrossingBehaviour(s32 playerId) {
-        for (auto& crossing : gWorldInstance.Crossings) {
-            if (crossing) {
-                crossing->AICrossingBehaviour(playerId);
-            }
-        }
-    }
+void CourseManager_TrainSmokeDraw(s32 cameraId) {
+    TrainSmokeDraw(cameraId);
+}
 
-    s32 CourseManager_GetCrossingOnTriggered(uintptr_t* crossing) {
-        TrainCrossing* ptr = (TrainCrossing*) crossing;
-        if (ptr) {
-            return ptr->OnTriggered;
-        }
+void CourseManager_LoadTextures() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->LoadTextures();
     }
+}
 
-    void CourseManager_TrainSmokeTick(void) {
-        TrainSmokeTick();
+void CourseManager_RenderCourse(struct UnkStruct_800DC5EC* arg0) {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->Render(arg0);
     }
+}
 
-    void CourseManager_TrainSmokeDraw(s32 cameraId) {
-        TrainSmokeDraw(cameraId);
+void CourseManager_RenderCredits() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->RenderCredits();
     }
+}
 
-    void CourseManager_LoadTextures() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->LoadTextures();
-        }
+void CourseManager_TickActors() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.TickActors();
     }
+}
 
-    void CourseManager_RenderCourse(struct UnkStruct_800DC5EC* arg0) {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->Render(arg0);
-        }
+void CourseManager_DrawActors(Camera* camera) {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.DrawActors(camera);
     }
+}
 
-    void CourseManager_RenderCredits() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->RenderCredits();
-        }
+void CourseManager_SpawnActors() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->SpawnActors();
     }
+}
 
-    void CourseManager_TickActors() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.TickActors();
-        }
+void CourseManager_InitClouds() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->InitClouds();
     }
+}
 
-    void CourseManager_DrawActors(Camera* camera) {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.DrawActors(camera);
-        }
+void CourseManager_UpdateClouds(s32 arg0, Camera* camera) {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->UpdateClouds(arg0, camera);
     }
+}
 
-    void CourseManager_SpawnActors() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->SpawnActors();
-        }
+void CourseManager_Waypoints(Player* player, int8_t playerId) {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->Waypoints(player, playerId);
     }
+}
 
-    void CourseManager_InitClouds() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->InitClouds();
-        }
+void CourseManager_GenerateCollision() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->GenerateCollision();
     }
+}
 
-    void CourseManager_UpdateClouds(s32 arg0, Camera* camera) {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->UpdateClouds(arg0, camera);
-        }
+void CourseManager_SomeCollisionThing(Player* player, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32* arg4, f32* arg5,
+                                      f32* arg6, f32* arg7) {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->SomeCollisionThing(player, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
     }
+}
 
-    void CourseManager_Waypoints(Player* player, int8_t playerId) {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->Waypoints(player, playerId);
-        }
+void CourseManager_MinimapSettings() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->MinimapSettings();
     }
+}
 
-    void CourseManager_GenerateCollision() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->GenerateCollision();
-        }
+void CourseManager_InitCourseObjects() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->InitCourseObjects();
     }
+}
 
-    void CourseManager_SomeCollisionThing(Player* player, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32* arg4, f32* arg5,
-                                        f32* arg6, f32* arg7) {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->SomeCollisionThing(player, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-        }
+void CourseManager_UpdateCourseObjects() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->UpdateCourseObjects();
     }
+}
 
-    void CourseManager_MinimapSettings() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->MinimapSettings();
-        }
+void CourseManager_RenderCourseObjects(s32 cameraId) {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->RenderCourseObjects(cameraId);
     }
+}
 
-    void CourseManager_InitCourseObjects() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->InitCourseObjects();
-        }
+void CourseManager_SomeSounds() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->SomeSounds();
     }
+}
 
-    void CourseManager_UpdateCourseObjects() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->UpdateCourseObjects();
-        }
+void CourseManager_SetCourseVtxColours() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->SetCourseVtxColours();
     }
+}
 
-    void CourseManager_RenderCourseObjects(s32 cameraId) {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->RenderCourseObjects(cameraId);
-        }
+void CourseManager_WhatDoesThisDo(Player* player, int8_t playerId) {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->WhatDoesThisDo(player, playerId);
     }
+}
 
-    void CourseManager_SomeSounds() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->SomeSounds();
-        }
+void CourseManager_WhatDoesThisDoAI(Player* player, int8_t playerId) {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->WhatDoesThisDoAI(player, playerId);
     }
+}
 
-    void CourseManager_SetCourseVtxColours() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->SetCourseVtxColours();
-        }
+void CourseManager_MinimapFinishlinePosition() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->MinimapFinishlinePosition();
     }
+}
 
-    void CourseManager_WhatDoesThisDo(Player* player, int8_t playerId) {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->WhatDoesThisDo(player, playerId);
-        }
+void CourseManager_SetStaffGhost() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->SetStaffGhost();
     }
+}
 
-    void CourseManager_WhatDoesThisDoAI(Player* player, int8_t playerId) {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->WhatDoesThisDoAI(player, playerId);
-        }
+CProperties* CourseManager_GetProps() {
+    if (gWorldInstance.CurrentCourse) {
+        return (CProperties*) &gWorldInstance.CurrentCourse->Props;
     }
+}
 
-    void CourseManager_MinimapFinishlinePosition() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->MinimapFinishlinePosition();
-        }
+void CourseManager_SpawnBombKarts() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->SpawnBombKarts();
     }
+}
 
-    void CourseManager_SetStaffGhost() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->SetStaffGhost();
-        }
+void CourseManager_Water() {
+    if (gWorldInstance.CurrentCourse) {
+        gWorldInstance.CurrentCourse->Water();
     }
+}
 
-    CProperties* CourseManager_GetProps() {
-        if (gWorldInstance.CurrentCourse) {
-            return (CProperties*) &gWorldInstance.CurrentCourse->Props;
-        }
-    }
+size_t GetCupCursorPosition() {
+    return gWorldInstance.CurrentCup->CursorPosition;
+}
 
-    void CourseManager_SpawnBombKarts() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->SpawnBombKarts();
-        }
-    }
+void SetCupCursorPosition(size_t position) {
+    gWorldInstance.CurrentCup->SetCourse(position);
+    // gWorldInstance.CurrentCup->CursorPosition = position;
+}
 
-    void CourseManager_Water() {
-        if (gWorldInstance.CurrentCourse) {
-            gWorldInstance.CurrentCourse->Water();
-        }
-    }
+size_t GetCupSize() {
+    return gWorldInstance.CurrentCup->GetSize();
+}
 
-    size_t GetCupCursorPosition() {
-        return gWorldInstance.CurrentCup->CursorPosition;
-    }
+void SetCourseFromCup() {
+    gWorldInstance.CurrentCourse = gWorldInstance.CurrentCup->GetCourse();
+}
 
-    void SetCupCursorPosition(size_t position) {
-        gWorldInstance.CurrentCup->SetCourse(position);
-        //gWorldInstance.CurrentCup->CursorPosition = position;
-    }
+void* GetCourse(void) {
+    return gWorldInstance.CurrentCourse;
+}
 
-    size_t GetCupSize() {
-        return gWorldInstance.CurrentCup->GetSize();
-    }
+void SetCourseByClass(void* course) {
+    gWorldInstance.CurrentCourse = (Course*) course;
+}
 
-    void SetCourseFromCup() {
-        gWorldInstance.CurrentCourse = gWorldInstance.CurrentCup->GetCourse();
-    }
+void* GetMarioRaceway(void) {
+    return gMarioRaceway;
+}
 
-    void* GetCourse(void) {
-        return gWorldInstance.CurrentCourse;
-    }
+void* GetLuigiRaceway(void) {
+    return gLuigiRaceway;
+}
 
-    void SetCourseByClass(void* course) {
-        gWorldInstance.CurrentCourse = (Course*) course;
-    }
+void* GetChocoMountain(void) {
+    return gChocoMountain;
+}
 
-    void* GetMarioRaceway(void) {
-        return gMarioRaceway;
-    }
+void* GetBowsersCastle(void) {
+    return gBowsersCastle;
+}
 
-    void* GetLuigiRaceway(void) {
-        return gLuigiRaceway;
-    }
+void* GetBansheeBoardwalk(void) {
+    return gBansheeBoardwalk;
+}
 
-    void* GetChocoMountain(void) {
-        return gChocoMountain;
-    }
+void* GetYoshiValley(void) {
+    return gYoshiValley;
+}
 
-    void* GetBowsersCastle(void) {
-        return gBowsersCastle;
-    }
+void* GetFrappeSnowland(void) {
+    return gFrappeSnowland;
+}
 
-    void* GetBansheeBoardwalk(void) {
-        return gBansheeBoardwalk;
-    }
+void* GetKoopaTroopaBeach(void) {
+    return gKoopaTroopaBeach;
+}
 
-    void* GetYoshiValley(void) {
-        return gYoshiValley;
-    }
+void* GetRoyalRaceway(void) {
+    return gRoyalRaceway;
+}
 
-    void* GetFrappeSnowland(void) {
-        return gFrappeSnowland;
-    }
+void* GetMooMooFarm(void) {
+    return gMooMooFarm;
+}
 
-    void* GetKoopaTroopaBeach(void) {
-        return gKoopaTroopaBeach;
-    }
+void* GetToadsTurnpike(void) {
+    return gToadsTurnpike;
+}
 
-    void* GetRoyalRaceway(void) {
-        return gRoyalRaceway;
-    }
+void* GetKalimariDesert(void) {
+    return gKalimariDesert;
+}
 
-    void* GetMooMooFarm(void) {
-        return gMooMooFarm;
-    }
+void* GetSherbetLand(void) {
+    return gSherbetLand;
+}
 
-    void* GetToadsTurnpike(void) {
-        return gToadsTurnpike;
-    }
+void* GetRainbowRoad(void) {
+    return gRainbowRoad;
+}
 
-    void* GetKalimariDesert(void) {
-        return gKalimariDesert;
-    }
+void* GetWarioStadium(void) {
+    return gWarioStadium;
+}
 
-    void* GetSherbetLand(void) {
-        return gSherbetLand;
-    }
+void* GetBlockFort(void) {
+    return gBlockFort;
+}
 
-    void* GetRainbowRoad(void) {
-        return gRainbowRoad;
-    }
+void* GetSkyscraper(void) {
+    return gSkyscraper;
+}
 
-    void* GetWarioStadium(void) {
-        return gWarioStadium;
-    }
+void* GetDoubleDeck(void) {
+    return gDoubleDeck;
+}
 
-    void* GetBlockFort(void) {
-        return gBlockFort;
-    }
+void* GetDkJungle(void) {
+    return gDkJungle;
+}
 
-    void* GetSkyscraper(void) {
-        return gSkyscraper;
-    }
+void* GetBigDonut(void) {
+    return gBigDonut;
+}
 
-    void* GetDoubleDeck(void) {
-        return gDoubleDeck;
-    }
+void* GetPodiumCeremony(void) {
+    return gPodiumCeremony;
+}
 
-    void* GetDkJungle(void) {
-        return gDkJungle;
-    }
+void* GetMushroomCup(void) {
+    return gMushroomCup;
+}
 
-    void* GetBigDonut(void) {
-        return gBigDonut;
-    }
+void* GetFlowerCup(void) {
+    return gFlowerCup;
+}
 
-    void* GetPodiumCeremony(void) {
-        return gPodiumCeremony;
-    }
+void* GetStarCup(void) {
+    return gStarCup;
+}
 
-    void* GetMushroomCup(void) {
-        return gMushroomCup;
-    }
+void* GetSpecialCup(void) {
+    return gSpecialCup;
+}
 
-    void* GetFlowerCup(void) {
-        return gFlowerCup;
-    }
-
-    void* GetStarCup(void) {
-        return gStarCup;
-    }
-
-    void* GetSpecialCup(void) {
-        return gSpecialCup;
-    }
-
-    void* GetBattleCup(void) {
-        return gBattleCup;
-    }
+void* GetBattleCup(void) {
+    return gBattleCup;
+}
 }
 
 void push_frame() {

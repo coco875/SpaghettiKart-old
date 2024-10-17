@@ -11,28 +11,28 @@
 #include "assets/boo_frames.h"
 
 extern "C" {
-    #include "main.h"
-    #include "camera.h"
-    #include "course_offsets.h"
-    #include "code_800029B0.h"
-    #include "render_courses.h"
-    #include "code_8006E9C0.h"
-    #include "code_80057C60.h"
-    #include "defines.h"
-    #include "math_util.h"
-    #include "external.h"
-    #include "code_80005FD0.h"
-    #include "spawn_players.h"
-    #include "render_objects.h"
-    #include "assets/common_data.h"
-    #include "save.h"
-    #include "staff_ghosts.h"
-    #include "actors.h"
-    #include "collision.h"
-    #include "memory.h"
-    #include "update_objects.h"
-    extern const char *d_course_frappe_snowland_dl_list[];
-    extern s8 gPlayerCount;
+#include "main.h"
+#include "camera.h"
+#include "course_offsets.h"
+#include "code_800029B0.h"
+#include "render_courses.h"
+#include "code_8006E9C0.h"
+#include "code_80057C60.h"
+#include "defines.h"
+#include "math_util.h"
+#include "external.h"
+#include "code_80005FD0.h"
+#include "spawn_players.h"
+#include "render_objects.h"
+#include "assets/common_data.h"
+#include "save.h"
+#include "staff_ghosts.h"
+#include "actors.h"
+#include "collision.h"
+#include "memory.h"
+#include "update_objects.h"
+extern const char* d_course_frappe_snowland_dl_list[];
+extern s8 gPlayerCount;
 }
 
 FrappeSnowland::FrappeSnowland() {
@@ -56,7 +56,7 @@ FrappeSnowland::FrappeSnowland() {
     Props.NearPersp = 9.0f;
     Props.FarPersp = 4500.0f;
 
-    Props.PathSizes = {0x2EE, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    Props.PathSizes = { 0x2EE, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     Props.D_0D009418[0] = 4.1666665f;
     Props.D_0D009418[1] = 5.5833334f;
@@ -78,12 +78,12 @@ FrappeSnowland::FrappeSnowland() {
     Props.D_0D009808[2] = 5.75f;
     Props.D_0D009808[3] = 6.3333334f;
 
-    Props.PathTable[0] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_frappe_snowland_unknown_waypoints);
+    Props.PathTable[0] = (TrackWaypoint*) LOAD_ASSET_RAW(d_course_frappe_snowland_unknown_waypoints);
     Props.PathTable[1] = NULL;
     Props.PathTable[2] = NULL;
     Props.PathTable[3] = NULL;
 
-    Props.PathTable2[0] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_frappe_snowland_track_waypoints);
+    Props.PathTable2[0] = (TrackWaypoint*) LOAD_ASSET_RAW(d_course_frappe_snowland_track_waypoints);
     Props.PathTable2[1] = NULL;
     Props.PathTable2[2] = NULL;
     Props.PathTable2[3] = NULL;
@@ -93,14 +93,14 @@ FrappeSnowland::FrappeSnowland() {
     Props.MinimapFinishlineX = 0;
     Props.MinimapFinishlineY = 0;
 
-    Props.Skybox.TopRight = {28, 11, 90};
-    Props.Skybox.BottomRight = {0, 99, 164};
-    Props.Skybox.BottomLeft = {0, 9, 164};
-    Props.Skybox.TopLeft = {28, 11, 90};
-    Props.Skybox.FloorTopRight = {0, 99, 164};
-    Props.Skybox.FloorBottomRight = {0, 0, 0};
-    Props.Skybox.FloorBottomLeft = {0, 0, 0};
-    Props.Skybox.FloorTopLeft = {0, 99, 164};
+    Props.Skybox.TopRight = { 28, 11, 90 };
+    Props.Skybox.BottomRight = { 0, 99, 164 };
+    Props.Skybox.BottomLeft = { 0, 9, 164 };
+    Props.Skybox.TopLeft = { 28, 11, 90 };
+    Props.Skybox.FloorTopRight = { 0, 99, 164 };
+    Props.Skybox.FloorBottomRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomLeft = { 0, 0, 0 };
+    Props.Skybox.FloorTopLeft = { 0, 99, 164 };
 }
 
 void FrappeSnowland::LoadTextures() {
@@ -109,8 +109,8 @@ void FrappeSnowland::LoadTextures() {
 }
 
 void FrappeSnowland::SpawnActors() {
-    spawn_foliage((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_frappe_snowland_tree_spawns));
-    spawn_all_item_boxes((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_frappe_snowland_item_box_spawns));
+    spawn_foliage((struct ActorSpawnData*) LOAD_ASSET_RAW(d_course_frappe_snowland_tree_spawns));
+    spawn_all_item_boxes((struct ActorSpawnData*) LOAD_ASSET_RAW(d_course_frappe_snowland_item_box_spawns));
 }
 
 void FrappeSnowland::InitClouds() {
@@ -183,9 +183,11 @@ void FrappeSnowland::RenderCourseObjects(s32 cameraId) {
 void FrappeSnowland::SomeSounds() {
 }
 
-void FrappeSnowland::WhatDoesThisDo(Player* player, int8_t playerId) {}
+void FrappeSnowland::WhatDoesThisDo(Player* player, int8_t playerId) {
+}
 
-void FrappeSnowland::WhatDoesThisDoAI(Player* player, int8_t playerId) {}
+void FrappeSnowland::WhatDoesThisDoAI(Player* player, int8_t playerId) {
+}
 
 void FrappeSnowland::SpawnBombKarts() {
     gWorldInstance.AddObject(std::make_unique<OBombKart>(140, 3, 0.8333333, 0, 0, 0, 0));
@@ -200,13 +202,15 @@ void FrappeSnowland::SpawnBombKarts() {
 // Positions the finishline on the minimap
 void FrappeSnowland::MinimapFinishlinePosition() {
     //! todo: Place hard-coded values here.
-    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY, (u8*) common_texture_minimap_finish_line);
+    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY,
+                            (u8*) common_texture_minimap_finish_line);
 }
 
 void FrappeSnowland::SetStaffGhost() {
 }
 
-void FrappeSnowland::BeginPlay() {  }
+void FrappeSnowland::BeginPlay() {
+}
 
 void FrappeSnowland::Render(struct UnkStruct_800DC5EC* arg0) {
     gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
@@ -226,13 +230,14 @@ void FrappeSnowland::Render(struct UnkStruct_800DC5EC* arg0) {
 }
 
 void FrappeSnowland::RenderCredits() {
-    gSPDisplayList(gDisplayListHead++, (Gfx*)(d_course_frappe_snowland_dl_76A0));
+    gSPDisplayList(gDisplayListHead++, (Gfx*) (d_course_frappe_snowland_dl_76A0));
 }
 
-void FrappeSnowland::Collision() {}
+void FrappeSnowland::Collision() {
+}
 
 void FrappeSnowland::GenerateCollision() {
-    parse_course_displaylists((TrackSectionsI*)LOAD_ASSET_RAW(d_course_frappe_snowland_addr));
+    parse_course_displaylists((TrackSectionsI*) LOAD_ASSET_RAW(d_course_frappe_snowland_addr));
     func_80295C6C();
     D_8015F8E4 = -50.0f;
 }
@@ -250,6 +255,8 @@ void FrappeSnowland::Waypoints(Player* player, int8_t playerId) {
     }
 }
 
-void FrappeSnowland::Water() {}
+void FrappeSnowland::Water() {
+}
 
-void FrappeSnowland::Destroy() {}
+void FrappeSnowland::Destroy() {
+}
