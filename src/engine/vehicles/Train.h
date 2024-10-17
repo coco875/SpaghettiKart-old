@@ -12,8 +12,7 @@ extern "C" {
 class AVehicle; // Forward declare
 
 class ATrain : public AVehicle {
-    public:
-
+  public:
     TrainCarStuff Locomotive;
     TrainCarStuff Tender;
     std::vector<TrainCarStuff> PassengerCars;

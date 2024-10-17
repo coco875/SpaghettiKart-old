@@ -5016,8 +5016,8 @@ void func_8009CE64(s32 arg0) {
                         gNextDemoId = 0;
                     }
                     printf("\nSELECTED!!!!!\n");
-                    
-                    //gCupSelection = GetCupIndex(); // gCupSelectionByCourseId[gCurrentCourseId];
+
+                    // gCupSelection = GetCupIndex(); // gCupSelectionByCourseId[gCurrentCourseId];
                     D_800DC540 = (s32) GetCupIndex();
                     gCourseIndexInCup = GetCupCursorPosition();
                     // gCupCourseSelection = (s8) gPerCupIndexByCourseId[gCurrentCourseId];
@@ -8240,12 +8240,15 @@ void func_800A66A8(struct_8018D9E0_entry* arg0, Unk_D_800E70A0* arg1) {
     y2 += y1;
     z2 += z1;
 
-    if (x2)
+    if (x2) {
         ;
-    if (y2)
+    }
+    if (y2) {
         ;
-    if (z2)
+    }
+    if (z2) {
         ;
+    }
 
     guScale(mtx, 1.2f, 1.2f, 1.2f);
     guRotate(mtx + 1, y2, 0.0f, 1.0f, 0.0f);

@@ -3,14 +3,13 @@
 
 #include <libultraship.h>
 
-
 #ifdef __cplusplus
 #include "GameObject.h"
 extern "C" {
 #endif
 
-    #include "bomb_kart.h"
-    #include "Engine.h"
+#include "bomb_kart.h"
+#include "Engine.h"
 
 #ifdef __cplusplus
 }
@@ -20,7 +19,7 @@ extern "C" {
 
 class OBombKart : public GameObject {
 
-public:
+  public:
     virtual ~OBombKart() = default;
 
     // Constructor

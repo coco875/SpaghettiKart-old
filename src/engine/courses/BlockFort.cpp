@@ -10,27 +10,27 @@
 #include "assets/block_fort_data.h"
 
 extern "C" {
-    #include "main.h"
-    #include "camera.h"
-    #include "course_offsets.h"
-    #include "code_800029B0.h"
-    #include "render_courses.h"
-    #include "code_8006E9C0.h"
-    #include "code_80057C60.h"
-    #include "defines.h"
-    #include "math_util.h"
-    #include "external.h"
-    #include "code_80005FD0.h"
-    #include "spawn_players.h"
-    #include "render_objects.h"
-    #include "assets/common_data.h"
-    #include "save.h"
-    #include "staff_ghosts.h"
-    #include "actors.h"
-    #include "collision.h"
-    #include "memory.h"
-    extern const char *block_fort_dls[];
-    extern s16 currentScreenSection;
+#include "main.h"
+#include "camera.h"
+#include "course_offsets.h"
+#include "code_800029B0.h"
+#include "render_courses.h"
+#include "code_8006E9C0.h"
+#include "code_80057C60.h"
+#include "defines.h"
+#include "math_util.h"
+#include "external.h"
+#include "code_80005FD0.h"
+#include "spawn_players.h"
+#include "render_objects.h"
+#include "assets/common_data.h"
+#include "save.h"
+#include "staff_ghosts.h"
+#include "actors.h"
+#include "collision.h"
+#include "memory.h"
+extern const char* block_fort_dls[];
+extern s16 currentScreenSection;
 }
 
 BlockFort::BlockFort() {
@@ -54,7 +54,7 @@ BlockFort::BlockFort() {
     Props.NearPersp = 2.0f;
     Props.FarPersp = 2700.0f;
 
-    Props.PathSizes = {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    Props.PathSizes = { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     Props.D_0D009418[0] = 4.1666665f;
     Props.D_0D009418[1] = 5.5833334f;
@@ -91,20 +91,21 @@ BlockFort::BlockFort() {
     Props.MinimapFinishlineX = 0;
     Props.MinimapFinishlineY = 0;
 
-    Props.Skybox.TopRight = {128, 184, 248};
-    Props.Skybox.BottomRight = {216, 232, 248};
-    Props.Skybox.BottomLeft = {216, 232, 248};
-    Props.Skybox.TopLeft = {128, 184, 248};
-    Props.Skybox.FloorTopRight = {216, 232, 248};
-    Props.Skybox.FloorBottomRight = {0, 0, 0};
-    Props.Skybox.FloorBottomLeft = {0, 0, 0};
-    Props.Skybox.FloorTopLeft = {216, 232, 248};
+    Props.Skybox.TopRight = { 128, 184, 248 };
+    Props.Skybox.BottomRight = { 216, 232, 248 };
+    Props.Skybox.BottomLeft = { 216, 232, 248 };
+    Props.Skybox.TopLeft = { 128, 184, 248 };
+    Props.Skybox.FloorTopRight = { 216, 232, 248 };
+    Props.Skybox.FloorBottomRight = { 0, 0, 0 };
+    Props.Skybox.FloorBottomLeft = { 0, 0, 0 };
+    Props.Skybox.FloorTopLeft = { 216, 232, 248 };
 }
 
 void BlockFort::LoadTextures() {
 }
 
-void BlockFort::SpawnActors() {}
+void BlockFort::SpawnActors() {
+}
 
 // Likely sets minimap boundaries
 void BlockFort::MinimapSettings() {
@@ -113,40 +114,50 @@ void BlockFort::MinimapSettings() {
     D_8018D2E8 = 32;
 }
 
-void BlockFort::InitCourseObjects() {}
+void BlockFort::InitCourseObjects() {
+}
 
-void BlockFort::SomeSounds() {}
+void BlockFort::SomeSounds() {
+}
 
-void BlockFort::WhatDoesThisDo(Player* player, int8_t playerId) {}
+void BlockFort::WhatDoesThisDo(Player* player, int8_t playerId) {
+}
 
-void BlockFort::WhatDoesThisDoAI(Player* player, int8_t playerId) {}
+void BlockFort::WhatDoesThisDoAI(Player* player, int8_t playerId) {
+}
 
-void BlockFort::SpawnBombKarts() {}
+void BlockFort::SpawnBombKarts() {
+}
 
 // Positions the finishline on the minimap
 void BlockFort::MinimapFinishlinePosition() {
     //! todo: Place hard-coded values here.
-    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY, (u8*) common_texture_minimap_finish_line);
+    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY,
+                            (u8*) common_texture_minimap_finish_line);
 }
 
-void BlockFort::SetStaffGhost() {}
+void BlockFort::SetStaffGhost() {
+}
 
-void BlockFort::BeginPlay() {  }
+void BlockFort::BeginPlay() {
+}
 void BlockFort::Render(struct UnkStruct_800DC5EC* arg0) {
     func_802B5D64(D_800DC610, D_802B87D4, 0, 1);
     gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     gSPSetGeometryMode(gDisplayListHead++, G_SHADING_SMOOTH);
     gSPClearGeometryMode(gDisplayListHead++, G_LIGHTING);
     // d_course_block_fort_packed_dl_15C0
-    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*)0x070015C0)));
+    gSPDisplayList(gDisplayListHead++, (segmented_gfx_to_virtual((void*) 0x070015C0)));
 }
 
-void BlockFort::RenderCredits() {}
+void BlockFort::RenderCredits() {
+}
 
-void BlockFort::Collision() {}
+void BlockFort::Collision() {
+}
 
 void BlockFort::GenerateCollision() {
-    generate_collision_mesh_with_default_section_id((Gfx*) segmented_gfx_to_virtual((void*)0x070015C0), 1);
+    generate_collision_mesh_with_default_section_id((Gfx*) segmented_gfx_to_virtual((void*) 0x070015C0), 1);
     func_80295C6C();
     D_8015F8E4 = gCourseMinY - 10.0f;
 }
@@ -155,4 +166,5 @@ void BlockFort::Waypoints(Player* player, int8_t playerId) {
     player->nearestWaypointId = 0;
 }
 
-void BlockFort::Destroy() { }
+void BlockFort::Destroy() {
+}

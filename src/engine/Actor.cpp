@@ -2,12 +2,17 @@
 
 #include "Actor.h"
 
-    //GameActor()
+// GameActor()
 
-AActor::AActor() {}
+AActor::AActor() {
+}
 
-    // Virtual functions to be overridden by derived classes
-void AActor::Tick() {  }
-void AActor::Draw(Camera *camera) { }
-void AActor::Collision() {}
-void AActor::Destroy() { }
+// Virtual functions to be overridden by derived classes
+void AActor::Tick() {
+}
+void AActor::Draw(Camera* camera) {
+}
+void AActor::Collision() {
+}
+void AActor::Destroy() {
+}

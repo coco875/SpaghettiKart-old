@@ -5,19 +5,19 @@
 #include "ChocoMountain.h"
 
 extern "C" {
-    #include "main.h"
-    #include "memory.h"
-    #include "common_structs.h"
-    #include "course_offsets.h"
-    #include "some_data.h"
-    #include "code_8006E9C0.h"
-    #include "code_8003DC40.h"
-    #include "assets/common_data.h"
-    #include "render_objects.h"
-    #include "save.h"
-    #include "staff_ghosts.h"
-    #include "Engine.h"
-    extern StaffGhost* d_mario_raceway_staff_ghost;
+#include "main.h"
+#include "memory.h"
+#include "common_structs.h"
+#include "course_offsets.h"
+#include "some_data.h"
+#include "code_8006E9C0.h"
+#include "code_8003DC40.h"
+#include "assets/common_data.h"
+#include "render_objects.h"
+#include "save.h"
+#include "staff_ghosts.h"
+#include "Engine.h"
+extern StaffGhost* d_mario_raceway_staff_ghost;
 }
 
 Course::Course() {
@@ -35,7 +35,7 @@ Course::Course() {
     Props.NearPersp = 3.0f;
     Props.FarPersp = 6800.0f;
 
-    Props.PathSizes = {600, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    Props.PathSizes = { 600, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     Props.D_0D009418[0] = 4.1666665f;
     Props.D_0D009418[1] = 5.5833334f;
@@ -86,7 +86,7 @@ void Course::Load() {
     // Convert course vtx to vtx
     Vtx* vtx = reinterpret_cast<Vtx*>(allocate_memory(vtxSize));
     gSegmentTable[4] = reinterpret_cast<uintptr_t>(&vtx[0]);
-    printf("\nVtxsize: 0x%X\n\n",vtxSize);
+    printf("\nVtxsize: 0x%X\n\n", vtxSize);
     func_802A86A8(reinterpret_cast<CourseVtx*>(LOAD_ASSET_RAW(this->vtx)), vtx, vtxSize / sizeof(Vtx));
 
     // Load and allocate memory for course textures
@@ -116,13 +116,13 @@ void Course::Load() {
     Gfx* gfx = (Gfx*) allocate_memory(sizeof(Gfx) * this->gfxSize); // Size of unpacked DLs
     assert(gfx != NULL);
     gSegmentTable[7] = reinterpret_cast<uintptr_t>(&gfx[0]);
-    displaylist_unpack(reinterpret_cast<uintptr_t *>(gfx), reinterpret_cast<uintptr_t>(packed), 0);
+    displaylist_unpack(reinterpret_cast<uintptr_t*>(gfx), reinterpret_cast<uintptr_t>(packed), 0);
 }
 
-void Course::LoadTextures() { }
+void Course::LoadTextures() {
+}
 
 void Course::SpawnActors() {
-
 }
 
 void Course::InitClouds() {
@@ -146,48 +146,41 @@ void Course::UpdateClouds(s32 arg0, Camera* camera) {
 }
 
 // Adjusts player speed on steep hills
-void Course::SomeCollisionThing(Player *player, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32* arg4, f32* arg5, f32* arg6, f32* arg7) {
+void Course::SomeCollisionThing(Player* player, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32* arg4, f32* arg5, f32* arg6,
+                                f32* arg7) {
     func_8003E048(player, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 }
 
-
 void Course::MinimapSettings() {
-
 }
 
 void Course::InitCourseObjects() {
-
 }
 
 void Course::UpdateCourseObjects() {
-
 }
 
 void Course::RenderCourseObjects(s32 cameraId) {
-
 }
 
 // Implemented for the first cup of each course plus Koopa Beach
 void Course::SomeSounds() {
-
 }
 
 void Course::SetCourseVtxColours() {
-
 }
 
 void Course::WhatDoesThisDo(Player* player, int8_t playerId) {
-
 }
 
 void Course::WhatDoesThisDoAI(Player* player, int8_t playerId) {
-
 }
 
 // Positions the finishline on the minimap
 void Course::MinimapFinishlinePosition() {
     //! todo: Place hard-coded values here.
-    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY, (u8*) common_texture_minimap_finish_line);
+    draw_hud_2d_texture_8x8(this->Props.MinimapFinishlineX, this->Props.MinimapFinishlineY,
+                            (u8*) common_texture_minimap_finish_line);
 }
 
 void Course::SetStaffGhost() {
@@ -205,16 +198,25 @@ void Course::Waypoints(Player* player, int8_t playerId) {
     }
 }
 
-void Course::SpawnVehicles() {}
-void Course::UpdateVehicles() {}
+void Course::SpawnVehicles() {
+}
+void Course::UpdateVehicles() {
+}
 
-void Course::BeginPlay() {}
-void Course::Render(struct UnkStruct_800DC5EC* arg0) {}
-void Course::RenderCredits() {}
-void Course::Collision() {}
-void Course::GenerateCollision() {}
-void Course::Water() {}
+void Course::BeginPlay() {
+}
+void Course::Render(struct UnkStruct_800DC5EC* arg0) {
+}
+void Course::RenderCredits() {
+}
+void Course::Collision() {
+}
+void Course::GenerateCollision() {
+}
+void Course::Water() {
+}
 
-void Course::Destroy() { }
+void Course::Destroy() {
+}
 
 Course* currentCourse = nullptr;

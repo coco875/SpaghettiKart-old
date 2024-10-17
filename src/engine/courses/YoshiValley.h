@@ -4,26 +4,26 @@
 #include "Course.h"
 
 extern "C" {
-    #include "assets/yoshi_valley_vertices.h"
-    #include "assets/yoshi_valley_displaylists.h"
-    #include "assets/yoshi_valley_data.h"
-    #include "course_offsets.h"
-    #include "camera.h"
-    #include "data/some_data.h"
-    #include "objects.h"
-    #include "path_spawn_metadata.h"
-    extern const course_texture yoshi_valley_textures[];
+#include "assets/yoshi_valley_vertices.h"
+#include "assets/yoshi_valley_displaylists.h"
+#include "assets/yoshi_valley_data.h"
+#include "course_offsets.h"
+#include "camera.h"
+#include "data/some_data.h"
+#include "objects.h"
+#include "path_spawn_metadata.h"
+extern const course_texture yoshi_valley_textures[];
 }
 
 class YoshiValley : public Course {
-public:
-    virtual ~YoshiValley() = default;  // Virtual destructor for proper cleanup in derived classes
+  public:
+    virtual ~YoshiValley() = default; // Virtual destructor for proper cleanup in derived classes
 
     // Constructor
     explicit YoshiValley();
 
-//    virtual void Load(const char* courseVtx, 
-//                  course_texture* textures, const char* displaylists, size_t dlSize);
+    //    virtual void Load(const char* courseVtx,
+    //                  course_texture* textures, const char* displaylists, size_t dlSize);
     virtual void LoadTextures() override;
     virtual void SpawnActors() override;
     virtual void MinimapSettings() override;
@@ -37,7 +37,7 @@ public:
     virtual void SetStaffGhost() override;
     virtual void BeginPlay() override;
     virtual void Render(struct UnkStruct_800DC5EC*) override;
-    virtual void RenderCredits() override;    
+    virtual void RenderCredits() override;
     virtual void Collision() override;
     virtual void SpawnBombKarts() override;
     virtual void GenerateCollision() override;

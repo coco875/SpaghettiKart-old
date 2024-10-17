@@ -12,16 +12,16 @@
 #include "TrainCrossing.h"
 #include <memory>
 
-
 extern "C" {
-   #include "camera.h"
-   #include "objects.h"
-   #include "main.h"
-   #include "engine/Engine.h"
-   #include "defines.h"
+#include "camera.h"
+#include "objects.h"
+#include "main.h"
+#include "engine/Engine.h"
+#include "defines.h"
 }
 
-World::World() {}
+World::World() {
+}
 
 Course* CurrentCourse;
 Cup* CurrentCup;
@@ -80,7 +80,8 @@ void World::ResetVehicles(void) {
     Vehicles.clear();
 }
 
-TrainCrossing* World::AddCrossing(Vec3f position, u32 waypointMin, u32 waypointMax, f32 approachRadius, f32 exitRadius) {
+TrainCrossing* World::AddCrossing(Vec3f position, u32 waypointMin, u32 waypointMax, f32 approachRadius,
+                                  f32 exitRadius) {
     auto crossing = std::make_shared<TrainCrossing>(position, waypointMin, waypointMax, approachRadius, exitRadius);
     Crossings.push_back(crossing);
     return crossing.get();
@@ -183,10 +184,10 @@ void World::DrawActors(Camera* camera) {
 }
 
 void RemoveExpiredActors() {
-    //Actors.erase(
-    //    std::remove_if(Actors.begin(), Actors.end(),
-    //                    [](const std::unique_ptr<AActor>& actor) { return actor->uuid == 0; }), // Example condition
-    //    Actors.end());
+    // Actors.erase(
+    //     std::remove_if(Actors.begin(), Actors.end(),
+    //                     [](const std::unique_ptr<AActor>& actor) { return actor->uuid == 0; }), // Example condition
+    //     Actors.end());
 }
 
 void World::TickObjects() {
@@ -195,21 +196,21 @@ void World::TickObjects() {
     }
 }
 
-void World::DrawObjects(Camera *camera) {
+void World::DrawObjects(Camera* camera) {
     for (const auto& object : this->GameObjects) {
         object->Draw(camera);
     }
 }
 
 void World::ExpiredObjects() {
-    this->GameObjects.erase(
-        std::remove_if(this->GameObjects.begin(), this->GameObjects.end(),
-                        [](const std::unique_ptr<GameObject>& object) { return object->uuid == 0; }), // Example condition
-        this->GameObjects.end());
+    this->GameObjects.erase(std::remove_if(this->GameObjects.begin(), this->GameObjects.end(),
+                                           [](const std::unique_ptr<GameObject>& object) {
+                                               return object->uuid == 0;
+                                           }), // Example condition
+                            this->GameObjects.end());
 }
 
 void World::DestroyObjects() {
-
 }
 
 Object* World::GetObjectByIndex(size_t index) {
