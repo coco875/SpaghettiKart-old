@@ -143,6 +143,20 @@ void* GetSpecialCup(void);
 
 void* GetBattleCup(void);
 
+void* GetCup();
+s32 CourseManager_GetCrossingOnTriggered(uintptr_t* crossing);
+void CourseManager_DrawActors(Camera* camera);
+void CourseManager_VehiclesSpawn();
+void CourseManager_VehiclesTick();
+void CourseManager_VehiclesCollision(s32 playerId, Player* player);
+void CourseManager_CrossingTrigger();
+void CourseManager_RenderTrucks(s32 playerId);
+void CourseManager_AICrossingBehaviour(s32 playerId);
+void CourseManager_ResetVehicles(void);
+void CourseManager_TrainSmokeDraw(s32 cameraId);
+void CourseManager_TrainSmokeTick(void);
+void CourseManager_TickActors();
+
 #ifdef __cplusplus
 }
 #endif
