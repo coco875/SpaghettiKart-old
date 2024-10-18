@@ -43,7 +43,7 @@
 #include "port/Game.h"
 
 #include "engine/Engine.h"
-#include "engine/courses/Course.h"
+#include "engine/Course.h"
 
 Lights1 D_800E45C0[] = {
     gdSPDefLights1(100, 0, 0, 100, 0, 0, 0, -120, 0),

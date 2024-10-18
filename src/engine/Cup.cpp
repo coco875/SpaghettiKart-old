@@ -1,7 +1,7 @@
 #include "Cup.h"
 #include "Course.h"
 
-Cup::Cup(const char* name, std::vector<Course*> courses) {
+Cup::Cup(const char* name, std::vector<int> courses) {
     Name = name;
     Courses = courses;
 
@@ -29,12 +29,12 @@ void Cup::SetCourse(size_t position) {
     CursorPosition = position;
 }
 
-Course* Cup::GetCourse() {
-    return Courses[CursorPosition];
-}
-
 size_t Cup::GetSize() {
     return Courses.size();
+}
+
+int Cup::GetCourseId() {
+    return Courses[CursorPosition];
 }
 
 // Function to shuffle the courses randomly

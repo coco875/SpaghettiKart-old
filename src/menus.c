@@ -1715,7 +1715,6 @@ void course_select_menu_act(struct Controller* arg0, u16 arg1) {
 
                 D_800DC540 = GetCupIndex();
                 //! @todo SetCourse();
-                SetCup();
                 // gCurrentCourseId = gCupCourseOrder[gCupSelection][gCourseIndexInCup];
                 SetCourseFromCup();
                 if ((buttonAndStickPress & B_BUTTON) != 0) {
@@ -1843,7 +1842,7 @@ void func_800B3F74(s32 menuSelection) {
         case 10: {
             gIsMirrorMode = 0;
             gEnableDebugMode = CVarGetInteger("gEnableDebugMode", 0);
-            CourseManager_SetCup(GetMushroomCup());
+            SetCupIndex(MUSHROOM_CUP);
             gCupSelection = MUSHROOM_CUP;
             gCourseIndexInCup = 0;
             gTimeTrialDataCourseIndex = 0;
@@ -1954,13 +1953,13 @@ void func_800B3F74(s32 menuSelection) {
         case 3:
         case 13: {
             if (gModeSelection == BATTLE) {
-                CourseManager_SetCup(GetBattleCup());
+                SetCupIndex(BATTLE_CUP);
                 // gCupSelection = BATTLE_CUP;
                 D_800DC540 = 4;
                 D_8018EDEC = 4;
             } else {
-                if (GetCup() == GetBattleCup()) {
-                    CourseManager_SetCup(GetMushroomCup());
+                if (GetCupIndex() == BATTLE_CUP) {
+                    SetCupIndex(MUSHROOM_CUP);
                     // gCupSelection = MUSHROOM_CUP;
                 }
                 D_8018EDEC = 1;

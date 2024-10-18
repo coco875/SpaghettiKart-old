@@ -165,7 +165,16 @@ enum PlayerId {
  * the battle courses could be displayed in the same
  * way race courses are.
  */
+#if 0
 enum { MUSHROOM_CUP, FLOWER_CUP, STAR_CUP, SPECIAL_CUP, BATTLE_CUP, NUM_CUPS };
+#endif
+#define MUSHROOM_CUP gMushroomCupId
+#define FLOWER_CUP gFlowerCupId
+#define STAR_CUP gStarCupId
+#define SPECIAL_CUP gSpecialCupId
+#define BATTLE_CUP gBattleCupId
+
+#define NUM_CUPS 5
 
 #define NUM_COURSES_PER_CUP 4
 
@@ -337,12 +346,7 @@ enum KART_AI_BEHAVIOURS {
     BEHAVIOUR_MAX_SPEED
 };
 
-enum DIRECTION {
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
-};
+enum DIRECTION { NORTH, EAST, SOUTH, WEST };
 
 /**
  * @brief Balloon status

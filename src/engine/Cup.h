@@ -16,7 +16,7 @@ class Cup {
     size_t CursorPosition = 0; // Course index in cup
     std::vector<int> Courses;
 
-    explicit Cup(const char* id, const char* name, std::vector<Course*> courses);
+    explicit Cup(const char* name, std::vector<int> courses);
 
     virtual void ShuffleCourses();
 
@@ -24,6 +24,5 @@ class Cup {
     virtual void Previous();
     virtual int GetCourseId();
     virtual void SetCourse(size_t position);
-    virtual Course* GetCourse();
     virtual size_t GetSize();
 };

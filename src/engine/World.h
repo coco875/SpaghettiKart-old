@@ -46,12 +46,13 @@ class World {
     Object* GetObjectByIndex(size_t);
 
     void AddCup(Cup*);
-    void SetCup(Cup* cup);
     const char* GetCupName();
     u32 GetCupIndex();
     u32 NextCup();
     u32 PreviousCup();
     void SetCourseFromCup();
+    void SetCourseFromId(int);
+    void SetCupIndex(int16_t);
 
     World* GetWorld(void);
 

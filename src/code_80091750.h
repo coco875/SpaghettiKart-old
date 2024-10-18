@@ -496,7 +496,7 @@ extern char* gDebugCourseNames[];
 // Maps course IDs (as defined in the COURSES enum) to an index in a given cup's track order
 extern const s8 gPerCupIndexByCourseId[]; // D_800EFD50
 extern const s8 D_800EFD64[];
-extern s8 gCupSelectionByCourseId[];
+extern int* gCupSelectionByCourseId[];
 extern char* D_800E7678[];
 extern char* gDebugCharacterNames[];
 extern char* D_800E76A8[];

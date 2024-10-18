@@ -5,7 +5,7 @@
 #include <Fast3D/gfx_pc.h>
 #include "Engine.h"
 #include "engine/World.h"
-#include "engine/courses/Course.h"
+#include "engine/Course.h"
 #include "engine/courses/MarioRaceway.h"
 #include "engine/courses/ChocoMountain.h"
 #include "engine/courses/BowsersCastle.h"
@@ -77,13 +77,13 @@ int gDkJungleId;
 int gBigDonutId;
 int gPodiumCeremonyId;
 int gTestCourseId;
-}
 
-Cup* gMushroomCup;
-Cup* gFlowerCup;
-Cup* gStarCup;
-Cup* gSpecialCup;
-Cup* gBattleCup;
+int gMushroomCupId;
+int gFlowerCupId;
+int gStarCupId;
+int gSpecialCupId;
+int gBattleCupId;
+}
 
 void CustomEngineInit() {
     /* Add all courses to the global course list */
@@ -111,21 +111,23 @@ void CustomEngineInit() {
     gTestCourseId = addCourse("mk64:test_course", new TestCourse());
 
     /* Instantiate Cups */
-    addCup("mk64:mushroom_cup", new Cup("mushroom cup", std::vector<int>{ gLuigiRacewayId, gMooMooFarmId,
-                                                                          gKoopaTroopaBeachId, gKalimariDesertId }));
-    int flowerid =
+    gMushroomCupId = addCup("mk64:mushroom_cup",
+                            new Cup("mushroom cup", std::vector<int>{ gLuigiRacewayId, gMooMooFarmId,
+                                                                      gKoopaTroopaBeachId, gKalimariDesertId }));
+    gFlowerCupId =
         addCup("mk64:flower_cup", new Cup("flower cup", std::vector<int>{ gToadsTurnpikeId, gFrappeSnowlandId,
                                                                           gChocoMountainId, COURSE_MARIO_RACEWAY }));
-    addCup("mk64:star_cup",
-           new Cup("star cup", std::vector<int>{ gWarioStadiumId, gSherbetLandId, gRoyalRacewayId, gBowsersCastleId }));
-    addCup("mk64:special_cup", new Cup("special cup", std::vector<int>{ gDkJungleId, gYoshiValleyId,
-                                                                        gBansheeBoardwalkId, gRainbowRoadId }));
-    addCup("mk64:battle",
-           new Cup("battle", std::vector<int>{ gBigDonutId, gBlockFortId, gDoubleDeckId, gSkyscraperId }));
+    gStarCupId = addCup("mk64:star_cup", new Cup("star cup", std::vector<int>{ gWarioStadiumId, gSherbetLandId,
+                                                                               gRoyalRacewayId, gBowsersCastleId }));
+    gSpecialCupId = addCup(
+        "mk64:special_cup",
+        new Cup("special cup", std::vector<int>{ gDkJungleId, gYoshiValleyId, gBansheeBoardwalkId, gRainbowRoadId }));
+    gBattleCupId = addCup(
+        "mk64:battle", new Cup("battle", std::vector<int>{ gBigDonutId, gBlockFortId, gDoubleDeckId, gSkyscraperId }));
 
     /* Set default course; mario raceway */
     SetCourseFromId(COURSE_MARIO_RACEWAY);
-    SetCupIndex(flowerid);
+    SetCupIndex(gBattleCupId);
     gWorldInstance.CurrentCup->CursorPosition = 3;
 }
 
@@ -143,10 +145,6 @@ void SetCupIndex(int cupId) {
     gWorldInstance.SetCupIndex(cupId);
 }
 
-void SetCup() {
-    gWorldInstance.SetCup();
-}
-
 u32 GetCupIndex(void) {
     return gWorldInstance.GetCupIndex();
 }
@@ -157,19 +155,6 @@ const char* GetCupName(void) {
 
 u32 WorldNextCup(void) {
     return gWorldInstance.NextCup();
-}
-
-u32 WorldPreviousCup(void) {
-    return gWorldInstance.PreviousCup();
-}
-
-void CourseManager_SetCup(void* cup) {
-
-    gWorldInstance.SetCup((Cup*) cup);
-}
-
-void* GetCup() {
-    return gWorldInstance.CurrentCup;
 }
 
 void LoadCourse() {

@@ -286,11 +286,11 @@ void TestCourse::SetStaffGhost() {
 void TestCourse::BeginPlay() {
 }
 void TestCourse::Render(struct UnkStruct_800DC5EC* arg0) {
-    gSPDisplayList(gDisplayListHead++, (Gfx*) "__OTR__test/mario_Plane_001_mesh");
+    gSPDisplayList(gDisplayListHead++, (Gfx*) mario_Plane_001_mesh);
 }
 
 void TestCourse::RenderCredits() {
-    gSPDisplayList(gDisplayListHead++, (Gfx*) "__OTR__test/mario_Plane_001_mesh");
+    gSPDisplayList(gDisplayListHead++, (Gfx*) mario_Plane_001_mesh);
 }
 
 void TestCourse::Collision() {

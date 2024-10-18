@@ -17,7 +17,6 @@ u32 WorldPreviousCup(void);
 
 void SetCourseFromId(int courseId);
 void SetCupIndex(int cupId);
-void SetCup();
 u32 GetCupIndex(void);
 
 const char* GetCupName(void);
@@ -32,8 +31,6 @@ void SetCourse(const char* name);
 
 void NextCourse();
 void PreviousCourse();
-
-void CourseManager_SetCup(void*);
 
 void CourseManager_SpawnVehicles();
 
@@ -118,6 +115,28 @@ extern int gDkJungleId;
 extern int gBigDonutId;
 extern int gPodiumCeremonyId;
 extern int gTestCourseId;
+
+extern int gMushroomCupId;
+extern int gFlowerCupId;
+extern int gStarCupId;
+extern int gSpecialCupId;
+extern int gBattleCupId;
+
+void CourseManager_SpawnVehicles();
+void CourseManager_VehiclesSpawn();
+void CourseManager_VehiclesTick();
+void CourseManager_VehiclesCollision(s32 playerId, Player* player);
+void CourseManager_RenderTrucks(s32 playerId);
+void CourseManager_ResetVehicles(void);
+void CourseManager_CrossingTrigger();
+void CourseManager_AICrossingBehaviour(s32 playerId);
+void CourseManager_DrawActors(Camera* camera);
+void CourseManager_InitClouds();
+s32 CourseManager_GetCrossingOnTriggered(uintptr_t* crossing);
+void CourseManager_TrainSmokeTick(void);
+void CourseManager_TrainSmokeDraw(s32 cameraId);
+void CourseManager_TickActors();
+
 #ifdef __cplusplus
 }
 #endif

@@ -1,9 +1,9 @@
 #include <libultraship.h>
 #include <debug.h>
-#include "debug.inc.c"
 #include <libc/stdio.h>
 
 #if DVDL
+#include "debug.inc.c"
 
 u8 sDisplayListState = OK;
 

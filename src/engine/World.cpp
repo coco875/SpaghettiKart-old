@@ -10,6 +10,7 @@
 #include "vehicles/TankerTruck.h"
 #include "vehicles/Car.h"
 #include "TrainCrossing.h"
+#include "port/Game.h"
 #include <memory>
 
 extern "C" {
@@ -25,10 +26,6 @@ World::World() {
 
 Course* CurrentCourse;
 Cup* CurrentCup;
-
-Cup* World::GetCup() {
-    return Cups[CupIndex];
-}
 
 uint64_t GetCurrentCourse() {
     return (uint64_t) gWorldInstance.CurrentCourse;
@@ -124,11 +121,6 @@ u32 World::PreviousCup() {
         CurrentCup = Cups[CupIndex];
         return CupIndex;
     }
-}
-
-void World::SetCup() {
-    CurrentCup = Cups[CupIndex];
-    CurrentCup->CursorPosition = 0;
 }
 
 CProperties* World::GetCourseProps() {

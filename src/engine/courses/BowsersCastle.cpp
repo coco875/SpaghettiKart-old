@@ -15,6 +15,7 @@ extern "C" {
 #include "course_offsets.h"
 #include "code_800029B0.h"
 #include "render_courses.h"
+#include "code_8003DC40.h"
 #include "code_8006E9C0.h"
 #include "code_80057C60.h"
 #include "defines.h"

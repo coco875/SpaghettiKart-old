@@ -30,7 +30,7 @@
 #include "port/Game.h"
 
 #include "engine/Engine.h"
-#include "engine/courses/Course.h"
+#include "engine/Course.h"
 
 void init_hud(void) {
 

@@ -1745,9 +1745,9 @@ void func_80009B60(s32 playerId) {
 
                 CourseManager_RenderTrucks(playerId);
 
-                if ((GetCourse() == GetYoshiValley()) || (GetCourse() == GetPodiumCeremony())) {
+                if ((gCurrentCourseId == COURSE_YOSHI_VALLEY) || (gCurrentCourseId == COURSE_AWARD_CEREMONY)) {
                     D_801634F8[playerId].unk4 = 0.0f;
-                } else if (GetCourse() == GetToadsTurnpike()) {
+                } else if (gCurrentCourseId == COURSE_TOADS_TURNPIKE) {
                     // func_8001490C(playerId);
                     // func_80014A60(playerId);
                     // func_80014BB4(playerId);
@@ -2948,11 +2948,11 @@ void set_bomb_kart_spawn_positions(void) {
                 break;
         }
 #endif
-        if (GetCourse() == GetYoshiValley()) {
+        if (gCurrentCourseId == COURSE_YOSHI_VALLEY) {
             startingXPos = bombKartSpawn->startingXPos;
             startingZPos = bombKartSpawn->startingZPos;
             startingYPos = spawn_actor_on_surface(startingXPos, 2000.0f, startingZPos);
-        } else if (GetCourse() == GetPodiumCeremony()) {
+        } else if (gCurrentCourseId == COURSE_AWARD_CEREMONY) {
             temp_v0 = &D_80164550[3][bombKartSpawn->waypointIndex];
             startingXPos = temp_v0->posX;
             startingYPos = temp_v0->posY;
@@ -4425,7 +4425,7 @@ void spawn_course_vehicles(void) {
 
     CourseManager_SpawnVehicles();
 
-    // if (GetCourse() == GetToadsTurnpike()) {
+    // if (gCurrentCourseId == GetToadsTurnpike()) {
     //     for (loopIndex = 0; loopIndex < NUM_RACE_BOX_TRUCKS; loopIndex++) {
     //         tempBoxTruck = &gBoxTruckList[loopIndex];
     //         spawn_vehicle_on_road(tempBoxTruck);
