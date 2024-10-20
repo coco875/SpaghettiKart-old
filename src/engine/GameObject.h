@@ -3,12 +3,12 @@
 #include <libultraship.h>
 
 extern "C" {
-    #include "camera.h"
-    #include "objects.h"
+#include "camera.h"
+#include "objects.h"
 }
 
 class GameObject {
-public:
+  public:
     uint8_t uuid[16];
     Object o;
 
