@@ -27,7 +27,8 @@ void FB_CreateFramebuffers(void) {
     // }
 
     // if (gReusableFrameBuffer == -1) {
-    //     gReusableFrameBuffer = gfx_create_framebuffer(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, true);
+    //     gReusableFrameBuffer = gfx_create_framebuffer(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT,
+    //     true);
     // }
 
     // if (gN64ResFrameBuffer == -1) {
@@ -145,7 +146,8 @@ void FB_DrawFromFramebuffer(Gfx* gfx, s32 fb, u8 alpha) {
     // gDPSetEnvColor(gfx++, 255, 255, 255, alpha);
 
     // gDPSetOtherMode(gfx++,
-    //                 G_AD_NOISE | G_CD_NOISE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE | G_TD_CLAMP |
+    //                 G_AD_NOISE | G_CD_NOISE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE | G_TD_CLAMP
+    //                 |
     //                     G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
     //                 G_AC_NONE | G_ZS_PRIM | G_RM_CLD_SURF | G_RM_CLD_SURF2);
 
@@ -159,8 +161,9 @@ void FB_DrawFromFramebuffer(Gfx* gfx, s32 fb, u8 alpha) {
 
     // gDPSetTextureImageFB(gfx++, 0, 0, 0, fb);
     // gDPImageRectangle(gfx++, OTRGetRectDimensionFromLeftEdge(0) << 2, 0 << 2, 0, 0,
-    //                   OTRGetRectDimensionFromRightEdge(SCREEN_WIDTH) << 2, SCREEN_HEIGHT << 2, OTRGetGameRenderWidth(),
-    //                   OTRGetGameRenderHeight(), G_TX_RENDERTILE, OTRGetGameRenderWidth(), OTRGetGameRenderHeight());
+    //                   OTRGetRectDimensionFromRightEdge(SCREEN_WIDTH) << 2, SCREEN_HEIGHT << 2,
+    //                   OTRGetGameRenderWidth(), OTRGetGameRenderHeight(), G_TX_RENDERTILE, OTRGetGameRenderWidth(),
+    //                   OTRGetGameRenderHeight());
 }
 
 /**
@@ -173,7 +176,8 @@ void FB_DrawFromFramebufferScaled(Gfx* gfx, s32 fb, u8 alpha, float scaleX, floa
     // gDPSetEnvColor(gfx++, 255, 255, 255, alpha);
 
     // gDPSetOtherMode(gfx++,
-    //                 G_AD_NOISE | G_CD_NOISE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE | G_TD_CLAMP |
+    //                 G_AD_NOISE | G_CD_NOISE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE | G_TD_CLAMP
+    //                 |
     //                     G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
     //                 G_AC_NONE | G_ZS_PRIM | G_RM_CLD_SURF | G_RM_CLD_SURF2);
 

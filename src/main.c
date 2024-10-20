@@ -1285,9 +1285,9 @@ void thread5_iteration(void) {
     FB_CreateFramebuffers();
     read_controllers();
     game_state_handler();
-    
+
     call_render_hook();
-    
+
     end_master_display_list();
     display_and_vsync();
 }
