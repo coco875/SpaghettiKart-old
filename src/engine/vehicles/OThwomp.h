@@ -17,16 +17,16 @@ extern "C" {
 
 /**
  * Thwomp GameObject
- * 
+ *
  * The game automatically places the actor on the ground so you do not need to provide a Y coordinate value.
- * 
+ *
  * @arg direction the rotational direction the thwomp is facing.
  * @arg behaviour the behaviour of the thwomp, uses values 1-6.
  * @arg primAlpha unknown
  * @arg boundingBoxSize optional. The size of the bounding box for the thwomp. Default value is 12
  */
 class OThwomp {
-private:
+  private:
     enum States : uint16_t {
         DISABLED,
         STATIONARY,
@@ -37,7 +37,7 @@ private:
         JAILED // Has no collision
     };
 
-public:
+  public:
     States State = States::DISABLED;
 
     explicit OThwomp(s32 i, s16 x, s16 z, s16 direction, f32 scale, s16 behaviour, s16 primAlpha, u16 boundingBoxSize);
@@ -66,12 +66,11 @@ public:
 
     void SlidingBehaviour(s32 objectIndex);
     void func_80080524(s32 objectIndex);
-private:
+
+  private:
     s32 _idx;
     s16 _faceDirection;
     //! @todo Write this better. This effects the squish size and the bounding box size.
     // We should probably return to the programmer the pointer to the actor so they can do thwomp->squishSize = value.
     u16 _boundingBoxSize;
-
-
 };

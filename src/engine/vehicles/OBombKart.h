@@ -16,12 +16,12 @@ extern "C" {
 
 /**
  * Used in VS mode
- * 
+ *
  * This differs from the other vehicle classes in that it does not get added to the standard actor list
  * So this is sort of its own thing. Draw call in different place too.
  */
 class OBombKart {
-private:
+  private:
     enum States : uint16_t { // 0,1,3,5
         DISABLED,
         CCW,
@@ -32,21 +32,20 @@ private:
         PODIUM_CEREMONY,
     };
 
-public:
-
+  public:
     const char* Type;
 
     Vec3f Pos;
     Vec3f WheelPos[4]; //! @todo Turn WheelPos into a struct
     f32 Unk_3C;
-    u16 SomeRot; // Some angle
+    u16 SomeRot;       // Some angle
     u16 WaypointIndex; // The waypoint the kart circles
     States State = States::DISABLED;
     u16 BounceTimer = 0;
     u16 CircleTimer = 0;
     u16 Unk_4A = 0;
     s16 Unk_4C = 1;
-    f32 CenterY; // Center of the circle
+    f32 CenterY;         // Center of the circle
     s32 ObjectIndex = 0; // Index into gObjectList
     Collision _Collision;
 
@@ -62,12 +61,11 @@ public:
     void SomeRender(Vec3f arg1);
     void LoadMtx();
     void Waypoint(s32 screenId);
-private:
+
+  private:
     Player* FindTarget();
     void Chase(Player*, Vec3f pos);
 
     Vec3f _spawnPos;
     Player* _target = NULL;
-
-
 };

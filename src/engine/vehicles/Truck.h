@@ -14,8 +14,7 @@ extern "C" {
 class AVehicle; // Forward declare
 
 class ATruck : public AVehicle {
-    public:
-
+  public:
     const char* Type;
     size_t Index;
     f32 Speed;

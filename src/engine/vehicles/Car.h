@@ -14,8 +14,7 @@ extern "C" {
 class AVehicle; // Forward declare
 
 class ACar : public AVehicle {
-    public:
-
+  public:
     explicit ACar(size_t idx, f32 speedA, f32 speedB, TrackWaypoint* path, uint32_t waypoint);
 
     const char* Type;

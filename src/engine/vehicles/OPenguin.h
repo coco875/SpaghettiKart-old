@@ -16,28 +16,23 @@ extern "C" {
 //! @todo Make shadow size bigger if thwomp is scaled up
 //! @todo make adjustable properties for squishSize and boundingBoxSize
 
-    /**
+/**
  * Thwomp GameObject
- * 
+ *
  * The game automatically places the actor on the ground so you do not need to provide a Y coordinate value.
- * 
+ *
  * @arg direction the rotational direction the thwomp is facing.
  * @arg behaviour the behaviour of the thwomp, uses values 1-6.
  * @arg primAlpha unknown
  * @arg boundingBoxSize optional. The size of the bounding box for the thwomp. Default value is 12
  */
 class OPenguin {
-public:
-    enum PenguinType : uint32_t {
-        CHICK,
-        ADULT,
-        CREDITS,
-        EMPEROR
-    };
+  public:
+    enum PenguinType : uint32_t { CHICK, ADULT, CREDITS, EMPEROR };
 
     enum Behaviour : uint16_t {
         DISABLED,
-        STRUT, // Emperor penguin
+        STRUT,  // Emperor penguin
         CIRCLE, // Waddle in a circle
         SLIDE3,
         SLIDE4,
@@ -45,7 +40,7 @@ public:
         SLIDE6,
     };
 
-public:
+  public:
     f32 Diameter = 0.0f; // Waddle in a circle around the spawn point at this diameter.
     uint16_t MirrorModeAngleOffset;
 
@@ -53,7 +48,8 @@ public:
 
     void Tick();
     void Draw(s32 playerId);
-private:
+
+  private:
     void Behaviours(s32 objectIndex, s32 arg1);
     void EmperorPenguin(s32 objectIndex);
     void InitEmperorPenguin(s32 objectIndex);
@@ -63,6 +59,4 @@ private:
     s32 _idx;
     PenguinType _type;
     Behaviour _bhv;
-
-
 };

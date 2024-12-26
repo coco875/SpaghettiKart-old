@@ -1578,11 +1578,11 @@ void func_8004B7DC(s32 x, s32 y, s32 width, s32 height, s32 arg4, s32 arg5, s32 
     if (arg6 == 0) {
         //! @todo Update to F3DEX. Uses OLD definition for gspTextureRectangle.
         gSPTextureRectangle(gDisplayListHead++, xl, yl, xh, yh, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5), 4 << 10,
-                           1 << 10);
+                            1 << 10);
         return;
     }
     gSPTextureRectangle(gDisplayListHead++, xl, yl, xh2, yh2, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5), 1 << 10,
-                       1 << 10);
+                        1 << 10);
 }
 
 void func_8004B7DC_wide(s32 x, s32 y, s32 width, s32 height, s32 arg4, s32 arg5, s32 arg6) {
@@ -1603,35 +1603,32 @@ void func_8004B7DC_wide(s32 x, s32 y, s32 width, s32 height, s32 arg4, s32 arg5,
 
     if (arg6 == 0) {
         if ((xl - (width / 2)) < (SCREEN_WIDTH / 2)) {
-            coordX = (s32)OTRGetDimensionFromLeftEdge(xl) << 2;
-            coordX2 = (s32)(xh) << 2;
+            coordX = (s32) OTRGetDimensionFromLeftEdge(xl) << 2;
+            coordX2 = (s32) (xh) << 2;
         } else {
-            coordX = (s32)OTRGetDimensionFromRightEdge(xl) << 2;
-            coordX2 = (s32)OTRGetDimensionFromRightEdge(xh) << 2;
+            coordX = (s32) OTRGetDimensionFromRightEdge(xl) << 2;
+            coordX2 = (s32) OTRGetDimensionFromRightEdge(xh) << 2;
         }
         //! @todo Update to F3DEX. Uses OLD definition for gspTextureRectangle.
-        gSPWideTextureRectangle(gDisplayListHead++, coordX, yl, coordX2, yh, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5), 4 << 10,
-                              1 << 10);
-//OTRGetDimensionFromLeftEdge
-        //gSPTextureRectangle(gDisplayListHead++, xl, yl, xh, yh, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5), 4 << 10,
-        //                    1 << 10);
+        gSPWideTextureRectangle(gDisplayListHead++, coordX, yl, coordX2, yh, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5),
+                                4 << 10, 1 << 10);
+        // OTRGetDimensionFromLeftEdge
+        // gSPTextureRectangle(gDisplayListHead++, xl, yl, xh, yh, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5), 4 << 10,
+        //                     1 << 10);
     } else {
 
         if ((xl - (width / 2)) < (SCREEN_WIDTH / 2)) {
-            coordX = (s32)OTRGetDimensionFromLeftEdge(xl) << 2;
-            coordX2 = (s32)(xh2) << 2;
+            coordX = (s32) OTRGetDimensionFromLeftEdge(xl) << 2;
+            coordX2 = (s32) (xh2) << 2;
         } else {
-            coordX = (s32)OTRGetDimensionFromRightEdge(xl) << 2;
-            coordX2 = (s32)OTRGetDimensionFromRightEdge(xh2) << 2;
+            coordX = (s32) OTRGetDimensionFromRightEdge(xl) << 2;
+            coordX2 = (s32) OTRGetDimensionFromRightEdge(xh2) << 2;
         }
-        gSPWideTextureRectangle(gDisplayListHead++, coordX, yl,
-                                coordX2, yh2, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5), 1 << 10,
-                            1 << 10);
-
-
+        gSPWideTextureRectangle(gDisplayListHead++, coordX, yl, coordX2, yh2, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5),
+                                1 << 10, 1 << 10);
     }
-    //gSPTextureRectangle(gDisplayListHead++, xl, yl, xh2, yh2, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5), 1 << 10,
-    //                    1 << 10);
+    // gSPTextureRectangle(gDisplayListHead++, xl, yl, xh2, yh2, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5), 1 << 10,
+    //                     1 << 10);
 }
 
 void func_8004B950(s32 x, s32 y, s32 width, s32 height, s32 arg4) {
@@ -3903,10 +3900,11 @@ void render_balloons_grand_prix(s32 arg0) {
     gDPLoadTLUT_pal256(gDisplayListHead++, gTLUTOnomatopoeia);
     func_8004B614(0, 0, 0, 0, 0, 0, 0);
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_THRESHOLD);
-    gDPSetRenderMode(gDisplayListHead++, AA_EN | Z_CMP | Z_UPD | IM_RD | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-       GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA),
-   AA_EN | Z_CMP | Z_UPD | IM_RD | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-       GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
+    gDPSetRenderMode(gDisplayListHead++,
+                     AA_EN | Z_CMP | Z_UPD | IM_RD | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                         GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA),
+                     AA_EN | Z_CMP | Z_UPD | IM_RD | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                         GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
     D_80183E80[0] = 0;
     D_80183E80[1] = 0x8000;
     rsp_load_texture(gTextureBalloon1, 64, 32);
@@ -4299,8 +4297,7 @@ void draw_crabs(s32 objectIndex, s32 cameraId) {
             func_800418AC(gObjectList[objectIndex].pos[0], gObjectList[objectIndex].pos[2], camera->pos);
         draw_2d_texture_at(gObjectList[objectIndex].pos, gObjectList[objectIndex].orientation,
                            gObjectList[objectIndex].sizeScaling, (u8*) gObjectList[objectIndex].activeTLUT,
-                           gObjectList[objectIndex].activeTexture, vtx, 64, 64,
-                           64, 32);
+                           gObjectList[objectIndex].activeTexture, vtx, 64, 64, 64, 32);
     }
 }
 
@@ -4547,9 +4544,9 @@ void func_80055FA0(s32 objectIndex, UNUSED s32 arg1) {
         gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxLookAt[0]),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         mtxf_set_matrix_transformation(someMatrix1, object->pos, object->direction_angle, object->sizeScaling);
-        //convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], someMatrix1);
-        //gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
-        //          G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], someMatrix1);
+        // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+        //           G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
         AddHudMatrix(someMatrix1, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
@@ -4786,9 +4783,9 @@ void func_80056FCC(s32 bombIndex) {
     D_80183E50[1] = temp_v0->yPos + 1.0;
     D_80183E50[2] = temp_v0->bombPos[2];
     set_transform_matrix(mat, gBombKartCollision[bombIndex].orientationVector, D_80183E50, 0U, 0.5f);
-    //convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], mat);
-    //gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
-    //          G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], mat);
+    // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+    //           G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
     AddHudMatrix(mat, G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
     gSPDisplayList(gDisplayListHead++, D_0D007B98);
 }

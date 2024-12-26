@@ -12,8 +12,7 @@ extern "C" {
 class AVehicle; // Forward declare
 
 class ATrain : public AVehicle {
-    public:
-
+  public:
     enum TenderStatus {
         NO_TENDER,
         HAS_TENDER,
