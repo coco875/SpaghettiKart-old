@@ -13,16 +13,16 @@
 #include "TrainCrossing.h"
 #include <memory>
 
-
 extern "C" {
-   #include "camera.h"
-   #include "objects.h"
-   #include "main.h"
-   #include "engine/Engine.h"
-   #include "defines.h"
+#include "camera.h"
+#include "objects.h"
+#include "main.h"
+#include "engine/Engine.h"
+#include "defines.h"
 }
 
-World::World() {}
+World::World() {
+}
 
 Course* CurrentCourse;
 Cup* CurrentCup;
@@ -88,7 +88,8 @@ void World::ClearVehicles(void) {
     Vehicles.clear();
 }
 
-TrainCrossing* World::AddCrossing(Vec3f position, u32 waypointMin, u32 waypointMax, f32 approachRadius, f32 exitRadius) {
+TrainCrossing* World::AddCrossing(Vec3f position, u32 waypointMin, u32 waypointMax, f32 approachRadius,
+                                  f32 exitRadius) {
     auto crossing = std::make_shared<TrainCrossing>(position, waypointMin, waypointMax, approachRadius, exitRadius);
     Crossings.push_back(crossing);
     return crossing.get();
@@ -105,7 +106,8 @@ void World::AddThwomp(s16 x, s16 z, s16 direction, f32 scale, s16 behaviour, s16
     gNumActiveThwomps = thwomps;
 }
 
-std::shared_ptr<OPenguin> World::AddPenguin(Vec3f pos, u16 direction, OPenguin::PenguinType type, OPenguin::Behaviour behaviour) {
+std::shared_ptr<OPenguin> World::AddPenguin(Vec3f pos, u16 direction, OPenguin::PenguinType type,
+                                            OPenguin::Behaviour behaviour) {
     auto penguin = std::make_shared<OPenguin>(penguins, pos, direction, type, behaviour);
     Penguins.push_back(penguin);
     penguins++;
@@ -208,7 +210,7 @@ AActor* World::ConvertActorToAActor(Actor* actor) {
     // Move the ptr back so that it points at the vtable.
     // Which is the initial item in the class, or in other words
     // Point to the class.
-    return reinterpret_cast<AActor*>((char*)actor - sizeof(void*));
+    return reinterpret_cast<AActor*>((char*) actor - sizeof(void*));
 }
 
 /**
@@ -217,7 +219,7 @@ AActor* World::ConvertActorToAActor(Actor* actor) {
 Actor* World::ConvertAActorToActor(AActor* actor) {
     // Move the ptr forward past the vtable.
     // This allows C to access the class variables like a normal Actor* struct.
-    return reinterpret_cast<Actor*>((char*)actor + sizeof(void*));
+    return reinterpret_cast<Actor*>((char*) actor + sizeof(void*));
 }
 
 AActor* World::GetActor(size_t index) {
@@ -245,21 +247,21 @@ void World::TickObjects() {
     }
 }
 
-void World::DrawObjects(Camera *camera) {
+void World::DrawObjects(Camera* camera) {
     for (const auto& object : this->GameObjects) {
         object->Draw(camera);
     }
 }
 
 void World::ExpiredObjects() {
-    this->GameObjects.erase(
-        std::remove_if(this->GameObjects.begin(), this->GameObjects.end(),
-                        [](const std::unique_ptr<GameObject>& object) { return object->uuid == 0; }), // Example condition
-        this->GameObjects.end());
+    this->GameObjects.erase(std::remove_if(this->GameObjects.begin(), this->GameObjects.end(),
+                                           [](const std::unique_ptr<GameObject>& object) {
+                                               return object->uuid == 0;
+                                           }), // Example condition
+                            this->GameObjects.end());
 }
 
 void World::DestroyObjects() {
-
 }
 
 Object* World::GetObjectByIndex(size_t index) {

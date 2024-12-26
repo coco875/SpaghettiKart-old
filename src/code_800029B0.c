@@ -124,8 +124,8 @@ Vec3f D_8015F768;
 Vec3f D_8015F778;
 
 f32 gCourseDirection; // Extra mode, flips vertices.
-s32 gNumScreens; // Set to zero in single player mode
-s32 D_8015F790[64]; // Unknown data, potentially not used.
+s32 gNumScreens;      // Set to zero in single player mode
+s32 D_8015F790[64];   // Unknown data, potentially not used.
 u16 D_8015F890;
 u16 D_8015F892;
 u16 D_8015F894;

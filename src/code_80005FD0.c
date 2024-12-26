@@ -7049,7 +7049,7 @@ void kart_ai_use_item_strategy(s32 playerId) {
                 if ((temp_s0->unk_04 % 120) == 0) {
                     kart_ai_decisions_branch_item(playerId, &temp_s0->unk_00,
                                                   gen_random_item_human((s16) gLapCountByPlayerId[playerId],
-                                                                          gGPCurrentRaceRankByPlayerId[playerId]));
+                                                                        gGPCurrentRaceRankByPlayerId[playerId]));
                 } else {
                     func_8001ABE0(playerId, temp_s0);
                 }
