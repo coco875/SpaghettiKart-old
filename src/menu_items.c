@@ -3261,12 +3261,12 @@ Gfx* func_800987D0(Gfx* displayListHead, u32 arg1, u32 arg2, u32 width, u32 heig
 
 /**
  * Draw a box filled with a solid color
- * 
+ *
  * Renders
- * 
+ *
  * Menus: Black box behind textures such as: "1P Game, 2P Game, Mario GP, 50CC, OK, etc."
- * 
- * 
+ *
+ *
  */
 Gfx* draw_box_fill(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, s32 red, s32 green, s32 blue, s32 alpha) {
     red &= 0xFF;
@@ -3309,13 +3309,13 @@ Gfx* draw_box_fill(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, s32
 
 /**
  * Draw a box filled with a solid color
- * 
+ *
  * Renders
- * 
+ *
  * All game modes:
  * Cinematic borders
- * 
- * 
+ *
+ *
  */
 Gfx* draw_box_fill_wide(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, s32 red, s32 green, s32 blue,
                         s32 alpha) {
@@ -3359,9 +3359,9 @@ Gfx* draw_box_fill_wide(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry
 
 /**
  * Draw a box with a solid outline
- * 
+ *
  * Menus best lap time at start menu
- * 
+ *
  */
 Gfx* draw_box(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32 red, u32 green, u32 blue, u32 alpha) {
     red &= 0xFF;
@@ -3401,12 +3401,12 @@ Gfx* draw_box(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32 red,
 
 /**
  * Renders
- * 
+ *
  * Menus: Menu transition swipes, course label highlight
- * 
+ *
  * All game modes: Background cover at pause screen
- * 
- * 
+ *
+ *
  */
 Gfx* draw_box_wide(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32 red, u32 green, u32 blue, u32 alpha) {
     red &= 0xFF;
@@ -3446,7 +3446,8 @@ Gfx* draw_box_wide(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32
 }
 
 // Renders pause background
-Gfx* draw_box_wide_pause_background(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32 red, u32 green, u32 blue, u32 alpha) {
+Gfx* draw_box_wide_pause_background(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32 red, u32 green,
+                                    u32 blue, u32 alpha) {
     red &= 0xFF;
     green &= 0xFF;
     blue &= 0xFF;
@@ -3479,8 +3480,7 @@ Gfx* draw_box_wide_pause_background(Gfx* displayListHead, s32 ulx, s32 uly, s32 
     // }
     gSPDisplayList(displayListHead++, D_02008008);
     gDPSetPrimColor(displayListHead++, 0, 0, red, green, blue, alpha);
-    gDPFillWideRectangle(displayListHead++, ulx, uly,
-       lrx, lry);
+    gDPFillWideRectangle(displayListHead++, ulx, uly, lrx, lry);
     gDPPipeSync(displayListHead++);
     return displayListHead;
 }
@@ -7857,37 +7857,38 @@ void render_pause_menu_versus(MenuItem* arg0) {
     temp_t3 = temp_v0->screenWidth / 2;
     temp_t4 = temp_v0->screenHeight / 2;
 
-    switch(gScreenModeSelection) {
+    switch (gScreenModeSelection) {
         case SCREEN_MODE_2P_SPLITSCREEN_HORIZONTAL:
             leftEdge = OTRGetDimensionFromLeftEdge(0);
             rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
-            gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4, rightEdge,
-                                    temp_t0 + temp_t4, 0, 0, 0, 140);
+            gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4,
+                                                              rightEdge, temp_t0 + temp_t4, 0, 0, 0, 140);
             break;
         case SCREEN_MODE_2P_SPLITSCREEN_VERTICAL:
             leftEdge = OTRGetDimensionFromLeftEdge(0);
             rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
-            gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4, leftEdge + rightEdge,
-                                    temp_t0 + temp_t4, 0, 0, 0, 140);
+            gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4,
+                                                              leftEdge + rightEdge, temp_t0 + temp_t4, 0, 0, 0, 140);
             break;
         case SCREEN_MODE_3P_4P_SPLITSCREEN:
             // Left side players
             if ((temp_v0->player == gPlayerOne) || (temp_v0->player == gPlayerThree)) {
                 leftEdge = OTRGetDimensionFromLeftEdge(0);
-                gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, leftEdge - temp_t3, temp_t0 - temp_t4, temp_v1 + temp_t3,
-                                        temp_t0 + temp_t4, 0, 0, 0, 140);
+                gDisplayListHead =
+                    draw_box_wide_pause_background(gDisplayListHead, leftEdge - temp_t3, temp_t0 - temp_t4,
+                                                   temp_v1 + temp_t3, temp_t0 + temp_t4, 0, 0, 0, 140);
 
-            // Right side players
+                // Right side players
             } else if ((temp_v0->player == gPlayerTwo) || (temp_v0->player == gPlayerFour)) {
                 rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
-                gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, temp_v1 - temp_t3, temp_t0 - temp_t4, temp_v1 + rightEdge,
-                                        temp_t0 + temp_t4, 0, 0, 0, 140);
-
+                gDisplayListHead =
+                    draw_box_wide_pause_background(gDisplayListHead, temp_v1 - temp_t3, temp_t0 - temp_t4,
+                                                   temp_v1 + rightEdge, temp_t0 + temp_t4, 0, 0, 0, 140);
             }
             break;
         default:
             gDisplayListHead = draw_box(gDisplayListHead, temp_v1 - temp_t3, temp_t0 - temp_t4, temp_v1 + temp_t3,
-                                            temp_t0 + temp_t4, 0, 0, 0, 140);
+                                        temp_t0 + temp_t4, 0, 0, 0, 140);
             break;
     }
 
@@ -7921,21 +7922,21 @@ void render_pause_grand_prix(MenuItem* arg0) {
     temp_t3 = temp_v0->screenWidth / 2;
     temp_t4 = temp_v0->screenHeight / 2;
 
-    switch(gScreenModeSelection) {
+    switch (gScreenModeSelection) {
         case SCREEN_MODE_1P:
         case SCREEN_MODE_2P_SPLITSCREEN_HORIZONTAL:
             gDisplayListHead = draw_box_wide(gDisplayListHead, temp_v1 - temp_t3, temp_t0 - temp_t4, temp_v1 + temp_t3,
-                                    temp_t0 + temp_t4, 0, 0, 0, 140);
+                                             temp_t0 + temp_t4, 0, 0, 0, 140);
             break;
         case SCREEN_MODE_2P_SPLITSCREEN_VERTICAL:
             s32 leftEdge = OTRGetDimensionFromLeftEdge(0);
             s32 rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
-            gDisplayListHead = draw_box_wide(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4, leftEdge + rightEdge,
-                                    temp_t0 + temp_t4, 0, 0, 0, 140);
-                                    break;
+            gDisplayListHead = draw_box_wide(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4,
+                                             leftEdge + rightEdge, temp_t0 + temp_t4, 0, 0, 0, 140);
+            break;
         default:
             gDisplayListHead = draw_box(gDisplayListHead, temp_v1 - temp_t3, temp_t0 - temp_t4, temp_v1 + temp_t3,
-                                            temp_t0 + temp_t4, 0, 0, 0, 140);
+                                        temp_t0 + temp_t4, 0, 0, 0, 140);
             break;
     }
 
@@ -7972,37 +7973,38 @@ void render_pause_battle(MenuItem* arg0) {
     temp_t3 = temp_v0->screenWidth / 2;
     temp_t4 = temp_v0->screenHeight / 2;
 
-    switch(gScreenModeSelection) {
+    switch (gScreenModeSelection) {
         case SCREEN_MODE_2P_SPLITSCREEN_HORIZONTAL:
             leftEdge = OTRGetDimensionFromLeftEdge(0);
             rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
-            gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4, rightEdge,
-                                    temp_t0 + temp_t4, 0, 0, 0, 140);
+            gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4,
+                                                              rightEdge, temp_t0 + temp_t4, 0, 0, 0, 140);
             break;
         case SCREEN_MODE_2P_SPLITSCREEN_VERTICAL:
             leftEdge = OTRGetDimensionFromLeftEdge(0);
             rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
-            gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4, rightEdge,
-                                    temp_t0 + temp_t4, 0, 0, 0, 140);
+            gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4,
+                                                              rightEdge, temp_t0 + temp_t4, 0, 0, 0, 140);
             break;
         case SCREEN_MODE_3P_4P_SPLITSCREEN:
             // Left side players
             if ((temp_v0->player == gPlayerOne) || (temp_v0->player == gPlayerThree)) {
                 leftEdge = OTRGetDimensionFromLeftEdge(0);
-                gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, leftEdge - temp_t3, temp_t0 - temp_t4, temp_v1 + temp_t3,
-                                        temp_t0 + temp_t4, 0, 0, 0, 140);
+                gDisplayListHead =
+                    draw_box_wide_pause_background(gDisplayListHead, leftEdge - temp_t3, temp_t0 - temp_t4,
+                                                   temp_v1 + temp_t3, temp_t0 + temp_t4, 0, 0, 0, 140);
 
-            // Right side players
+                // Right side players
             } else if ((temp_v0->player == gPlayerTwo) || (temp_v0->player == gPlayerFour)) {
                 rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
-                gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, temp_v1 - temp_t3, temp_t0 - temp_t4, temp_v1 + rightEdge,
-                                        temp_t0 + temp_t4, 0, 0, 0, 140);
-
+                gDisplayListHead =
+                    draw_box_wide_pause_background(gDisplayListHead, temp_v1 - temp_t3, temp_t0 - temp_t4,
+                                                   temp_v1 + rightEdge, temp_t0 + temp_t4, 0, 0, 0, 140);
             }
             break;
         default:
             gDisplayListHead = draw_box(gDisplayListHead, temp_v1 - temp_t3, temp_t0 - temp_t4, temp_v1 + temp_t3,
-                                            temp_t0 + temp_t4, 0, 0, 0, 140);
+                                        temp_t0 + temp_t4, 0, 0, 0, 140);
             break;
     }
 
@@ -8339,9 +8341,12 @@ void func_800A66A8(MenuItem* arg0, Unk_D_800E70A0* arg1) {
     z2 += z1;
 
     // clang-format off
-    if (x2);
-    if (y2);
-    if (z2);
+    if (x2) {;
+}
+    if (y2) {;
+}
+    if (z2) {;
+}
     // clang-format on
 
     guScale(mtx, 1.2f, 1.2f, 1.2f);

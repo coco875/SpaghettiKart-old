@@ -505,7 +505,7 @@ u8* dma_textures(const char* texture, size_t arg1, size_t arg2) {
     gNextFreeMemoryAddress += arg2;
 #else
     memcpy(temp_v0, tex, arg2);
-    //strcpy(temp_v0, texture);
+    // strcpy(temp_v0, texture);
 #endif
     return temp_v0;
 }
@@ -823,7 +823,7 @@ void unpack_tile_sync(Gfx* gfx, u8* args, s8 opcode) {
 }
 
 uintptr_t get_texture(size_t offset) {
-    course_texture *textures = CourseManager_GetProps()->textures;
+    course_texture* textures = CourseManager_GetProps()->textures;
     size_t totalOffset = 0;
 
     while (textures->addr) {

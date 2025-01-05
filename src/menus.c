@@ -1624,8 +1624,9 @@ void player_select_menu_act(struct Controller* controller, u16 controllerIdx) {
                     }
                     // L800B38FC
                     if (btnAndStick & CONT_RIGHT) {
-                        if (savedSelection == 4 || savedSelection == 8)
+                        if (savedSelection == 4 || savedSelection == 8) {
                             return;
+                        }
                         savedSelection += 1;
                         do {
                             // L800B391C
@@ -1635,15 +1636,17 @@ void player_select_menu_act(struct Controller* controller, u16 controllerIdx) {
                                 break;
                             }
                             savedSelection += 1;
-                            if ((savedSelection == 5) || (savedSelection == 9))
+                            if ((savedSelection == 5) || (savedSelection == 9)) {
                                 return;
+                            }
                         } while (savedSelection < 10);
                         return;
                     }
                     // L800B3978
                     if (btnAndStick & CONT_LEFT) {
-                        if (savedSelection == 1 || savedSelection == 5)
+                        if (savedSelection == 1 || savedSelection == 5) {
                             return;
+                        }
                         savedSelection -= 1;
                         do {
                             if (is_character_spot_free(savedSelection)) {
@@ -1652,8 +1655,9 @@ void player_select_menu_act(struct Controller* controller, u16 controllerIdx) {
                                 break;
                             }
                             savedSelection -= 1;
-                            if ((savedSelection == 0) || (savedSelection == 4))
+                            if ((savedSelection == 0) || (savedSelection == 4)) {
                                 return;
+                            }
                         } while (savedSelection >= 0);
                         return;
                     }
