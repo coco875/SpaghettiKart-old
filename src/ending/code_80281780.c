@@ -17,11 +17,12 @@
 #include "collision.h"
 #include "code_80281C40.h"
 #include "code_800029B0.h"
-#include "code_80091750.h"
+#include "menu_items.h"
 #include "main.h"
 #include "menus.h"
 #include "render_courses.h"
 #include <string.h>
+#include "port/Game.h"
 
 #define bcopy memcpy
 
@@ -88,10 +89,11 @@ void func_802818BC(void) {
     }
 }
 
-void load_ceremony_cutscene(void) {
+void setup_podium_ceremony(void) {
     Camera* camera = &cameras[0];
 
     gCurrentCourseId = COURSE_ROYAL_RACEWAY;
+    SetCourseByClass(GetPodiumCeremony());
     D_800DC5B4 = (u16) 1;
     gIsMirrorMode = 0;
     gGotoMenu = 0xFFFF;
@@ -162,6 +164,7 @@ void load_ceremony_cutscene(void) {
     balloons_and_fireworks_init();
     init_camera_podium_ceremony();
     func_80093E60();
+    CourseManager_SpawnActors();
     D_801625F8 = (uintptr_t) gHeapEndPtr - gNextFreeMemoryAddress;
     D_801625FC = ((f32) D_801625F8 / 1000.0f);
 }

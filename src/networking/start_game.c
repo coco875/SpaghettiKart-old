@@ -6,7 +6,8 @@
 #include "code_800029B0.h"
 #include "menus.h"
 #include "audio/external.h"
-#include "code_80091750.h"
+#include "menu_items.h"
+#include "port/Game.h"
 
 // PLAYER_EXISTS | PLAYER_STAGING | PLAYER_START_SEQUENCE | PLAYER_HUMAN
 // PLAYER_EXISTS | PLAYER_STAGING | PLAYER_START_SEQUENCE | PLAYER_KART_AI
@@ -52,8 +53,10 @@ void network_cup_vote(uint32_t course) {
 
 void set_course(const char* data) {
     if (data != NULL) {
+        //SetCup(data[0]);
         gCupSelection = data[0];
-        gCurrentCourseId = gCupCourseOrder[gCupSelection][COURSE_ONE];
+        // gCurrentCourseId = gCupCourseOrder[gCupSelection][COURSE_ONE];
+        //! @todo SetCourse();
     }
 }
 
@@ -126,7 +129,7 @@ void networking_start_session(const char* data) {
     gModeSelection = GRAND_PRIX;
     gPlayerCount = 1;
     // gCurrentCourseId = 8;
-    gDebugMenuSelection = DEBUG_MENU_EXITED;
+    gDebugMenuSelection = DEBUG_MENU_OPTION_SELECTED;
     func_8009E1C0();
     func_800CA330(0x19);
 }

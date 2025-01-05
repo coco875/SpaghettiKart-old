@@ -7,6 +7,7 @@
 #include "buffers/trig_tables.h"
 #include "math.h"
 #include "memory.h"
+#include "engine/Matrix.h"
 
 #pragma intrinsic(sqrtf, fabs)
 
@@ -43,27 +44,31 @@ UNUSED void func_802B4FF0() {
  * object already render Note that gMatrixObjectCount gets reset at the beginning of the game loop. So no cleanup needs
  * to be performed.
  */
-s32 render_set_position(Mat4 arg0, s32 arg1) {
+s32 render_set_position(Mat4 mtx, s32 arg1) {
     if (gMatrixObjectCount >= MTX_OBJECT_POOL_SIZE) {
         return 0;
     }
-    mtxf_to_mtx(&gGfxPool->mtxObject[gMatrixObjectCount], arg0);
+    //mtxf_to_mtx(&gGfxPool->mtxObject[gMatrixObjectCount], arg0);
     switch (arg1) { /* irregular */
         case 0:
-            gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxObject[gMatrixObjectCount++]),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            AddObjectMatrix(mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxObject[gMatrixObjectCount++]),
+            //           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             break;
         case 1:
-            gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxObject[gMatrixObjectCount++]),
-                      G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            AddObjectMatrix(mtx, G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxObject[gMatrixObjectCount++]),
+            //           G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             break;
         case 3:
-            gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxObject[gMatrixObjectCount++]),
-                      G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            AddObjectMatrix(mtx, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxObject[gMatrixObjectCount++]),
+            //           G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
             break;
         case 2:
-            gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxObject[gMatrixObjectCount++]),
-                      G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            AddObjectMatrix(mtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxObject[gMatrixObjectCount++]),
+            //           G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
             break;
     }
     return 1;
@@ -946,7 +951,7 @@ u16 atan2s(f32 x, f32 y) {
     return ret;
 }
 
-f32 atan2f(f32 arg0, f32 arg1) {
+f32 _atan2f(f32 arg0, f32 arg1) {
     return atan2s(arg0, arg1);
 }
 
@@ -994,11 +999,11 @@ UNUSED f32 func_802B79F0(f32 arg0, f32 arg1) {
 #endif
 
 UNUSED u16 func_802B7B50(f32 arg0, f32 arg1) {
-    return ((atan2f(arg0, arg1) * 32768.0f) / M_PI);
+    return ((_atan2f(arg0, arg1) * 32768.0f) / M_PI);
 }
 
 UNUSED void func_802B7C18(f32 arg0) {
-    atan2f(arg0, 1.0f);
+    _atan2f(arg0, 1.0f);
 }
 
 s16 func_802B7C40(f32 arg0) {
@@ -1006,7 +1011,7 @@ s16 func_802B7C40(f32 arg0) {
 }
 
 UNUSED void func_802B7C6C(f32 arg0) {
-    atan2f(arg0, sqrtf(1.0 - (arg0 * arg0)));
+    _atan2f(arg0, sqrtf(1.0 - (arg0 * arg0)));
 }
 
 s16 func_802B7CA8(f32 arg0) {
@@ -1014,11 +1019,11 @@ s16 func_802B7CA8(f32 arg0) {
 }
 
 f32 calculate_vector_angle_xy(f32 vectorX) {
-    return atan2f(sqrtf(1.0 - (vectorX * vectorX)), vectorX);
+    return _atan2f(sqrtf(1.0 - (vectorX * vectorX)), vectorX);
 }
 
 UNUSED s16 func_802B7D28(f32 arg0) {
-    return atan2f(sqrtf(1.0 - (f64) (arg0 * arg0)), arg0) * 32768.0f / M_PI;
+    return _atan2f(sqrtf(1.0 - (f64) (arg0 * arg0)), arg0) * 32768.0f / M_PI;
 }
 
 u16 random_u16(void) {

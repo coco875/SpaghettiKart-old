@@ -4,8 +4,12 @@
 #include <common_structs.h>
 #include "main.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void func_80045738(u8*, u8*, s32, s32);
-void func_80057114(s32);
+void render_bomb_karts(s32);
 void func_800431B0(Vec3f, Vec3su, f32, Vtx*);
 void func_80043220(Vec3f, Vec3su, f32, Gfx*);
 void func_80043328(Vec3f, Vec3su, f32, Gfx*);
@@ -166,7 +170,6 @@ void func_8004A5E4(Vec3f, Vec3su, f32, u8*, Vtx*);
 void func_8004A630(Collision*, Vec3f, f32);
 void func_8004A6EC(s32, f32);
 void func_8004A7AC(s32, f32);
-void func_8004A870(s32, f32);
 void func_8004A9B8(f32);
 void func_8004AA10(Vec3f, Vec3su, f32, u8*, Vtx*, s32, s32, s32, s32);
 void func_8004AAA0(s32, s32, u16, f32, u8*, Vtx*);
@@ -203,22 +206,22 @@ void func_8004B5A8(s32, s32, s32, s32);
 void func_8004B614(s32, s32, s32, s32, s32, s32, s32);
 void func_8004B6C4(s32, s32, s32);
 void func_8004B72C(s32, s32, s32, s32, s32, s32, s32);
-void func_8004B950(s32, s32, s32, s32, s32);
+void render_texture_rectangle_wrap(s32, s32, s32, s32, s32);
 void func_8004BB34(void);
 void func_8004BB3C(s32, s32, s32, s32, f32);
 void func_8004BD14(s32, s32, u32, u32, s32, u8*, u8*);
 
-void func_8004C6FC(s16, s16, u8*, u32, u32);
+void render_texture_tile_rgba32_block(s16, s16, u8*, u32, u32);
 
 void func_8004C024(s16, s16, s16, u16, u16, u16, u16);
 void func_8004C148(s16, s16, s16, u16, u16, u16, u16);
 void func_8004C354(void);
 void func_8004C35C(void);
-void draw_hud_2d_texture(s32, s32, u32, u32, u8*);
+void draw_hud_2d_texture_wide(s32, s32, u32, u32, u8*);
 void func_8004C450(s32, s32, u32, u32, u8*);
 void func_8004C53C(s32, s32, u32, u32, u8*);
 void func_8004C628(s32, s32, u32, u32, u8*);
-void func_8004C8D4(s16, s16);
+void render_game_logo(s16, s16);
 void func_8004C91C(s32, s32, u8*, s32, s32, s32);
 void func_8004C9D8(s32, s32, s32, u8*, s32, s32, s32, s32);
 void func_8004CA58(s32, s32, f32, u8*, s32, s32);
@@ -238,7 +241,6 @@ void func_8004CD18(s32, s32, u8*);
 void func_8004CF9C(s32, s32, u8*, s32, s32, s32, s32);
 void func_8004CFF0(s32, s32, u8*, s32, s32, s32, s32);
 
-void func_800552BC(s32);
 void func_800450C8(u8*, s32, s32);
 void func_80044F34(u8*, s32, s32);
 void func_8004D044(s32, s32, u8*, s32, s32, s32, s32, s32, s32, s32, s32);
@@ -294,7 +296,7 @@ void func_8004ED40(s32);
 void func_8004EE54(s32);
 
 void func_8004EF9C(s32);
-void func_8004F020(s32);
+void set_minimap_finishline_position(s32);
 void func_8004F168(s32, s32, s32);
 void func_8004F3E4(s32);
 s32 func_8004F674(s32*, s32);
@@ -326,7 +328,6 @@ void func_80051F9C(void);
 void func_80052044(void);
 void func_80052080(void);
 void func_800520C0(s32);
-void func_8005217C(s32);
 void func_800523B8(s32, s32, u32);
 void render_object_boos(s32);
 void render_object_bat(s32);
@@ -340,13 +341,12 @@ void render_object_snowmans_list_2(s32);
 
 void render_object_snowmans_list_1(s32);
 void render_object_snowmans(s32);
-void render_lakitu(s32);
-void func_800534A4(s32);
-void func_800534E8(s32);
+void translate_thwomp_lights(s32);
+void thwomp_lights(s32);
 void render_object_thwomps_model(s32);
 void render_object_thwomps(s32);
 void func_80053D74(s32, s32, s32);
-void func_80053E6C(s32);
+void render_balloons_grand_prix(s32);
 
 void render_object_train_smoke_particle(s32, s32);
 void render_object_trains_smoke_particles(s32);
@@ -356,32 +356,22 @@ void render_object_bowser_flame_particle(s32, s32);
 void render_object_bowser_flame(s32);
 void func_8005477C(s32, u8, Vec3f);
 void render_object_smoke_particles(s32);
-void func_80054AFC(s32, Vec3f);
-void func_80054BE8(s32);
 void func_80054D00(s32, s32);
 void func_80054E10(s32);
 void func_80054EB8(s32);
 void func_80054F04(s32);
 
 void render_object_moles(s32);
-void func_80055164(s32);
 void func_80055228(s32);
-void func_800552BC(s32);
 void render_object_seagulls(s32);
-void draw_crabs(s32, s32);
 void render_object_crabs(s32);
-void func_800555BC(s32, s32);
-void render_object_hedgehogs(s32);
 void func_800557AC(void);
 void func_800557B4(s32, u32, u32);
 void render_object_train_penguins(s32);
 void func_80055AB8(s32, s32);
 void render_object_chain_chomps(s32);
-void func_80055CCC(s32, s32);
-void render_object_hot_air_balloon(s32);
 void func_80055EF4(s32, s32);
 void func_80055F48(s32);
-void func_80055FA0(s32, s32);
 
 void func_80056160(s32);
 void render_object_neon(s32);
@@ -392,11 +382,11 @@ void func_8005669C(s32, s32, s32);
 void func_800569F4(s32);
 void func_80056A40(s32, s32);
 void func_80056A94(s32);
-void render_object_bomb_kart(s32);
+void render_battle_bomb_karts(s32);
 void func_80056E24(s32, Vec3f);
 void func_80056FCC(s32);
 
-void func_80057114(s32);
+void render_bomb_karts(s32);
 void func_8005762C(s32*, s32*, s32, u32);
 void func_80057330(void);
 void func_80057338(void);
@@ -427,6 +417,9 @@ void func_80057B14(s32, s32, char*, u32);
 void func_80057B80(s32, s32, char*, u32);
 void func_80057BEC(s32, s32, char*, u32);
 
+extern Lights1 D_800E45C0[];
+extern Lights1 D_800E4668;
+
 extern f32 D_801637C4;
 extern s32 D_801637E8;
 extern f32 D_801637F0;
@@ -448,5 +441,9 @@ extern u8* D_8018D4BC;
 extern u8* D_8018D4C0;
 
 extern u8* gPortraitTextures[];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

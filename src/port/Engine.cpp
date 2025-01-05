@@ -5,6 +5,9 @@
 #include "libultraship/src/Context.h"
 #include "resource/type/ResourceType.h"
 #include "resource/importers/GenericArrayFactory.h"
+#include "resource/importers/AudioBankFactory.h"
+#include "resource/importers/AudioSampleFactory.h"
+#include "resource/importers/AudioSequenceFactory.h"
 #include "resource/importers/Vec3fFactory.h"
 #include "resource/importers/Vec3sFactory.h"
 #include "resource/importers/KartAIFactory.h"
@@ -31,6 +34,8 @@ float gInterpolationStep = 0.0f;
 #include <BlobFactory.h>
 #include <VertexFactory.h>
 #include <LightFactory.h>
+#include "audio/internal.h"
+#include "audio/GameAudio.h"
 }
 
 GameEngine* GameEngine::Instance;
@@ -57,7 +62,8 @@ GameEngine::GameEngine() {
         }
     }
 
-    this->context = Ship::Context::CreateInstance("Spaghettify", "skart64", "spaghettify.cfg.json", OTRFiles, {}, 3);
+    this->context = Ship::Context::CreateInstance("Spaghettify", "skart64", "spaghettify.cfg.json", OTRFiles, {}, 3,
+                                                  { 26800, 512, 1100 });
 
     auto wnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
 
@@ -65,6 +71,12 @@ GameEngine::GameEngine() {
     this->context->InitGfxDebugger();
 
     auto loader = context->GetResourceManager()->GetResourceLoader();
+    loader->RegisterResourceFactory(std::make_shared<SM64::AudioBankFactoryV0>(), RESOURCE_FORMAT_BINARY, "AudioBank",
+                                    static_cast<uint32_t>(SF64::ResourceType::Bank), 0);
+    loader->RegisterResourceFactory(std::make_shared<SM64::AudioSampleFactoryV0>(), RESOURCE_FORMAT_BINARY,
+                                    "AudioSample", static_cast<uint32_t>(SF64::ResourceType::Sample), 0);
+    loader->RegisterResourceFactory(std::make_shared<SM64::AudioSequenceFactoryV0>(), RESOURCE_FORMAT_BINARY,
+                                    "AudioSequence", static_cast<uint32_t>(SF64::ResourceType::Sequence), 0);
     loader->RegisterResourceFactory(std::make_shared<SF64::ResourceFactoryBinaryVec3fV0>(), RESOURCE_FORMAT_BINARY,
                                     "Vec3f", static_cast<uint32_t>(SF64::ResourceType::Vec3f), 0);
     loader->RegisterResourceFactory(std::make_shared<SF64::ResourceFactoryBinaryVec3sV0>(), RESOURCE_FORMAT_BINARY,
@@ -76,10 +88,17 @@ GameEngine::GameEngine() {
                                     "Texture", static_cast<uint32_t>(LUS::ResourceType::Texture), 0);
     loader->RegisterResourceFactory(std::make_shared<LUS::ResourceFactoryBinaryTextureV1>(), RESOURCE_FORMAT_BINARY,
                                     "Texture", static_cast<uint32_t>(LUS::ResourceType::Texture), 1);
+
     loader->RegisterResourceFactory(std::make_shared<LUS::ResourceFactoryBinaryVertexV0>(), RESOURCE_FORMAT_BINARY,
                                     "Vertex", static_cast<uint32_t>(LUS::ResourceType::Vertex), 0);
+    loader->RegisterResourceFactory(std::make_shared<LUS::ResourceFactoryXMLVertexV0>(), RESOURCE_FORMAT_XML, "Vertex",
+                                    static_cast<uint32_t>(LUS::ResourceType::Vertex), 0);
+
     loader->RegisterResourceFactory(std::make_shared<LUS::ResourceFactoryBinaryDisplayListV0>(), RESOURCE_FORMAT_BINARY,
                                     "DisplayList", static_cast<uint32_t>(LUS::ResourceType::DisplayList), 0);
+    loader->RegisterResourceFactory(std::make_shared<LUS::ResourceFactoryXMLDisplayListV0>(), RESOURCE_FORMAT_XML,
+                                    "DisplayList", static_cast<uint32_t>(LUS::ResourceType::DisplayList), 0);
+
     loader->RegisterResourceFactory(std::make_shared<LUS::ResourceFactoryBinaryMatrixV0>(), RESOURCE_FORMAT_BINARY,
                                     "Matrix", static_cast<uint32_t>(LUS::ResourceType::Matrix), 0);
     loader->RegisterResourceFactory(std::make_shared<LUS::ResourceFactoryBinaryBlobV0>(), RESOURCE_FORMAT_BINARY,
@@ -108,6 +127,7 @@ GameEngine::GameEngine() {
 
 void GameEngine::Create() {
     const auto instance = Instance = new GameEngine();
+    instance->AudioInit();
     GameUI::SetupGuiElements();
 #if defined(__SWITCH__) || defined(__WIIU__)
     CVarRegisterInteger("gControlNav", 1); // always enable controller nav on switch/wii u
@@ -115,6 +135,7 @@ void GameEngine::Create() {
 }
 
 void GameEngine::Destroy() {
+    AudioExit();
 }
 
 bool ShouldClearTextureCacheAtEndOfFrame = false;
@@ -156,10 +177,110 @@ void GameEngine::ProcessGfxCommands(Gfx* commands) {
     RunCommands(commands);
     auto wnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
     if (wnd != nullptr) {
-        wnd->SetTargetFps(30);
+        wnd->SetTargetFps(CVarGetInteger("gInterpolationFPS", 30));
         wnd->SetMaximumFrameLatency(1);
     }
 }
+
+// Audio
+
+void GameEngine::HandleAudioThread() {
+    while (audio.running) {
+        {
+            std::unique_lock<std::mutex> Lock(audio.mutex);
+            while (!audio.processing && audio.running) {
+                audio.cv_to_thread.wait(Lock);
+            }
+
+            if (!audio.running) {
+                break;
+            }
+        }
+        std::unique_lock<std::mutex> Lock(audio.mutex);
+
+        int samples_left = AudioPlayerBuffered();
+        u32 num_audio_samples = samples_left < AudioPlayerGetDesiredBuffered() ? SAMPLES_HIGH : SAMPLES_LOW;
+
+        s16 audio_buffer[SAMPLES_PER_FRAME];
+        for (int i = 0; i < NUM_AUDIO_CHANNELS; i++) {
+            create_next_audio_buffer(audio_buffer + i * (num_audio_samples * 2), num_audio_samples);
+        }
+
+        AudioPlayerPlayFrame((u8*) audio_buffer, 2 * num_audio_samples * 4);
+
+        audio.processing = false;
+        audio.cv_from_thread.notify_one();
+    }
+}
+
+void GameEngine::StartAudioFrame() {
+    {
+        std::unique_lock<std::mutex> Lock(audio.mutex);
+        audio.processing = true;
+    }
+
+    audio.cv_to_thread.notify_one();
+}
+
+void GameEngine::EndAudioFrame() {
+    {
+        std::unique_lock<std::mutex> Lock(audio.mutex);
+        while (audio.processing) {
+            audio.cv_from_thread.wait(Lock);
+        }
+    }
+}
+
+void GameEngine::AudioInit() {
+    const auto resourceMgr = Ship::Context::GetInstance()->GetResourceManager();
+    resourceMgr->LoadDirectory("sound");
+    const auto banksFiles = resourceMgr->GetArchiveManager()->ListFiles("sound/banks/*");
+    const auto sequences_files = resourceMgr->GetArchiveManager()->ListFiles("sound/sequences/*");
+
+    Instance->sequenceTable.resize(512);
+    Instance->audioSequenceTable.resize(512);
+    Instance->banksTable.resize(512);
+
+    for (auto& bank : *banksFiles) {
+        auto path = "__OTR__" + bank;
+        const auto ctl = static_cast<CtlEntry*>(ResourceGetDataByName(path.c_str()));
+        this->bankMapTable[bank] = ctl->bankId;
+        SPDLOG_INFO("Loaded bank: {}", bank);
+    }
+
+    for (auto& sequence : *sequences_files) {
+        auto path = "__OTR__" + sequence;
+        auto seq = static_cast<AudioSequenceData*>(ResourceGetDataByName(path.c_str()));
+        Instance->sequenceTable[seq->id] = path;
+        SPDLOG_INFO("Loaded sequence: {}", sequence);
+    }
+
+    if (!audio.running) {
+        audio.running = true;
+        audio.thread = std::thread(HandleAudioThread);
+        SPDLOG_INFO("Audio thread started");
+    }
+}
+
+void GameEngine::AudioExit() {
+    {
+        std::unique_lock lock(audio.mutex);
+        audio.running = false;
+    }
+    audio.cv_to_thread.notify_all();
+
+    // Wait until the audio thread quit
+    audio.thread.join();
+}
+
+uint8_t GameEngine::GetBankIdByName(const std::string& name) {
+    if (Instance->bankMapTable.contains(name)) {
+        return Instance->bankMapTable[name];
+    }
+    return 0;
+}
+
+// End
 
 extern "C" uint32_t GameEngine_GetSampleRate() {
     auto player = Ship::Context::GetInstance()->GetAudio()->GetAudioPlayer();
@@ -178,7 +299,67 @@ extern "C" uint32_t GameEngine_GetSamplesPerFrame() {
     return SAMPLES_PER_FRAME;
 }
 
-// End
+extern "C" CtlEntry* GameEngine_LoadBank(const uint8_t bankId) {
+    const auto engine = GameEngine::Instance;
+
+    if (bankId >= engine->bankMapTable.size()) {
+        return nullptr;
+    }
+
+    if (engine->banksTable[bankId] != nullptr) {
+        return engine->banksTable[bankId];
+    }
+
+    for (auto& bank : engine->bankMapTable) {
+        if (bank.second == bankId) {
+            const auto ctl = static_cast<CtlEntry*>(ResourceGetDataByName(("__OTR__" + bank.first).c_str()));
+            engine->banksTable[bankId] = ctl;
+            return ctl;
+        }
+    }
+    return nullptr;
+}
+
+extern "C" uint8_t GameEngine_IsBankLoaded(const uint8_t bankId) {
+    const auto engine = GameEngine::Instance;
+    GameEngine_LoadBank(bankId);
+    return engine->banksTable[bankId] != nullptr;
+}
+
+extern "C" void GameEngine_UnloadBank(const uint8_t bankId) {
+    const auto engine = GameEngine::Instance;
+    engine->banksTable[bankId] = nullptr;
+}
+
+extern "C" AudioSequenceData* GameEngine_LoadSequence(const uint8_t seqId) {
+    auto engine = GameEngine::Instance;
+
+    if (engine->sequenceTable[seqId].empty()) {
+        return nullptr;
+    }
+
+    if (engine->audioSequenceTable[seqId] != nullptr) {
+        return engine->audioSequenceTable[seqId];
+    }
+
+    auto sequences = static_cast<AudioSequenceData*>(ResourceGetDataByName(engine->sequenceTable[seqId].c_str()));
+    engine->audioSequenceTable[seqId] = sequences;
+    return sequences;
+}
+
+extern "C" uint32_t GameEngine_GetSequenceCount() {
+    auto engine = GameEngine::Instance;
+    return engine->sequenceTable.size();
+}
+
+extern "C" uint8_t GameEngine_IsSequenceLoaded(const uint8_t seqId) {
+    return GameEngine_LoadSequence(seqId) != nullptr;
+}
+
+extern "C" void GameEngine_UnloadSequence(const uint8_t seqId) {
+    const auto engine = GameEngine::Instance;
+    engine->audioSequenceTable[seqId] = nullptr;
+}
 
 extern "C" float GameEngine_GetAspectRatio() {
     return gfx_current_dimensions.aspect_ratio;
@@ -190,9 +371,8 @@ extern "C" uint32_t GameEngine_GetGameVersion() {
 
 static const char* sOtrSignature = "__OTR__";
 
-extern "C" uint8_t GameEngine_OTRSigCheck(const char* data) {
-    static const char* sOtrSignaturea = "__OTR__";
-    return strncmp(data, sOtrSignaturea, strlen(sOtrSignaturea)) == 0;
+extern "C" bool GameEngine_OTRSigCheck(const char* data) {
+    return strncmp(data, sOtrSignature, strlen(sOtrSignature)) == 0;
 }
 
 // struct TimedEntry {
@@ -272,6 +452,28 @@ extern "C" float OTRGetDimensionFromRightEdge(float v) {
 
 extern "C" int16_t OTRGetRectDimensionFromRightEdge(float v) {
     return ((int) ceilf(OTRGetDimensionFromRightEdge(v)));
+}
+
+/**
+ * Centers an item in a given area.
+ * 
+ * Adds the number of extended screen pixels to the location to center.
+ * This allows stretching the game window really wide, and the item will stay in-place.
+ * 
+ * This is not for centering in the direct center of the screen.
+ * 
+ * How to use:
+ * 
+ * s32 center = OTRCalculateCenterOfAreaFromRightEdge((SCREEN_WIDTH / 4) + (SCREEN_WIDTH / 2));
+ * x = center - (texWidth / 2)
+ * x2 = center + (texWidth / 2)
+ */
+extern "C" uint32_t OTRCalculateCenterOfAreaFromRightEdge(int32_t center) {
+    return ((OTRGetDimensionFromRightEdge(SCREEN_WIDTH) - SCREEN_WIDTH) / 2) + center;
+}
+
+extern "C" uint32_t OTRCalculateCenterOfAreaFromLeftEdge(int32_t center) {
+    return ((OTRGetDimensionFromLeftEdge(0) - SCREEN_WIDTH) / 2) + center;
 }
 
 // Gets the width of the current render target area

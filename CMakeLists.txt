@@ -94,6 +94,10 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/audio
     ${CMAKE_CURRENT_SOURCE_DIR}/src/debug
     ${CMAKE_CURRENT_SOURCE_DIR}/src/networking
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/engine
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/courses
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/objects
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/particles
     ${CMAKE_CURRENT_SOURCE_DIR}/src/enhancements
     ${CMAKE_CURRENT_SOURCE_DIR}/src/enhancements/freecam
 )
@@ -135,10 +139,20 @@ file(GLOB_RECURSE ALL_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     "courses/*.h"
     "src/networking/*.c"
     "src/networking/*.h"
+    "src/engine/*.cpp"
+    "src/engine/*.h"
+    "src/engine/courses/*.c"
+    "src/engine/courses/*.h"
+    "src/engine/objects/*.cpp"
+    "src/engine/objects/*.h"
+    "src/engine/particles/*.cpp"
+    "src/engine/particles/*.h"
     "src/enhancements/*.c"
     "src/enhancements/*.h"
     "src/enhancements/freecam/*.c"
     "src/enhancements/freecam/*.h"
+    "src/engine/*.cpp"
+    "src/engine/*.h"
 )
 
 list(APPEND ALL_FILES ${ALL_FILES_ROOT})

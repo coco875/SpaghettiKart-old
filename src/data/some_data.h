@@ -7,6 +7,10 @@
 #include <assets/other_textures.h>
 #include "objects.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern Vtx D_800E49C0[];
 extern Vtx D_800E4AC0[];
 extern Vtx D_800E4BC0[];
@@ -21,7 +25,7 @@ extern Vtx gBalloonVertexPlane1[];
 extern Vtx gBalloonVertexPlane2[];
 extern u8* gCourseOutlineTextures[];
 extern s16 D_800E5520[];
-extern s16 D_800E5548[];
+extern s16 minimapDimensions[];
 extern u16 D_800E55A0[];
 extern u16 D_800E55B0[];
 extern u8 D_800E55D0[][3];
@@ -35,9 +39,7 @@ extern s16 D_800E57F8[];
 extern ThwompSpawn gThomwpSpawns50CC[];
 extern ThwompSpawn gThwompSpawns100CCExtra[];
 extern ThwompSpawn gThomwpSpawns150CC[];
-extern f32 D_800E594C[][2];
 extern u64 D_800E5974;
-extern s16 D_800E597C[];
 extern SplineData D_800E5988;
 extern SplineData D_800E5A44;
 extern SplineData D_800E5B08;
@@ -48,7 +50,7 @@ extern SplineData D_800E5D78;
 extern SplineData* D_800E5D9C[];
 extern SplineData* D_800E5DB0;
 extern s8 D_800E5DB4[];
-extern YVFlagPoleSpawn D_800E5DF4[];
+extern YVFlagPoleSpawn gFlagpoleSpawns[];
 extern HegdehogSpawn gHedgehogSpawns[];
 extern Vec3s gHedgehogPatrolPoints[];
 extern SnowmanSpawn gSnowmanSpawns[];
@@ -58,7 +60,6 @@ extern SplineData D_800E6034;
 extern SplineData D_800E60F0;
 extern SplineData D_800E61B4;
 extern SplineData D_800E6280;
-extern SplineData* D_800E633C[];
 extern Vec3s D_800E634C[];
 extern MoleSpawnUnion gMoleSpawns;
 extern SplineData D_800E641C;
@@ -86,5 +87,9 @@ extern StarData gToadsTurnpikeRainbowRoadStars[];
 extern StarData gWarioStadiumStars[];
 extern u8 D_800E6F30[][3];
 extern u8 D_800E6F48[][3];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

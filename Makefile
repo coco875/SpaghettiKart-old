@@ -244,7 +244,7 @@ include $(MAKEFILE_SPLIT)
 # These are files that need to be encoded into EUC-JP in order for the ROM to match
 # We filter them out from the regular C_FILES since we don't need nor want the
 # UTF-8 versions getting compiled
-EUC_JP_FILES := src/ending/credits.c src/code_80005FD0.c src/code_80091750.c
+EUC_JP_FILES := src/ending/credits.c src/code_80005FD0.c src/menu_items.c
 C_FILES := $(filter-out %.inc.c,$(filter-out $(EUC_JP_FILES),$(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))))
 S_FILES := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 # Include source files in courses/course_name/files.c but exclude .inc.c files.
@@ -384,7 +384,7 @@ BIN2C                 := $(PYTHON) $(TOOLS_DIR)/bin2c.py
 EXTRACT_DATA_FOR_MIO  := $(TOOLS_DIR)/extract_data_for_mio
 ASSET_EXTRACT         := $(PYTHON) $(TOOLS_DIR)/new_extract_assets.py
 LINKONLY_GENERATOR    := $(PYTHON) $(TOOLS_DIR)/linkonly_generator.py
-TORCH                 := $(TOOLS_DIR)/torch/cmake-build-release/torch
+TORCH                 := ./torch/cmake-build-release/torch
 EMULATOR               = mupen64plus
 EMU_FLAGS              = --noosd
 LOADER                 = loader64

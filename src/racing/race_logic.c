@@ -11,7 +11,7 @@
 #include "code_800029B0.h"
 #include "code_80057C60.h"
 #include "update_objects.h"
-#include "code_80091750.h"
+#include "menu_items.h"
 #include "code_80005FD0.h"
 #include "spawn_players.h"
 #include "audio/external.h"
@@ -21,6 +21,8 @@
 #include "effects.h"
 #include "math.h"
 #include "menus.h"
+#include "sounds.h"
+#include "port/Game.h"
 
 #pragma intrinsic(sqrtf)
 
@@ -140,20 +142,21 @@ void func_8028E298(void) {
     func_800070F4();
 }
 
-void func_8028E3A0(void) {
+void set_next_course(void) {
 
     if (D_80150120) {
-
-        if (gCourseIndexInCup == COURSE_FOUR) {
+        if (GetCupCursorPosition() == GetCupSize() - 1) { // CUP_COURSE_FOUR) {
             gGotoMode = ENDING;
         } else {
             D_800DC544++;
+            SetCupCursorPosition(GetCupCursorPosition() + 1);
             gCourseIndexInCup++;
             gGotoMode = RACING;
         }
     } else {
         D_800DC544++;
         gCourseIndexInCup++;
+        SetCupCursorPosition(GetCupCursorPosition() + 1);
         gGotoMode = RACING;
     }
 }
@@ -397,7 +400,7 @@ void func_8028E678(void) {
             gIsInQuitToMenuTransition = 1;
             gQuitToMenuTransitionCounter = 5;
             D_800DC510 = 7;
-            func_8028E3A0();
+            set_next_course();
             break;
     }
 }
@@ -421,51 +424,10 @@ void func_8028EC98(s32 arg0) {
 
     func_800029B0();
 
-    switch (arg0) {
-        case 0:
-        case 7:
-        case 8:
-        case 14:
-            func_800C8EAC(3);
-            break;
-        case 10:
-            func_800C8EAC(21);
-            break;
-        case 4:
-        case 9:
-            func_800C8EAC(4);
-            break;
-        case 1:
-        case 15:
-        case 17:
-            func_800C8EAC(5);
-            break;
-        case 11:
-            func_800C8EAC(10);
-            break;
-        case 6:
-            func_800C8EAC(6);
-            break;
-        case 2:
-            func_800C8EAC(9);
-            break;
-        case 3:
-            func_800C8EAC(7);
-            break;
-        case 5:
-        case 12:
-            func_800C8EAC(8);
-            break;
-        case 13:
-            func_800C8EAC(18);
-            break;
-        case 18:
-            func_800C8EAC(19);
-            break;
-        case 16:
-        case 19:
-            func_800C8EAC(25);
-            break;
+    enum MusicSeq sequence = CourseManager_GetProps()->Sequence;
+
+    if(sequence != MUSIC_SEQ_UNKNOWN){
+        play_sequence(sequence);
     }
 }
 
@@ -891,7 +853,7 @@ void func_8028FCBC(void) {
     s32 i;
     u32 phi_v0_4;
 
-    if (D_8018EE08) {
+    if (gDemoUseController) {
         func_8028FC34();
     }
     switch (D_800DC510) {
@@ -933,16 +895,16 @@ void func_8028FCBC(void) {
             func_8028F914();
             if (D_802BA034 == 1.0f) {
                 if (gActiveScreenMode != SCREEN_MODE_1P) {
-                    if (gCurrentCourseId == COURSE_LUIGI_RACEWAY) {
+                    if (GetCourse() == GetLuigiRaceway()) {
                         func_802A7940();
-                    } else if (gCurrentCourseId == COURSE_WARIO_STADIUM) {
+                    } else if (GetCourse() == GetWarioStadium()) {
                         func_802A7728();
                     }
                 }
                 D_800DC510 = 2;
                 D_800DC5B0 = 0;
                 D_800DC5B8 = 1;
-                func_80078F64();
+                CM_SpawnStarterLakitu(); // func_80078F64();
                 if ((gModeSelection == TIME_TRIALS) && (D_80162DD6 == 0)) {
                     phi_v0_4 = 0x1;
                     for (i = 0; i < gCurrentCourseId; i++) {

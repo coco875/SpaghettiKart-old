@@ -7,13 +7,16 @@
 #include "skybox_and_splitscreen.h"
 #include "render_objects.h"
 #include "code_80057C60.h"
-#include "code_80091750.h"
+#include "menu_items.h"
 #include "podium_ceremony_actors.h"
 #include "ceremony_and_credits.h"
 #include "podium_ceremony_actors.h"
 #include "render_player.h"
 #include "defines.h"
 #include "memory.h"
+
+#include "engine/Engine.h"
+#include "engine/courses/Course.h"
 
 struct UnkStruct80287560 {
     s16 unk0;
@@ -69,7 +72,7 @@ void func_80281D00(void) {
     }
     func_8028150C();
     gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH);
-    guPerspective((Mtx*) &gGfxPool->mtxPersp[0], &perspNorm, gCameraZoom[0], gScreenAspect, D_80150150, D_8015014C,
+    guPerspective((Mtx*) &gGfxPool->mtxPersp[0], &perspNorm, gCameraZoom[0], gScreenAspect, CourseManager_GetProps()->NearPersp, CourseManager_GetProps()->FarPersp,
                   1.0f);
     gSPPerspNormalize(gDisplayListHead++, perspNorm);
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxPersp[0]),
@@ -128,7 +131,7 @@ void func_80281D00(void) {
     render_players_on_screen_one();
     gSPDisplayList(gDisplayListHead++, VIRTUAL_TO_PHYSICAL2(&D_80284EE0));
     update_actors_loop();
-    render_object(PLAYER_ONE + SCREEN_MODE_1P);
+    render_object(RENDER_SCREEN_MODE_1P_PLAYER_ONE);
     func_80021B0C();
     gSPDisplayList(gDisplayListHead++, VIRTUAL_TO_PHYSICAL2(&D_80284EE0));
     func_80093F10();

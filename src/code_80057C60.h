@@ -331,7 +331,7 @@ extern s8 D_801657D8;
 extern s8 D_801657E1;
 extern s8 D_801657E2;
 extern s8 D_801657E3;
-extern s8 D_801657E4;
+extern s8 gHUDModes;
 extern s8 D_801657E5;
 extern bool D_801657E6;
 extern u8 D_801657E7;
@@ -521,7 +521,6 @@ extern s32 D_8018D1D4;
 // extern s32 D_8018D1D8; -> objects.h
 
 extern s32 D_8018D1DC;
-extern u8* D_8018D1E0;
 extern f32 D_8018D1E8;
 extern s32 D_8018D1EC;
 // extern s32 D_8018D1F0; -> objects.h
@@ -547,17 +546,15 @@ extern u8* D_8018D248[];
 extern f32 D_8018D2A0;
 extern s32 D_8018D2A4;
 extern s32 D_8018D2AC;
-extern s16 D_8018D2B0;
+extern s16 gMinimapWidth;
 extern s32 D_8018D2B4;
-extern s16 D_8018D2B8;
+extern s16 gMinimapHeight;
 extern s32 D_8018D2BC;
 extern s16 D_8018D2C0[];
 extern s32 D_8018D2C8[];
 extern s16 D_8018D2D8[];
 extern s16 D_8018D2E0;
 extern s16 D_8018D2E8;
-extern s16 D_8018D2F0;
-extern s16 D_8018D2F8;
 extern u16 D_8018D300;
 extern u16 D_8018D308;
 extern u16 D_8018D310;

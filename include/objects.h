@@ -4,6 +4,10 @@
 #include "spline.h"
 #include <common_structs.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define OBJECT_LIST_SIZE 0x226
 #define SOME_OBJECT_INDEX_LIST_SIZE 32
 
@@ -219,7 +223,7 @@ typedef struct {
     /* 0x6 */ u16 rot;
 } YVFlagPoleSpawn; // size = 0x8;
 
-extern YVFlagPoleSpawn D_800E5DF4[];
+extern YVFlagPoleSpawn gFlagpoleSpawns[];
 
 #define NUM_CRABS 0xA
 
@@ -450,5 +454,9 @@ extern s8 D_8018D230;
 
 //! Some sort of limiter on how many of some object type can spawn
 extern s32 D_8018D3C4;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -15,7 +15,12 @@
 #include <Fast3D/gfx_pc.h>
 #include "port/Engine.h"
 
-extern "C" {}
+extern "C" {
+    extern s32 gGamestateNext;
+    extern s32 gMenuSelection;
+    #include "audio/external.h"
+    #include "defines.h"
+}
 
 namespace GameUI {
 std::shared_ptr<GameMenuBar> mGameMenuBar;
@@ -121,61 +126,60 @@ static const char* filters[3] = {
 
 void DrawSettingsMenu() {
     if (UIWidgets::BeginMenu("Settings")) {
-        // if (UIWidgets::BeginMenu("Audio")) {
-        //     UIWidgets::CVarSliderFloat("Master Volume", "gGameMasterVolume", 0.0f, 1.0f, 1.0f, {
-        //         .format = "%.0f%%",
-        //         .isPercentage = true,
-        //     });
-        //     if (UIWidgets::CVarSliderFloat("Main Music Volume", "gMainMusicVolume", 0.0f, 1.0f, 1.0f,
-        //     {
-        //         .format = "%.0f%%",
-        //         .isPercentage = true,
-        //     })) {
-        //         audio_set_player_volume(SEQ_PLAYER_LEVEL, CVarGetFloat("gMainMusicVolume", 1.0f));
-        //     }
-        //     if (UIWidgets::CVarSliderFloat("Sound Effects Volume", "gSFXMusicVolume",
-        //     0.0f, 1.0f, 1.0f, {
-        //         .format = "%.0f%%",
-        //         .isPercentage = true,
-        //     })) {
-        //         audio_set_player_volume(SEQ_PLAYER_SFX, CVarGetFloat("gSFXMusicVolume", 1.0f));
-        //     }
-        //     if (UIWidgets::CVarSliderFloat("Environment Volume", "gEnvironmentVolume",
-        //     0.0f, 1.0f, 1.0f, {
-        //         .format = "%.0f%%",
-        //         .isPercentage = true,
-        //     })) {
-        //         audio_set_player_volume(SEQ_PLAYER_ENV, CVarGetFloat("gEnvironmentVolume", 1.0f));
-        //     }
-        //
-        //     static std::unordered_map<Ship::AudioBackend, const char*> audioBackendNames = {
-        //             { Ship::AudioBackend::WASAPI, "Windows Audio Session API" },
-        //             { Ship::AudioBackend::PULSE, "PulseAudio" },
-        //             { Ship::AudioBackend::SDL, "SDL" },
-        //     };
-        //
-        //     ImGui::Text("Audio API (Needs reload)");
-        //     auto currentAudioBackend = Ship::Context::GetInstance()->GetAudio()->GetAudioBackend();
-        //
-        //     if (Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->size() <= 1) {
-        //         UIWidgets::DisableComponent(ImGui::GetStyle().Alpha * 0.5f);
-        //     }
-        //     if (ImGui::BeginCombo("##AApi", audioBackendNames[currentAudioBackend])) {
-        //         for (uint8_t i = 0; i <
-        //         Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->size(); i++) {
-        //             auto backend = Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->data()[i];
-        //             if (ImGui::Selectable(audioBackendNames[backend], backend == currentAudioBackend)) {
-        //                 Ship::Context::GetInstance()->GetAudio()->SetAudioBackend(backend);
-        //             }
-        //         }
-        //         ImGui::EndCombo();
-        //     }
-        //     if (Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->size() <= 1) {
-        //         UIWidgets::ReEnableComponent("");
-        //     }
-        //
-        //     ImGui::EndMenu();
-        // }
+         if (UIWidgets::BeginMenu("Audio")) {
+             UIWidgets::CVarSliderFloat("Master Volume", "gGameMasterVolume", 0.0f, 1.0f, 1.0f, {
+                 .format = "%.0f%%",
+                 .isPercentage = true,
+             });
+             if (UIWidgets::CVarSliderFloat("Main Music Volume", "gMainMusicVolume", 0.0f, 1.0f, 1.0f,
+             {
+                 .format = "%.0f%%",
+                 .isPercentage = true,
+             })) {
+                 audio_set_player_volume(SEQ_PLAYER_LEVEL, CVarGetFloat("gMainMusicVolume", 1.0f));
+             }
+             if (UIWidgets::CVarSliderFloat("Sound Effects Volume", "gSFXMusicVolume",
+             0.0f, 1.0f, 1.0f, {
+                 .format = "%.0f%%",
+                 .isPercentage = true,
+             })) {
+                 audio_set_player_volume(SEQ_PLAYER_SFX, CVarGetFloat("gSFXMusicVolume", 1.0f));
+             }
+             if (UIWidgets::CVarSliderFloat("Environment Volume", "gEnvironmentVolume",
+             0.0f, 1.0f, 1.0f, {
+                 .format = "%.0f%%",
+                 .isPercentage = true,
+             })) {
+                 audio_set_player_volume(SEQ_PLAYER_ENV, CVarGetFloat("gEnvironmentVolume", 1.0f));
+             }
+
+             static std::unordered_map<Ship::AudioBackend, const char*> audioBackendNames = {
+                     { Ship::AudioBackend::WASAPI, "Windows Audio Session API" },
+                     { Ship::AudioBackend::SDL, "SDL" },
+             };
+
+             ImGui::Text("Audio API (Needs reload)");
+             auto currentAudioBackend = Ship::Context::GetInstance()->GetAudio()->GetCurrentAudioBackend();
+
+             if (Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->size() <= 1) {
+                 UIWidgets::DisableComponent(ImGui::GetStyle().Alpha * 0.5f);
+             }
+             if (ImGui::BeginCombo("##AApi", audioBackendNames[currentAudioBackend])) {
+                 for (uint8_t i = 0; i <
+                 Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->size(); i++) {
+                     auto backend = Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->data()[i];
+                     if (ImGui::Selectable(audioBackendNames[backend], backend == currentAudioBackend)) {
+                         Ship::Context::GetInstance()->GetAudio()->SetCurrentAudioBackend(backend);
+                     }
+                 }
+                 ImGui::EndCombo();
+             }
+             if (Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->size() <= 1) {
+                 UIWidgets::ReEnableComponent("");
+             }
+
+             ImGui::EndMenu();
+         }
 
         UIWidgets::Spacer(0);
 
@@ -446,7 +450,8 @@ void DrawGameMenu() {
                                 "Ctrl+R"
 #endif
                                 )) {
-            // gNextGameState = GSTATE_BOOT;
+            gGamestateNext = MAIN_MENU_FROM_QUIT;
+            gMenuSelection = START_MENU;
         }
 #if !defined(__SWITCH__) && !defined(__WIIU__)
 
@@ -471,12 +476,13 @@ void DrawEnhancementsMenu() {
         if (UIWidgets::BeginMenu("Gameplay")) {
             UIWidgets::WindowButton("Freecam", "gFreecam", GameUI::mFreecamWindow,
                                     { .tooltip = "Allows you to fly around the course" });
+            UIWidgets::CVarCheckbox("No multiplayer feature cuts", "gMultiplayerNoFeatureCuts",
+                                    { .tooltip = "Allows full train and jumbotron in multiplayer, etc." });
+            UIWidgets::CVarCheckbox("General Improvements", "gImprovements", { .tooltip = "General improvements to the game experience." });
             UIWidgets::CVarCheckbox(
                 "No Level of Detail (LOD)", "gDisableLod",
                 { .tooltip = "Disable Level of Detail (LOD) to avoid models using lower poly versions at a distance" });
 
-            UIWidgets::CVarCheckbox("Select any star from menu", "gCompletedGame",
-                                    { .tooltip = "Unlocks extra mode and sets all gold cups." });
 
             UIWidgets::CVarCheckbox("Disable Culling", "gNoCulling", { .tooltip = "Disable original culling of mk64" });
             UIWidgets::CVarSliderFloat(
@@ -491,6 +497,7 @@ void DrawEnhancementsMenu() {
 
 void DrawCheatsMenu() {
     if (UIWidgets::BeginMenu("Cheats")) {
+        UIWidgets::CVarCheckbox("Moon Jump", "gEnableMoonJump");
         UIWidgets::CVarCheckbox("Enable Custom CC", "gEnableCustomCC");
         UIWidgets::CVarSliderFloat("Custom CC", "gCustomCC", 0.0, 1000.0, 150.0, { .step = 10.0 });
         UIWidgets::CVarCheckbox("Disable Wall Collision", "gNoWallColision", { .tooltip = "Disable wall collision." });

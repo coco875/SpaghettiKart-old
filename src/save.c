@@ -5,11 +5,12 @@
 
 #include "save.h"
 
-#include "code_80091750.h"
+#include "menu_items.h"
 #include "menus.h"
 #include "save_data.h"
 #include "staff_ghosts.h"
 #include "code_80057C60.h"
+#include "port/Game.h"
 
 /*** macros ***/
 #define PFS_COMPANY_CODE(c0, c1) ((u16) (((c0) << 8) | ((c1))))
@@ -17,6 +18,9 @@
 // calculate an eeprom address based off of the ram address of the SaveData variable
 // very fragile!
 #define EEPROM_ADDR(ptr) (((uintptr_t) (ptr) - (uintptr_t) (&gSaveData)) / 8)
+
+/** BSS **/
+struct_8018EE10_entry D_8018EE10[2];
 
 /*** data ***/
 u16 gCompanyCode = PFS_COMPANY_CODE('0', '1');
@@ -92,7 +96,7 @@ void reset_save_data_grand_prix_points_and_sound_mode(void) {
     }
     main->saveInfo.soundMode = SOUND_STEREO;
     gSoundMode = SOUND_STEREO;
-    func_800B44BC();
+    set_sound_mode();
     write_save_data_grand_prix_points_and_sound_mode();
 }
 
@@ -246,8 +250,8 @@ u32 func_800B4DF4(u8* arr) {
 
 // Get a time trial record, infer course index
 s32 func_800B4E24(s32 recordIndex) {
-    return func_800B4DF4(gSaveData.allCourseTimeTrialRecords.cupRecords[(((gCupSelection * 4) + gCourseIndexInCup) / 4)]
-                             .courseRecords[(((gCupSelection * 4) + gCourseIndexInCup) % 4)]
+    return func_800B4DF4(gSaveData.allCourseTimeTrialRecords.cupRecords[(((GetCupIndex() * 4) + gCourseIndexInCup) / 4)]
+                             .courseRecords[(((GetCupIndex() * 4) + gCourseIndexInCup) % 4)]
                              .records[recordIndex]);
 }
 
@@ -260,8 +264,8 @@ u32 func_800B4EB4(s32 recordIndex, s32 courseIndex) {
 
 // Get Best Lap record of the inferred course index
 s32 func_800B4F2C(void) {
-    return func_800B4DF4(gSaveData.allCourseTimeTrialRecords.cupRecords[(((gCupSelection * 4) + gCourseIndexInCup) / 4)]
-                             .courseRecords[(((gCupSelection * 4) + gCourseIndexInCup) % 4)]
+    return func_800B4DF4(gSaveData.allCourseTimeTrialRecords.cupRecords[(((GetCupIndex() * 4) + gCourseIndexInCup) / 4)]
+                             .courseRecords[(((GetCupIndex() * 4) + gCourseIndexInCup) % 4)]
                              .records[TIME_TRIAL_1LAP_RECORD]);
 }
 
@@ -279,7 +283,7 @@ s32 func_800B5020(u32 time, s32 charId) {
     s32 j;
     CourseTimeTrialRecords* tt;
 
-    course = gCupSelection * 4 + gCourseIndexInCup;
+    course = GetCupIndex() * 4 + gCourseIndexInCup;
     tt = &gSaveData.allCourseTimeTrialRecords.cupRecords[course / 4].courseRecords[course % 4];
 
     i = 0;
@@ -326,7 +330,7 @@ s32 func_800B5218(void) {
     s32 checkLapIndex;
     s32 character;
     s32 lapBitmask;
-    recordIndex = (gCupSelection * 4) + gCourseIndexInCup;
+    recordIndex = (GetCupIndex() * 4) + gCourseIndexInCup;
     recordPointer =
         &gSaveData.allCourseTimeTrialRecords.cupRecords[recordIndex / 4].courseRecords[recordIndex % 4].records[0][0];
     lapBitmask = 1;
@@ -363,10 +367,10 @@ void func_800B536C(s32 arg0) {
 
     if (arg0 >= 0) {
         points = &gSaveData.main.saveInfo.grandPrixPoints[gCCSelection];
-        tmp = func_800B54EC(gCupSelection, *points);
+        tmp = func_800B54EC(GetCupIndex(), *points);
         tmp2 = 3 - arg0;
         if ((arg0 < 3) && (tmp < (3 - arg0))) {
-            *points = func_800B5508(gCupSelection, *points, tmp2);
+            *points = func_800B5508(GetCupIndex(), *points, tmp2);
             write_save_data_grand_prix_points_and_sound_mode();
             update_save_data_backup();
         }
@@ -424,21 +428,21 @@ u8 func_800B5508(s32 cup, s32 ccGrandPrixPoints, s32 points_scored) {
 
 // Check if all 4 cups have gold cups scored
 // for a given CC mode
-s32 func_800B5530(s32 cc_mode) {
+s32 is_cc_mode_complete(s32 cc_mode) {
     if (gSaveData.main.saveInfo.grandPrixPoints[cc_mode] == 0xFF) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 // Check if the 150CC mode has all 4 gold cups
-s32 func_800B555C(void) {
-    return func_800B5530(CC_150);
+s32 has_unlocked_extra_mode(void) {
+    return is_cc_mode_complete(CC_150);
 }
 
 // Check if the Extra mode has all 4 gold cups
-s32 func_800B557C(void) {
-    return func_800B5530(CC_EXTRA);
+s32 has_completed_extra_mode(void) {
+    return is_cc_mode_complete(CC_EXTRA);
 }
 
 void func_800B559C(s32 arg0) {
@@ -785,7 +789,7 @@ s32 func_800B6178(s32 arg0) {
         if (var_v0 == 0) {
             temp_s3->ghostDataSaved = 1;
             if (gGamestate == 4) {
-                temp_s3->courseIndex = (gCupSelection * 4) + gCourseIndexInCup;
+                temp_s3->courseIndex = (GetCupIndex() * 4) + gCourseIndexInCup;
             }
             temp_s3->unk_00 = D_80162DFC;
             temp_s3->characterId = (u8) D_80162DE0;
@@ -834,7 +838,7 @@ s32 func_800B63F0(s32 arg0) {
     func_80005AE8(gPlayerThree);
 
     phi_s3 = 0;
-    if (((gCupSelection * 4) + gCourseIndexInCup) != D_8018EE10[arg0].courseIndex) {
+    if (((GetCupIndex() * 4) + gCourseIndexInCup) != D_8018EE10[arg0].courseIndex) {
         phi_s3 = 2;
     } else if (D_80162DFC != D_8018EE10[arg0].unk_00) {
         phi_s3 = 3;
@@ -910,7 +914,7 @@ s32 func_800B65F4(s32 arg0, s32 arg1) {
     writeStatus = osPfsReadWriteFile(&gControllerPak2FileHandle, gControllerPak2FileNote, 0U, (arg0 * 0x3C00) + 0x100,
                                      0x00003C00, (u8*) D_800DC714);
     if (writeStatus == 0) {
-        temp_s3 = &((struct_8018EE10_entry*) D_8018D9C0)[arg0];
+        temp_s3 = &((struct_8018EE10_entry*) gSomeDLBuffer)[arg0];
         for (i = 0; i < 0x3C; i++) {
             if (temp_s3->unk_07[i] != func_800B60E8(i)) {
                 temp_s3->ghostDataSaved = 0;
@@ -941,14 +945,14 @@ void func_800B6798(void) {
     s32 temp_s0;
     u8* tmp;
 
-    tmp = (u8*) D_8018D9C0;
+    tmp = (u8*) gSomeDLBuffer;
 
     osPfsReadWriteFile(&gControllerPak2FileHandle, gControllerPak2FileNote, PFS_READ, 0,
                        0x100 /*  2*sizeof(struct_8018EE10_entry) ? */, tmp);
 
     for (temp_s0 = 0; temp_s0 < 2; ++temp_s0) {
-        // if (D_8018D9C0[temp_s0]->checksum != func_800B68F4(temp_s0)) {
-        //     D_8018D9C0[temp_s0]->ghostDataSaved = 0;
+        // if (gSomeDLBuffer[temp_s0]->checksum != func_800B68F4(temp_s0)) {
+        //     gSomeDLBuffer[temp_s0]->ghostDataSaved = 0;
         // }
         if (((struct_8018EE10_entry*) (tmp + (temp_s0 << 7)))->checksum != func_800B68F4(temp_s0)) {
             ((struct_8018EE10_entry*) (tmp + (temp_s0 << 7)))->ghostDataSaved = 0;
@@ -973,7 +977,7 @@ u8 func_800B68F4(s32 arg0) {
     s32 i;
     checksum = 0;
     for (i = 0; i < 0x43; i++) {
-        u8* addr = &((u8*) D_8018D9C0)[arg0];
+        u8* addr = &((u8*) gSomeDLBuffer)[arg0];
         checksum += addr[i] * multiplier + i;
     }
     return checksum;

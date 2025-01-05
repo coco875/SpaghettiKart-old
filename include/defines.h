@@ -48,25 +48,6 @@
 #define HOLD_ALL_DPAD_AND_C_BUTTONS \
     (U_JPAD | L_JPAD | R_JPAD | D_JPAD | U_CBUTTONS | L_CBUTTONS | R_CBUTTONS | D_CBUTTONS)
 
-/**
- * @brief Options for gDebugMenuSelection
- */
-#define DEBUG_MENU_DISABLED 1
-#define DEBUG_MENU_DEBUG_MODE 2
-#define DEBUG_MENU_COURSE 3
-#define DEBUG_MENU_SCREEN_MODE 4
-#define DEBUG_MENU_PLAYER 5
-#define DEBUG_MENU_SOUND_MODE 6
-#define DEBUG_MENU_GIVE_ALL_GOLD_CUP 7
-#define DEBUG_MENU_EXITED 64
-
-/**
- * @brief Options for gDebugGotoScene
- */
-#define DEBUG_GOTO_RACING 0
-#define DEBUG_GOTO_ENDING 1
-#define DEBUG_GOTO_CREDITS_SEQUENCE_CC_50 2
-#define DEBUG_GOTO_CREDITS_SEQUENCE_CC_EXTRA 3
 
 /**
  * @brief Jump to demo mode from the debug menu using L and A
@@ -199,7 +180,7 @@ enum { COURSE_ONE, COURSE_TWO, COURSE_THREE, COURSE_FOUR };
 #define CONTROLLER_PAK_MENU 9
 #define START_MENU 10
 #define MAIN_MENU 11
-#define PLAYER_SELECT_MENU 12
+#define CHARACTER_SELECT_MENU 12
 #define COURSE_SELECT_MENU 13
 #define RACING_DUPLICATE 14
 
@@ -213,34 +194,6 @@ enum { COURSE_ONE, COURSE_TWO, COURSE_THREE, COURSE_FOUR };
 #define RACING 4
 #define ENDING 5
 #define CREDITS_SEQUENCE 9
-
-/**
- * @brief Options for gMainMenuSelectionDepth
- */
-#define BLANK_MAIN_MENU 0
-#define OPTIONS_SELECTION 1
-#define DATA_SELECTION 2
-#define PLAYER_NUM_SELECTION 3
-#define GAME_MODE_SELECTION 4
-#define GAME_MODE_CC_OR_TIME_TRIALS_OPTIONS_SELECTION \
-    5 // Selecting CC for GP and Versus. Selecting "Begin" or "Data" for Time Trials. Unused for Battle
-#define CONFIRM_OK_SELECTION 6
-#define CONFIRM_OK_SELECTION_FROM_BACK_OUT 7
-#define TIME_TRIALS_DATA_SELECTION_FROM_BACK_OUT 8
-
-/**
- * @brief Options for gControllerPakMenuSelection
- */
-#define CONTROLLER_PAK_MENU_SELECT_RECORD 1
-#define CONTROLLER_PAK_MENU_END 2
-#define CONTROLLER_PAK_MENU_ERASE 3
-#define CONTROLLER_PAK_MENU_QUIT 4
-#define CONTROLLER_PAK_MENU_TABLE_GAME_DATA 5
-#define CONTROLLER_PAK_MENU_GO_TO_ERASING 6
-#define CONTROLLER_PAK_MENU_ERASING 7
-#define CONTROLLER_PAK_MENU_ERASE_ERROR_NOT_ERASED 8
-#define CONTROLLER_PAK_MENU_ERASE_ERROR_NO_PAK 9
-#define CONTROLLER_PAK_MENU_ERASE_ERROR_PAK_CHANGED 10
 
 /**
  * @brief Options for gScreenModeSelection and gActiveScreenMode
@@ -269,12 +222,14 @@ enum { COURSE_ONE, COURSE_TWO, COURSE_THREE, COURSE_FOUR };
  * flashing between 2 colors, but also cause individual characters
  * to be cutoff on their right side
  */
-#define TEXT_BLUE 0
-#define TEXT_GREEN 1
-#define TEXT_RED 2
-#define TEXT_YELLOW 3
-#define TEXT_BLUE_GREEN_RED_CYCLE_1 4
-#define TEXT_BLUE_GREEN_RED_CYCLE_2 5
+enum COLOR_ID {
+    TEXT_BLUE,
+    TEXT_GREEN,
+    TEXT_RED,
+    TEXT_YELLOW,
+    TEXT_BLUE_GREEN_RED_CYCLE_1,
+    TEXT_BLUE_GREEN_RED_CYCLE_2
+};
 
 /**
  * @brief Sound mode options
@@ -352,6 +307,11 @@ enum DIRECTION {
 #define BALLOON_STATUS_DEPARTING 2
 
 /**
+ * Number of podiums in podium ceremony
+ */
+#define NUM_PODIUMS 3
+
+/**
  * @brief Max representable time, 100 minutes measured in centiseconds
  */
 #define MAX_TIME 0x927C0
@@ -397,7 +357,6 @@ enum DIRECTION {
 #define COLOR_LAVA GPACK_RGB888(0x34, 0x00, 0x00)
 #define COLOR_BLACK GPACK_RGB888(0, 0, 0)
 
-#endif // DEFINES_H
 
 /**
  *
@@ -410,3 +369,5 @@ enum DIRECTION {
 #define FACING_Y_AXIS 0x4000
 #define FACING_X_AXIS 0x8000
 #define FACING_Z_AXIS 0x2000
+
+#endif // DEFINES_H

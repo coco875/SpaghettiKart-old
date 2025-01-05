@@ -13,7 +13,7 @@
 #include "code_80280000.h"
 #include "code_80281780.h"
 #include "skybox_and_splitscreen.h"
-#include "code_80091750.h"
+#include "menu_items.h"
 #include "code_8006E9C0.h"
 #include "code_800029B0.h"
 #include "ceremony_and_credits.h"
@@ -24,6 +24,11 @@
 #include "render_courses.h"
 #include "main.h"
 #include "render_player.h"
+
+#include "engine/Engine.h"
+#include "engine/courses/Course.h"
+#include "engine/Matrix.h"
+#include "port/Game.h"
 
 s32 D_802874A0;
 // s32 D_802874A4[5];
@@ -41,6 +46,8 @@ void func_80280038(void) {
     UNUSED s32 pad;
     Mat4 matrix;
 
+    ClearMatrixPools();
+
     gMatrixObjectCount = 0;
     gMatrixEffectCount = 0;
     gMatrixHudCount = 0;
@@ -50,7 +57,7 @@ void func_80280038(void) {
     func_80057FC4(0);
 
     gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH);
-    guPerspective(&gGfxPool->mtxPersp[0], &perspNorm, gCameraZoom[0], gScreenAspect, D_80150150, D_8015014C, 1.0f);
+    guPerspective(&gGfxPool->mtxPersp[0], &perspNorm, gCameraZoom[0], gScreenAspect, CourseManager_GetProps()->NearPersp, CourseManager_GetProps()->FarPersp, 1.0f);
     gSPPerspNormalize(gDisplayListHead++, perspNorm);
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxPersp[0]),
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
@@ -59,6 +66,7 @@ void func_80280038(void) {
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxLookAt[0]),
               G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     gCurrentCourseId = gCreditsCourseId;
+    SetCourseById(gCreditsCourseId);
     mtxf_identity(matrix);
     render_set_position(matrix, 0);
     render_course(D_800DC5EC);
@@ -72,14 +80,14 @@ void func_80280038(void) {
     init_rdp();
 }
 
-void func_80280268(s32 arg0) {
+void func_80280268(s32 courseId) {
     gIsInQuitToMenuTransition = 1;
     gQuitToMenuTransitionCounter = 5;
     D_802874A0 = 1;
-    if ((arg0 < 0) || ((arg0 >= 20))) {
-        arg0 = 0;
+    if ((courseId < 0) || ((courseId >= NUM_COURSES - 1))) {
+        courseId = 0;
     }
-    gCreditsCourseId = arg0;
+    gCreditsCourseId = courseId;
 }
 
 void credits_loop(void) {
@@ -125,6 +133,7 @@ void load_credits(void) {
     Camera* camera = &cameras[0];
 
     gCurrentCourseId = gCreditsCourseId;
+    SetCourseById(gCreditsCourseId);
     D_800DC5B4 = 1;
     creditsRenderMode = 1;
     func_802A4D18();
@@ -168,7 +177,7 @@ void load_credits(void) {
     camera->up[1] = 1.0f;
     camera->up[2] = 0.0f;
     init_cinematic_camera();
-    func_80003040();
+    credits_spawn_actors();
     init_hud();
     func_80093E60();
     func_80092688();

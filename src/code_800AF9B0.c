@@ -4,7 +4,7 @@
 
 #include "code_800AF9B0.h"
 
-#include "code_80091750.h"
+#include "menu_items.h"
 #include "memory.h"
 #include "main.h"
 #include "math_util.h"
@@ -197,8 +197,10 @@ void func_800B0004(void) {
         }
     }
     func_800AFF58(vtxs);
-    D_8018EDB0 += D_8018EDB2;
-    ++D_8018EDB4;
+    if (gTickVisuals) {
+        D_8018EDB0 += D_8018EDB2;
+        ++D_8018EDB4;
+    }
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
     gSPNumLights(gDisplayListHead++, NUMLIGHTS_1);
     gSPClearGeometryMode(gDisplayListHead++, G_LIGHTING);

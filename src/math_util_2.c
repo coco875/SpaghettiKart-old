@@ -13,6 +13,9 @@
 #include "defines.h"
 #include "camera.h"
 
+#include "port/Engine.h"
+#include "engine/Matrix.h"
+
 #pragma intrinsic(sqrtf)
 
 UNUSED void operator_or(s32* arg0, s32 arg1) {
@@ -640,8 +643,6 @@ void set_matrix_hud_screen(void) {
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 }
 
-// void convert_to_fixed_point_matrix(Mtx*, Mat4);
-
 UNUSED void func_80041F54(s32 x, s32 y) {
     Mat4 matrix;
 
@@ -699,10 +700,72 @@ UNUSED void func_800421FC(s32 x, s32 y, f32 scale) {
 
 void func_80042330(s32 x, s32 y, u16 angle, f32 scale) {
     Mat4 matrix;
+    //printf("panel %d %d %d\n", x, (s32)OTRGetDimensionFromLeftEdge(x), (s32)OTRGetDimensionFromLeftEdge(0));
+
+    if (gHUDModes != 2) {
+        if (x < (SCREEN_WIDTH / 2)) {
+            x = (s32)OTRGetDimensionFromLeftEdge(x);
+        } else {
+            x = (s32)OTRGetDimensionFromRightEdge(x);
+        }
+    }
+
     mtxf_translation_x_y_rotate_z_scale_x_y(matrix, x, y, angle, scale);
-    convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
-    gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
+    // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+    //           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    AddHudMatrix(matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+}
+
+void func_80042330_unchanged(s32 x, s32 y, u16 angle, f32 scale) {
+    Mat4 matrix;
+    //printf("panel %d %d %d\n", x, (s32)OTRGetDimensionFromLeftEdge(x), (s32)OTRGetDimensionFromLeftEdge(0));
+
+    mtxf_translation_x_y_rotate_z_scale_x_y(matrix, x, y, angle, scale);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
+    // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+    //           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    AddHudMatrix(matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+}
+
+// Allows a different way of lining up the portraits at the end of race sequence
+void func_80042330_portrait(s32 x, s32 y, u16 angle, f32 scale, s16 lapCount) {
+    Mat4 matrix;
+    //printf("panel %d %d %d\n", x, (s32)OTRGetDimensionFromLeftEdge(x), (s32)OTRGetDimensionFromLeftEdge(0));
+
+    if ((gHUDModes != 2) && (D_801657E2 == 0) || (CVarGetInteger("gImprovements", 0) == true)) {
+        if (x < (SCREEN_WIDTH / 2)) {
+            x = (s32)OTRGetDimensionFromLeftEdge(x);
+        } else {
+            x = (s32)OTRGetDimensionFromRightEdge(x);
+        }
+    }
+
+    mtxf_translation_x_y_rotate_z_scale_x_y(matrix, x, y, angle, scale);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
+    // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+    //           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    AddHudMatrix(matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+}
+
+void func_80042330_wide(s32 x, s32 y, u16 angle, f32 scale) {
+    Mat4 matrix;
+
+    if (x < (SCREEN_WIDTH / 2)) {
+        x = (s32)OTRGetDimensionFromLeftEdge(x);
+    } else {
+        x = (s32)OTRGetDimensionFromRightEdge(x);
+    }
+
+    mtxf_translation_x_y_rotate_z_scale_x_y(matrix, x, y, angle, scale);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
+    // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+    //           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    AddHudMatrix(matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 }
 
 UNUSED void func_800423F0(Mat4 arg0, u16 arg1, u16 arg2, u16 arg3) {
@@ -963,18 +1026,22 @@ void rsp_set_matrix_transformation(Vec3f translate, Vec3su orientation, f32 scal
     Mat4 matrix;
 
     mtxf_set_matrix_transformation(matrix, translate, orientation, scale);
-    convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
-    gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
+    // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+    //           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    AddHudMatrix(matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 }
 
 UNUSED void rsp_set_matrix_diff_translation_scale(Vec3f pos1, Vec3f pos2, f32 scale) {
     Mat4 matrix;
 
     mtxf_set_matrix_scale_transl(matrix, pos1, pos2, scale);
-    convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
-    gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
+    // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+    //           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    AddHudMatrix(matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 }
 
 void rsp_set_matrix_transformation_inverted_x_y_orientation(Vec3f arg0, Vec3su arg1, f32 arg2) {
@@ -985,27 +1052,31 @@ void rsp_set_matrix_transformation_inverted_x_y_orientation(Vec3f arg0, Vec3su a
     orientation[1] = arg1[1] + 0x8000; // change the sign
     orientation[2] = arg1[2];
     mtxf_set_matrix_transformation(matrix, arg0, orientation, arg2);
-    convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
 
-    gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+    //           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    AddHudMatrix(matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 }
 
 void rsp_set_matrix_transl_rot_scale(Vec3f arg0, Vec3f arg1, f32 arg2) {
     Mat4 matrix;
 
     set_transform_matrix(matrix, arg1, arg0, 0, arg2);
-    convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
-    gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
+    // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+    //           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    AddHudMatrix(matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 }
 
 void rsp_set_matrix_gObjectList(s32 transformIndex) {
     Mat4 matrix;
 
     mtxf_set_matrix_gObjectList(transformIndex, matrix);
-    convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], matrix);
 
-    gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
-              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
+    //           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    AddHudMatrix(matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 }
