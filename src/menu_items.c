@@ -3437,14 +3437,12 @@ void load_menu_img_mio0_forced(MenuTexture* addr) {
     load_menu_img_comp_type(addr, LOAD_MENU_IMG_MIO0_FORCE);
 }
 
-void load_menu_img_comp_type(MenuTexture* addr, s32 compType) {
+void load_menu_img_comp_type(MenuTexture* texAddr, s32 compType) {
     s32 i;
     s32 imgLoaded;
     u8 clearBit;
-    MenuTexture* texAddr;
     TextureMap* texMap = &sMenuTextureMap[0];
 
-    texAddr = segmented_to_virtual_dupe(addr);
     while (texAddr->textureData != NULL) {
         imgLoaded = false;
         for (i = 0; i < sMenuTextureEntries; i++) {
@@ -5407,6 +5405,16 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
         case MENU_ITEM_UI_START_BACKGROUND:
             // load_menu_img_comp_type(gMenuTexturesBackground[has_unlocked_extra_mode()], LOAD_MENU_IMG_TKMK00_ONCE);
             load_texture_reset_cache(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
+            int original_width = gMenuTexturesBackground[has_unlocked_extra_mode()]->width;
+            int original_height = gMenuTexturesBackground[has_unlocked_extra_mode()]->height;
+            gMenuTexturesBackground[has_unlocked_extra_mode()]->width =
+                ResourceGetTexWidthByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
+            gMenuTexturesBackground[has_unlocked_extra_mode()]->height =
+                ResourceGetTexHeightByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
+            gMenuTexturesBackground[has_unlocked_extra_mode()]->dX +=
+                (original_width - gMenuTexturesBackground[has_unlocked_extra_mode()]->width) / 2;
+            gMenuTexturesBackground[has_unlocked_extra_mode()]->dY +=
+                (original_height - gMenuTexturesBackground[has_unlocked_extra_mode()]->height) / 2;
             break;
         case MENU_ITEM_UI_LOGO_AND_COPYRIGHT:
             load_mario_kart_64_logo();
@@ -5419,13 +5427,13 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
         case MAIN_MENU_BACKGROUND:
         case CHARACTER_SELECT_BACKGROUND:
         case COURSE_SELECT_BACKGROUND:
-            load_texture_reset_cache(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
-            // load_menu_img_comp_type(gMenuTexturesBackground[has_unlocked_extra_mode()], LOAD_MENU_IMG_TKMK00_ONCE);
+            // load_texture_reset_cache(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
+            load_menu_img_comp_type(gMenuTexturesBackground[has_unlocked_extra_mode()], LOAD_MENU_IMG_TKMK00_ONCE);
             load_menu_img_comp_type(D_02004B74, LOAD_MENU_IMG_TKMK00_ONCE);
-            convert_img_to_greyscale(0, 0x00000019);
-            adjust_img_colour(0, SCREEN_WIDTH * SCREEN_HEIGHT, D_800E74E8[type - MAIN_MENU_BACKGROUND].red,
-                              D_800E74E8[type - MAIN_MENU_BACKGROUND].green,
-                              D_800E74E8[type - MAIN_MENU_BACKGROUND].blue);
+            // convert_img_to_greyscale(0, 0x00000019);
+            // adjust_img_colour(0, SCREEN_WIDTH * SCREEN_HEIGHT, D_800E74E8[type - MAIN_MENU_BACKGROUND].red,
+            //                   D_800E74E8[type - MAIN_MENU_BACKGROUND].green,
+            //                   D_800E74E8[type - MAIN_MENU_BACKGROUND].blue);
             break;
         case MENU_ITEM_UI_OK:
             var_ra->param1 = 0x00000020;
@@ -5856,8 +5864,11 @@ void render_menus(MenuItem* arg0) {
             case MAIN_MENU_BACKGROUND:
             case CHARACTER_SELECT_BACKGROUND:
             case COURSE_SELECT_BACKGROUND:
+                gDPSetGrayscaleColor(gDisplayListHead++, D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].red, D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].green, D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].blue, D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].alpha);
+                gSPGrayscale(gDisplayListHead++, true);
                 gDisplayListHead = func_8009BC9C(gDisplayListHead, gMenuTexturesBackground[has_unlocked_extra_mode()],
                                                  arg0->column, arg0->row, 3, 0);
+                gSPGrayscale(gDisplayListHead++, false);
                 break;
             case MENU_ITEM_UI_GAME_SELECT:
                 gDisplayListHead =

@@ -17,10 +17,10 @@ typedef struct {
     /* 0x04 */ u64* textureData; // This should be interpreted as a segmented address
     /* 0x08 */ u16 width;
     /* 0x0A */ u16 height;
-    /* 0x0C */ u16 dX;
-    /* 0x0E */ u16 dY;
+    /* 0x0C */ s16 dX;
+    /* 0x0E */ s16 dY;
     /* 0x10 */ u16 size; // This size is NOT equal to width*height. Its likely the size of the compressed texture
-} MenuTexture; // size = 0x14
+} MenuTexture;           // size = 0x14
 
 /**
  * @brief struct for an animation
