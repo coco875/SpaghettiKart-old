@@ -442,8 +442,6 @@ MenuTexture* func_8009A944(struct_8018DEE0_entry*, s32);
 void func_8009A9FC(s32, s32, u32, s32);
 void func_8009AB7C(s32);
 void func_8009AD78(s32, s32);
-void convert_img_to_greyscale(s32, u32);
-void adjust_img_colour(s32, s32, s32, s32, s32);
 u16* func_8009B8C4(u64*);
 void func_8009B938(void);
 void func_8009B954(MenuTexture*);

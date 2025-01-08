@@ -4039,78 +4039,6 @@ void func_8009AD78(s32 arg0, s32 arg1) {
     gSPInvalidateTexCache(gDisplayListHead++, sMenuTextureMap[arg0].offset);
 }
 
-void convert_img_to_greyscale(s32 index, u32 num) {
-    size_t width = ResourceGetTexWidthByName(sMenuTextureList[sMenuTextureMap[index].offset]);
-    size_t height = ResourceGetTexHeightByName(sMenuTextureList[sMenuTextureMap[index].offset]);
-    u32 i;
-    s32 red;
-    s32 green;
-    s32 blue;
-    s32 alpha;
-    u32 result;
-    u16* color;
-    f32 sp48[32];
-
-    size_t size = width * height;
-
-    for (i = 0; i < ARRAY_COUNT(sp48); i++) {
-        sp48[i] = func_800917B0(i * 0.03125, (num * 1.5 * 0.00390625) + 0.25);
-    }
-
-    color = (u16*) LOAD_ASSET(sMenuTextureList[sMenuTextureMap[index].offset]);
-
-    for (i = 0; i < (u32) size; i++) {
-        u16 color_pixel = BSWAP16(*color);
-        red = ((color_pixel & 0xF800) >> 0xB) * 0x55;
-        green = ((color_pixel & 0x7C0) >> 6) * 0x4B;
-        blue = ((color_pixel & 0x3E) >> 1) * 0x5F;
-        alpha = color_pixel & 0x1;
-        result = red + green + blue;
-        result >>= 8;
-        result = sp48[result] * 32.0f;
-        if (result >= 0x20) {
-            result = 0x1F;
-        }
-        *color++ = BSWAP16((result << 1) + (result << 6) + (result << 0xB) + alpha);
-    }
-    // Invalidate texture to properly apply color manipulation
-    gSPInvalidateTexCache(gDisplayListHead++, sMenuTextureMap[index].offset);
-}
-
-void adjust_img_colour(s32 index, s32 screenSize, s32 r, s32 g, s32 b) {
-    size_t width = ResourceGetTexWidthByName(sMenuTextureList[sMenuTextureMap[index].offset]);
-    size_t height = ResourceGetTexHeightByName(sMenuTextureList[sMenuTextureMap[index].offset]);
-    s32 red;
-    s32 green;
-    s32 blue;
-    s32 alpha;
-    s32 newred;
-    s32 newgreen;
-    s32 newblue;
-    u32 temp_t9;
-    u16* color;
-    // Overwrite the default screen size of 320 * 240 to allow widescreen textures.
-    screenSize = width * height;
-
-    color = LOAD_ASSET(sMenuTextureList[sMenuTextureMap[index].offset]);
-
-    for (size_t i = 0; i < screenSize; i++) {
-        u16 color_pixel = BSWAP16(*color);
-        red = ((color_pixel & 0xF800) >> 0xB) * 0x4D;
-        green = ((color_pixel & 0x7C0) >> 6) * 0x96;
-        blue = ((color_pixel & 0x3E) >> 1) * 0x1D;
-        alpha = (color_pixel & 0x1);
-        temp_t9 = red + green + blue;
-        temp_t9 = temp_t9 >> 8;
-        newred = ((temp_t9 * r) >> 8) << 0xB;
-        newgreen = ((temp_t9 * g) >> 8) << 6;
-        newblue = ((temp_t9 * b) >> 8) << 1;
-        *color++ = BSWAP16(newred + newgreen + newblue + alpha);
-    }
-    // Invalidate texture to properly apply color manipulation
-    gSPInvalidateTexCache(gDisplayListHead++, sMenuTextureMap[index].offset);
-}
-
 u16* func_8009B8C4(u64* arg0) {
     UNUSED s32 pad[2];
     s32 offset;
@@ -5427,13 +5355,8 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
         case MAIN_MENU_BACKGROUND:
         case CHARACTER_SELECT_BACKGROUND:
         case COURSE_SELECT_BACKGROUND:
-            // load_texture_reset_cache(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
             load_menu_img_comp_type(gMenuTexturesBackground[has_unlocked_extra_mode()], LOAD_MENU_IMG_TKMK00_ONCE);
             load_menu_img_comp_type(D_02004B74, LOAD_MENU_IMG_TKMK00_ONCE);
-            // convert_img_to_greyscale(0, 0x00000019);
-            // adjust_img_colour(0, SCREEN_WIDTH * SCREEN_HEIGHT, D_800E74E8[type - MAIN_MENU_BACKGROUND].red,
-            //                   D_800E74E8[type - MAIN_MENU_BACKGROUND].green,
-            //                   D_800E74E8[type - MAIN_MENU_BACKGROUND].blue);
             break;
         case MENU_ITEM_UI_OK:
             var_ra->param1 = 0x00000020;
