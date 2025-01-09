@@ -22,9 +22,12 @@ extern f32 gDampValue;
 extern f32 gFreecamSpeed;
 extern f32 gFreecamSpeedMultiplier;
 extern f32 gFreecamRotateSmoothingFactor;
+extern f32 gFreecamFollowFactor;
 extern char* D_800E76A8[];
 extern u32 fRankIndex;
+extern u32 fTargetPlayer;
 extern u32 gFreecamControllerType;
+void freecam_get_player_from_character(s32 characterId);
 }
 
 namespace Freecam {
@@ -37,7 +40,7 @@ void FreecamWindow::InitElement() {
 
 static s32 sReadyUpBool = false;
 
-float dampMin = 0.990;
+float dampMin = 0.970;
 float dampMax = 1.0f;
 float minSpeed = 1.0;
 float maxSpeed = 30.0f;
@@ -45,6 +48,8 @@ float minSpeedMultiplier = 1.5f;
 float maxSpeedMultiplier = 15.0f;
 float minFreecamRotateFactor = 0.0f;
 float maxFreecamRotateFactor = 1.0f;
+float minFreecamFollowFactor = 0.0f;
+float maxFreecamFollowFactor = 1.0f;
 
 uint32_t focusPlayer;
 
@@ -53,16 +58,15 @@ void FreecamWindow::DrawElement() {
     const float deltatime = ImGui::GetIO().DeltaTime;
     ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0, 0, 0));
 
-    ImGui::Text("Freecam: Mouse/Keyboard Requires OpenGL. DX is not supported");
+    ImGui::Text("Controller mode is not configured yet.");
 
-    const char* items[] = { "Mouse/Keyboard", "N64 Controls" };
+    const char* items[] = { "Mouse/Keyboard", "Controller" };
     static int current_item = 0;
     if (ImGui::Combo("Dropdown", &current_item, items, IM_ARRAYSIZE(items))) {
         gFreecamControllerType = current_item;
     }
 
-    ImGui::Text("Move: W,A,S,D\nUp: Space, Down: Shift\nFaster: Ctrl\nLook: Right-mouse button\nTarget previous "
-                "player: N, Target next player: M");
+    ImGui::Text("Move: W,A,S,D\nUp: Space, Down: Shift\nFaster: Ctrl\nLook: Right-mouse button\nTarget Player Mode: F, Next: M, Previous: N");
     ImGui::Spacing();
     UIWidgets::CVarCheckbox("Enable Flycam", "gFreecam", { .tooltip = "Allows you to fly around the course" });
 
@@ -74,13 +78,15 @@ void FreecamWindow::DrawElement() {
                             &minSpeedMultiplier, &maxSpeedMultiplier, "%f")) {};
     if (ImGui::SliderScalar("Camera Rotation Smoothing", ImGuiDataType_Float, &gFreecamRotateSmoothingFactor,
                             &minFreecamRotateFactor, &maxFreecamRotateFactor, "%f")) {};
+    if (ImGui::SliderScalar("Follow Factor", ImGuiDataType_Float, &gFreecamFollowFactor,
+                            &minFreecamFollowFactor, &maxFreecamFollowFactor, "%f")) {};
 
     ImGui::Spacing();
 
     ImGui::Text("Target Player");
 
     if (ImGui::Button("None")) {
-        fRankIndex = -1;
+        fTargetPlayer = false;
     }
 
     for (size_t i = 0; i < NUM_PLAYERS; i++) {
@@ -89,7 +95,8 @@ void FreecamWindow::DrawElement() {
         }
         ImGui::SameLine();
         if (ImGui::Button(D_800E76A8[i])) {
-            fRankIndex = i;
+            freecam_get_player_from_character(i);
+            fTargetPlayer = true;
         }
     }
 
