@@ -329,6 +329,7 @@ s32 func_800BB304(struct AudioBankSample* sample) {
         sample->loaded = 0x81;
         sample->sampleAddr = mem; // sound->unk4
     }
+    return 0;
 }
 
 s32 func_800BB388(s32 bankId, s32 instId, s32 arg2) {
@@ -414,7 +415,7 @@ void func_800BB584(s32 bankId) {
     u8* var_a1;
 
     if (gAlTbl->seqArray[bankId].len == 0) {
-        var_a1 = gAlTbl->seqArray[(s32) gAlTbl->seqArray[bankId].offset].offset;
+        var_a1 = gAlTbl->seqArray[(uintptr_t) gAlTbl->seqArray[bankId].offset].offset;
     } else {
         var_a1 = gAlTbl->seqArray[bankId].offset;
     }
@@ -604,11 +605,11 @@ uint8_t* load_sequence_immediate(s32 seqId, s32 arg1) {
     return GameEngine_LoadSequence(seqId)->data;
 }
 
-struct CtlEntry* load_banks_immediate(s32 seqId, u8 *outDefaultBank) {
+struct CtlEntry* load_banks_immediate(s32 seqId, u8* outDefaultBank) {
     u32 bankId;
-    struct AudioSequenceData *seqData = GameEngine_LoadSequence(seqId);
-    struct CtlEntry *output;
-    for(size_t i = 0; i < seqData->bankCount; i++) {
+    struct AudioSequenceData* seqData = GameEngine_LoadSequence(seqId);
+    struct CtlEntry* output;
+    for (size_t i = 0; i < seqData->bankCount; i++) {
         output = GameEngine_LoadBank(bankId = seqData->banks[i]);
     }
     *outDefaultBank = bankId;
@@ -659,7 +660,7 @@ void load_sequence(u32 player, u32 seqId, s32 loadAsync) {
 }
 
 void load_sequence_internal(u32 player, u32 seqId, s32 loadAsync) {
-    struct SequencePlayer *seqPlayer = &gSequencePlayers[player];
+    struct SequencePlayer* seqPlayer = &gSequencePlayers[player];
 
     if (seqId >= gSequenceCount) {
         return;
@@ -808,7 +809,6 @@ void audio_init(void) {
     audio_set_player_volume(SEQ_PLAYER_LEVEL, CVarGetFloat("gMainMusicVolume", 1.0f));
     audio_set_player_volume(SEQ_PLAYER_ENV, CVarGetFloat("gEnvironmentVolume", 1.0f));
     audio_set_player_volume(SEQ_PLAYER_SFX, CVarGetFloat("gSFXMusicVolume", 1.0f));
-
 }
 #else
 #ifdef VERSION_EU
