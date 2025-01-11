@@ -46,8 +46,7 @@ Player* gPlayersToRenderPlayer[8];
 s16 gMatrixEffectCount;
 s32 D_80164AF4[3];
 struct_D_802F1F80* gPlayerPalette;
-static const char* sKartUpperTexture;
-static const char* sKartLowerTexture;
+static const char* sKartTexture;
 u16 gPlayerRedEffect[8];
 u16 gPlayerGreenEffect[8];
 u16 gPlayerBlueEffect[8];
@@ -1606,6 +1605,19 @@ void render_player_shadow_credits(Player* player, s8 playerId, s8 arg2) {
     gSPTexture(gDisplayListHead++, 1, 1, 0, G_TX_RENDERTILE, G_OFF);
 }
 
+Vtx player_vtx[] = {
+    { { { 9, 18, -6 }, 0, { 4032, 0 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+    { { { 9, 0, -6 }, 0, { 4032, 4032 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+    { { { -9, 18, -6 }, 0, { 0, 0 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+    { { { -9, 0, -6 }, 0, { 0, 4032 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+};
+Vtx player_vtx_flip[] = {
+    { { { 9, 18, -6 }, 0, { 0, 0 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+    { { { 9, 0, -6 }, 0, { 0, 4032 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+    { { { -9, 18, -6 }, 0, { 4032, 0 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+    { { { -9, 0, -6 }, 0, { 4032, 4032 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+};
+
 void render_kart(Player* player, s8 playerId, s8 screenId, s8 arg3) {
     UNUSED s32 pad;
     Mat4 mtx;
@@ -1657,17 +1669,9 @@ void render_kart(Player* player, s8 playerId, s8 screenId, s8 arg3) {
         (struct_D_802F1F80*) &gPlayerPalettesList[D_801651D0[screenId][playerId]][screenId][playerId * 0x100];
 #endif
     if ((screenId == 0) || (screenId == 1)) {
-        sKartUpperTexture = gEncodedKartTexture[D_801651D0[screenId][playerId]][screenId][playerId].unk_00;
-#ifdef TARGET_N64
-        sKartLowerTexture =
-            &D_802BFB80.arraySize8[D_801651D0[screenId][playerId]][screenId][playerId].pixel_index_array[0x7C0];
-#endif
+        sKartTexture = gEncodedKartTexture[D_801651D0[screenId][playerId]][screenId][playerId].unk_00;
     } else {
-        sKartUpperTexture = gEncodedKartTexture[D_801651D0[screenId][playerId]][screenId - 1][playerId - 4].unk_00;
-#ifdef TARGET_N64
-        sKartLowerTexture =
-            &D_802BFB80.arraySize8[D_801651D0[screenId][playerId]][screenId - 1][playerId - 4].pixel_index_array[0x7C0];
-#endif
+        sKartTexture = gEncodedKartTexture[D_801651D0[screenId][playerId]][screenId - 1][playerId - 4].unk_00;
     }
     mtxf_translate_rotate(mtx, sp154, sp14C);
     mtxf_scale2(mtx, gCharacterSize[player->characterId] * player->size);
@@ -1729,20 +1733,16 @@ void render_kart(Player* player, s8 playerId, s8 screenId, s8 arg3) {
         gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_TEX_EDGE, G_RM_AA_ZB_TEX_EDGE2);
     }
 
-    // Render heads
-    gDPLoadTextureBlock(gDisplayListHead++, sKartUpperTexture, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 32, 0,
+    // Render kart
+    gDPLoadTextureBlock(gDisplayListHead++, sKartTexture, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 64, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
-    gSPVertex(gDisplayListHead++, &D_800DDBB4[playerId][arg3], 4, 0);
-    gSPDisplayList(gDisplayListHead++, common_square_plain_render);
-
-    // Render karts
-    u8* test = (u8*) LOAD_ASSET(sKartUpperTexture);
-    gDPLoadTextureBlock(gDisplayListHead++, test + 0x7C0, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 32, 0,
-                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                        G_TX_NOLOD);
-    gSPVertex(gDisplayListHead++, &D_800DDBB4[playerId][arg3 + 4], 4, 0);
-    gSPDisplayList(gDisplayListHead++, common_square_plain_render);
+    if (arg3 == 0) {
+        gSPVertex(gDisplayListHead++, player_vtx, 4, 0);
+    } else {
+        gSPVertex(gDisplayListHead++, player_vtx_flip, 4, 0);
+    }
+    gSP2Triangles(gDisplayListHead++, 0, 1, 2, 0, 1, 3, 2, 0);
     gSPTexture(gDisplayListHead++, 1, 1, 0, G_TX_RENDERTILE, G_OFF);
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 }
@@ -1781,13 +1781,9 @@ void render_ghost(Player* player, s8 playerId, s8 screenId, s8 arg3) {
         (struct_D_802F1F80*) &gPlayerPalettesList[D_801651D0[screenId][playerId]][screenId][playerId * 0x100];
 #endif
     if ((screenId == 0) || (screenId == 1)) {
-        sKartUpperTexture = gEncodedKartTexture[D_801651D0[screenId][playerId]][screenId][playerId].unk_00;
-        // sKartLowerTexture =
-        // &D_802BFB80.arraySize8[D_801651D0[screenId][playerId]][screenId][playerId].pixel_index_array[0x7C0];
+        sKartTexture = gEncodedKartTexture[D_801651D0[screenId][playerId]][screenId][playerId].unk_00;
     } else {
-        sKartUpperTexture = gEncodedKartTexture[D_801651D0[screenId][playerId]][screenId - 1][playerId - 4].unk_00;
-        // sKartLowerTexture = &D_802BFB80.arraySize8[D_801651D0[screenId][playerId]][screenId - 1][playerId -
-        // 4].pixel_index_array[0x7C0];
+        sKartTexture = gEncodedKartTexture[D_801651D0[screenId][playerId]][screenId - 1][playerId - 4].unk_00;
     }
 
     mtxf_translate_rotate(mtx, spDC, spD4);
@@ -1808,18 +1804,15 @@ void render_ghost(Player* player, s8 playerId, s8 screenId, s8 arg3) {
                          GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA),
                      AA_EN | Z_CMP | Z_UPD | IM_RD | CVG_DST_WRAP | ZMODE_XLU | CVG_X_ALPHA | FORCE_BL |
                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
-    gDPLoadTextureBlock(gDisplayListHead++, sKartUpperTexture, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 32, 0,
+    gDPLoadTextureBlock(gDisplayListHead++, sKartTexture, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 64, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
-    gSPVertex(gDisplayListHead++, &D_800DDBB4[playerId][arg3], 4, 0);
-    gSPDisplayList(gDisplayListHead++, common_square_plain_render);
-
-    u8* test = (u8*) LOAD_ASSET(sKartUpperTexture);
-    gDPLoadTextureBlock(gDisplayListHead++, test + 0x7C0, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 32, 0,
-                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                        G_TX_NOLOD);
-    gSPVertex(gDisplayListHead++, &D_800DDBB4[playerId][arg3 + 4], 4, 0);
-    gSPDisplayList(gDisplayListHead++, common_square_plain_render);
+    if (arg3 == 0) {
+        gSPVertex(gDisplayListHead++, player_vtx, 4, 0);
+    } else {
+        gSPVertex(gDisplayListHead++, player_vtx_flip, 4, 0);
+    }
+    gSP2Triangles(gDisplayListHead++, 0, 1, 2, 0, 1, 3, 2, 0);
     gSPTexture(gDisplayListHead++, 1, 1, 0, G_TX_RENDERTILE, G_OFF);
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 }
@@ -1853,18 +1846,15 @@ void func_80025DE8(Player* player, s8 playerId, s8 screenId, s8 arg3) {
                          GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA),
                      AA_EN | Z_CMP | Z_UPD | IM_RD | CVG_DST_WRAP | ZMODE_XLU | CVG_X_ALPHA | FORCE_BL |
                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
-    gDPLoadTextureBlock(gDisplayListHead++, sKartUpperTexture, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 32, 0,
+    gDPLoadTextureBlock(gDisplayListHead++, sKartTexture, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 64, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
-    gSPVertex(gDisplayListHead++, &D_800DDBB4[playerId][arg3], 4, 0);
-    gSPDisplayList(gDisplayListHead++, common_square_plain_render);
-
-    u8* test = (u8*) LOAD_ASSET(sKartUpperTexture);
-    gDPLoadTextureBlock(gDisplayListHead++, test + 0x7C0, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 32, 0,
-                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                        G_TX_NOLOD);
-    gSPVertex(gDisplayListHead++, &D_800DDBB4[playerId][arg3 + 4], 4, 0);
-    gSPDisplayList(gDisplayListHead++, common_square_plain_render);
+    if (arg3 == 0) {
+        gSPVertex(gDisplayListHead++, player_vtx, 4, 0);
+    } else {
+        gSPVertex(gDisplayListHead++, player_vtx_flip, 4, 0);
+    }
+    gSP2Triangles(gDisplayListHead++, 0, 1, 2, 0, 1, 3, 2, 0);
     gSPTexture(gDisplayListHead++, 1, 1, 0, G_TX_RENDERTILE, G_OFF);
     gMatrixEffectCount += 1;
 }
@@ -1899,18 +1889,15 @@ void render_player_ice_reflection(Player* player, s8 playerId, s8 screenId, s8 a
                   gPlayerCyanEffect[playerId], gPlayerMagentaEffect[playerId], gPlayerYellowEffect[playerId],
                   (s16) player->unk_0C6 / 2);
     gDPSetRenderMode(gDisplayListHead++, G_RM_ZB_XLU_SURF, G_RM_ZB_XLU_SURF2);
-    gDPLoadTextureBlock(gDisplayListHead++, sKartUpperTexture, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 32, 0,
+    gDPLoadTextureBlock(gDisplayListHead++, sKartTexture, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 64, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
-    gSPVertex(gDisplayListHead++, &D_800DDBB4[playerId][arg3], 4, 0);
-    gSPDisplayList(gDisplayListHead++, common_square_plain_render);
-
-    u8* test = (u8*) LOAD_ASSET(sKartUpperTexture);
-    gDPLoadTextureBlock(gDisplayListHead++, test + 0x7C0, G_IM_FMT_CI, G_IM_SIZ_8b, 64, 32, 0,
-                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                        G_TX_NOLOD);
-    gSPVertex(gDisplayListHead++, &D_800DDBB4[playerId][arg3 + 4], 4, 0);
-    gSPDisplayList(gDisplayListHead++, common_square_plain_render);
+    if (arg3 == 0) {
+        gSPVertex(gDisplayListHead++, player_vtx, 4, 0);
+    } else {
+        gSPVertex(gDisplayListHead++, player_vtx_flip, 4, 0);
+    }
+    gSP2Triangles(gDisplayListHead++, 0, 1, 2, 0, 1, 3, 2, 0);
     gSPTexture(gDisplayListHead++, 1, 1, 0, G_TX_RENDERTILE, G_OFF);
     gMatrixEffectCount += 1;
 }
@@ -1953,7 +1940,7 @@ void render_player(Player* player, s8 playerId, s8 screenId) {
         func_80025DE8(player, playerId, screenId, var_v1);
     }
     // Allows wheels to spin
-    gSPInvalidateTexCache(gDisplayListHead++, sKartLowerTexture);
+    // gSPInvalidateTexCache(gDisplayListHead++, sKartTexture);
 }
 
 void func_80026A48(Player* player, s8 arg1) {
