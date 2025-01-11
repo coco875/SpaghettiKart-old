@@ -167,8 +167,19 @@ void func_8006EEE8(s32 courseId) {
     D_8018D240 = (uintptr_t) CourseManager_GetProps()->MinimapTexture;
     // This is incredibly dumb. MinimapDimensions ought to be something more like
     // `u16 MinimapDimensions[][2]` but that doesn't match for some insane reason
-    gMinimapWidth = CourseManager_GetProps()->MinimapDimensions.X; // MinimapDimensions[courseId * 2];
+    gMinimapWidth = CourseManager_GetProps()->MinimapDimensions.X;  // MinimapDimensions[courseId * 2];
     gMinimapHeight = CourseManager_GetProps()->MinimapDimensions.Z; // MinimapDimensions[courseId * 2 + 1];
+
+    // rescale minimap
+    int prevWidth = gMinimapWidth;
+    int prevHeight = gMinimapHeight;
+    if (prevHeight < prevWidth) {
+        gMinimapHeight = 64;
+        gMinimapWidth = (gMinimapWidth * 64) / prevHeight;
+    } else {
+        gMinimapWidth = 64;
+        gMinimapHeight = (gMinimapHeight * 64) / prevWidth;
+    }
 }
 
 void func_8006EF60(void) {

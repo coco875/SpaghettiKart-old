@@ -2185,23 +2185,20 @@ void func_8004D37C(s32 arg0, s32 arg1, u8* texture, s32 arg3, s32 arg4, s32 arg5
     }
 }
 
-void func_8004D4E8(s32 arg0, s32 arg1, u8* texture, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 width, s32 arg8,
-                   UNUSED s32 arg9, s32 height) {
+void func_8004D4E8(s32 arg0, s32 arg1, u8* texture, s32 red, s32 green, s32 blue, s32 alpha, s32 width, s32 height,
+                   UNUSED s32 width2, s32 height2) {
     s32 var_s3;
     u8* img;
     s32 i;
 
-    var_s3 = arg1 - (arg8 / 2);
+    var_s3 = arg1 - (height / 2);
     img = texture;
     gSPDisplayList(gDisplayListHead++, D_0D007FE0);
-    func_8004B414(arg3, arg4, arg5, arg6);
-
-    for (i = 0; i < arg8 / height; i++) {
-        func_800450C8(img, width, height);
-        func_8004BA08(arg0 - (width / 2), var_s3, width, height, 1);
-        img += (width * height) / 2;
-        var_s3 += height;
-    }
+    func_8004B414(red, green, blue, alpha);
+    func_800450C8(img, width, height2);
+    func_8004BA08(arg0 - (width / 2), var_s3, width, height2, 1);
+    img += (width * height2) / 2;
+    var_s3 += height2;
 }
 
 void func_8004D654(s32 arg0, s32 arg1, u8* texture, f32 arg3, s32 arg4, s32 arg5, s32 arg6, UNUSED s32 arg7, s32 width,
