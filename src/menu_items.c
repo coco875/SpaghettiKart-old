@@ -4456,7 +4456,6 @@ void func_8009CBE4(s32 arg0, s32 arg1, s32 arg2) {
     RGBA16* color;
     s16 x, y, w, h;
     UNUSED s32 pad[3];
-    struct UnkStruct_800DC5EC* unk;
     struct UnkStruct_8018E7E8 *size, *start;
 
     if ((gModeSelection == GRAND_PRIX) || (gModeSelection == TIME_TRIALS)) {
@@ -4474,11 +4473,10 @@ void func_8009CBE4(s32 arg0, s32 arg1, s32 arg2) {
         w = size->x;
         h = size->y;
     } else {
-        unk = &D_8015F480[arg0];
-        x = unk->screenStartX;
-        y = unk->screenStartY;
-        w = unk->screenWidth;
-        h = unk->screenHeight;
+        x = D_8015F480[arg0].screenStartX;
+        y = D_8015F480[arg0].screenStartY;
+        w = D_8015F480[arg0].screenWidth;
+        h = D_8015F480[arg0].screenHeight;
     }
     color = &D_800E7AE8[arg2];
     gDisplayListHead = draw_box_wide(gDisplayListHead, x - (w / 2), y - (h / 2), (w / 2) + x, (h / 2) + y, color->red,
@@ -5801,7 +5799,10 @@ void render_menus(MenuItem* arg0) {
             case MAIN_MENU_BACKGROUND:
             case CHARACTER_SELECT_BACKGROUND:
             case COURSE_SELECT_BACKGROUND:
-                gDPSetGrayscaleColor(gDisplayListHead++, D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].red, D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].green, D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].blue, D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].alpha);
+                gDPSetGrayscaleColor(gDisplayListHead++, D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].red,
+                                     D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].green,
+                                     D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].blue,
+                                     D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].alpha);
                 gSPGrayscale(gDisplayListHead++, true);
                 gDisplayListHead = func_8009BC9C(gDisplayListHead, gMenuTexturesBackground[has_unlocked_extra_mode()],
                                                  arg0->column, arg0->row, 3, 0);
@@ -7575,13 +7576,10 @@ void render_pause_menu_versus(MenuItem* arg0) {
     s32 leftEdge;
     s32 rightEdge;
     Unk_D_800E70A0* temp_s3;
-    struct UnkStruct_800DC5EC* temp_v0;
-
-    temp_v0 = &D_8015F480[gIsGamePaused - 1];
-    temp_v1 = temp_v0->screenStartX;
-    temp_t0 = temp_v0->screenStartY;
-    temp_t3 = temp_v0->screenWidth / 2;
-    temp_t4 = temp_v0->screenHeight / 2;
+    temp_v1 = D_8015F480[gIsGamePaused - 1].screenStartX;
+    temp_t0 = D_8015F480[gIsGamePaused - 1].screenStartY;
+    temp_t3 = D_8015F480[gIsGamePaused - 1].screenWidth / 2;
+    temp_t4 = D_8015F480[gIsGamePaused - 1].screenHeight / 2;
 
     switch (gScreenModeSelection) {
         case SCREEN_MODE_2P_SPLITSCREEN_HORIZONTAL:
@@ -7598,14 +7596,16 @@ void render_pause_menu_versus(MenuItem* arg0) {
             break;
         case SCREEN_MODE_3P_4P_SPLITSCREEN:
             // Left side players
-            if ((temp_v0->player == gPlayerOne) || (temp_v0->player == gPlayerThree)) {
+            if ((D_8015F480[gIsGamePaused - 1].player == gPlayerOne) ||
+                (D_8015F480[gIsGamePaused - 1].player == gPlayerThree)) {
                 leftEdge = OTRGetDimensionFromLeftEdge(0);
                 gDisplayListHead =
                     draw_box_wide_pause_background(gDisplayListHead, leftEdge - temp_t3, temp_t0 - temp_t4,
                                                    temp_v1 + temp_t3, temp_t0 + temp_t4, 0, 0, 0, 140);
 
                 // Right side players
-            } else if ((temp_v0->player == gPlayerTwo) || (temp_v0->player == gPlayerFour)) {
+            } else if ((D_8015F480[gIsGamePaused - 1].player == gPlayerTwo) ||
+                       (D_8015F480[gIsGamePaused - 1].player == gPlayerFour)) {
                 rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
                 gDisplayListHead =
                     draw_box_wide_pause_background(gDisplayListHead, temp_v1 - temp_t3, temp_t0 - temp_t4,

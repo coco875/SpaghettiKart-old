@@ -691,6 +691,7 @@ void render_player_snow_effect_four(void) {
 void render_object_for_player(s32 cameraId) {
     CourseManager_DrawObjects(cameraId);
     CM_DrawParticles(cameraId);
+    CourseManager_RenderCourseObjects(cameraId);
 
     // switch (gCurrentCourseId) {
     //     case COURSE_MARIO_RACEWAY:
@@ -2744,44 +2745,43 @@ void func_8005D1F4(s32 cameraId) {
 
 // Appears to load GP Mode race staging balloons and kart shadows.
 void func_8005D290(void) {
-    D_8018D488 = dma_textures(gTexture69C80C, 0x400, 0x400);
-    D_8018D474 = dma_textures(gTextureKartShadow, 0x1000, 0x1000);
-    D_8018D420 = dma_textures(gTexture69B03C, 0x100, 0x100);
-    D_8018D424 = dma_textures(gTexture69B140, 0x400, 0x400);
-    D_8018D478 = dma_textures(gTexture69C1E8, 0x200, 0x200);
-    D_8018D480 = dma_textures(gTexture69BA28, 0x400, 0x400);
-    D_8018D484 = dma_textures(gTexture69B960, 0x400, 0x400);
-    D_8018D48C = dma_textures(gTexture69C354, 0x400, 0x400);
-    D_8018D494 = dma_textures(gTexture69C4E4, 0x400, 0x400);
+    D_8018D488 = gTexture69C80C;
+    D_8018D420 = gTexture69B03C;
+    D_8018D424 = gTexture69B140;
+    D_8018D478 = gTexture69C1E8;
+    D_8018D480 = gTexture69BA28;
+    D_8018D484 = gTexture69B960;
+    D_8018D48C = gTexture69C354;
+    D_8018D494 = gTexture69C4E4;
     D_8018D490 = D_8018D48C;
-    D_8018D498 = dma_textures(gTexture69B378, 0x1000, 0x1000);
-    D_8018D4BC = dma_textures(gTextureBalloon1, 0x800, 0x800);
-    D_8018D4C0 = dma_textures(gTextureBalloon2, 0x800, 0x800);
-    D_8018D49C = dma_textures(gTexture69C9C4, 0x200, 0x200);
-    D_8018D4A0 = dma_textures(gTextureBoingExclamation, 0x800, 0x800);
-    D_8018D4A4 = dma_textures(gTextureOnomatopoeiaPoomp1, 0x800, 0x800);
-    D_8018D4A8 = dma_textures(gTextureOnomatopoeiaPoomp2, 0x800, 0x800);
-    D_8018D4AC = dma_textures(gTextureOnomatopoeiaWhrrrr1, 0x800, 0x800);
-    D_8018D4B0 = dma_textures(gTextureOnomatopoeiaWhrrrr2, 0x800, 0x800);
-    D_8018D4B4 = dma_textures(gTextureOnomatopoeiaCrash1, 0x800, 0x800);
-    D_8018D4B8 = dma_textures(gTextureOnomatopoeiaCrash2, 0x800, 0x800);
-    D_8018D438 = dma_textures(gTexture69CB84, 0x800, 0x800);
-    D_8018D43C = dma_textures(gTexture69CCEC, 0x800, 0x800);
-    D_8018D440 = dma_textures(gTexture69CEB8, 0x800, 0x800);
-    D_8018D444 = dma_textures(gTexture69D148, 0x800, 0x800);
-    D_8018D448 = dma_textures(gTexture69D4E0, 0x800, 0x800);
-    D_8018D44C = dma_textures(gTexture69D8FC, 0x800, 0x800);
-    D_8018D450 = dma_textures(gTexture69DCB4, 0x800, 0x800);
-    D_8018D454 = dma_textures(gTexture69DFA0, 0x800, 0x800);
-    D_8018D458 = dma_textures(gTexture69E25C, 0x800, 0x800);
-    D_8018D45C = dma_textures(gTexture69E518, 0x800, 0x800);
-    D_8018D460 = dma_textures(gTexture69E7A8, 0x800, 0x800);
-    D_8018D464 = dma_textures(gTexture69EA18, 0x800, 0x800);
-    D_8018D468 = dma_textures(gTexture69EC54, 0x800, 0x800);
-    D_8018D46C = dma_textures(gTexture69EE38, 0x800, 0x800);
-    D_8018D470 = dma_textures(gTexture69EFE0, 0x800, 0x800);
-    D_8018D4C4 = dma_textures(gTextureLightningBolt0, 0x800, 0x800);
-    D_8018D4C8 = dma_textures(gTextureLightningBolt1, 0x800, 0x800);
+    D_8018D498 = gTexture69B378;
+    D_8018D4BC = gTextureBalloon1;
+    D_8018D4C0 = gTextureBalloon2;
+    D_8018D49C = gTexture69C9C4;
+    D_8018D4A0 = gTextureBoingExclamation;
+    D_8018D4A4 = gTextureOnomatopoeiaPoomp1;
+    D_8018D4A8 = gTextureOnomatopoeiaPoomp2;
+    D_8018D4AC = gTextureOnomatopoeiaWhrrrr1;
+    D_8018D4B0 = gTextureOnomatopoeiaWhrrrr2;
+    D_8018D4B4 = gTextureOnomatopoeiaCrash1;
+    D_8018D4B8 = gTextureOnomatopoeiaCrash2;
+    D_8018D438 = gTexture69CB84;
+    D_8018D43C = gTexture69CCEC;
+    D_8018D440 = gTexture69CEB8;
+    D_8018D444 = gTexture69D148;
+    D_8018D448 = gTexture69D4E0;
+    D_8018D44C = gTexture69D8FC;
+    D_8018D450 = gTexture69DCB4;
+    D_8018D454 = gTexture69DFA0;
+    D_8018D458 = gTexture69E25C;
+    D_8018D45C = gTexture69E518;
+    D_8018D460 = gTexture69E7A8;
+    D_8018D464 = gTexture69EA18;
+    D_8018D468 = gTexture69EC54;
+    D_8018D46C = gTexture69EE38;
+    D_8018D470 = gTexture69EFE0;
+    D_8018D4C4 = gTextureLightningBolt0;
+    D_8018D4C8 = gTextureLightningBolt1;
 }
 
 void func_8005D6C0(Player* player) {
