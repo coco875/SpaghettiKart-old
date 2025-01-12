@@ -46,10 +46,8 @@ char* gTextureBlueshell[] = {
     gTextureBlueShell4, gTextureBlueShell5, gTextureBlueShell6, gTextureBlueShell7,
 };
 char* gTextureRedShell[] = {
-    "__OTR__other_textures/gTextureRedShell0", "__OTR__other_textures/gTextureRedShell1",
-    "__OTR__other_textures/gTextureRedShell2", "__OTR__other_textures/gTextureRedShell3",
-    "__OTR__other_textures/gTextureRedShell4", "__OTR__other_textures/gTextureRedShell5",
-    "__OTR__other_textures/gTextureRedShell6", "__OTR__other_textures/gTextureRedShell7",
+    gTextureRedShell0, gTextureRedShell1, gTextureRedShell2, gTextureRedShell3,
+    gTextureRedShell4, gTextureRedShell5, gTextureRedShell6, gTextureRedShell7,
 };
 u8* D_802BA058;
 
@@ -723,17 +721,16 @@ void render_actor_shell(Camera* camera, Mat4 matrix, struct ShellActor* shell) {
         index = 15 - index;
     }
 
-    if (shell->type == ACTOR_BLUE_SPINY_SHELL) {
-        phi_t3 = gTextureBlueshell[index];
-    } else if (shell->type == ACTOR_GREEN_SHELL) {
-        phi_t3 = gTextureGreenShell[index];
-    } else if (shell->type == ACTOR_RED_SHELL) {
-        phi_t3 = gTextureRedShell[index];
-    }
-
-    if (LOAD_ASSET(phi_t3) == NULL) {
-        phi_t3 = gTextureGreenShell[index];
-        gDPLoadTLUT_pal256(gDisplayListHead++, &gTLUTRedShell);
+    switch (shell->type) {
+        case ACTOR_GREEN_SHELL:
+            phi_t3 = gTextureGreenShell[index];
+            break;
+        case ACTOR_RED_SHELL:
+            phi_t3 = gTextureRedShell[index];
+            break;
+        case ACTOR_BLUE_SPINY_SHELL:
+            phi_t3 = gTextureBlueshell[index];
+            break;
     }
 
     matrix[3][0] = shell->pos[0];

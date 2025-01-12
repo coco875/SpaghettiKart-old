@@ -2655,6 +2655,86 @@ gTextureGreenShell7:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
+gTextureRedShell0:
+  symbol: gTextureRedShell0
+  type: texture
+  mio0: true
+  offset: 0x4CBE0
+  ctype: u8
+  width: 32
+  height: 32
+  format: CI8
+  tlut_symbol: common_tlut_green_shell
+gTextureRedShell1:
+  symbol: gTextureRedShell1
+  type: texture
+  mio0: true
+  offset: 0x4CE30
+  ctype: u8
+  width: 32
+  height: 32
+  format: CI8
+  tlut_symbol: common_tlut_green_shell
+gTextureRedShell2:
+  symbol: gTextureRedShell2
+  type: texture
+  mio0: true
+  offset: 0x4D080
+  ctype: u8
+  width: 32
+  height: 32
+  format: CI8
+  tlut_symbol: common_tlut_green_shell
+gTextureRedShell3:
+  symbol: gTextureRedShell3
+  type: texture
+  mio0: true
+  offset: 0x4D2D8
+  ctype: u8
+  width: 32
+  height: 32
+  format: CI8
+  tlut_symbol: common_tlut_green_shell
+gTextureRedShell4:
+  symbol: gTextureRedShell4
+  type: texture
+  mio0: true
+  offset: 0x4D538
+  ctype: u8
+  width: 32
+  height: 32
+  format: CI8
+  tlut_symbol: common_tlut_green_shell
+gTextureRedShell5:
+  symbol: gTextureRedShell5
+  type: texture
+  mio0: true
+  offset: 0x4D790
+  ctype: u8
+  width: 32
+  height: 32
+  format: CI8
+  tlut_symbol: common_tlut_green_shell
+gTextureRedShell6:
+  symbol: gTextureRedShell6
+  type: texture
+  mio0: true
+  offset: 0x4D9FC
+  ctype: u8
+  width: 32
+  height: 32
+  format: CI8
+  tlut_symbol: common_tlut_green_shell
+gTextureRedShell7:
+  symbol: gTextureRedShell7
+  type: texture
+  mio0: true
+  offset: 0x4DC5C
+  ctype: u8
+  width: 32
+  height: 32
+  format: CI8
+  tlut_symbol: common_tlut_green_shell
 gTextureBlueShell0:
   symbol: gTextureBlueShell0
   type: texture
