@@ -1,6 +1,10 @@
 #ifndef CODE_80057C60_H
 #define CODE_80057C60_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <common_structs.h>
 #include "objects.h"
 #include "camera.h"
@@ -192,7 +196,7 @@ void func_800651F4(Player*, s8, s8, s8);
 void func_800652D4(Vec3f, Vec3s, f32);
 void func_8006538C(Player*, s8, s16, s8);
 void func_800658A0(Player*, s8, s16, s8);
-void func_80065AB0(Player*, s8, s16, s8);
+void render_drift_particle(Player*, s8, s16, s8);
 void func_80065F0C(Player*, s8, s16, s8);
 
 void func_800664E0(Player*, s8, s16, s8);
@@ -603,11 +607,9 @@ extern u8* D_8018D464;
 extern u8* D_8018D468;
 extern u8* D_8018D46C;
 extern u8* D_8018D470;
-extern u8* D_8018D474;
 extern u8* D_8018D478;
 extern u8* D_8018D480;
 extern u8* D_8018D484;
-extern u8* D_8018D488;
 extern u8* D_8018D48C;
 extern u8* D_8018D490;
 extern u8* D_8018D494;
@@ -645,5 +647,9 @@ extern s16 gPlayerBalloonCount[]; // D_8018D8C0
 extern Vec3s D_8018D8D0[];
 
 /** @endcond */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

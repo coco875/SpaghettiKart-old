@@ -48,7 +48,6 @@
 #define HOLD_ALL_DPAD_AND_C_BUTTONS \
     (U_JPAD | L_JPAD | R_JPAD | D_JPAD | U_CBUTTONS | L_CBUTTONS | R_CBUTTONS | D_CBUTTONS)
 
-
 /**
  * @brief Jump to demo mode from the debug menu using L and A
  */
@@ -292,12 +291,7 @@ enum KART_AI_BEHAVIOURS {
     BEHAVIOUR_MAX_SPEED
 };
 
-enum DIRECTION {
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
-};
+enum DIRECTION { NORTH, EAST, SOUTH, WEST };
 
 /**
  * @brief Balloon status
@@ -336,6 +330,7 @@ enum DIRECTION {
  * for effects
  */
 #define BOOST_RAMP_WOOD_EFFECT 0x4         // being boosted by a ramp
+#define DRIFTING_EFFECT 0x10               // drifting
 #define STAR_EFFECT 0x200                  // being a star
 #define BOOST_EFFECT 0x2000                // being boosted by trigger a mushroom
 #define BOOST_RAMP_ASPHALT_EFFECT 0x100000 // being boosted by a boost pad
@@ -356,7 +351,6 @@ enum DIRECTION {
 #define COLOR_LIGHT GPACK_RGB888(0x1C, 0x00, 0x00)
 #define COLOR_LAVA GPACK_RGB888(0x34, 0x00, 0x00)
 #define COLOR_BLACK GPACK_RGB888(0, 0, 0)
-
 
 /**
  *

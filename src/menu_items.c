@@ -1879,7 +1879,7 @@ void print_text0(s32 column, s32 row, char* text, s32 tracking, f32 scaleX, f32 
     gSPDisplayList(gDisplayListHead++, D_020077D8);
 }
 
-// Time trials 
+// Time trials
 void print_text0_wide_right(s32 column, s32 row, char* text, s32 tracking, f32 scaleX, f32 scaleY, s32 mode) {
     s32 stringWidth = 0;
     s32 glyphIndex;
@@ -1890,10 +1890,10 @@ void print_text0_wide_right(s32 column, s32 row, char* text, s32 tracking, f32 s
             glyphIndex = char_to_glyph_index(text);
             if (glyphIndex >= 0) {
                 load_menu_img((MenuTexture*) segmented_to_virtual_dupe((const void*) gGlyphTextureLUT[glyphIndex]));
-                gDisplayListHead =
-                    print_letter_wide_right(gDisplayListHead,
-                                 (MenuTexture*) segmented_to_virtual_dupe((const void*) gGlyphTextureLUT[glyphIndex]),
-                                 column + (stringWidth * scaleX), row, mode, scaleX, scaleY);
+                gDisplayListHead = print_letter_wide_right(
+                    gDisplayListHead,
+                    (MenuTexture*) segmented_to_virtual_dupe((const void*) gGlyphTextureLUT[glyphIndex]),
+                    column + (stringWidth * scaleX), row, mode, scaleX, scaleY);
                 stringWidth += gGlyphDisplayWidth[glyphIndex] + tracking;
             } else if ((glyphIndex != -2) && (glyphIndex == -1)) {
                 stringWidth += tracking + 7;
@@ -2751,7 +2751,8 @@ func_80095BD0_label2:
     return func_800959F8(displayListHead, var_a1);
 }
 
-Gfx* func_80095BD0_wide_right(Gfx* displayListHead, u8* arg1, f32 arg2, f32 arg3, u32 arg4, u32 arg5, f32 arg6, f32 arg7) {
+Gfx* func_80095BD0_wide_right(Gfx* displayListHead, u8* arg1, f32 arg2, f32 arg3, u32 arg4, u32 arg5, f32 arg6,
+                              f32 arg7) {
     Vtx* var_a1;
     // A match is a match, but why are goto's required here?
     if (gMatrixEffectCount >= 0x2F7) {
@@ -3322,7 +3323,8 @@ Gfx* draw_box_wide(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32
 }
 
 // Time trials race data cannot be saved for ghost box
-Gfx* draw_box_wide_right(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32 red, u32 green, u32 blue, u32 alpha) {
+Gfx* draw_box_wide_right(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32 red, u32 green, u32 blue,
+                         u32 alpha) {
     red &= 0xFF;
     green &= 0xFF;
     blue &= 0xFF;
@@ -4378,7 +4380,8 @@ Gfx* print_letter(Gfx* arg0, MenuTexture* glyphTexture, f32 arg2, f32 arg3, s32 
     return arg0;
 }
 
-Gfx* print_letter_wide_right(Gfx* arg0, MenuTexture* glyphTexture, f32 arg2, f32 arg3, s32 mode, f32 scaleX, f32 scaleY) {
+Gfx* print_letter_wide_right(Gfx* arg0, MenuTexture* glyphTexture, f32 arg2, f32 arg3, s32 mode, f32 scaleX,
+                             f32 scaleY) {
     s32 var_v0;
     u8* temp_v0_2;
     f32 thing0;
@@ -4414,13 +4417,13 @@ Gfx* print_letter_wide_right(Gfx* arg0, MenuTexture* glyphTexture, f32 arg2, f32
                 switch (mode) {
                     case 1:
                         gSPDisplayList(arg0++, D_020077F8);
-                        arg0 = func_80095BD0_wide_right(arg0, temp_v0_2, var_s0->dX + arg2, var_s0->dY + arg3, var_s0->width,
-                                             var_s0->height, scaleX, scaleY);
+                        arg0 = func_80095BD0_wide_right(arg0, temp_v0_2, var_s0->dX + arg2, var_s0->dY + arg3,
+                                                        var_s0->width, var_s0->height, scaleX, scaleY);
                         break;
                     case 2:
                         gSPDisplayList(arg0++, D_02007818);
-                        arg0 = func_80095BD0_wide_right(arg0, temp_v0_2, var_s0->dX + arg2, var_s0->dY + arg3, var_s0->width,
-                                             var_s0->height, scaleX, scaleY);
+                        arg0 = func_80095BD0_wide_right(arg0, temp_v0_2, var_s0->dX + arg2, var_s0->dY + arg3,
+                                                        var_s0->width, var_s0->height, scaleX, scaleY);
                         break;
                 }
             }
@@ -8418,8 +8421,7 @@ void func_800A70E8(MenuItem* arg0) {
         if (var_s0 < temp_f6) {
             var_s0 = temp_f6;
         }
-        gDisplayListHead =
-            draw_box_wide_right(gDisplayListHead, (192), 34, (var_s0 + 198), 57, 0, 0, 0, 150);
+        gDisplayListHead = draw_box_wide_right(gDisplayListHead, (192), 34, (var_s0 + 198), 57, 0, 0, 0, 150);
         alpha = 0x180 - ((arg0->param1 % 32) * 8);
         if (alpha >= 0x100) {
             alpha = 0xFF;

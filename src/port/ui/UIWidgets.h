@@ -4,7 +4,6 @@
 #include <vector>
 #include <span>
 #include <cstdint>
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui.h>
 #include <libultraship/libultraship.h>
 
