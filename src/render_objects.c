@@ -2659,17 +2659,22 @@ void set_minimap_finishline_position(s32 arg0) {
     draw_hud_2d_texture_8x8(var_f2, var_f0, (u8*) common_texture_minimap_finish_line);
 }
 
+char* common_texture_minimap_progress[] = {
+    common_texture_minimap_mario, common_texture_minimap_luigi,  common_texture_minimap_yoshi,
+    common_texture_minimap_toad,  common_texture_minimap_dk,     common_texture_minimap_wario,
+    common_texture_minimap_peach, common_texture_minimap_bowser,
+};
+
 #ifdef NON_MATCHING
 // https://decomp.me/scratch/FxA1w
 /**
  * characterId of 8 appears to be a type of null check or control flow alteration.
  */
-#define EXPLICIT_AND 1
 void func_8004F168(s32 arg0, s32 playerId, s32 characterId) {
     f32 thing0;
     f32 thing1;
-    s16 temp_a0;
-    s16 temp_a1;
+    s16 x;
+    s16 y;
     s32 center = 0;
     Player* player = &gPlayerOne[playerId];
 
@@ -2684,40 +2689,27 @@ void func_8004F168(s32 arg0, s32 playerId, s32 characterId) {
             center = D_8018D2C0[arg0];
         }
 
-        temp_a0 = (center - (gMinimapWidth / 2)) + D_8018D2E0 + (s16) (thing0);
-        temp_a1 = (D_8018D2D8[arg0] - (gMinimapHeight / 2)) + D_8018D2E8 + (s16) (thing1);
+        x = (center - (gMinimapWidth / 2)) + D_8018D2E0 + (s16) (thing0);
+        y = (D_8018D2D8[arg0] - (gMinimapHeight / 2)) + D_8018D2E8 + (s16) (thing1);
         if (characterId != 8) {
             if ((gGPCurrentRaceRankByPlayerId[playerId] == 0) && (gModeSelection != 3) && (gModeSelection != 1)) {
-#if EXPLICIT_AND == 1
-                func_80046424(temp_a0, temp_a1, (player->rotation[1] + 0x8000) & 0xFFFF, 1.0f,
+                func_80046424(x, y, player->rotation[1] + 0x8000, 1.0f,
                               (u8*) common_texture_minimap_kart_character[characterId], common_vtx_player_minimap_icon,
                               8, 8, 8, 8);
-#else
-                func_80046424(temp_a0, temp_a1, player->rotation[1] + 0x8000, 1.0f,
-                              (u8*) common_texture_minimap_kart_character[characterId], common_vtx_player_minimap_icon,
-                              8, 8, 8, 8);
-#endif
             } else {
-#if EXPLICIT_AND == 1
-                func_800463B0(temp_a0, temp_a1, (player->rotation[1] + 0x8000) & 0xFFFF, 1.0f,
+                func_800463B0(x, y, player->rotation[1] + 0x8000, 1.0f,
                               (u8*) common_texture_minimap_kart_character[characterId], common_vtx_player_minimap_icon,
                               8, 8, 8, 8);
-#else
-                func_800463B0(temp_a0, temp_a1, player->rotation[1] + 0x8000, 1.0f,
-                              (u8*) common_texture_minimap_kart_character[characterId], common_vtx_player_minimap_icon,
-                              8, 8, 8, 8);
-#endif
             }
         } else {
             if (gGPCurrentRaceRankByPlayerId[playerId] == 0) {
-                func_8004C450(temp_a0, temp_a1, 8, 8, (u8*) common_texture_minimap_progress_dot);
+                func_8004C450(x, y, 8, 8, (u8*) common_texture_minimap_progress[player->characterId]);
             } else {
-                draw_hud_2d_texture_wide(temp_a0, temp_a1, 8, 8, (u8*) common_texture_minimap_progress_dot);
+                draw_hud_2d_texture_wide(x, y, 8, 8, (u8*) common_texture_minimap_progress[player->characterId]);
             }
         }
     }
 }
-#undef EXPLICIT_AND
 #else
 GLOBAL_ASM("asm/non_matchings/render_objects/func_8004F168.s")
 #endif

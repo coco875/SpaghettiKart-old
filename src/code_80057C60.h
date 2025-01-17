@@ -362,7 +362,6 @@ extern s32 D_80165860;
 extern s32 D_8016586C;
 extern s32 D_80165878;
 extern s32 D_8016587C;
-extern u8* D_80165880;
 extern s8 D_80165888;
 extern s8 D_80165890;
 extern s8 D_80165898;
