@@ -2670,7 +2670,7 @@ char* common_texture_minimap_progress[] = {
 /**
  * characterId of 8 appears to be a type of null check or control flow alteration.
  */
-void func_8004F168(s32 arg0, s32 playerId, s32 characterId) {
+void draw_minimap_character(s32 arg0, s32 playerId, s32 characterId) {
     f32 thing0;
     f32 thing1;
     s16 x;
@@ -2703,7 +2703,7 @@ void func_8004F168(s32 arg0, s32 playerId, s32 characterId) {
             }
         } else {
             if (gGPCurrentRaceRankByPlayerId[playerId] == 0) {
-                func_8004C450(x, y, 8, 8, (u8*) common_texture_minimap_progress[player->characterId]);
+                // func_8004C450(x, y, 8, 8, (u8*) common_texture_minimap_progress[player->characterId]);
             } else {
                 draw_hud_2d_texture_wide(x, y, 8, 8, (u8*) common_texture_minimap_progress[player->characterId]);
             }
@@ -2711,7 +2711,7 @@ void func_8004F168(s32 arg0, s32 playerId, s32 characterId) {
     }
 }
 #else
-GLOBAL_ASM("asm/non_matchings/render_objects/func_8004F168.s")
+GLOBAL_ASM("asm/non_matchings/render_objects/draw_minimap_character.s")
 #endif
 
 // WTF is up with the gPlayerOne access in this function?
@@ -2725,34 +2725,34 @@ void func_8004F3E4(s32 arg0) {
             for (idx = D_8018D158 - 1; idx >= 0; idx--) {
                 playerId = gGPCurrentRacePlayerIdByRank[idx];
                 if ((gPlayerOne + playerId)->type & PLAYER_KART_AI) {
-                    func_8004F168(arg0, playerId, 8);
+                    draw_minimap_character(arg0, playerId, 8);
                 }
             }
             for (idx = D_8018D158 - 1; idx >= 0; idx--) {
                 playerId = gGPCurrentRacePlayerIdByRank[idx];
                 if (((gPlayerOne + playerId)->type & PLAYER_KART_AI) != PLAYER_KART_AI) {
-                    func_8004F168(arg0, playerId, (gPlayerOne + playerId)->characterId);
+                    draw_minimap_character(arg0, playerId, (gPlayerOne + playerId)->characterId);
                 }
             }
             break;
         case TIME_TRIALS:
             for (idx = 0; idx < 8; idx++) {
                 if (((gPlayerOne + idx)->type & PLAYER_INVISIBLE_OR_BOMB) == PLAYER_INVISIBLE_OR_BOMB) {
-                    func_8004F168(arg0, idx, 8);
+                    draw_minimap_character(arg0, idx, 8);
                 }
             }
-            func_8004F168(arg0, 0, gPlayerOne->characterId);
+            draw_minimap_character(arg0, 0, gPlayerOne->characterId);
             break;
         case VERSUS:
             for (idx = gPlayerCountSelection1 - 1; idx >= 0; idx--) {
                 playerId = gGPCurrentRacePlayerIdByRank[idx];
-                func_8004F168(arg0, playerId, (gPlayerOne + playerId)->characterId);
+                draw_minimap_character(arg0, playerId, (gPlayerOne + playerId)->characterId);
             }
             break;
         case BATTLE:
             for (idx = 0; idx < gPlayerCountSelection1; idx++) {
                 if (!((gPlayerOne + idx)->type & PLAYER_UNKNOWN_0x40)) {
-                    func_8004F168(arg0, idx, (gPlayerOne + idx)->characterId);
+                    draw_minimap_character(arg0, idx, (gPlayerOne + idx)->characterId);
                 }
             }
             break;

@@ -1466,7 +1466,7 @@ void apply_boo_sound_effect(Player* player, s8 arg1) {
         for (temp_v1 = 0; temp_v1 < 10; ++temp_v1) {
             player->playerPacticlePool0[temp_v1].unk_01C = 0;
             player->playerPacticlePool0[temp_v1].unk_01E = 0;
-            player->playerPacticlePool0[temp_v1].unk_012 = 0;
+            player->playerPacticlePool0[temp_v1].type = 0;
         }
     }
 
@@ -1547,7 +1547,7 @@ void func_8008FD4C(Player* player, UNUSED s8 arg1) {
     for (temp_v0 = 0; temp_v0 < 10; ++temp_v0) {
         player->playerPacticlePool0[temp_v0].unk_01C = 0;
         player->playerPacticlePool0[temp_v0].unk_01E = 0;
-        player->playerPacticlePool0[temp_v0].unk_012 = 0;
+        player->playerPacticlePool0[temp_v0].type = 0;
     }
 }
 
@@ -1557,7 +1557,7 @@ void func_8008FDA8(Player* player, UNUSED s8 arg1) {
     for (temp_v0 = 0; temp_v0 < 10; ++temp_v0) {
         player->playerPacticlePool0[temp_v0].unk_01C = 0;
         player->playerPacticlePool0[temp_v0].unk_01E = 0;
-        player->playerPacticlePool0[temp_v0].unk_012 = 0;
+        player->playerPacticlePool0[temp_v0].type = 0;
     }
 }
 
@@ -2017,10 +2017,10 @@ void func_800911B4(Player* player, s8 arg1) {
     player->unk_078 = 0;
     D_8018D920[arg1] = 0;
 
-    player->playerPacticlePool0[31].unk_012 = 0;
+    player->playerPacticlePool0[31].type = 0;
     player->playerPacticlePool0[31].unk_01E = 0;
     player->playerPacticlePool0[31].unk_01C = 0;
-    player->playerPacticlePool0[30].unk_012 = 0;
+    player->playerPacticlePool0[30].type = 0;
     player->playerPacticlePool0[30].unk_01E = 0;
     player->playerPacticlePool0[30].unk_01C = 0;
 
@@ -2029,18 +2029,18 @@ void func_800911B4(Player* player, s8 arg1) {
         // clang-format on
         player->playerPacticlePool0[31 + temp_v0].unk_01C = 0;
         player->playerPacticlePool0[31 + temp_v0].unk_01E = 0;
-        player->playerPacticlePool0[31 + temp_v0].unk_012 = 0;
+        player->playerPacticlePool0[31 + temp_v0].type = 0;
         player->playerPacticlePool0[32 + temp_v0].unk_01C = 0;
         player->playerPacticlePool0[32 + temp_v0].unk_01E = 0;
-        player->playerPacticlePool0[32 + temp_v0].unk_012 = 0;
+        player->playerPacticlePool0[32 + temp_v0].type = 0;
         player->playerPacticlePool0[33 + temp_v0].unk_01C = 0;
         player->playerPacticlePool0[33 + temp_v0].unk_01E = 0;
-        player->playerPacticlePool0[33 + temp_v0].unk_012 = 0;
+        player->playerPacticlePool0[33 + temp_v0].type = 0;
 
         temp_v0 += 4;
         player->playerPacticlePool0[26 + temp_v0].unk_01C = 0;
         player->playerPacticlePool0[26 + temp_v0].unk_01E = 0;
-        player->playerPacticlePool0[26 + temp_v0].unk_012 = 0;
+        player->playerPacticlePool0[26 + temp_v0].type = 0;
     } while (temp_v0 < 10);
 }
 

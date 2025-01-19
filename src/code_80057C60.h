@@ -120,7 +120,7 @@ void func_8005D18C(void);
 void func_8005D1F4(s32);
 
 void func_8005D290(void);
-void func_8005D6C0(Player*);
+void reset_player_particle_pool(Player*);
 void func_8005D794(Player*, UnkPlayerStruct258*, f32, f32, f32, s8, s8);
 s32 func_8005D7D8(UnkPlayerStruct258*, s8, f32);
 s32 func_8005D800(UnkPlayerStruct258*, s32, s16);
@@ -196,7 +196,7 @@ void func_800651F4(Player*, s8, s8, s8);
 void func_800652D4(Vec3f, Vec3s, f32);
 void func_8006538C(Player*, s8, s16, s8);
 void func_800658A0(Player*, s8, s16, s8);
-void render_drift_particle(Player*, s8, s16, s8);
+void render_player_drift_particles(Player*, s8, s16, s8);
 void func_80065F0C(Player*, s8, s16, s8);
 
 void func_800664E0(Player*, s8, s16, s8);

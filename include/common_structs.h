@@ -158,11 +158,11 @@ typedef struct {
 } Collision;
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_000;
+    /* 0x00 */ Vec3f pos;
     /* 0x0C */ f32 unk_00C;
     /* 0x10 */ u16 unk_010;
-    /* 0x12 */ u16 unk_012;
-    /* 0x14 */ f32 unk_014;
+    /* 0x12 */ u16 type;
+    /* 0x14 */ f32 surfaceType;
     /* 0x18 */ f32 unk_018;
     /* 0x1C */ s16 unk_01C;
     /* 0x1E */ s16 unk_01E;
@@ -397,6 +397,19 @@ typedef struct {
     s32 nStartingRank;
     u32 nHasAuthority;
 } Player; // size = 0xDD8
+
+enum POOL_1_PARTICLE_TYPES {
+    NO_PARTICLE,
+    DRIFT_PARTICLE,
+    GROUND_PARTCLE,
+    POOL_1_PARTICLE_TYPE_3,
+    POOL_1_PARTICLE_TYPE_4,
+    POOL_1_PARTICLE_TYPE_5,
+    POOL_1_PARTICLE_TYPE_6,
+    POOL_1_PARTICLE_TYPE_7,
+    POOL_1_PARTICLE_TYPE_8,
+    POOL_1_PARTICLE_TYPE_9
+};
 
 typedef struct {
     // Something related to time trial ghost data?
