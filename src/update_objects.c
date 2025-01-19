@@ -4251,8 +4251,6 @@ void func_800842C8(void) {
     }
 }
 
-
-
 void func_80085BB4(s32 objectIndex) {
     gObjectList[objectIndex].sizeScaling = 8.0f;
     set_obj_origin_offset(objectIndex, 0.0f, 0.0f, 0.0f);
