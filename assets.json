@@ -539,7 +539,7 @@
 "textures/standalone/kart_shadow.i8.png": {"meta":{"dims":[64,64]}, "offsets": {"us":["0x69A830", "0x00000"]}},
 "textures/standalone/texture_69B03C.i8.png": {"meta":{"dims":[16,16]}, "offsets": {"us":["0x69B03C", "0x00000"]}},
 "textures/standalone/texture_69B140.i8.png": {"meta":{"dims":[32,32]}, "offsets": {"us":["0x69B140", "0x00000"]}},
-"textures/standalone/texture_69B378.rgba16.png": {"meta":{"dims":[32,64]}, "offsets": {"us":["0x69B378", "0x00000"]}},
+"textures/standalone/gGrassParticle.rgba16.png": {"meta":{"dims":[32,64]}, "offsets": {"us":["0x69B378", "0x00000"]}},
 "textures/standalone/texture_69B960.i8.png": {"meta":{"dims":[32,32]}, "offsets": {"us":["0x69B960", "0x00000"]}},
 "textures/standalone/texture_69BA28.i8.png": {"meta":{"dims":[32,32]}, "offsets": {"us":["0x69BA28", "0x00000"]}},
 "textures/standalone/boing_exclamation.ia8.png": {"meta":{"dims":[64,32]}, "offsets": {"us":["0x69BB18", "0x00000"]}},

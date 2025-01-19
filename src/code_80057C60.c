@@ -2752,7 +2752,6 @@ void func_8005D290(void) {
     D_8018D48C = gTexture69C354;
     D_8018D494 = gTexture69C4E4;
     D_8018D490 = D_8018D48C;
-    D_8018D498 = gTexture69B378;
     D_8018D4BC = gTextureBalloon1;
     D_8018D4C0 = gTextureBalloon2;
     D_8018D49C = gTexture69C9C4;
@@ -2786,25 +2785,25 @@ void reset_player_particle_pool(Player* player) {
     s32 temp_v0;
 
     for (temp_v0 = 0; temp_v0 < 10; ++temp_v0) {
-        player->playerPacticlePool0[temp_v0].unk_01C = 0;
+        player->playerPacticlePool0[temp_v0].isAlive = 0;
         player->playerPacticlePool0[temp_v0].unk_01E = 0;
         player->playerPacticlePool0[temp_v0].type = 0;
     }
 
     for (temp_v0 = 0; temp_v0 < 10; ++temp_v0) {
-        player->playerPacticlePool3[temp_v0].unk_01C = 0;
+        player->playerPacticlePool3[temp_v0].isAlive = 0;
         player->playerPacticlePool3[temp_v0].unk_01E = 0;
         player->playerPacticlePool3[temp_v0].type = 0;
     }
 
     for (temp_v0 = 0; temp_v0 < 10; ++temp_v0) {
-        player->playerPacticlePool1[temp_v0].unk_01C = 0;
+        player->playerPacticlePool1[temp_v0].isAlive = 0;
         player->playerPacticlePool1[temp_v0].unk_01E = 0;
         player->playerPacticlePool1[temp_v0].type = 0;
     }
 
     for (temp_v0 = 0; temp_v0 < 10; ++temp_v0) {
-        player->playerPacticlePool2[temp_v0].unk_01C = 0;
+        player->playerPacticlePool2[temp_v0].isAlive = 0;
         player->playerPacticlePool2[temp_v0].unk_01E = 0;
         player->playerPacticlePool2[temp_v0].type = 0;
     }
@@ -2819,17 +2818,17 @@ void func_8005D794(Player* player, UnkPlayerStruct258* arg1, f32 x, f32 y, f32 z
     arg1->unk_010 = arg6;
 }
 
-s32 func_8005D7D8(UnkPlayerStruct258* arg0, s8 arg1, f32 arg2) {
-    arg0->unk_01C = 1;
-    arg0->type = arg1;
+s32 init_new_particle_player(UnkPlayerStruct258* arg0, s8 type, f32 arg2) {
+    arg0->isAlive = true;
+    arg0->type = type;
     arg0->unk_01E = 0;
-    arg0->unk_00C = arg2;
+    arg0->scale = arg2;
 }
 
-s32 func_8005D800(UnkPlayerStruct258* arg0, s32 arg1, s16 arg2) {
-    arg0->unk_038 = (u8) (arg1 >> 16);
-    arg0->unk_03A = (u8) (arg1 >> 8);
-    arg0->unk_03C = (u8) arg1;
+s32 set_particle_color(UnkPlayerStruct258* arg0, s32 arg1, s16 arg2) {
+    arg0->red = (u8) (arg1 >> 16);
+    arg0->green = (u8) (arg1 >> 8);
+    arg0->blue = (u8) arg1;
     arg0->unk_03E = arg2;
 }
 
@@ -2837,9 +2836,9 @@ s32 func_8005D82C(UnkPlayerStruct258* arg0, s32 arg1, s16 arg2) {
     s32 temp_v0;
     temp_v0 = random_int(0x30);
 
-    arg0->unk_038 = (u8) ((u8) (arg1 >> 0x10) - temp_v0);
-    arg0->unk_03A = (u8) ((u8) (arg1 >> 8) - temp_v0);
-    arg0->unk_03C = (u8) ((u8) arg1 - temp_v0);
+    arg0->red = (u8) ((u8) (arg1 >> 0x10) - temp_v0);
+    arg0->green = (u8) ((u8) (arg1 >> 8) - temp_v0);
+    arg0->blue = (u8) ((u8) arg1 - temp_v0);
     arg0->unk_03E = arg2;
 }
 
@@ -2858,17 +2857,17 @@ void func_8005D898(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s8 arg3, UN
 
     temp_lo = player->unk_0C0 / 182;
     if ((temp_lo >= 7) || (temp_lo < -6)) {
-        func_8005D7D8(&player->playerPacticlePool1[arg1], 1, 0.35f);
+        init_new_particle_player(&player->playerPacticlePool1[arg1], DRIFT_PARTICLE, 0.35f);
         if (player->unk_22A == 0) {
-            func_8005D800(&player->playerPacticlePool1[arg1], 0xFFFFFF, 0x70);
+            set_particle_color(&player->playerPacticlePool1[arg1], 0xFFFFFF, 0x70);
         }
 
         if (player->unk_22A == 1) {
-            func_8005D800(&player->playerPacticlePool1[arg1], 0xFFFF00, 0x70);
+            set_particle_color(&player->playerPacticlePool1[arg1], 0xFFFF00, 0x70);
         }
 
         if (player->unk_22A >= 2) {
-            func_8005D800(&player->playerPacticlePool1[arg1], 0xFF9600, 0x70);
+            set_particle_color(&player->playerPacticlePool1[arg1], 0xFF9600, 0x70);
         }
 
         if (player->unk_22A >= 2) {
@@ -2883,7 +2882,7 @@ void func_8005D898(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s8 arg3, UN
 
 void func_8005DA30(Player* player, s16 arg1, s32 arg2, s8 arg3, s8 arg4) {
     if ((arg1 == 0) &&
-        ((player->playerPacticlePool1[arg2].unk_01E >= 3) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+        ((player->playerPacticlePool1[arg2].unk_01E >= 3) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
         func_8005D898(player, arg1, arg2, arg3, arg4);
     } else if (player->playerPacticlePool1[arg2].unk_01E >= 3) {
         func_8005D898(player, arg1, arg2, arg3, arg4);
@@ -2894,7 +2893,7 @@ UNUSED void func_8005DAD0(void) {
 }
 
 void func_8005DAD8(UnkPlayerStruct258* arg0, s16 arg1, s16 arg2, s16 arg3) {
-    arg0->unk_038 = arg1;
+    arg0->red = arg1;
     arg0->unk_03E = arg3;
     arg0->unk_040 = arg2;
 }
@@ -2928,10 +2927,10 @@ void func_8005DAF4(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
     switch (surfaceType) {
         case DIRT:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 if (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f) {
                     func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                    func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                    init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                     if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
                         func_8005DAD8(&player->playerPacticlePool1[arg1], 1, 0, 0x0080);
                     }
@@ -2950,12 +2949,12 @@ void func_8005DAF4(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                     if (GetCourse() == GetDkJungle()) {
                         func_8005DAD8(&player->playerPacticlePool1[arg1], 11, 0, 0x0080);
                     }
-                    player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                    player->playerPacticlePool1[arg1].green = random_int(0x0010U);
                 }
             } else if ((player->playerPacticlePool1[arg2].unk_01E > 0) &&
                        (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f)) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                 if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 1, 0, 0x0080);
                 }
@@ -2974,139 +2973,139 @@ void func_8005DAF4(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                 if (GetCourse() == GetDkJungle()) {
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 11, 0, 0x0080);
                 }
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case GRASS:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 if (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f) {
                     func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                    func_8005D7D8(&player->playerPacticlePool1[arg1], 3, 1.0f);
-                    func_8005D800(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
-                    player->playerPacticlePool1[arg1].unk_038 -= arg1 * 8;
-                    player->playerPacticlePool1[arg1].unk_03A -= arg1 * 8;
-                    player->playerPacticlePool1[arg1].unk_03C -= arg1 * 8;
+                    init_new_particle_player(&player->playerPacticlePool1[arg1], GRASS_PARTICLE, 1.0f);
+                    set_particle_color(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
+                    player->playerPacticlePool1[arg1].red -= arg1 * 8;
+                    player->playerPacticlePool1[arg1].green -= arg1 * 8;
+                    player->playerPacticlePool1[arg1].blue -= arg1 * 8;
                 }
             } else if ((player->playerPacticlePool1[arg2].unk_01E > 0) &&
                        (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f)) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 3, 1.0f);
-                func_8005D800(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
-                player->playerPacticlePool1[arg1].unk_038 -= arg1 * 8;
-                player->playerPacticlePool1[arg1].unk_03A -= arg1 * 8;
-                player->playerPacticlePool1[arg1].unk_03C -= arg1 * 8;
+                init_new_particle_player(&player->playerPacticlePool1[arg1], GRASS_PARTICLE, 1.0f);
+                set_particle_color(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
+                player->playerPacticlePool1[arg1].red -= arg1 * 8;
+                player->playerPacticlePool1[arg1].green -= arg1 * 8;
+                player->playerPacticlePool1[arg1].blue -= arg1 * 8;
             }
             player->playerPacticlePool1[arg1].pos[1] -= 1.5;
             break;
         case SAND_OFFROAD:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 if (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f) {
                     func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                    func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                    init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 2, 1, 0x00A8);
-                    player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                    player->playerPacticlePool1[arg1].green = random_int(0x0010U);
                 }
             } else if ((player->playerPacticlePool1[arg2].unk_01E > 0) &&
                        (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f)) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 2, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case SAND:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 if (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f) {
                     func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                    func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                    init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 3, 1, 0x00A8);
-                    player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                    player->playerPacticlePool1[arg1].green = random_int(0x0010U);
                 }
             } else if ((player->playerPacticlePool1[arg2].unk_01E > 0) &&
                        (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f)) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 3, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case WET_SAND:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 if (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f) {
                     func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                    func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                    init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 4, 1, 0x00A8);
-                    player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                    player->playerPacticlePool1[arg1].green = random_int(0x0010U);
                 }
             } else if ((player->playerPacticlePool1[arg2].unk_01E > 0) &&
                        (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f)) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 4, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case DIRT_OFFROAD:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 if (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f) {
                     func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                    func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                    init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 5, 1, 0x00A8);
-                    player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                    player->playerPacticlePool1[arg1].green = random_int(0x0010U);
                 }
             } else if ((player->playerPacticlePool1[arg2].unk_01E > 0) &&
                        (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f)) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                 func_8005D82C(&player->playerPacticlePool1[arg1], 0x00FFA54F, 0x00AF);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 5, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case SNOW:
         case SNOW_OFFROAD:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 if (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f) {
                     func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                    func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                    init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 6, 1, 0x00A8);
-                    player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                    player->playerPacticlePool1[arg1].green = random_int(0x0010U);
                 }
             } else if ((player->playerPacticlePool1[arg2].unk_01E > 0) &&
                        (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f)) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 6, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case ASPHALT:
         case STONE:
         case BRIDGE:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 if (((((player->unk_094 / 18.0f) * 216.0f) >= 30.0f) &&
                      ((((player->unk_0C0 / 182) > 0x14) || ((player->unk_0C0 / 182) < (-0x14))))) ||
                     ((player->unk_22C - player->unk_094) >= 0.04)) {
                     func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                    func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                    init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 0, 0, 0x0080);
-                    player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                    player->playerPacticlePool1[arg1].green = random_int(0x0010U);
                 }
             } else if ((player->playerPacticlePool1[arg2].unk_01E > 0) &&
                        (((((player->unk_094 / 18.0f) * 216.0f) >= 30.0f) &&
                          (((player->unk_0C0 / 182) >= 0x15) || ((player->unk_0C0 / 182) < -0x14))) ||
                         ((player->unk_22C - player->unk_094) >= 0.04))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, z, y, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 2, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], GROUND_PARTCLE, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 0, 0, 0x0080);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         default:
@@ -3146,16 +3145,16 @@ void func_8005EA94(Player* player, s16 arg1, s32 arg2, s8 arg3, UNUSED s8 arg4) 
     if (1) {}
     if (surfaceType == 0) {
         if ((arg1 == 0) &&
-            ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+            ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
             if (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 9, 0.8f);
-                func_8005D800(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00AF);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 9, 0.8f);
+                set_particle_color(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00AF);
             }
         } else if ((player->playerPacticlePool1[arg2].unk_01E > 0) && (((player->unk_094 / 18.0f) * 216.0f) >= 10.0f)) {
             func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-            func_8005D7D8(&player->playerPacticlePool1[arg1], 9, 0.8f);
-            func_8005D800(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00AF);
+            init_new_particle_player(&player->playerPacticlePool1[arg1], 9, 0.8f);
+            set_particle_color(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00AF);
         }
     }
 }
@@ -3188,9 +3187,9 @@ void func_8005ED48(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
     switch (surfaceType) {
         case DIRT:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 1, 0, 0x0080);
                 }
@@ -3209,10 +3208,10 @@ void func_8005ED48(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                 if (GetCourse() == GetDkJungle()) {
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 11, 0, 0x0080);
                 }
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 1, 0, 0x0080);
                 }
@@ -3231,113 +3230,113 @@ void func_8005ED48(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                 if (GetCourse() == GetDkJungle()) {
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 0x000B, 0, 0x0080);
                 }
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case GRASS:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.1f);
-                func_8005D800(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
-                player->playerPacticlePool1[arg1].unk_038 -= arg1 * 8;
-                player->playerPacticlePool1[arg1].unk_03A -= arg1 * 8;
-                player->playerPacticlePool1[arg1].unk_03C -= arg1 * 8;
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.1f);
+                set_particle_color(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
+                player->playerPacticlePool1[arg1].red -= arg1 * 8;
+                player->playerPacticlePool1[arg1].green -= arg1 * 8;
+                player->playerPacticlePool1[arg1].blue -= arg1 * 8;
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.1f);
-                func_8005D800(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
-                player->playerPacticlePool1[arg1].unk_038 -= arg1 * 8;
-                player->playerPacticlePool1[arg1].unk_03A -= arg1 * 8;
-                player->playerPacticlePool1[arg1].unk_03C -= arg1 * 8;
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.1f);
+                set_particle_color(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
+                player->playerPacticlePool1[arg1].red -= arg1 * 8;
+                player->playerPacticlePool1[arg1].green -= arg1 * 8;
+                player->playerPacticlePool1[arg1].blue -= arg1 * 8;
             }
             player->playerPacticlePool1[arg1].pos[1] -= 1.5;
             break;
         case SAND_OFFROAD:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 2, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 2, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case SAND:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 3, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 3, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case WET_SAND:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 4, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 4, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case DIRT_OFFROAD:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 5, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 5, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case SNOW:
         case SNOW_OFFROAD:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 6, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 6, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case ASPHALT:
         case STONE:
         case BRIDGE:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 0, 0, 0x0080);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, (s8) surfaceType, (s8) var_t3);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 5, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 5, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 0, 0, 0x0080);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         default:
@@ -3375,9 +3374,9 @@ void func_8005F90C(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
     switch (surfaceType) {
         case DIRT:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 1, 0, 0x0080);
                 }
@@ -3396,10 +3395,10 @@ void func_8005F90C(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                 if (GetCourse() == GetDkJungle()) {
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 0x000B, 0, 0x0080);
                 }
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 if ((GetCourse() == GetChocoMountain()) || (GetCourse() == GetRoyalRaceway())) {
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 1, 0, 0x0080);
                 }
@@ -3418,113 +3417,113 @@ void func_8005F90C(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                 if (GetCourse() == GetDkJungle()) {
                     func_8005DAD8(&player->playerPacticlePool1[arg1], 0x000B, 0, 0x0080);
                 }
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case GRASS:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.1f);
-                func_8005D800(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
-                player->playerPacticlePool1[arg1].unk_038 -= arg1 * 8;
-                player->playerPacticlePool1[arg1].unk_03A -= arg1 * 8;
-                player->playerPacticlePool1[arg1].unk_03C -= arg1 * 8;
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.1f);
+                set_particle_color(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
+                player->playerPacticlePool1[arg1].red -= arg1 * 8;
+                player->playerPacticlePool1[arg1].green -= arg1 * 8;
+                player->playerPacticlePool1[arg1].blue -= arg1 * 8;
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.1f);
-                func_8005D800(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
-                player->playerPacticlePool1[arg1].unk_038 -= arg1 * 8;
-                player->playerPacticlePool1[arg1].unk_03A -= arg1 * 8;
-                player->playerPacticlePool1[arg1].unk_03C -= arg1 * 8;
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.1f);
+                set_particle_color(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
+                player->playerPacticlePool1[arg1].red -= arg1 * 8;
+                player->playerPacticlePool1[arg1].green -= arg1 * 8;
+                player->playerPacticlePool1[arg1].blue -= arg1 * 8;
             }
             player->playerPacticlePool1[arg1].pos[1] -= 1.5;
             break;
         case SAND_OFFROAD:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 2, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 2, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case SAND:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 3, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 3, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case WET_SAND:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 4, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 4, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case DIRT_OFFROAD:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 5, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 5, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case SNOW:
         case SNOW_OFFROAD:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 6, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 6, 1, 0x00A8);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         case ASPHALT:
         case STONE:
         case BRIDGE:
             if ((arg1 == 0) &&
-                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+                ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 0, 0, 0x0080);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
                 func_8005D794(player, &player->playerPacticlePool1[arg1], x, y, z, surfaceType, var_t1);
-                func_8005D7D8(&player->playerPacticlePool1[arg1], 4, 0.46f);
+                init_new_particle_player(&player->playerPacticlePool1[arg1], 4, 0.46f);
                 func_8005DAD8(&player->playerPacticlePool1[arg1], 0, 0, 0x0080);
-                player->playerPacticlePool1[arg1].unk_03A = random_int(0x0010U);
+                player->playerPacticlePool1[arg1].green = random_int(0x0010U);
             }
             break;
         default:
@@ -3555,38 +3554,38 @@ void func_80060504(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
     temp_v0 = random_int(var_v0);
     if ((temp_v0 == 1) || (temp_v0 == 2) || (temp_v0 == 3)) {
         if ((arg1 == 0) &&
-            ((player->playerPacticlePool0[arg2].unk_01E > 0) || (player->playerPacticlePool0[arg2].unk_01C == 0))) {
+            ((player->playerPacticlePool0[arg2].unk_01E > 0) || (player->playerPacticlePool0[arg2].isAlive == 0))) {
             sp4C = player->pos[1] - 2.5;
             sp48 = player->pos[2];
             sp50 = player->pos[0];
             func_8005D794(player, &player->playerPacticlePool0[arg1], sp50, sp4C, sp48, 0, 0);
-            func_8005D7D8(&player->playerPacticlePool0[arg1], 1, 0.5f);
+            init_new_particle_player(&player->playerPacticlePool0[arg1], 1, 0.5f);
         } else if (player->playerPacticlePool0[arg2].unk_01E > 0) {
             sp4C = player->pos[1] - 2.5;
             sp48 = player->pos[2];
             sp50 = player->pos[0];
             func_8005D794(player, &player->playerPacticlePool0[arg1], sp50, sp4C, sp48, 0, 0);
-            func_8005D7D8(&player->playerPacticlePool0[arg1], 1, 0.5f);
+            init_new_particle_player(&player->playerPacticlePool0[arg1], 1, 0.5f);
         }
     }
     player->playerPacticlePool0[arg1].unk_024 = 0.0f;
     if ((player->unk_044 & 0x20) == 0x20) {
         player->playerPacticlePool0[arg1].unk_040 = 0;
         if ((player->effects & BOOST_EFFECT) == BOOST_EFFECT) {
-            func_8005D800(&player->playerPacticlePool0[arg1], 0x00FFFF00, 0x0080);
-            player->playerPacticlePool0[arg1].unk_038 = 1;
+            set_particle_color(&player->playerPacticlePool0[arg1], 0x00FFFF00, 0x0080);
+            player->playerPacticlePool0[arg1].red = 1;
         } else {
-            func_8005D800(&player->playerPacticlePool0[arg1], 0x00FFFFFF, 0x0070);
-            player->playerPacticlePool0[arg1].unk_038 = 0;
+            set_particle_color(&player->playerPacticlePool0[arg1], 0x00FFFFFF, 0x0070);
+            player->playerPacticlePool0[arg1].red = 0;
         }
     } else {
         player->playerPacticlePool0[arg1].unk_040 = 1;
         if ((player->effects & BOOST_EFFECT) == BOOST_EFFECT) {
-            func_8005D800(&player->playerPacticlePool0[arg1], 0x00FFFF00, 0x0080);
-            player->playerPacticlePool0[arg1].unk_038 = 1;
+            set_particle_color(&player->playerPacticlePool0[arg1], 0x00FFFF00, 0x0080);
+            player->playerPacticlePool0[arg1].red = 1;
         } else {
-            func_8005D800(&player->playerPacticlePool0[arg1], 0x00FFFFFF, 0x0070);
-            player->playerPacticlePool0[arg1].unk_038 = 0;
+            set_particle_color(&player->playerPacticlePool0[arg1], 0x00FFFFFF, 0x0070);
+            player->playerPacticlePool0[arg1].red = 0;
         }
     }
     thing2 = (player->playerPacticlePool0[arg1].unk_020 - (player->unk_0C0 / 2));
@@ -3620,11 +3619,11 @@ void func_800608E0(Player* player, s16 arg1, UNUSED s32 arg2, s8 arg3, UNUSED s8
         sp4C = (f32) ((f64) (D_801652A0[arg3] - player->pos[1]) + 0.1);
     }
     func_8005D794(player, &player->playerPacticlePool0[arg1], 0.0f, 0.0f, 0.0f, (s8) 0, (s8) 0);
-    func_8005D7D8(&player->playerPacticlePool0[arg1], 3, var_f0);
+    init_new_particle_player(&player->playerPacticlePool0[arg1], 3, var_f0);
     if ((GetCourse() == GetBowsersCastle()) || (GetCourse() == GetBigDonut())) {
-        func_8005D800(&player->playerPacticlePool0[arg1], 0, 0x00AF);
+        set_particle_color(&player->playerPacticlePool0[arg1], 0, 0x00AF);
     } else {
-        func_8005D800(&player->playerPacticlePool0[arg1], 0x00FFFFFF, 0x00CF);
+        set_particle_color(&player->playerPacticlePool0[arg1], 0x00FFFFFF, 0x00CF);
     }
     func_80062B18(&sp50, &sp4C, &sp48, 0.0f, sp4C,
                   ((-player->playerPacticlePool0[arg1].unk_01E * (player->unk_094 / 18.0f) * 216.0f) / 10.0f) + -4.0f,
@@ -3637,7 +3636,7 @@ void func_800608E0(Player* player, s16 arg1, UNUSED s32 arg2, s8 arg3, UNUSED s8
 void func_80060B14(Player* player, s16 arg1, s32 arg2, s8 arg3, s8 arg4) {
     if ((GetCourse() != GetSkyscraper()) && (GetCourse() != GetRainbowRoad())) {
         if ((arg1 == 0) &&
-            ((player->playerPacticlePool0[arg2].unk_01E > 0) || (player->playerPacticlePool0[arg2].unk_01C == 0))) {
+            ((player->playerPacticlePool0[arg2].unk_01E > 0) || (player->playerPacticlePool0[arg2].isAlive == 0))) {
             func_800608E0(player, arg1, arg2, arg3, arg4);
         } else if (player->playerPacticlePool0[arg2].unk_01E > 0) {
             func_800608E0(player, arg1, arg2, arg3, arg4);
@@ -3666,35 +3665,35 @@ void func_80060BCC(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
         return;
     }
     if ((arg1 == 0) &&
-        ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].unk_01C == 0))) {
+        ((player->playerPacticlePool1[arg2].unk_01E > 0) || (player->playerPacticlePool1[arg2].isAlive == 0))) {
         func_8005D794(player, &player->playerPacticlePool1[arg1], 0.0f, 0.0f, 0.0f, (s8) 0, (s8) 0);
-        func_8005D7D8(&player->playerPacticlePool1[arg1], 0x0B, 0.4f);
-        func_8005D800(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
+        init_new_particle_player(&player->playerPacticlePool1[arg1], 0x0B, 0.4f);
+        set_particle_color(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
         player->playerPacticlePool1[arg1].pos[2] = player->pos[2] + (coss(sp54 * 0xB6) * -1.8);
         player->playerPacticlePool1[arg1].pos[0] = player->pos[0] + (sins(sp54 * 0xB6) * -1.8);
         player->playerPacticlePool1[arg1].pos[1] = (player->pos[1] - player->boundingBoxSize) + sp4C + 2.0f;
         player->playerPacticlePool1[arg1].unk_018 = sp44 + 1.0f;
-        player->playerPacticlePool1[arg1].unk_00C = (sp48 + 2.0f) / 10.0f;
+        player->playerPacticlePool1[arg1].scale = (sp48 + 2.0f) / 10.0f;
     } else if (player->playerPacticlePool1[arg2].unk_01E > 0) {
         func_8005D794(player, &player->playerPacticlePool1[arg1], 0.0f, 0.0f, 0.0f, (s8) 0, (s8) 0);
-        func_8005D7D8(&player->playerPacticlePool1[arg1], 0x0B, 0.4f);
-        func_8005D800(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
+        init_new_particle_player(&player->playerPacticlePool1[arg1], 0x0B, 0.4f);
+        set_particle_color(&player->playerPacticlePool1[arg1], 0x00FFFFFF, 0x00FF);
         player->playerPacticlePool1[arg1].pos[2] = player->pos[2] + (coss(sp54 * 0xB6) * -1.8);
         player->playerPacticlePool1[arg1].pos[0] = player->pos[0] + (sins(sp54 * 0xB6) * -1.8);
         player->playerPacticlePool1[arg1].pos[1] = (player->pos[1] - player->boundingBoxSize) + sp4C + 2.0f;
         player->playerPacticlePool1[arg1].unk_018 = sp44 + 1.0f;
-        player->playerPacticlePool1[arg1].unk_00C = (sp48 + 2.0f) / 10.0f;
+        player->playerPacticlePool1[arg1].scale = (sp48 + 2.0f) / 10.0f;
     }
 }
 
 void func_80060F50(Player* player, s16 arg1, UNUSED s32 arg2, s8 arg3, UNUSED s8 arg4) {
     func_8005D794(player, &player->playerPacticlePool0[arg1], 0.0f, 0.0f, 0.0f, 0, 0);
-    func_8005D7D8(&player->playerPacticlePool0[arg1], 5, 4.0f);
+    init_new_particle_player(&player->playerPacticlePool0[arg1], 5, 4.0f);
 
     if ((GetCourse() == GetBowsersCastle()) || (GetCourse() == GetBigDonut())) {
-        func_8005D800(&player->playerPacticlePool0[arg1], 0xFF0000, 0xFF);
+        set_particle_color(&player->playerPacticlePool0[arg1], 0xFF0000, 0xFF);
     } else {
-        func_8005D800(&player->playerPacticlePool0[arg1], 0xFFFFFF, 0xFF);
+        set_particle_color(&player->playerPacticlePool0[arg1], 0xFFFFFF, 0xFF);
     }
 
     player->playerPacticlePool0[arg1].pos[2] =
@@ -3708,18 +3707,18 @@ void func_80060F50(Player* player, s16 arg1, UNUSED s32 arg2, s8 arg3, UNUSED s8
 void func_80061094(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s8 arg3, UNUSED s8 arg4) {
     if (arg1 == 0) {
         func_8005D794(player, &player->playerPacticlePool0[arg1], 0.0f, 0.0f, 0.0f, 0, 0);
-        func_8005D7D8(&player->playerPacticlePool0[arg1], 6, 3.8f);
-        func_8005D800(&player->playerPacticlePool0[arg1], 0xFFFFFF, 0xFF);
-        player->playerPacticlePool0[arg1].unk_038 = 0;
-        player->playerPacticlePool0[arg1].unk_03A = 0;
-        player->playerPacticlePool0[arg1].unk_03C = 0;
+        init_new_particle_player(&player->playerPacticlePool0[arg1], 6, 3.8f);
+        set_particle_color(&player->playerPacticlePool0[arg1], 0xFFFFFF, 0xFF);
+        player->playerPacticlePool0[arg1].red = 0;
+        player->playerPacticlePool0[arg1].green = 0;
+        player->playerPacticlePool0[arg1].blue = 0;
     }
 }
 
 void func_80061130(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s8 arg3, UNUSED s8 arg4) {
     func_8005D794(player, &player->playerPacticlePool0[arg1], 0.0f, 0.0f, 0.0f, 0, 0);
-    func_8005D7D8(&player->playerPacticlePool0[arg1], 7, 0.6f);
-    func_8005D800(&player->playerPacticlePool0[arg1], 0xFFFFFF, 0xD0);
+    init_new_particle_player(&player->playerPacticlePool0[arg1], 7, 0.6f);
+    set_particle_color(&player->playerPacticlePool0[arg1], 0xFFFFFF, 0xD0);
 
     player->playerPacticlePool0[arg1].pos[2] =
         player->pos[2] + (coss(player->playerPacticlePool0[arg1].unk_020) * 6.0f);
@@ -3732,7 +3731,7 @@ void func_80061130(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s8 arg3, UN
 
 void func_80061224(Player* player, s16 arg1, s32 arg2, s8 arg3, s8 arg4) {
     if ((arg1 == 0) &&
-        ((player->playerPacticlePool0[arg2].unk_01E > 0) || (player->playerPacticlePool0[arg1].unk_01C == 0))) {
+        ((player->playerPacticlePool0[arg2].unk_01E > 0) || (player->playerPacticlePool0[arg1].isAlive == 0))) {
         func_80061130(player, arg1, arg2, arg3, arg4);
     } else if (player->playerPacticlePool0[arg2].unk_01E >= 2) {
         func_80061130(player, arg1, arg2, arg3, arg4);
@@ -3746,11 +3745,11 @@ void func_800612F8(Player* player, UNUSED s32 arg1, UNUSED s32 arg2, UNUSED s8 a
     s32 var_s2;
 
     for (var_s2 = 0; var_s2 < 10; var_s2++) {
-        player->playerPacticlePool3[var_s2].unk_01C = 1;
+        player->playerPacticlePool3[var_s2].isAlive = 1;
         player->playerPacticlePool3[var_s2].unk_028 = player->pos[1] + 5.0f;
         player->playerPacticlePool3[var_s2].unk_020 = (0x1C70 * var_s2) - player->rotation[1];
         player->playerPacticlePool3[var_s2].unk_024 = (random_int(0x0064U) / 100.0f) + 1.5;
-        player->playerPacticlePool3[var_s2].unk_03A = 0;
+        player->playerPacticlePool3[var_s2].green = 0;
         player->playerPacticlePool3[var_s2].type = 1;
         player->playerPacticlePool3[var_s2].unk_01E = 0;
         player->playerPacticlePool3[var_s2].unk_03E = 0x00FF;
@@ -3764,13 +3763,13 @@ void func_80061430(Player* player, UNUSED s32 arg1, UNUSED s32 arg2, UNUSED s8 a
     s32 var_s2;
 
     for (var_s2 = 0; var_s2 < 7; var_s2++) {
-        player->playerPacticlePool3[var_s2].unk_01C = 1;
+        player->playerPacticlePool3[var_s2].isAlive = 1;
         player->playerPacticlePool3[var_s2].unk_028 = player->pos[1] - 4.0f;
         player->playerPacticlePool3[var_s2].unk_020 = (0x1C70 * var_s2) - player->rotation[1];
         // ???
         player->playerPacticlePool3[var_s2].unk_024 = (random_int(0x0064U) / 100.0f) + 1.9;
         player->playerPacticlePool3[var_s2].unk_024 = (random_int(0x0064U) / 100.0f) + 1.5;
-        player->playerPacticlePool3[var_s2].unk_03A = 0;
+        player->playerPacticlePool3[var_s2].green = 0;
         player->playerPacticlePool3[var_s2].type = 9;
         player->playerPacticlePool3[var_s2].unk_01E = 0;
         player->playerPacticlePool3[var_s2].unk_03E = 0x00FF;
@@ -3788,7 +3787,7 @@ void func_800615AC(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s8 arg3, UN
     f32 sp28[10] = { -182.0f, 182.0f, 364.0f, -364.0f, 546.0f, -546.0f, 728.0f, -728.0f, 910.0f, -910.0f };
 
     if (random_int(3U) == 2.0f) {
-        player->playerPacticlePool3[arg1].unk_01C = 1;
+        player->playerPacticlePool3[arg1].isAlive = 1;
         player->playerPacticlePool3[arg1].pos[0] = player->pos[0];
         player->playerPacticlePool3[arg1].pos[2] = player->pos[2];
         player->playerPacticlePool3[arg1].unk_020 = -player->rotation[1] + sp28[arg1];
@@ -3797,11 +3796,11 @@ void func_800615AC(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s8 arg3, UN
         temp_f0 -= test;
         player->playerPacticlePool3[arg1].surfaceType = temp_f0;
         player->playerPacticlePool3[arg1].pos[1] = player->pos[1] + temp_f0;
-        player->playerPacticlePool3[arg1].unk_00C = 0.15f;
+        player->playerPacticlePool3[arg1].scale = 0.15f;
         player->playerPacticlePool3[arg1].type = 5;
         player->playerPacticlePool3[arg1].unk_01E = 0;
         player->playerPacticlePool3[arg1].unk_03E = 0x00FF;
-        player->playerPacticlePool3[arg1].unk_038 = 0;
+        player->playerPacticlePool3[arg1].red = 0;
     }
 }
 
@@ -3818,29 +3817,29 @@ void func_80061754(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s32 arg3, U
     sp44 = random_int(6U);
     sp48 = random_int(2U);
     func_8005D794(player, &player->playerPacticlePool3[arg1], 0.0f, 0.0f, 0.0f, (s8) 0, (s8) 0);
-    func_8005D7D8(&player->playerPacticlePool3[arg1], 6, 1.0f);
+    init_new_particle_player(&player->playerPacticlePool3[arg1], 6, 1.0f);
     if ((player->effects & HIT_BY_ITEM_EFFECT) || ((player->effects) & 0x01000000) || ((player->effects) & 0x400) ||
         ((player->effects) & BOO_EFFECT)) {
-        func_8005D800(&player->playerPacticlePool3[arg1], 0x00FFFFFF, 0x00A0);
-        player->playerPacticlePool3[arg1].unk_038 -= temp_s1;
-        player->playerPacticlePool3[arg1].unk_03A -= temp_s1;
-        player->playerPacticlePool3[arg1].unk_03C -= temp_s1;
+        set_particle_color(&player->playerPacticlePool3[arg1], 0x00FFFFFF, 0x00A0);
+        player->playerPacticlePool3[arg1].red -= temp_s1;
+        player->playerPacticlePool3[arg1].green -= temp_s1;
+        player->playerPacticlePool3[arg1].blue -= temp_s1;
     } else {
-        func_8005D800(&player->playerPacticlePool3[arg1], 0, 0x00A0);
-        player->playerPacticlePool3[arg1].unk_038 += temp_s1;
-        player->playerPacticlePool3[arg1].unk_03A += temp_s1;
-        player->playerPacticlePool3[arg1].unk_03C += temp_s1;
+        set_particle_color(&player->playerPacticlePool3[arg1], 0, 0x00A0);
+        player->playerPacticlePool3[arg1].red += temp_s1;
+        player->playerPacticlePool3[arg1].green += temp_s1;
+        player->playerPacticlePool3[arg1].blue += temp_s1;
     }
     player->playerPacticlePool3[arg1].pos[2] = player->pos[2] + (coss(sp54 * 0xB6) * -5.0f);
     player->playerPacticlePool3[arg1].pos[0] = player->pos[0] + (sins(sp54 * 0xB6) * -5.0f);
     player->playerPacticlePool3[arg1].pos[1] = (player->pos[1] - player->boundingBoxSize) + sp4C + 2.0f;
     player->playerPacticlePool3[arg1].unk_018 = sp44 + 1.0f;
-    player->playerPacticlePool3[arg1].unk_00C = sp48 + 1.0f;
+    player->playerPacticlePool3[arg1].scale = sp48 + 1.0f;
 }
 
 void func_8006199C(Player* player, s16 arg1, s32 arg2, s8 arg3, s8 arg4) {
     if ((arg1 == 0) &&
-        ((player->playerPacticlePool3[arg2].unk_01E > 0) || (player->playerPacticlePool3[arg2].unk_01C == 0))) {
+        ((player->playerPacticlePool3[arg2].unk_01E > 0) || (player->playerPacticlePool3[arg2].isAlive == 0))) {
         func_80061754(player, arg1, arg2, (s32) arg3, arg4);
     } else if (player->playerPacticlePool3[arg2].unk_01E > 0) {
         func_80061754(player, arg1, arg2, (s32) arg3, arg4);
@@ -3859,22 +3858,22 @@ void func_80061A34(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
     random_int(6U);
     sp48 = (f32) random_int(3U);
     if ((arg1 == 0) &&
-        ((player->playerPacticlePool3[arg2].unk_01E > 0) || (player->playerPacticlePool3[arg2].unk_01C == 0))) {
+        ((player->playerPacticlePool3[arg2].unk_01E > 0) || (player->playerPacticlePool3[arg2].isAlive == 0))) {
         func_8005D794(player, &player->playerPacticlePool3[arg1], 0.0f, 0.0f, 0.0f, (s8) 0, (s8) 0);
-        func_8005D7D8(&player->playerPacticlePool3[arg1], 7, 1.0f);
-        func_8005D800(&player->playerPacticlePool3[arg1], 0x00FFFFFF, 0x00FF);
+        init_new_particle_player(&player->playerPacticlePool3[arg1], 7, 1.0f);
+        set_particle_color(&player->playerPacticlePool3[arg1], 0x00FFFFFF, 0x00FF);
         player->playerPacticlePool3[arg1].pos[2] = player->pos[2] + (coss(sp54 * 0xB6) * -2.0);
         player->playerPacticlePool3[arg1].pos[0] = player->pos[0] + (sins(sp54 * 0xB6) * -2.0);
         player->playerPacticlePool3[arg1].pos[1] = (player->pos[1] - player->boundingBoxSize) + sp4C + 2.0f;
-        player->playerPacticlePool3[arg1].unk_00C = (sp48 + 2.0f) / 10.0f;
+        player->playerPacticlePool3[arg1].scale = (sp48 + 2.0f) / 10.0f;
     } else if (player->playerPacticlePool3[arg2].unk_01E > 0) {
         func_8005D794(player, &player->playerPacticlePool3[arg1], 0.0f, 0.0f, 0.0f, (s8) 0, (s8) 0);
-        func_8005D7D8(&player->playerPacticlePool3[arg1], 7, 1.0f);
-        func_8005D800(&player->playerPacticlePool3[arg1], 0x00FFFFFF, 0x00FF);
+        init_new_particle_player(&player->playerPacticlePool3[arg1], 7, 1.0f);
+        set_particle_color(&player->playerPacticlePool3[arg1], 0x00FFFFFF, 0x00FF);
         player->playerPacticlePool3[arg1].pos[2] = player->pos[2] + (coss(sp54 * 0xB6) * -2.0);
         player->playerPacticlePool3[arg1].pos[0] = player->pos[0] + (sins(sp54 * 0xB6) * -2.0);
         player->playerPacticlePool3[arg1].pos[1] = (player->pos[1] - player->boundingBoxSize) + (f32) sp4C + 2.0f;
-        player->playerPacticlePool3[arg1].unk_00C = (sp48 + 2.0f) / 10.0f;
+        player->playerPacticlePool3[arg1].scale = (sp48 + 2.0f) / 10.0f;
     }
 }
 
@@ -3886,7 +3885,7 @@ void func_80061D4C(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s8 arg3, UN
     f32 sp20[10] = { -182.0f, 182.0f, 364.0f, -364.0f, 546.0f, -546.0f, 728.0f, -728.0f, 910.0f, -910.0f };
 
     if (random_int(3U) == 2.0f) {
-        player->playerPacticlePool3[arg1].unk_01C = 1;
+        player->playerPacticlePool3[arg1].isAlive = 1;
         player->playerPacticlePool3[arg1].pos[0] = player->pos[0];
         player->playerPacticlePool3[arg1].pos[1] = player->pos[1] + 2.0f;
         player->playerPacticlePool3[arg1].pos[2] = player->pos[2];
@@ -3894,7 +3893,7 @@ void func_80061D4C(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s8 arg3, UN
         player->playerPacticlePool3[arg1].unk_018 = random_int(3U) + 2.0f;
         player->playerPacticlePool3[arg1].surfaceType = random_int(4U);
         player->playerPacticlePool3[arg1].surfaceType -= test;
-        player->playerPacticlePool3[arg1].unk_00C = 0.4f;
+        player->playerPacticlePool3[arg1].scale = 0.4f;
         player->playerPacticlePool3[arg1].type = 2;
         player->playerPacticlePool3[arg1].unk_01E = 0;
         player->playerPacticlePool3[arg1].unk_03E = 0x00FF;
@@ -3923,10 +3922,10 @@ void func_80061EF4(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
     }
     if (var_t0 == 0) {
         if ((arg1 == 0) &&
-            ((player->playerPacticlePool3[arg2].unk_01E > 0) || (player->playerPacticlePool3[arg2].unk_01C == 0))) {
+            ((player->playerPacticlePool3[arg2].unk_01E > 0) || (player->playerPacticlePool3[arg2].isAlive == 0))) {
             func_8005D794(player, &player->playerPacticlePool3[arg1], 0.0f, var_f2, 0.0f, (s8) var_t0, (s8) var_t1);
-            func_8005D7D8(&player->playerPacticlePool3[arg1], 3, 0.5f);
-            func_8005D800(&player->playerPacticlePool3[arg1], 0x00FFFFFF, 0x0060);
+            init_new_particle_player(&player->playerPacticlePool3[arg1], 3, 0.5f);
+            set_particle_color(&player->playerPacticlePool3[arg1], 0x00FFFFFF, 0x0060);
             player->playerPacticlePool3[arg1].unk_020 = 0;
             if (player->playerPacticlePool3[arg1].unk_010 == 1) {
                 player->playerPacticlePool3[arg1].unk_020 += 0x888;
@@ -3941,8 +3940,8 @@ void func_80061EF4(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
                 (sins(player->playerPacticlePool3[arg1].unk_020 - player->rotation[1] - player->unk_0C0) * 5.0f);
         } else if (player->playerPacticlePool3[arg2].unk_01E > 0) {
             func_8005D794(player, &player->playerPacticlePool3[arg1], 0.0f, var_f2, 0.0f, (s8) var_t0, (s8) var_t1);
-            func_8005D7D8(&player->playerPacticlePool3[arg1], 3, 0.5f);
-            func_8005D800(&player->playerPacticlePool3[arg1], 0x00FFFFFF, 0x0060);
+            init_new_particle_player(&player->playerPacticlePool3[arg1], 3, 0.5f);
+            set_particle_color(&player->playerPacticlePool3[arg1], 0x00FFFFFF, 0x0060);
             player->playerPacticlePool3[arg1].unk_020 = 0;
             if (player->playerPacticlePool3[arg1].unk_010 == 1) {
                 player->playerPacticlePool3[arg1].unk_020 += 0x888;
@@ -3985,10 +3984,10 @@ void func_800621BC(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
 
     if (phi_t0 == 0) {
         if ((arg1 == 0) &&
-            ((player->playerPacticlePool3[arg2].unk_01E > 0) || (player->playerPacticlePool3[arg2].unk_01C == 0))) {
+            ((player->playerPacticlePool3[arg2].unk_01E > 0) || (player->playerPacticlePool3[arg2].isAlive == 0))) {
             func_8005D794(player, &player->playerPacticlePool3[arg1], 0.0f, phi_f2, 0.0f, phi_t0, phi_t1);
-            func_8005D7D8(&player->playerPacticlePool3[arg1], 8, 1.0f);
-            func_8005D800(&player->playerPacticlePool3[arg1], 0xFFFF20, 0xFF);
+            init_new_particle_player(&player->playerPacticlePool3[arg1], 8, 1.0f);
+            set_particle_color(&player->playerPacticlePool3[arg1], 0xFFFF20, 0xFF);
 
             player->playerPacticlePool3[arg1].unk_020 = 0;
             if (player->playerPacticlePool3[arg1].unk_010 == 1) {
@@ -4009,8 +4008,8 @@ void func_800621BC(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
         new_var2 = player;
         if (new_var2->playerPacticlePool3[arg2].unk_01E > 0) {
             func_8005D794(new_var2, &new_var2->playerPacticlePool3[arg1], 0.0f, phi_f2, 0.0f, phi_t0, phi_t1);
-            func_8005D7D8(&new_var2->playerPacticlePool3[arg1], 8, 1.0f);
-            func_8005D800(&new_var2->playerPacticlePool3[arg1], 0xFFFF20, 0xFF);
+            init_new_particle_player(&new_var2->playerPacticlePool3[arg1], 8, 1.0f);
+            set_particle_color(&new_var2->playerPacticlePool3[arg1], 0xFFFF20, 0xFF);
             new_var2->playerPacticlePool3[arg1].unk_020 = 0;
             if (new_var2->playerPacticlePool3[arg1].unk_010 == 1) {
                 new_var2->playerPacticlePool3[arg1].unk_020 += 2184;
@@ -4030,7 +4029,7 @@ void func_800621BC(Player* player, s16 arg1, s32 arg2, UNUSED s8 arg3, UNUSED s8
 }
 
 void func_80062484(Player* player, UnkPlayerStruct258* arg1, s32 arg2) {
-    arg1->unk_01C = 1;
+    arg1->isAlive = 1;
     arg1->pos[1] = player->unk_074 + 1.0f;
     arg1->pos[2] = player->pos[2];
     arg1->pos[0] = player->pos[0];
@@ -4130,42 +4129,42 @@ void func_800624D8(Player* player, UNUSED s32 arg1, UNUSED s32 arg2, UNUSED s8 a
 }
 
 void func_800628C0(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
-    player->playerPacticlePool2[arg3].unk_01C = 1;
+    player->playerPacticlePool2[arg3].isAlive = 1;
     player->playerPacticlePool2[arg3].unk_020 = -player->rotation[1];
     player->playerPacticlePool2[arg3].type = 2;
     player->playerPacticlePool2[arg3].unk_01E = 0;
-    player->playerPacticlePool2[arg3].unk_00C = 0.2f;
+    player->playerPacticlePool2[arg3].scale = 0.2f;
 }
 
 void func_80062914(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
-    player->playerPacticlePool2[arg3].unk_01C = 1;
+    player->playerPacticlePool2[arg3].isAlive = 1;
     player->playerPacticlePool2[arg3].unk_020 = -player->rotation[1];
     player->playerPacticlePool2[arg3].type = 4;
     player->playerPacticlePool2[arg3].unk_01E = 0;
-    player->playerPacticlePool2[arg3].unk_00C = 1.0f;
+    player->playerPacticlePool2[arg3].scale = 1.0f;
 }
 
 void func_80062968(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
-    player->playerPacticlePool2[arg3].unk_01C = 1;
+    player->playerPacticlePool2[arg3].isAlive = 1;
     player->playerPacticlePool2[arg3].unk_020 = -player->rotation[1];
     player->playerPacticlePool2[arg3].type = 5;
     player->playerPacticlePool2[arg3].unk_01E = 0;
-    player->playerPacticlePool2[arg3].unk_00C = 0.2f;
+    player->playerPacticlePool2[arg3].scale = 0.2f;
 }
 
 void func_800629BC(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
-    player->playerPacticlePool2[arg3].unk_01C = 1;
+    player->playerPacticlePool2[arg3].isAlive = 1;
     player->playerPacticlePool2[arg3].unk_020 = -player->rotation[1];
     player->playerPacticlePool2[arg3].type = 6;
     player->playerPacticlePool2[arg3].unk_01E = 0;
-    player->playerPacticlePool2[arg3].unk_00C = 0.2f;
+    player->playerPacticlePool2[arg3].scale = 0.2f;
     player->playerPacticlePool2[arg3].pos[1] = 0.0f;
 }
 
 void func_80062A18(Player* player, s8 arg1, UNUSED s8 arg2, s8 arg3) {
-    player->playerPacticlePool2[arg3].unk_01C = 1;
+    player->playerPacticlePool2[arg3].isAlive = 1;
     player->playerPacticlePool2[arg3].type = 3;
-    player->playerPacticlePool2[arg1 /* arg1 instead of arg3 */].unk_00C = 0.2f;
+    player->playerPacticlePool2[arg1 /* arg1 instead of arg3 */].scale = 0.2f;
     player->playerPacticlePool2[arg3].unk_01E = 1;
     player->playerPacticlePool2[arg3].unk_020 = 0;
     player->unk_0B6 &= ~0x0080;
@@ -4175,9 +4174,9 @@ void func_80062A18(Player* player, s8 arg1, UNUSED s8 arg2, s8 arg3) {
 }
 
 void func_80062AA8(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
-    player->playerPacticlePool2[arg3].unk_01C = 1;
+    player->playerPacticlePool2[arg3].isAlive = 1;
     player->playerPacticlePool2[arg3].type = 5;
-    player->playerPacticlePool2[arg3].unk_00C = 0.1f;
+    player->playerPacticlePool2[arg3].scale = 0.1f;
     player->playerPacticlePool2[arg3].unk_01E = 0;
     player->playerPacticlePool2[arg3].pos[1] = (player->pos[1] + player->boundingBoxSize) - 2.5;
 }
@@ -4228,13 +4227,13 @@ void func_80062C74(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s32 arg3) {
 
     player->playerPacticlePool0[arg1].unk_01E += 1;
     if (player->playerPacticlePool0[arg1].unk_01E == 0x000C) {
-        player->playerPacticlePool0[arg1].unk_01C = 0;
+        player->playerPacticlePool0[arg1].isAlive = 0;
         player->playerPacticlePool0[arg1].unk_01E = 0;
         player->playerPacticlePool0[arg1].type = 0;
     }
     player->playerPacticlePool0[arg1].unk_018 = 2.0f;
     if (player->playerPacticlePool0[arg1].unk_040 == 0) {
-        player->playerPacticlePool0[arg1].unk_00C = player->playerPacticlePool0[arg1].unk_00C + 0.07;
+        player->playerPacticlePool0[arg1].scale = player->playerPacticlePool0[arg1].scale + 0.07;
         player->playerPacticlePool0[arg1].unk_024 = player->playerPacticlePool0[arg1].unk_024 + 0.3;
         if (player->playerPacticlePool0[arg1].unk_01E >= 3) {
             player->playerPacticlePool0[arg1].unk_03E -= 3;
@@ -4243,7 +4242,7 @@ void func_80062C74(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s32 arg3) {
             player->playerPacticlePool0[arg1].unk_03E = 0;
         }
     } else {
-        player->playerPacticlePool0[arg1].unk_00C = player->playerPacticlePool0[arg1].unk_00C + 0.1;
+        player->playerPacticlePool0[arg1].scale = player->playerPacticlePool0[arg1].scale + 0.1;
         player->playerPacticlePool0[arg1].unk_024 = player->playerPacticlePool0[arg1].unk_024 + 0.3;
         if (player->playerPacticlePool0[arg1].unk_01E >= 3) {
             player->playerPacticlePool0[arg1].unk_03E -= 2;
@@ -4259,7 +4258,7 @@ void func_80062C74(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s32 arg3) {
         var_f6 = -((player->unk_098 / 6000.0f) + 0.1);
     }
     if (((player->effects & BOOST_EFFECT) == BOOST_EFFECT) && (player->playerPacticlePool0[arg1].unk_01E >= 6)) {
-        player->playerPacticlePool0[arg1].unk_00C = player->playerPacticlePool0[arg1].unk_00C + 0.06;
+        player->playerPacticlePool0[arg1].scale = player->playerPacticlePool0[arg1].scale + 0.06;
     }
     player->playerPacticlePool0[arg1].unk_010++;
     if (player->playerPacticlePool0[arg1].unk_010 >= 3) {
@@ -4283,13 +4282,13 @@ void func_80062F98(Player* player, s16 arg1, s8 arg2, UNUSED s8 arg3) {
         player->playerPacticlePool1[arg1].pos[1] += (temp_f0 + 0.3);
         if ((player->playerPacticlePool1[arg1].unk_01E == 0x10) ||
             ((D_801652A0[arg2] - player->playerPacticlePool1[arg1].pos[1]) < 3.0f)) {
-            player->playerPacticlePool1[arg1].unk_01C = 0;
+            player->playerPacticlePool1[arg1].isAlive = 0;
             player->playerPacticlePool1[arg1].unk_01E = 0;
             player->playerPacticlePool1[arg1].type = 0;
         }
     } else if ((player->playerPacticlePool1[arg1].unk_01E == 0xA) ||
                ((D_801652A0[arg2] - player->playerPacticlePool1[arg1].pos[1]) < 3.0f)) {
-        player->playerPacticlePool1[arg1].unk_01C = 0;
+        player->playerPacticlePool1[arg1].isAlive = 0;
         player->playerPacticlePool1[arg1].unk_01E = 0;
         player->playerPacticlePool1[arg1].type = 0;
     }
@@ -4301,7 +4300,7 @@ void func_800630C0(Player* player, s16 arg1, s8 arg2, UNUSED s8 arg3) {
     player->playerPacticlePool0[arg1].pos[0] = player->pos[0] + sins(player->playerPacticlePool0[arg1].unk_020) * -5.8;
     player->playerPacticlePool0[arg1].pos[1] = D_801652A0[arg2];
     if (player->playerPacticlePool0[arg1].unk_01E == 15) {
-        player->playerPacticlePool0[arg1].unk_01C = 0;
+        player->playerPacticlePool0[arg1].isAlive = 0;
         player->playerPacticlePool0[arg1].unk_01E = 0;
         player->playerPacticlePool0[arg1].type = 0;
     }
@@ -4311,22 +4310,22 @@ void func_800631A8(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     ++player->playerPacticlePool0[arg1].unk_01E;
     if ((s32) player->playerPacticlePool0[arg1].unk_01E < 9) {
         if ((player->playerPacticlePool0[arg1].unk_01E & 1) != 0) {
-            player->playerPacticlePool0[arg1].unk_038 = 8;
+            player->playerPacticlePool0[arg1].red = 8;
         } else {
-            player->playerPacticlePool0[arg1].unk_038 = 0;
+            player->playerPacticlePool0[arg1].red = 0;
         }
     } else if (((player->playerPacticlePool0[arg1].unk_01E & 1) != 0) ||
                ((player->playerPacticlePool0[arg1].unk_01E >= 9) && (player->playerPacticlePool0[arg1].unk_01E < 12))) {
-        player->playerPacticlePool0[arg1].unk_038 = 0xFF;
+        player->playerPacticlePool0[arg1].red = 0xFF;
     } else if ((player->playerPacticlePool0[arg1].unk_01E & 2) != 0) {
-        player->playerPacticlePool0[arg1].unk_038 = 8;
+        player->playerPacticlePool0[arg1].red = 8;
     } else {
-        player->playerPacticlePool0[arg1].unk_038 = 0;
+        player->playerPacticlePool0[arg1].red = 0;
     }
-    player->playerPacticlePool0[arg1].unk_03A = 0;
-    player->playerPacticlePool0[arg1].unk_03C = 0;
+    player->playerPacticlePool0[arg1].green = 0;
+    player->playerPacticlePool0[arg1].blue = 0;
     if ((s32) player->playerPacticlePool0[arg1].unk_01E >= 0x19) {
-        player->playerPacticlePool0[arg1].unk_01C = 0;
+        player->playerPacticlePool0[arg1].isAlive = 0;
         player->playerPacticlePool0[arg1].unk_01E = 0;
         player->playerPacticlePool0[arg1].type = 0;
     }
@@ -4348,7 +4347,7 @@ void func_80063268(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
         (sins((player->playerPacticlePool0[arg1].unk_020 + player->playerPacticlePool0[arg1].unk_040)) * 5.5);
     player->playerPacticlePool0[arg1].pos[1] = ((player->pos[1] - 5.0f) + player->playerPacticlePool0[arg1].unk_024);
     ++player->playerPacticlePool0[arg1].unk_01E;
-    player->playerPacticlePool0[arg1].unk_00C += 0.05;
+    player->playerPacticlePool0[arg1].scale += 0.05;
     player->playerPacticlePool0[arg1].unk_03E -= 5;
 
     if ((s32) player->playerPacticlePool0[arg1].unk_03E <= 0) {
@@ -4356,7 +4355,7 @@ void func_80063268(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     }
 
     if ((s32) player->playerPacticlePool0[arg1].unk_01E >= 0x28) {
-        player->playerPacticlePool0[arg1].unk_01C = 0;
+        player->playerPacticlePool0[arg1].isAlive = 0;
         player->playerPacticlePool0[arg1].unk_01E = 0;
         player->playerPacticlePool0[arg1].type = 0;
     }
@@ -4383,17 +4382,17 @@ void func_80063408(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     player->playerPacticlePool1[arg1].pos[1] += 1.0f;
 
     if (((player->effects & 0x80) != 0) || ((player->effects & 0x40) != 0)) {
-        player->playerPacticlePool1[arg1].unk_01C = 0;
+        player->playerPacticlePool1[arg1].isAlive = 0;
         player->playerPacticlePool1[arg1].unk_01E = 0;
     }
 
     if (player->playerPacticlePool1[arg1].unk_01E == 8) {
         player->playerPacticlePool1[arg1].unk_01E = 0;
-        player->playerPacticlePool1[arg1].unk_01C = 0;
+        player->playerPacticlePool1[arg1].isAlive = 0;
         player->playerPacticlePool1[arg1].type = 0;
     }
 
-    player->playerPacticlePool1[arg1].unk_00C += 0.08;
+    player->playerPacticlePool1[arg1].scale += 0.08;
     if (player->playerPacticlePool1[arg1].unk_01E >= 4) {
         player->playerPacticlePool1[arg1].unk_03E -= 16;
     }
@@ -4445,17 +4444,17 @@ void func_800635D4(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     ++player->playerPacticlePool1[arg1].unk_01E;
     player->playerPacticlePool1[arg1].pos[1] += 0.2;
     if (((player->effects & 0x80) != 0) || ((player->effects & 0x40) != 0)) {
-        player->playerPacticlePool1[arg1].unk_01C = 0;
+        player->playerPacticlePool1[arg1].isAlive = 0;
         player->playerPacticlePool1[arg1].unk_01E = 0;
     }
 
     if (player->playerPacticlePool1[arg1].unk_01E == 8) {
-        player->playerPacticlePool1[arg1].unk_01C = 0;
+        player->playerPacticlePool1[arg1].isAlive = 0;
         player->playerPacticlePool1[arg1].unk_01E = 0;
         player->playerPacticlePool1[arg1].type = 0;
     }
 
-    player->playerPacticlePool1[arg1].unk_00C += 0.1;
+    player->playerPacticlePool1[arg1].scale += 0.1;
     if (player->playerPacticlePool1[arg1].unk_040 == 0) {
         if (player->playerPacticlePool1[arg1].unk_01E >= 4) {
             player->playerPacticlePool1[arg1].unk_03E -= 12;
@@ -4492,12 +4491,12 @@ void func_800639DC(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     ++player->playerPacticlePool1[arg1].unk_01E;
     player->playerPacticlePool1[arg1].pos[1] += 0.3;
     if (player->playerPacticlePool1[arg1].unk_01E == 8) {
-        player->playerPacticlePool1[arg1].unk_01C = 0;
+        player->playerPacticlePool1[arg1].isAlive = 0;
         player->playerPacticlePool1[arg1].unk_01E = 0;
         player->playerPacticlePool1[arg1].type = 0;
     }
 
-    player->playerPacticlePool1[arg1].unk_00C += 0.15;
+    player->playerPacticlePool1[arg1].scale += 0.15;
     if (player->playerPacticlePool1[arg1].unk_040 == 0) {
         if ((s32) player->playerPacticlePool1[arg1].unk_01E >= 4) {
             --player->playerPacticlePool1[arg1].unk_03E;
@@ -4536,13 +4535,13 @@ void func_80063BD4(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     ++player->playerPacticlePool1[arg1].unk_01E;
     player->playerPacticlePool1[arg1].pos[1] += 0.2;
     if (player->playerPacticlePool1[arg1].unk_01E == 8) {
-        player->playerPacticlePool1[arg1].unk_01C = 0;
+        player->playerPacticlePool1[arg1].isAlive = 0;
         player->playerPacticlePool1[arg1].unk_01E = 0;
         player->playerPacticlePool1[arg1].type = 0;
     }
 
     player->playerPacticlePool1[arg1].unk_018 = 2.0f;
-    player->playerPacticlePool1[arg1].unk_00C -= 0.06;
+    player->playerPacticlePool1[arg1].scale -= 0.06;
 }
 
 void func_80063D58(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
@@ -4569,11 +4568,11 @@ void func_80063D58(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     ++player->playerPacticlePool1[arg1].unk_01E;
     if (player->playerPacticlePool1[arg1].unk_01E == 8) {
         player->playerPacticlePool1[arg1].unk_01E = 0;
-        player->playerPacticlePool1[arg1].unk_01C = 0;
+        player->playerPacticlePool1[arg1].isAlive = 0;
         player->playerPacticlePool1[arg1].type = 0;
     }
 
-    player->playerPacticlePool1[arg1].unk_00C += 0.2;
+    player->playerPacticlePool1[arg1].scale += 0.2;
     if (player->playerPacticlePool1[arg1].unk_01E >= 4) {
         player->playerPacticlePool1[arg1].unk_03E -= 18;
         player->playerPacticlePool1[arg1].pos[1] -= 0.1;
@@ -4607,7 +4606,7 @@ void func_80063FBC(Player* player, s16 arg1, UNUSED s32 arg2, UNUSED s32 arg3) {
     player->playerPacticlePool1[arg1].pos[1] = (player->pos[1] - player->boundingBoxSize) + sp34;
     player->playerPacticlePool1[arg1].unk_01E++;
     if (player->playerPacticlePool1[arg1].unk_01E == 6) {
-        player->playerPacticlePool1[arg1].unk_01C = 0;
+        player->playerPacticlePool1[arg1].isAlive = 0;
         player->playerPacticlePool1[arg1].unk_01E = 0;
         player->playerPacticlePool1[arg1].type = 0;
     }
@@ -4632,14 +4631,14 @@ void func_80064184(Player* player, s16 arg1, s8 arg2, UNUSED s8 arg3) {
     ++player->playerPacticlePool0[arg1].unk_01E;
     if ((player->playerPacticlePool0[arg1].unk_01E == 12) ||
         (D_801652A0[arg2] <= (player->pos[1] - player->boundingBoxSize))) {
-        player->playerPacticlePool0[arg1].unk_01C = 0;
+        player->playerPacticlePool0[arg1].isAlive = 0;
         player->playerPacticlePool0[arg1].unk_01E = 0;
         player->playerPacticlePool0[arg1].type = 0;
     }
     player->playerPacticlePool0[arg1].unk_018 = 2.0f;
-    player->playerPacticlePool0[arg1].unk_00C -= 0.35;
-    if (player->playerPacticlePool0[arg1].unk_00C < 0.0f) {
-        player->playerPacticlePool0[arg1].unk_00C = 0.0f;
+    player->playerPacticlePool0[arg1].scale -= 0.35;
+    if (player->playerPacticlePool0[arg1].scale < 0.0f) {
+        player->playerPacticlePool0[arg1].scale = 0.0f;
     }
 
     player->playerPacticlePool0[arg1].unk_03E -= 22;
@@ -4657,12 +4656,12 @@ void func_800643A8(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
 
     ++player->playerPacticlePool1[arg1].unk_01E;
     if (player->playerPacticlePool1[arg1].unk_01E == 10) {
-        player->playerPacticlePool1[arg1].unk_01C = 0;
+        player->playerPacticlePool1[arg1].isAlive = 0;
         player->playerPacticlePool1[arg1].unk_01E = 0;
         player->playerPacticlePool1[arg1].type = 0;
     }
 
-    player->playerPacticlePool1[arg1].unk_00C += 0.2;
+    player->playerPacticlePool1[arg1].scale += 0.2;
     player->playerPacticlePool1[arg1].unk_03E -= 8;
     if (player->playerPacticlePool1[arg1].unk_03E <= 0) {
         player->playerPacticlePool1[arg1].unk_03E = 0;
@@ -4689,7 +4688,7 @@ void func_800644E8(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
         player->playerPacticlePool3[arg1].unk_028 + (f32) ((thing * thing2) - (0.2 * (thing * thing)));
     if (player->playerPacticlePool3[arg1].unk_01E == 0x000A) {
         player->playerPacticlePool3[arg1].unk_01E = 0;
-        player->playerPacticlePool3[arg1].unk_01C = 0;
+        player->playerPacticlePool3[arg1].isAlive = 0;
         player->playerPacticlePool3[arg1].type = 0;
     }
     if (player->playerPacticlePool3[arg1].unk_01E >= 7) {
@@ -4717,7 +4716,7 @@ void func_80064664(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
         player->playerPacticlePool3[arg1].unk_028 + (f32) ((temp_v1 * temp_f4) - (0.1 * (temp_v1 * temp_v1)));
     if (player->playerPacticlePool3[arg1].unk_01E == 0x0019) {
         player->playerPacticlePool3[arg1].unk_01E = 0;
-        player->playerPacticlePool3[arg1].unk_01C = 0;
+        player->playerPacticlePool3[arg1].isAlive = 0;
         player->playerPacticlePool3[arg1].type = 0;
     }
     if (player->playerPacticlePool3[arg1].unk_01E >= 7) {
@@ -4738,7 +4737,7 @@ void func_800647C8(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     player->playerPacticlePool3[arg1].pos[1] = (player->unk_074 + 2.0f);
 
     if (player->playerPacticlePool3[arg1].unk_01E == 14) {
-        player->playerPacticlePool3[arg1].unk_01C = 0;
+        player->playerPacticlePool3[arg1].isAlive = 0;
         player->playerPacticlePool3[arg1].unk_01E = 0;
         player->playerPacticlePool3[arg1].type = 0;
     }
@@ -4751,7 +4750,7 @@ void func_800647C8(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
 
 void func_800648E4(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     ++player->playerPacticlePool3[arg1].unk_01E;
-    player->playerPacticlePool3[arg1].unk_00C -= 0.06;
+    player->playerPacticlePool3[arg1].scale -= 0.06;
     player->playerPacticlePool3[arg1].pos[1] += 0.1;
     player->playerPacticlePool3[arg1].unk_03E -= 12;
 
@@ -4760,7 +4759,7 @@ void func_800648E4(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     }
 
     if (player->playerPacticlePool3[arg1].unk_01E == 10) {
-        player->playerPacticlePool3[arg1].unk_01C = 0;
+        player->playerPacticlePool3[arg1].isAlive = 0;
         player->playerPacticlePool3[arg1].unk_01E = 0;
         player->playerPacticlePool3[arg1].type = 0;
     }
@@ -4771,7 +4770,7 @@ void func_80064988(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     player->playerPacticlePool3[arg1].pos[1] -= 0.3;
 
     if (player->playerPacticlePool3[arg1].unk_01E == 10) {
-        player->playerPacticlePool3[arg1].unk_01C = 0;
+        player->playerPacticlePool3[arg1].isAlive = 0;
         player->playerPacticlePool3[arg1].unk_01E = 0;
         player->playerPacticlePool3[arg1].type = 0;
     }
@@ -4788,12 +4787,12 @@ void func_800649F4(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
         player->unk_218 +
         (((-temp) * player->playerPacticlePool3[arg1].unk_01E) * sins(player->playerPacticlePool3[arg1].unk_020));
     player->playerPacticlePool3[arg1].pos[1] = player->pos[1] + player->playerPacticlePool3[arg1].surfaceType;
-    player->playerPacticlePool3[arg1].unk_00C += 0.04;
+    player->playerPacticlePool3[arg1].scale += 0.04;
 
     ++player->playerPacticlePool3[arg1].unk_01E;
     if (player->playerPacticlePool3[arg1].unk_01E == 12) {
         player->playerPacticlePool3[arg1].unk_01E = 0;
-        player->playerPacticlePool3[arg1].unk_01C = 0;
+        player->playerPacticlePool3[arg1].isAlive = 0;
         player->playerPacticlePool3[arg1].type = 0;
     }
 
@@ -4818,11 +4817,11 @@ void func_80064B30(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
     ++player->playerPacticlePool3[arg1].unk_01E;
     if (player->playerPacticlePool3[arg1].unk_01E == 10) {
         player->playerPacticlePool3[arg1].unk_01E = 0;
-        player->playerPacticlePool3[arg1].unk_01C = 0;
+        player->playerPacticlePool3[arg1].isAlive = 0;
         player->playerPacticlePool3[arg1].type = 0;
     }
 
-    player->playerPacticlePool3[arg1].unk_038 += 1820;
+    player->playerPacticlePool3[arg1].red += 1820;
     if (player->playerPacticlePool3[arg1].unk_01E >= 6) {
         player->playerPacticlePool3[arg1].unk_03E -= 16;
         if (player->playerPacticlePool3[arg1].unk_03E <= 0) {
@@ -4846,12 +4845,12 @@ void func_80064C74(Player* player, s16 arg1, UNUSED s8 arg2, UNUSED s8 arg3) {
         player->pos[0] +
         (sins(player->playerPacticlePool3[arg1].unk_020 - player->rotation[1] - player->unk_0C0) * 5.0f);
     player->playerPacticlePool3[arg1].pos[1] = player->pos[1] - 1.0f;
-    player->playerPacticlePool3[arg1].unk_00C += 0.4;
+    player->playerPacticlePool3[arg1].scale += 0.4;
     ++player->playerPacticlePool3[arg1].unk_01E;
 
     if (player->playerPacticlePool3[arg1].unk_01E == 10) {
         player->playerPacticlePool3[arg1].unk_01E = 0;
-        player->playerPacticlePool3[arg1].unk_01C = 0;
+        player->playerPacticlePool3[arg1].isAlive = 0;
         player->playerPacticlePool3[arg1].type = 0;
     }
     if (player->playerPacticlePool3[arg1].unk_01E >= 5) {
@@ -4869,29 +4868,29 @@ void func_80064DEC(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
 
     if (player->playerPacticlePool2[arg3].unk_01E == 9) {
         player->unk_0B6 &= ~0x0040;
-        player->playerPacticlePool2[arg3].unk_01C = 0;
+        player->playerPacticlePool2[arg3].isAlive = 0;
         player->playerPacticlePool2[arg3].unk_01E = 0;
         player->playerPacticlePool2[arg3].type = 0;
     }
 
-    player->playerPacticlePool2[arg3].unk_00C += 0.8;
-    if (player->playerPacticlePool2[arg3].unk_00C >= (f64) 2.5) {
-        player->playerPacticlePool2[arg3].unk_00C = 2.5f;
+    player->playerPacticlePool2[arg3].scale += 0.8;
+    if (player->playerPacticlePool2[arg3].scale >= (f64) 2.5) {
+        player->playerPacticlePool2[arg3].scale = 2.5f;
     }
 }
 
 void func_80064EA4(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
     ++player->playerPacticlePool2[arg3].unk_01E;
     if (player->playerPacticlePool2[arg3].unk_01E < 4) {
-        player->playerPacticlePool2[arg3].unk_00C += 1.2;
-        if (player->playerPacticlePool2[arg3].unk_00C >= 3.5) {
-            player->playerPacticlePool2[arg3].unk_00C = 3.5f;
+        player->playerPacticlePool2[arg3].scale += 1.2;
+        if (player->playerPacticlePool2[arg3].scale >= 3.5) {
+            player->playerPacticlePool2[arg3].scale = 3.5f;
         }
     } else {
-        player->playerPacticlePool2[arg3].unk_00C -= 1.8;
-        if (player->playerPacticlePool2[arg3].unk_00C <= 0.0f) {
+        player->playerPacticlePool2[arg3].scale -= 1.8;
+        if (player->playerPacticlePool2[arg3].scale <= 0.0f) {
             player->unk_0B6 &= ~0x1000;
-            player->playerPacticlePool2[arg3].unk_01C = 0;
+            player->playerPacticlePool2[arg3].isAlive = 0;
             player->playerPacticlePool2[arg3].unk_01E = 0;
             player->playerPacticlePool2[arg3].type = 0;
         }
@@ -4900,14 +4899,14 @@ void func_80064EA4(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
 
 void func_80064F88(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
     ++player->playerPacticlePool2[arg3].unk_01E;
-    player->playerPacticlePool2[arg3].unk_00C += 0.15;
+    player->playerPacticlePool2[arg3].scale += 0.15;
 
-    if (1.2 <= player->playerPacticlePool2[arg3].unk_00C) {
-        player->playerPacticlePool2[arg3].unk_00C = 1.2f;
+    if (1.2 <= player->playerPacticlePool2[arg3].scale) {
+        player->playerPacticlePool2[arg3].scale = 1.2f;
     }
     if (player->playerPacticlePool2[arg3].unk_01E >= 12) {
         player->unk_0B6 &= ~0x0800;
-        player->playerPacticlePool2[arg3].unk_01C = 0;
+        player->playerPacticlePool2[arg3].isAlive = 0;
         player->playerPacticlePool2[arg3].unk_01E = 0;
         player->playerPacticlePool2[arg3].type = 0;
     }
@@ -4917,14 +4916,14 @@ void func_80065030(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
     ++player->playerPacticlePool2[arg3].unk_01E;
 
     player->playerPacticlePool2[arg3].pos[1] += 0.8;
-    player->playerPacticlePool2[arg3].unk_00C += 0.4;
-    if (player->playerPacticlePool2[arg3].unk_00C >= (f64) 1.5) {
-        player->playerPacticlePool2[arg3].unk_00C = 1.5f;
+    player->playerPacticlePool2[arg3].scale += 0.4;
+    if (player->playerPacticlePool2[arg3].scale >= (f64) 1.5) {
+        player->playerPacticlePool2[arg3].scale = 1.5f;
     }
 
     if (player->playerPacticlePool2[arg3].unk_01E >= 12) {
         player->unk_0B6 &= ~0x0100;
-        player->playerPacticlePool2[arg3].unk_01C = 0;
+        player->playerPacticlePool2[arg3].isAlive = 0;
         player->playerPacticlePool2[arg3].unk_01E = 0;
         player->playerPacticlePool2[arg3].type = 0;
     }
@@ -4941,29 +4940,29 @@ void func_800650FC(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
     }
 
     if (((player->effects & 0x80) != 0x80) && ((player->effects & 0x40) != 0x40)) {
-        player->playerPacticlePool2[arg3].unk_01C = 0;
+        player->playerPacticlePool2[arg3].isAlive = 0;
         player->playerPacticlePool2[arg3].unk_01E = 0;
         player->playerPacticlePool2[arg3].type = 0;
     }
 
-    player->playerPacticlePool2[arg3].unk_00C += 0.08;
-    if (player->playerPacticlePool2[arg3].unk_00C >= 1.5) {
-        player->playerPacticlePool2[arg3].unk_00C = 1.5f;
+    player->playerPacticlePool2[arg3].scale += 0.08;
+    if (player->playerPacticlePool2[arg3].scale >= 1.5) {
+        player->playerPacticlePool2[arg3].scale = 1.5f;
     }
 }
 
 void func_800651F4(Player* player, UNUSED s8 arg1, UNUSED s8 arg2, s8 arg3) {
     ++player->playerPacticlePool2[arg3].unk_01E;
     if (player->playerPacticlePool2[arg3].unk_01E < 8) {
-        player->playerPacticlePool2[arg3].unk_00C += 0.2;
-        if (1.2 <= player->playerPacticlePool2[arg3].unk_00C) {
-            player->playerPacticlePool2[arg3].unk_00C = 1.2f;
+        player->playerPacticlePool2[arg3].scale += 0.2;
+        if (1.2 <= player->playerPacticlePool2[arg3].scale) {
+            player->playerPacticlePool2[arg3].scale = 1.2f;
         }
     } else {
-        player->playerPacticlePool2[arg3].unk_00C -= 0.4;
-        if (player->playerPacticlePool2[arg3].unk_00C <= 0.0f) {
+        player->playerPacticlePool2[arg3].scale -= 0.4;
+        if (player->playerPacticlePool2[arg3].scale <= 0.0f) {
             player->unk_0B6 &= ~0x0020;
-            player->playerPacticlePool2[arg3].unk_01C = 0;
+            player->playerPacticlePool2[arg3].isAlive = 0;
             player->playerPacticlePool2[arg3].unk_01E = 0;
             player->playerPacticlePool2[arg3].type = 0;
         }
@@ -4995,7 +4994,7 @@ void func_8006538C(Player* player, s8 arg1, s16 arg2, s8 arg3) {
     s16 envGreen;
     s16 envBlue;
 
-    if (player->playerPacticlePool0[arg2].unk_01C == 1) {
+    if (player->playerPacticlePool0[arg2].isAlive == 1) {
         spB4[0] = player->playerPacticlePool0[arg2].pos[0];
         spB4[1] = player->playerPacticlePool0[arg2].pos[1];
         spB4[2] = player->playerPacticlePool0[arg2].pos[2];
@@ -5010,7 +5009,7 @@ void func_8006538C(Player* player, s8 arg1, s16 arg2, s8 arg3) {
             envGreen = (envColors[1] >> 0x08) & 0xFF;
             envBlue = (envColors[1] >> 0x00) & 0xFF;
             primAlpha = player->playerPacticlePool0[arg2].unk_03E;
-            func_800652D4(spB4, spAC, ((player->playerPacticlePool0[arg2].unk_00C * player->size) * 1.4));
+            func_800652D4(spB4, spAC, ((player->playerPacticlePool0[arg2].scale * player->size) * 1.4));
             gSPDisplayList(gDisplayListHead++, D_0D008DB8);
             gDPLoadTextureBlock(gDisplayListHead++,
                                 common_texture_particle_smoke[player->playerPacticlePool0[arg2].unk_010], G_IM_FMT_I,
@@ -5020,14 +5019,14 @@ void func_8006538C(Player* player, s8 arg1, s16 arg2, s8 arg3) {
             gDPSetAlphaCompare(gDisplayListHead++, G_AC_DITHER);
             gSPDisplayList(gDisplayListHead++, D_0D008E48);
         } else {
-            primRed = (primColors[player->playerPacticlePool0[arg2].unk_038] >> 0x10) & 0xFF;
-            primGreen = (primColors[player->playerPacticlePool0[arg2].unk_038] >> 0x08) & 0xFF;
-            primBlue = (primColors[player->playerPacticlePool0[arg2].unk_038] >> 0x00) & 0xFF;
-            envRed = (envColors[player->playerPacticlePool0[arg2].unk_038] >> 0x10) & 0xFF;
-            envGreen = (envColors[player->playerPacticlePool0[arg2].unk_038] >> 0x08) & 0xFF;
-            envBlue = (envColors[player->playerPacticlePool0[arg2].unk_038] >> 0x00) & 0xFF;
+            primRed = (primColors[player->playerPacticlePool0[arg2].red] >> 0x10) & 0xFF;
+            primGreen = (primColors[player->playerPacticlePool0[arg2].red] >> 0x08) & 0xFF;
+            primBlue = (primColors[player->playerPacticlePool0[arg2].red] >> 0x00) & 0xFF;
+            envRed = (envColors[player->playerPacticlePool0[arg2].red] >> 0x10) & 0xFF;
+            envGreen = (envColors[player->playerPacticlePool0[arg2].red] >> 0x08) & 0xFF;
+            envBlue = (envColors[player->playerPacticlePool0[arg2].red] >> 0x00) & 0xFF;
             primAlpha = player->playerPacticlePool0[arg2].unk_03E;
-            func_800652D4(spB4, spAC, player->playerPacticlePool0[arg2].unk_00C * player->size);
+            func_800652D4(spB4, spAC, player->playerPacticlePool0[arg2].scale * player->size);
             gSPDisplayList(gDisplayListHead++, D_0D008DB8);
             gDPLoadTextureBlock(gDisplayListHead++,
                                 common_texture_particle_smoke[player->playerPacticlePool0[arg2].unk_010], G_IM_FMT_I,
@@ -5048,10 +5047,10 @@ void func_800658A0(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     s16 blue;
     s16 alpha;
 
-    if (player->playerPacticlePool0[arg2].unk_01C == 1) {
-        red = player->playerPacticlePool0[arg2].unk_038;
-        green = player->playerPacticlePool0[arg2].unk_03A;
-        blue = player->playerPacticlePool0[arg2].unk_03C;
+    if (player->playerPacticlePool0[arg2].isAlive == 1) {
+        red = player->playerPacticlePool0[arg2].red;
+        green = player->playerPacticlePool0[arg2].green;
+        blue = player->playerPacticlePool0[arg2].blue;
         alpha = player->playerPacticlePool0[arg2].unk_03E;
         sp54[0] = player->playerPacticlePool0[arg2].pos[0];
         sp54[1] = player->playerPacticlePool0[arg2].pos[1];
@@ -5059,7 +5058,7 @@ void func_800658A0(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
         sp4C[0] = 0;
         sp4C[1] = player->unk_048[arg3];
         sp4C[2] = 0;
-        func_800652D4(sp54, sp4C, player->playerPacticlePool0[arg2].unk_00C * player->size);
+        func_800652D4(sp54, sp4C, player->playerPacticlePool0[arg2].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008DB8);
         gDPLoadTextureBlock(gDisplayListHead++, D_8018D48C, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -5085,15 +5084,15 @@ void render_player_drift_particles(Player* player, UNUSED s8 arg1, s16 arg2, s8 
     s16 envGreen;
     s16 envBlue;
     s32 sp8C[] = { 0x00ffffff, 0x00ffff00, 0x00ff9600 };
-    if (player->playerPacticlePool1[arg2].unk_01C == 1) {
+    if (player->playerPacticlePool1[arg2].isAlive == 1) {
         if (player->driftDuration >= 0x32) {
             var_s0 = 1;
         } else {
             var_s0 = 0;
         }
-        primRed = player->playerPacticlePool1[arg2].unk_038;
-        primGreen = player->playerPacticlePool1[arg2].unk_03A;
-        primBlue = player->playerPacticlePool1[arg2].unk_03C;
+        primRed = player->playerPacticlePool1[arg2].red;
+        primGreen = player->playerPacticlePool1[arg2].green;
+        primBlue = player->playerPacticlePool1[arg2].blue;
         primAlpha = player->playerPacticlePool1[arg2].unk_03E;
         envRed = (sp8C[player->playerPacticlePool1[arg2].unk_040] >> 0x10) & 0xFF;
         envGreen = (sp8C[player->playerPacticlePool1[arg2].unk_040] >> 0x08) & 0xFF;
@@ -5104,7 +5103,7 @@ void render_player_drift_particles(Player* player, UNUSED s8 arg1, s16 arg2, s8 
         spAC[0] = 0;
         spAC[1] = player->unk_048[arg3];
         spAC[2] = 0;
-        func_800652D4(spB4, spAC, player->playerPacticlePool1[arg2].unk_00C * player->size);
+        func_800652D4(spB4, spAC, player->playerPacticlePool1[arg2].scale * player->size);
         if (var_s0 == 0) {
             gSPDisplayList(gDisplayListHead++, D_0D008DB8);
             gDPLoadTextureBlock(gDisplayListHead++, *D_800E4770[var_s0], G_IM_FMT_I, G_IM_SIZ_8b, 16, 16, 0,
@@ -5132,7 +5131,7 @@ GLOBAL_ASM("asm/non_matchings/code_80057C60/render_player_drift_particles.s")
 #ifdef NON_MATCHING
 // https://decomp.me/scratch/KEz08
 //  Something is very wrong with the handling of prim/evn colors, but I can't figuer out what.
-void func_80065F0C(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
+void render_player_ground_particles(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     Vec3f spDC;
     Vec3s spD4;
     s16 primRed;
@@ -5143,27 +5142,27 @@ void func_80065F0C(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     s16 envGreen;
     s16 envBlue;
 
-    if ((player->playerPacticlePool1[arg2].unk_01C == 1) && (player->playerPacticlePool1[arg2].unk_01E != 0)) {
+    if ((player->playerPacticlePool1[arg2].isAlive == 1) && (player->playerPacticlePool1[arg2].unk_01E != 0)) {
         spDC[0] = player->playerPacticlePool1[arg2].pos[0];
         spDC[1] = player->playerPacticlePool1[arg2].pos[1];
         spDC[2] = player->playerPacticlePool1[arg2].pos[2];
         spD4[0] = 0;
         spD4[1] = player->unk_048[arg3];
         spD4[2] = 0;
-        func_800652D4(spDC, spD4, player->playerPacticlePool1[arg2].unk_00C * player->size);
-        if ((s32) player->playerPacticlePool1[arg2].surfaceType != 8) {
-            primRed = ((D_800E47DC[player->playerPacticlePool1[arg2].unk_038] >> 0x10) & 0xFF) -
-                      player->playerPacticlePool1[arg2].unk_03A;
-            primGreen = ((D_800E47DC[player->playerPacticlePool1[arg2].unk_038] >> 0x08) & 0xFF) -
-                        player->playerPacticlePool1[arg2].unk_03A;
-            primBlue = ((D_800E47DC[player->playerPacticlePool1[arg2].unk_038] >> 0x00) & 0xFF) -
-                       player->playerPacticlePool1[arg2].unk_03A;
-            envRed = ((D_800E480C[player->playerPacticlePool1[arg2].unk_038] >> 0x10) & 0xFF) -
-                     player->playerPacticlePool1[arg2].unk_03A;
-            envGreen = ((D_800E480C[player->playerPacticlePool1[arg2].unk_038] >> 0x08) & 0xFF) -
-                       player->playerPacticlePool1[arg2].unk_03A;
-            envBlue = ((D_800E480C[player->playerPacticlePool1[arg2].unk_038] >> 0x00) & 0xFF) -
-                      player->playerPacticlePool1[arg2].unk_03A;
+        func_800652D4(spDC, spD4, player->playerPacticlePool1[arg2].scale * player->size);
+        if ((s32) player->playerPacticlePool1[arg2].surfaceType != GRASS) {
+            primRed = ((D_800E47DC[player->playerPacticlePool1[arg2].red] >> 0x10) & 0xFF) -
+                      player->playerPacticlePool1[arg2].green;
+            primGreen = ((D_800E47DC[player->playerPacticlePool1[arg2].red] >> 0x08) & 0xFF) -
+                        player->playerPacticlePool1[arg2].green;
+            primBlue = ((D_800E47DC[player->playerPacticlePool1[arg2].red] >> 0x00) & 0xFF) -
+                       player->playerPacticlePool1[arg2].green;
+            envRed = ((D_800E480C[player->playerPacticlePool1[arg2].red] >> 0x10) & 0xFF) -
+                     player->playerPacticlePool1[arg2].green;
+            envGreen = ((D_800E480C[player->playerPacticlePool1[arg2].red] >> 0x08) & 0xFF) -
+                       player->playerPacticlePool1[arg2].green;
+            envBlue = ((D_800E480C[player->playerPacticlePool1[arg2].red] >> 0x00) & 0xFF) -
+                      player->playerPacticlePool1[arg2].green;
             primAlpha = player->playerPacticlePool1[arg2].unk_03E;
             if (player->playerPacticlePool1[arg2].unk_040 == 0) {
                 gSPDisplayList(gDisplayListHead++, D_0D008DB8);
@@ -5182,12 +5181,12 @@ void func_80065F0C(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
                 gSPDisplayList(gDisplayListHead++, D_0D008E48);
             }
         } else {
-            primRed = player->playerPacticlePool1[arg2].unk_038;
-            primGreen = player->playerPacticlePool1[arg2].unk_03A;
-            primBlue = player->playerPacticlePool1[arg2].unk_03C;
+            primRed = player->playerPacticlePool1[arg2].red;
+            primGreen = player->playerPacticlePool1[arg2].green;
+            primBlue = player->playerPacticlePool1[arg2].blue;
             gSPDisplayList(gDisplayListHead++, D_0D008C90);
             gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
-            gDPLoadTextureBlock(gDisplayListHead++, D_8018D498, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 64, 0,
+            gDPLoadTextureBlock(gDisplayListHead++, gGrassParticle, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 64, 0,
                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             func_8004B35C(primRed, primGreen, primBlue, 0x000000FF);
@@ -5199,7 +5198,7 @@ void func_80065F0C(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     }
 }
 #else
-GLOBAL_ASM("asm/non_matchings/code_80057C60/func_80065F0C.s")
+GLOBAL_ASM("asm/non_matchings/code_80057C60/render_player_ground_particles.s")
 #endif
 
 void func_800664E0(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
@@ -5210,10 +5209,10 @@ void func_800664E0(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     s16 blue;
     s16 alpha;
 
-    if (player->playerPacticlePool1[arg2].unk_01C == 1) {
-        red = player->playerPacticlePool1[arg2].unk_038;
-        green = player->playerPacticlePool1[arg2].unk_03A;
-        blue = player->playerPacticlePool1[arg2].unk_03C;
+    if (player->playerPacticlePool1[arg2].isAlive == 1) {
+        red = player->playerPacticlePool1[arg2].red;
+        green = player->playerPacticlePool1[arg2].green;
+        blue = player->playerPacticlePool1[arg2].blue;
         alpha = player->playerPacticlePool1[arg2].unk_03E;
         sp54[0] = player->playerPacticlePool1[arg2].pos[0];
         sp54[1] = player->playerPacticlePool1[arg2].pos[1];
@@ -5221,7 +5220,7 @@ void func_800664E0(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
         sp4C[0] = 0;
         sp4C[1] = player->unk_048[arg3];
         sp4C[2] = 0;
-        func_800652D4(sp54, sp4C, player->playerPacticlePool1[arg2].unk_00C * player->size);
+        func_800652D4(sp54, sp4C, player->playerPacticlePool1[arg2].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008DB8);
         gDPSetAlphaCompare(gDisplayListHead++, G_AC_DITHER);
         gDPLoadTextureBlock(gDisplayListHead++, D_8018D48C, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
@@ -5241,10 +5240,10 @@ void func_80066714(Player* player, UNUSED s32 arg1, s16 arg2, s8 arg3) {
     s16 blue;
     s16 alpha;
 
-    if (player->playerPacticlePool1[arg2].unk_01C == 1) {
-        red = player->playerPacticlePool1[arg2].unk_038;
-        green = player->playerPacticlePool1[arg2].unk_03A;
-        blue = player->playerPacticlePool1[arg2].unk_03C;
+    if (player->playerPacticlePool1[arg2].isAlive == 1) {
+        red = player->playerPacticlePool1[arg2].red;
+        green = player->playerPacticlePool1[arg2].green;
+        blue = player->playerPacticlePool1[arg2].blue;
         alpha = player->playerPacticlePool1[arg2].unk_03E;
         sp5C[0] = player->playerPacticlePool1[arg2].pos[0];
         sp5C[1] = player->playerPacticlePool1[arg2].pos[1];
@@ -5252,7 +5251,7 @@ void func_80066714(Player* player, UNUSED s32 arg1, s16 arg2, s8 arg3) {
         sp54[0] = 0;
         sp54[1] = player->unk_048[arg3];
         sp54[2] = 0;
-        func_800652D4(sp5C, sp54, player->playerPacticlePool1[arg2].unk_00C * player->size);
+        func_800652D4(sp5C, sp54, player->playerPacticlePool1[arg2].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008C90);
         gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
         gDPLoadTextureBlock(gDisplayListHead++, common_texture_particle_fire, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 64, 0,
@@ -5274,10 +5273,10 @@ void func_80066998(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     s16 blue;
     s16 alpha;
 
-    if (player->playerPacticlePool0[arg2].unk_01C == 1) {
-        red = player->playerPacticlePool0[arg2].unk_038;
-        green = player->playerPacticlePool0[arg2].unk_03A;
-        blue = player->playerPacticlePool0[arg2].unk_03C;
+    if (player->playerPacticlePool0[arg2].isAlive == 1) {
+        red = player->playerPacticlePool0[arg2].red;
+        green = player->playerPacticlePool0[arg2].green;
+        blue = player->playerPacticlePool0[arg2].blue;
         alpha = player->playerPacticlePool0[arg2].unk_03E;
         sp54[0] = player->playerPacticlePool0[arg2].pos[0];
         sp54[1] = player->playerPacticlePool0[arg2].pos[1];
@@ -5285,7 +5284,7 @@ void func_80066998(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
         sp4C[0] = 0x4000;
         sp4C[1] = player->unk_048[arg3];
         sp4C[2] = 0;
-        func_800652D4(sp54, sp4C, player->playerPacticlePool0[arg2].unk_00C * player->size);
+        func_800652D4(sp54, sp4C, player->playerPacticlePool0[arg2].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008DB8);
         gDPLoadTextureBlock(gDisplayListHead++, D_8018D48C, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -5329,7 +5328,7 @@ void func_80066BAC(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     UNUSED s32 stackPadding;
     // Vtx **A_800E8900 = (Vtx **) LOAD_ASSET(D_800E8900);
 
-    if ((player->playerPacticlePool0[arg2].unk_01C == 1) && (player->playerPacticlePool0[arg2].unk_038 != 0x00FF)) {
+    if ((player->playerPacticlePool0[arg2].isAlive == 1) && (player->playerPacticlePool0[arg2].red != 0x00FF)) {
 
         if (player->collision.surfaceDistance[2] >= 300.0f) {
             spDC[1] = player->pos[1] + 5.0f;
@@ -5345,20 +5344,20 @@ void func_80066BAC(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
         }
         spD4[1] = player->unk_048[arg3];
         spD4[2] = 0;
-        func_800652D4(spDC, spD4, player->playerPacticlePool0[arg2].unk_00C * player->size);
-        if (player->playerPacticlePool0[arg2].unk_038 == 0) {
+        func_800652D4(spDC, spD4, player->playerPacticlePool0[arg2].scale * player->size);
+        if (player->playerPacticlePool0[arg2].red == 0) {
             gSPDisplayList(gDisplayListHead++, D_0D008DB8);
             gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA);
             gDPSetRenderMode(gDisplayListHead++, G_RM_ZB_CLD_SURF, G_RM_ZB_CLD_SURF2);
             gDPLoadTextureBlock(gDisplayListHead++, D_8018D4C4, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 64, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
-            gSPVertex(gDisplayListHead++, &D_800E8900a[0][player->playerPacticlePool0[arg2].unk_038], 4, 0);
+            gSPVertex(gDisplayListHead++, &D_800E8900a[0][player->playerPacticlePool0[arg2].red], 4, 0);
             gSPDisplayList(gDisplayListHead++, common_square_plain_render);
             gDPLoadTextureBlock(gDisplayListHead++, D_8018D4C8, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 64, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
-            gSPVertex(gDisplayListHead++, &D_800E8900a[1][player->playerPacticlePool0[arg2].unk_038], 4, 0);
+            gSPVertex(gDisplayListHead++, &D_800E8900a[1][player->playerPacticlePool0[arg2].red], 4, 0);
             gSPDisplayList(gDisplayListHead++, D_0D008DA0);
         } else {
             gSPDisplayList(gDisplayListHead++, D_0D008DB8);
@@ -5367,12 +5366,12 @@ void func_80066BAC(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
             gDPLoadTextureBlock(gDisplayListHead++, D_8018D4C8, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 64, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
-            gSPVertex(gDisplayListHead++, &D_800E8900a[0][player->playerPacticlePool0[arg2].unk_038], 4, 0);
+            gSPVertex(gDisplayListHead++, &D_800E8900a[0][player->playerPacticlePool0[arg2].red], 4, 0);
             gSPDisplayList(gDisplayListHead++, common_square_plain_render);
             gDPLoadTextureBlock(gDisplayListHead++, D_8018D4C4, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 64, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
-            gSPVertex(gDisplayListHead++, &D_800E8900a[1][player->playerPacticlePool0[arg2].unk_038], 4, 0);
+            gSPVertex(gDisplayListHead++, &D_800E8900a[1][player->playerPacticlePool0[arg2].red], 4, 0);
             gSPDisplayList(gDisplayListHead++, D_0D008DA0);
         }
         gMatrixEffectCount += 1;
@@ -5387,10 +5386,10 @@ void func_80067280(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     s16 blue;
     s16 alpha;
 
-    if (player->playerPacticlePool3[arg2].unk_01C == 1) {
-        red = player->playerPacticlePool3[arg2].unk_038;
-        green = player->playerPacticlePool3[arg2].unk_03A;
-        blue = player->playerPacticlePool3[arg2].unk_03C;
+    if (player->playerPacticlePool3[arg2].isAlive == 1) {
+        red = player->playerPacticlePool3[arg2].red;
+        green = player->playerPacticlePool3[arg2].green;
+        blue = player->playerPacticlePool3[arg2].blue;
         alpha = player->playerPacticlePool3[arg2].unk_03E;
         sp7C[0] = player->playerPacticlePool3[arg2].pos[0];
         sp7C[1] = player->playerPacticlePool3[arg2].pos[1];
@@ -5399,7 +5398,7 @@ void func_80067280(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
         sp74[2] = 0;
         if (player->playerPacticlePool3[arg2].unk_010 == 1) {
             sp74[1] = player->unk_048[arg3] - 0x2000;
-            func_800652D4(sp7C, sp74, player->playerPacticlePool3[arg2].unk_00C * player->size);
+            func_800652D4(sp7C, sp74, player->playerPacticlePool3[arg2].scale * player->size);
             gSPDisplayList(gDisplayListHead++, D_0D008DB8);
             gDPLoadTextureBlock(gDisplayListHead++, D_8018D48C, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
@@ -5408,7 +5407,7 @@ void func_80067280(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
             gSPDisplayList(gDisplayListHead++, D_0D008E70);
         } else {
             sp74[1] = player->unk_048[arg3] + 0x2000;
-            func_800652D4(sp7C, sp74, player->playerPacticlePool3[arg2].unk_00C * player->size);
+            func_800652D4(sp7C, sp74, player->playerPacticlePool3[arg2].scale * player->size);
             gSPDisplayList(gDisplayListHead++, D_0D008DB8);
             gDPLoadTextureBlock(gDisplayListHead++, D_8018D48C, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
@@ -5425,14 +5424,14 @@ void func_80067604(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     Vec3s sp84;
     UNUSED s32 stackPadding[4];
 
-    if (player->playerPacticlePool3[arg2].unk_01C == 1) {
+    if (player->playerPacticlePool3[arg2].isAlive == 1) {
         sp8C[0] = player->playerPacticlePool3[arg2].pos[0];
         sp8C[1] = player->playerPacticlePool3[arg2].pos[1];
         sp8C[2] = player->playerPacticlePool3[arg2].pos[2];
         sp84[0] = 0;
         sp84[1] = player->unk_048[arg3];
         sp84[2] = 0;
-        func_800652D4(sp8C, sp84, player->playerPacticlePool3[arg2].unk_00C * player->size);
+        func_800652D4(sp8C, sp84, player->playerPacticlePool3[arg2].scale * player->size);
         if (player->playerPacticlePool3[arg2].unk_010 == 1) {
             gSPDisplayList(gDisplayListHead++, D_0D008DB8);
             gDPLoadTextureBlock(gDisplayListHead++, common_texture_particle_spark[0], G_IM_FMT_I, G_IM_SIZ_8b, 32, 32,
@@ -5457,7 +5456,7 @@ void func_80067964(Player* player, UNUSED s8 arg1, f32 arg2, UNUSED s8 arg3, s8 
     Vec3s sp94;
     UNUSED s32 stackPadding[2];
 
-    if (player->playerPacticlePool2[arg4].unk_01C == 1) {
+    if (player->playerPacticlePool2[arg4].isAlive == 1) {
         sp9C[0] = player->playerPacticlePool2[arg4].pos[0];
         sp9C[1] = player->playerPacticlePool2[arg4].pos[1];
         sp9C[2] = player->playerPacticlePool2[arg4].pos[2];
@@ -5493,14 +5492,14 @@ void func_80067D3C(Player* player, s8 arg1, u8* texture, s8 arg3, f32 arg4, s32 
     s16 blue = ((arg5 >> 0x00) & 0xFF) & 0xFF;
     // ????????????????????????????????????????
 
-    if (player->playerPacticlePool2[arg3].unk_01C == 1) {
+    if (player->playerPacticlePool2[arg3].isAlive == 1) {
         sp74[0] = 0;
         sp74[1] = player->unk_048[arg1];
         sp74[2] = 0;
         sp7C[0] = player->pos[0] + (sins((0x4000 & 0xFFFFFFFF) - (player->rotation[1] + player->unk_0C0)) * arg4);
         sp7C[1] = player->pos[1] + player->boundingBoxSize - sp54[player->characterId] - 2.0f;
         sp7C[2] = player->pos[2] + (coss((0x4000 & 0xFFFFFFFF) - (player->rotation[1] + player->unk_0C0)) * arg4);
-        func_800652D4(sp7C, sp74, player->playerPacticlePool2[arg3].unk_00C * player->size);
+        func_800652D4(sp7C, sp74, player->playerPacticlePool2[arg3].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008DB8);
         gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_I, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -5521,14 +5520,14 @@ void func_8006801C(Player* player, s8 arg1, u8* texture, s8 arg3, f32 arg4, s32 
     s16 blue = ((arg5 >> 0x00) & 0xFF) & 0xFF;
     // ????????????????????????????????????????
 
-    if (player->playerPacticlePool2[arg3].unk_01C == 1) {
+    if (player->playerPacticlePool2[arg3].isAlive == 1) {
         sp74[0] = 0;
         sp74[1] = player->unk_048[arg1];
         sp74[2] = 0;
         sp7C[0] = player->pos[0] + (sins((0x4000 & 0xFFFFFFFF) - (player->rotation[1] + player->unk_0C0)) * arg4);
         sp7C[1] = player->pos[1] + player->boundingBoxSize - sp54[player->characterId] - 2.0f;
         sp7C[2] = player->pos[2] + (coss((0x4000 & 0xFFFFFFFF) - (player->rotation[1] + player->unk_0C0)) * arg4);
-        func_800652D4(sp7C, sp74, player->playerPacticlePool2[arg3].unk_00C * player->size * 0.8);
+        func_800652D4(sp7C, sp74, player->playerPacticlePool2[arg3].scale * player->size * 0.8);
         gSPDisplayList(gDisplayListHead++, D_0D008DB8);
         gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_I, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -5544,14 +5543,14 @@ void func_80068310(Player* player, UNUSED s8 arg1, UNUSED f32 arg2, s8 arg3, s8 
     Vec3f sp9C;
     Vec3s sp94;
 
-    if (player->playerPacticlePool2[arg4].unk_01C == 1) {
+    if (player->playerPacticlePool2[arg4].isAlive == 1) {
         sp9C[1] = player->playerPacticlePool2[arg4].pos[1];
         sp9C[2] = player->pos[2] + (coss(player->unk_048[arg3]) * -10.0f);
         sp9C[0] = player->pos[0] + (sins(player->unk_048[arg3]) * -10.0f);
         sp94[0] = 0;
         sp94[1] = player->unk_048[arg3];
         sp94[2] = 0;
-        func_800652D4(sp9C, sp94, player->playerPacticlePool2[arg4].unk_00C * player->size);
+        func_800652D4(sp9C, sp94, player->playerPacticlePool2[arg4].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008C90);
         gDPLoadTLUT_pal256(gDisplayListHead++, gTLUTOnomatopoeia);
         gDPSetTextureLUT(gDisplayListHead++, G_TT_RGBA16);
@@ -5574,14 +5573,14 @@ void func_80068724(Player* player, UNUSED s8 arg1, UNUSED f32 arg2, s8 arg3, s8 
     Vec3f sp84;
     Vec3s sp7C;
 
-    if (player->playerPacticlePool2[arg4].unk_01C == 1) {
+    if (player->playerPacticlePool2[arg4].isAlive == 1) {
         sp84[1] = player->pos[1] - 3.0f;
         sp84[2] = player->pos[2] + (coss(player->unk_048[arg3]) * -10.0f);
         sp84[0] = player->pos[0] + (sins(player->unk_048[arg3]) * -10.0f);
         sp7C[0] = 0;
         sp7C[1] = player->unk_048[arg3];
         sp7C[2] = 0;
-        func_800652D4(sp84, sp7C, player->playerPacticlePool2[arg4].unk_00C * player->size);
+        func_800652D4(sp84, sp7C, player->playerPacticlePool2[arg4].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008DB8);
         gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA);
         gDPSetRenderMode(gDisplayListHead++, G_RM_ZB_CLD_SURF, G_RM_ZB_CLD_SURF2);
@@ -5607,7 +5606,7 @@ void func_80068AA4(Player* player, UNUSED s8 arg1, UNUSED f32 arg2, s8 arg3, s8 
     sp64[2] = player->pos[2];
     sp64[0] = player->pos[0];
 
-    if ((player->playerPacticlePool2[arg4].unk_01C == 1) && (player->animFrameSelector[arg3] < 0xD)) {
+    if ((player->playerPacticlePool2[arg4].isAlive == 1) && (player->animFrameSelector[arg3] < 0xD)) {
         if (gTickVisuals) {
             sp64[1] = player->pos[1] - 3.0f;
             sp64[2] =
@@ -5618,7 +5617,7 @@ void func_80068AA4(Player* player, UNUSED s8 arg1, UNUSED f32 arg2, s8 arg3, s8 
         sp5C[0] = 0;
         sp5C[1] = player->unk_048[arg3];
         sp5C[2] = 0;
-        func_800652D4(sp64, sp5C, player->playerPacticlePool2[arg4].unk_00C * player->size);
+        func_800652D4(sp64, sp5C, player->playerPacticlePool2[arg4].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008D58);
         gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
         gDPLoadTextureBlock(gDisplayListHead++, D_8018D4A0, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 32, 0,
@@ -5636,14 +5635,14 @@ void func_80068DA0(Player* player, UNUSED s8 arg1, UNUSED f32 arg2, s8 arg3, s8 
     Vec3f sp9C;
     Vec3s sp94;
 
-    if ((player->playerPacticlePool2[arg4].unk_01C == 1) && ((s32) player->animFrameSelector[arg3] < 0xD)) {
+    if ((player->playerPacticlePool2[arg4].isAlive == 1) && ((s32) player->animFrameSelector[arg3] < 0xD)) {
         sp9C[1] = (player->pos[1] - 3.0f) + player->playerPacticlePool2[arg4].pos[1];
         sp9C[2] = player->pos[2] + (coss(player->unk_048[arg3]) * -10.0f);
         sp9C[0] = player->pos[0] + (sins(player->unk_048[arg3]) * -10.0f);
         sp94[0] = 0;
         sp94[1] = player->unk_048[arg3];
         sp94[2] = 0;
-        func_800652D4(sp9C, sp94, player->playerPacticlePool2[arg4].unk_00C * player->size);
+        func_800652D4(sp9C, sp94, player->playerPacticlePool2[arg4].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008C90);
         gDPLoadTLUT_pal256(gDisplayListHead++, gTLUTOnomatopoeia);
         gDPSetTextureLUT(gDisplayListHead++, G_TT_RGBA16);
@@ -5666,15 +5665,15 @@ void func_800691B8(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     Vec3s sp54;
     s16 alpha;
 
-    if (player->playerPacticlePool3[arg2].unk_01C == 1) {
+    if (player->playerPacticlePool3[arg2].isAlive == 1) {
         alpha = player->playerPacticlePool3[arg2].unk_03E;
         sp5C[0] = player->playerPacticlePool3[arg2].pos[0];
         sp5C[1] = player->playerPacticlePool3[arg2].pos[1];
         sp5C[2] = player->playerPacticlePool3[arg2].pos[2];
         sp54[0] = 0;
         sp54[1] = player->unk_048[arg3];
-        player->playerPacticlePool3[arg2].unk_03A += 0x1C71;
-        sp54[2] = player->playerPacticlePool3[arg2].unk_03A;
+        player->playerPacticlePool3[arg2].green += 0x1C71;
+        sp54[2] = player->playerPacticlePool3[arg2].green;
         func_800652D4(sp5C, sp54, player->size * 0.5);
         gSPDisplayList(gDisplayListHead++, D_0D008D58);
         gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
@@ -5700,14 +5699,14 @@ void func_80069444(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     s16 envGreen;
     s16 envBlue;
     u16 test;
-    if (player->playerPacticlePool3[arg2].unk_01C == 1) {
-        primRed = (D_800E47DC[player->playerPacticlePool3[arg2].unk_038] >> 0x10) & 0xFF;
-        primGreen = (D_800E47DC[player->playerPacticlePool3[arg2].unk_038] >> 8) & 0xFF;
-        primBlue = D_800E47DC[player->playerPacticlePool3[arg2].unk_038] & 0xFF;
+    if (player->playerPacticlePool3[arg2].isAlive == 1) {
+        primRed = (D_800E47DC[player->playerPacticlePool3[arg2].red] >> 0x10) & 0xFF;
+        primGreen = (D_800E47DC[player->playerPacticlePool3[arg2].red] >> 8) & 0xFF;
+        primBlue = D_800E47DC[player->playerPacticlePool3[arg2].red] & 0xFF;
 
-        envRed = (D_800E480C[player->playerPacticlePool3[arg2].unk_038] >> 0x10) & 0xFF;
-        envGreen = (D_800E480C[player->playerPacticlePool3[arg2].unk_038] >> 8) & 0xFF;
-        envBlue = D_800E480C[player->playerPacticlePool3[arg2].unk_038] & 0xFF;
+        envRed = (D_800E480C[player->playerPacticlePool3[arg2].red] >> 0x10) & 0xFF;
+        envGreen = (D_800E480C[player->playerPacticlePool3[arg2].red] >> 8) & 0xFF;
+        envBlue = D_800E480C[player->playerPacticlePool3[arg2].red] & 0xFF;
         primAlpha = player->playerPacticlePool3[arg2].unk_03E;
 
         sp74[0] = player->playerPacticlePool3[arg2].pos[0];
@@ -5737,7 +5736,7 @@ void func_800696CC(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3, f32 arg4) 
     Vec3s sp54;
     s16 alpha;
 
-    if (player->playerPacticlePool3[arg2].unk_01C == 1) {
+    if (player->playerPacticlePool3[arg2].isAlive == 1) {
         alpha = player->playerPacticlePool3[arg2].unk_03E;
         sp5C[0] = player->playerPacticlePool3[arg2].pos[0];
         sp5C[1] = player->playerPacticlePool3[arg2].pos[1];
@@ -5764,15 +5763,15 @@ void func_80069938(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     Vec3s sp54;
     s16 alpha;
 
-    if (player->playerPacticlePool3[arg2].unk_01C == 1) {
+    if (player->playerPacticlePool3[arg2].isAlive == 1) {
         alpha = player->playerPacticlePool3[arg2].unk_03E;
         sp5C[0] = player->playerPacticlePool3[arg2].pos[0];
         sp5C[1] = player->playerPacticlePool3[arg2].pos[1];
         sp5C[2] = player->playerPacticlePool3[arg2].pos[2];
         sp54[0] = 0;
         sp54[1] = player->unk_048[arg3];
-        sp54[2] = player->playerPacticlePool3[arg2].unk_038;
-        func_800652D4(sp5C, sp54, player->playerPacticlePool3[arg2].unk_00C * player->size);
+        sp54[2] = player->playerPacticlePool3[arg2].red;
+        func_800652D4(sp5C, sp54, player->playerPacticlePool3[arg2].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008D58);
         gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
         gDPLoadTextureBlock(gDisplayListHead++, gTexture69C80C, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
@@ -5794,10 +5793,10 @@ void func_80069BA8(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     s16 blue;
     s16 alpha;
 
-    if (player->playerPacticlePool3[arg2].unk_01C == 1) {
-        red = player->playerPacticlePool3[arg2].unk_038;
-        green = player->playerPacticlePool3[arg2].unk_03A;
-        blue = player->playerPacticlePool3[arg2].unk_03C;
+    if (player->playerPacticlePool3[arg2].isAlive == 1) {
+        red = player->playerPacticlePool3[arg2].red;
+        green = player->playerPacticlePool3[arg2].green;
+        blue = player->playerPacticlePool3[arg2].blue;
         alpha = player->playerPacticlePool3[arg2].unk_03E;
         sp54[0] = player->playerPacticlePool3[arg2].pos[0];
         sp54[1] = player->playerPacticlePool3[arg2].pos[1];
@@ -5805,7 +5804,7 @@ void func_80069BA8(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
         sp4C[0] = 0;
         sp4C[1] = player->unk_048[arg3];
         sp4C[2] = 0;
-        func_800652D4(sp54, sp4C, player->playerPacticlePool3[arg2].unk_00C * player->size);
+        func_800652D4(sp54, sp4C, player->playerPacticlePool3[arg2].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008DB8);
         gDPLoadTextureBlock(gDisplayListHead++, D_8018D48C, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -5821,14 +5820,14 @@ void func_80069DB8(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     Vec3s sp54;
     UNUSED s32 stackPadding[2];
 
-    if (player->playerPacticlePool3[arg2].unk_01C == 1) {
+    if (player->playerPacticlePool3[arg2].isAlive == 1) {
         sp5C[0] = player->playerPacticlePool3[arg2].pos[0];
         sp5C[1] = player->playerPacticlePool3[arg2].pos[1];
         sp5C[2] = player->playerPacticlePool3[arg2].pos[2];
         sp54[0] = 0;
         sp54[1] = player->unk_048[arg3];
         sp54[2] = 0;
-        func_800652D4(sp5C, sp54, player->playerPacticlePool3[arg2].unk_00C * player->size);
+        func_800652D4(sp5C, sp54, player->playerPacticlePool3[arg2].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008D58);
         gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
         gDPLoadTextureBlock(gDisplayListHead++, D_8018D49C, G_IM_FMT_IA, G_IM_SIZ_16b, 16, 16, 0,
@@ -5846,14 +5845,14 @@ void func_8006A01C(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     Vec3f sp54;
     Vec3s sp4C;
 
-    if (player->playerPacticlePool0[arg2].unk_01C == 1) {
+    if (player->playerPacticlePool0[arg2].isAlive == 1) {
         sp54[0] = player->playerPacticlePool1[arg2].pos[0];
         sp54[1] = player->playerPacticlePool1[arg2].pos[1];
         sp54[2] = player->playerPacticlePool1[arg2].pos[2];
         sp4C[0] = 0;
         sp4C[1] = player->unk_048[arg3];
         sp4C[2] = 0;
-        func_800652D4(sp54, sp4C, player->playerPacticlePool1[arg2].unk_00C * player->size);
+        func_800652D4(sp54, sp4C, player->playerPacticlePool1[arg2].scale * player->size);
 
         gSPDisplayList(gDisplayListHead++, D_0D008D58);
         gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
@@ -5875,17 +5874,17 @@ void func_8006A280(Player* player, UNUSED s8 arg1, s16 arg2, s8 arg3) {
     s16 green;
     s16 blue;
 
-    if (player->playerPacticlePool0[arg2].unk_01C == 1) {
-        red = player->playerPacticlePool0[arg2].unk_038;
-        green = player->playerPacticlePool0[arg2].unk_03A;
-        blue = player->playerPacticlePool0[arg2].unk_03C;
+    if (player->playerPacticlePool0[arg2].isAlive == 1) {
+        red = player->playerPacticlePool0[arg2].red;
+        green = player->playerPacticlePool0[arg2].green;
+        blue = player->playerPacticlePool0[arg2].blue;
         sp5C[0] = player->playerPacticlePool0[arg2].pos[0];
         sp5C[1] = player->playerPacticlePool0[arg2].pos[1];
         sp5C[2] = player->playerPacticlePool0[arg2].pos[2];
         sp54[0] = 0;
         sp54[1] = player->unk_048[arg3];
         sp54[2] = 0;
-        func_800652D4(sp5C, sp54, player->playerPacticlePool0[arg2].unk_00C * player->size);
+        func_800652D4(sp5C, sp54, player->playerPacticlePool0[arg2].scale * player->size);
         gSPDisplayList(gDisplayListHead++, D_0D008D58);
         gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
         gDPLoadTextureBlock_4b(gDisplayListHead++, *D_800E47A0[player->playerPacticlePool0[arg2].unk_01E], G_IM_FMT_I,
@@ -6303,57 +6302,57 @@ void func_8006C4D4(Vec3f arg0, f32 arg1, s32 rgb, s16 alpha, s16 arg4) {
     gMatrixEffectCount += 1;
 }
 
-void func_8006C6AC(Player* player, s16 arg1, s8 arg2, s8 arg3) {
+void func_8006C6AC(Player* player, s16 particleIndex, s8 arg2, s8 arg3) {
     s8 arg2_copy = arg2;
     s32 sp28;
 
-    sp28 = arg1 - 1;
+    sp28 = particleIndex - 1;
     if (sp28 < 0) {
         sp28 = 9;
     }
-    if (player->playerPacticlePool1[arg1].unk_01C == 1) {
-        switch (player->playerPacticlePool1[arg1].type) {
+    if (player->playerPacticlePool1[particleIndex].isAlive == 1) {
+        switch (player->playerPacticlePool1[particleIndex].type) {
             case 1:
-                func_80063408(player, arg1, arg2_copy, arg3);
+                func_80063408(player, particleIndex, arg2_copy, arg3);
                 break;
             case 2:
-                func_800635D4(player, arg1, arg2_copy, arg3);
+                func_800635D4(player, particleIndex, arg2_copy, arg3);
                 break;
             case 3:
-                func_80063BD4(player, arg1, arg2_copy, arg3);
+                func_80063BD4(player, particleIndex, arg2_copy, arg3);
                 break;
             case 4:
-                func_800643A8(player, arg1, arg2_copy, arg3);
+                func_800643A8(player, particleIndex, arg2_copy, arg3);
                 break;
             case 5:
-                func_800639DC(player, arg1, arg2_copy, arg3);
+                func_800639DC(player, particleIndex, arg2_copy, arg3);
                 break;
             case 9:
-                func_80063D58(player, arg1, arg2_copy, arg3);
+                func_80063D58(player, particleIndex, arg2_copy, arg3);
                 break;
             case 11:
-                func_80062F98(player, arg1, arg2_copy, arg3);
+                func_80062F98(player, particleIndex, arg2_copy, arg3);
                 break;
             default:
                 break;
         }
     } else {
         if (player->unk_0DE & 1) {
-            func_80060BCC(player, arg1, sp28, arg2_copy, arg3);
+            func_80060BCC(player, particleIndex, sp28, arg2_copy, arg3);
         } else if (!(player->effects & 8) && !(player->effects & 2)) {
             if (((player->effects & DRIFTING_EFFECT) == DRIFTING_EFFECT) &&
                 ((player->type & PLAYER_HUMAN) == PLAYER_HUMAN)) {
-                func_8005DA30(player, arg1, sp28, arg2_copy, arg3);
+                func_8005DA30(player, particleIndex, sp28, arg2_copy, arg3);
             } else if (((f64) (D_801652A0[arg2_copy] - player->tyres[BACK_RIGHT].baseHeight) >= 3.5) ||
                        ((f64) (D_801652A0[arg2_copy] - player->tyres[BACK_LEFT].baseHeight) >= 3.5)) {
-                func_8005EA94(player, arg1, sp28, arg2_copy, arg3);
+                func_8005EA94(player, particleIndex, sp28, arg2_copy, arg3);
             } else if (((player->effects & 0x80) == 0x80) || ((player->effects & 0x40) == 0x40)) {
-                func_8005F90C(player, arg1, sp28, arg2_copy, arg3);
+                func_8005F90C(player, particleIndex, sp28, arg2_copy, arg3);
             } else if (((player->effects & 0x4000) && !(player->type & PLAYER_START_SEQUENCE)) ||
                        (player->effects & 0x800) || (player->effects & 0x20) || (player->unk_044 & 0x4000)) {
-                func_8005ED48(player, arg1, sp28, arg2_copy, arg3);
+                func_8005ED48(player, particleIndex, sp28, arg2_copy, arg3);
             } else {
-                func_8005DAF4(player, arg1, sp28, arg2_copy, arg3);
+                func_8005DAF4(player, particleIndex, sp28, arg2_copy, arg3);
             }
         }
     }
@@ -6366,7 +6365,7 @@ void func_8006C9B8(Player* player, s16 arg1, s8 arg2, s8 arg3) {
     if (sp28 < 0) {
         sp28 = 9;
     }
-    if (player->playerPacticlePool3[arg1].unk_01C == 1) {
+    if (player->playerPacticlePool3[arg1].isAlive == 1) {
         switch (player->playerPacticlePool3[arg1].type) {
             case 1:
                 func_800644E8(player, arg1, arg2, arg3);
@@ -6468,7 +6467,7 @@ void func_8006CEC0(Player* arg0, s16 arg1, s8 arg2, s8 arg3) {
     if (--sp20 < 0) {
         sp20 = 9;
     }
-    if (arg0->playerPacticlePool0[arg1].unk_01C == 1) {
+    if (arg0->playerPacticlePool0[arg1].isAlive == 1) {
         switch (arg0->playerPacticlePool0[arg1].type) {
             case 1:
                 func_80062C74(arg0, arg1, arg2, arg3);
@@ -6528,7 +6527,7 @@ void func_8006CEC0(Player* arg0, s16 arg1, s8 arg2, s8 arg3) {
 }
 
 void func_8006D194(Player* player, s8 arg1, s8 arg2) {
-    if (player->playerPacticlePool0[0x14].unk_01C == 1) {
+    if (player->playerPacticlePool0[0x14].isAlive == 1) {
         switch (player->playerPacticlePool0[0x14].type) {
             case 2:
                 func_80064DEC(player, arg1, arg2, 0);
@@ -6563,7 +6562,7 @@ void func_8006D194(Player* player, s8 arg1, s8 arg2) {
             func_800629BC(player, arg1, arg2, 0);
         }
     }
-    if (player->playerPacticlePool0[0x15].unk_01C == 1) {
+    if (player->playerPacticlePool0[0x15].isAlive == 1) {
         if (player->playerPacticlePool0[0x15].type == 5) {
             func_800651F4(player, arg1, arg2, 1);
         }
@@ -6608,10 +6607,10 @@ void func_8006D474(Player* player, s8 playerId, s8 screenId) {
                 case 2:
                     if (gActiveScreenMode == SCREEN_MODE_1P) {
                         func_800696CC(player, playerId, var_s2, screenId,
-                                      player->playerPacticlePool0[var_s2 + 30].unk_00C);
+                                      player->playerPacticlePool0[var_s2 + 30].scale);
                     } else if (screenId == playerId) {
                         func_800696CC(player, playerId, var_s2, screenId,
-                                      player->playerPacticlePool0[var_s2 + 30].unk_00C);
+                                      player->playerPacticlePool0[var_s2 + 30].scale);
                     }
                     break;
                 case 3:
@@ -6658,7 +6657,7 @@ void func_8006D474(Player* player, s8 playerId, s8 screenId) {
                     break;
             }
             switch (player->playerPacticlePool1[var_s2].type) {
-                case 1:
+                case DRIFT_PARTICLE:
                     if (gActiveScreenMode == SCREEN_MODE_3P_4P_SPLITSCREEN) {
                         if (screenId == playerId) {
                             render_player_drift_particles(player, playerId, var_s2, screenId);
@@ -6667,16 +6666,16 @@ void func_8006D474(Player* player, s8 playerId, s8 screenId) {
                         render_player_drift_particles(player, playerId, var_s2, screenId);
                     }
                     break;
-                case 2:
-                case 3:
+                case GROUND_PARTCLE:
+                case GRASS_PARTICLE:
                 case 4:
                 case 5:
                     if (gActiveScreenMode == SCREEN_MODE_3P_4P_SPLITSCREEN) {
                         if (screenId == playerId) {
-                            func_80065F0C(player, playerId, var_s2, screenId);
+                            render_player_ground_particles(player, playerId, var_s2, screenId);
                         }
                     } else {
-                        func_80065F0C(player, playerId, var_s2, screenId);
+                        render_player_ground_particles(player, playerId, var_s2, screenId);
                     }
                     break;
                 case 9:
@@ -6743,19 +6742,19 @@ void func_8006DD3C(Player* arg0, s8 arg1, s8 arg2) {
         if (((arg0->type & 0x4000) == 0x4000) && (arg2 == arg1)) {
             switch (arg0->playerPacticlePool0[20].type) {
                 case 2:
-                    func_80068310(arg0, arg1, arg0->playerPacticlePool0[20].unk_00C, arg2, 0);
+                    func_80068310(arg0, arg1, arg0->playerPacticlePool0[20].scale, arg2, 0);
                     break;
                 case 3:
-                    func_80067964(arg0, arg1, arg0->playerPacticlePool0[20].unk_00C, arg2, 0);
+                    func_80067964(arg0, arg1, arg0->playerPacticlePool0[20].scale, arg2, 0);
                     break;
                 case 4:
-                    func_80068724(arg0, arg1, arg0->playerPacticlePool0[20].unk_00C, arg2, 0);
+                    func_80068724(arg0, arg1, arg0->playerPacticlePool0[20].scale, arg2, 0);
                     break;
                 case 5:
-                    func_80068AA4(arg0, arg1, arg0->playerPacticlePool0[20].unk_00C, arg2, 0);
+                    func_80068AA4(arg0, arg1, arg0->playerPacticlePool0[20].scale, arg2, 0);
                     break;
                 case 6:
-                    func_80068DA0(arg0, arg1, arg0->playerPacticlePool0[20].unk_00C, arg2, 0);
+                    func_80068DA0(arg0, arg1, arg0->playerPacticlePool0[20].scale, arg2, 0);
                     break;
             }
             if (arg0->playerPacticlePool0[21].type == 5) {

@@ -1420,8 +1420,8 @@ glabel gTexture69B140
 .incbin "textures/standalone/texture_69B140.i8.mio0"
 
 .balign 4, 0x00
-glabel gTexture69B378
-.incbin "textures/standalone/texture_69B378.rgba16.mio0"
+glabel gGrassParticle
+.incbin "textures/standalone/gGrassParticle.rgba16.mio0"
 
 .balign 4, 0x00
 glabel gTexture69B960

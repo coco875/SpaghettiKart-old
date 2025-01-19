@@ -3331,8 +3331,8 @@ texture_69B140:
   height: 32
   offset: 0x591D0
   format: i8
-texture_69B378:
-  symbol: gTexture69B378
+gGrassParticle:
+  symbol: gGrassParticle
   type: texture
   mio0: true
   ctype: u16
