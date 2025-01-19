@@ -341,8 +341,8 @@ void DrawSettingsMenu() {
 
         if (Ship::Context::GetInstance()->GetWindow()->GetWindowBackend() == Ship::WindowBackend::FAST3D_DXGI_DX11) {
             UIWidgets::PaddedEnhancementSliderInt(
-                CVarGetInteger("gExtraLatencyThreshold", 80) == 0 ? "Jitter fix: Off" : "Jitter fix: >= %d FPS",
-                "##ExtraLatencyThreshold", "gExtraLatencyThreshold", 0, 360, "", 80, true, true, false);
+                CVarGetInteger("gExtraLatencyThreshold", 0) == 0 ? "Jitter fix: Off" : "Jitter fix: >= %d FPS",
+                "##ExtraLatencyThreshold", "gExtraLatencyThreshold", 0, 360, "", 0, true, true, false);
             UIWidgets::Tooltip("When Interpolation FPS setting is at least this threshold, add one frame of input lag "
                                "(e.g. 16.6 ms for 60 FPS) in order to avoid jitter. This setting allows the CPU to "
                                "work on one frame while GPU works on the previous frame.\nThis setting should be used "
@@ -451,11 +451,15 @@ void DrawGameMenu() {
 #endif
                                 )) {
             gGamestateNext = MAIN_MENU_FROM_QUIT;
-            gMenuSelection = START_MENU;
+            if (CVarGetInteger("gEnableDebugMode", 0) == true) {
+                gMenuSelection = START_MENU;
+            } else {
+                gMenuSelection = LOGO_INTRO_MENU;
+            }
         }
 #if !defined(__SWITCH__) && !defined(__WIIU__)
 
-        if (UIWidgets::MenuItem("Toggle Fullscreen", "F9")) {
+        if (UIWidgets::MenuItem("Toggle Fullscreen", "F11")) {
             Ship::Context::GetInstance()->GetWindow()->ToggleFullscreen();
         }
 
@@ -520,12 +524,6 @@ void DrawDebugMenu() {
                   "Enables the Gfx Debugger window, allowing you to input commands, type help for some examples" });
 
         UIWidgets::CVarCheckbox("Debug mode", "gEnableDebugMode", { .tooltip = "Enable debug mode" });
-
-        UIWidgets::CVarCheckbox("Level Selector", "gLevelSelector",
-                                { .tooltip = "Allows you to select any level from the main menu" });
-
-        UIWidgets::CVarCheckbox("SFX Jukebox", "gSfxJukebox",
-                                { .tooltip = "Allows you to play sound effects from the game" });
 
         UIWidgets::CVarCheckbox("Render Collision", "gRenderCollisionMesh",
                                 { .tooltip = "Renders the collision mesh instead of the course mesh" });

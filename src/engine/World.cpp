@@ -14,6 +14,8 @@ extern "C" {
    #include "main.h"
    #include "engine/Engine.h"
    #include "defines.h"
+   #include "audio/external.h"
+   #include "menus.h"
 }
 
 World::World() {}
@@ -69,8 +71,11 @@ u32 World::NextCup() {
         CupIndex++;
         CurrentCup = Cups[CupIndex];
         CurrentCup->CursorPosition = 0;
+        reset_cycle_flash_menu();
+        play_sound2(SOUND_MENU_CURSOR_MOVE);
         return CupIndex;
     }
+    return Cups.size() - hack;
 }
 
 u32 World::PreviousCup() {
@@ -78,8 +83,11 @@ u32 World::PreviousCup() {
         CupIndex--;
         CurrentCup = Cups[CupIndex];
         CurrentCup->CursorPosition = 0;
+        reset_cycle_flash_menu();
+        play_sound2(SOUND_MENU_CURSOR_MOVE);
         return CupIndex;
     }
+    return 0;
 }
 
 void World::SetCup(Cup* cup) {

@@ -9,6 +9,8 @@
 #include "engine/objects/BombKart.h"
 #include "engine/objects/CheepCheep.h"
 #include "engine/objects/TrashBin.h"
+#include "engine/objects/Bat.h"
+#include "engine/objects/Boos.h"
 #include "assets/banshee_boardwalk_data.h"
 #include "assets/boo_frames.h"
 
@@ -167,6 +169,12 @@ void BansheeBoardwalk::SpawnActors() {
     } else {
         gWorldInstance.AddObject(new OTrashBin(FVector(-1765.0f, 45.0f, 70.0f), FRotation(0, 0, 0), 1.0f, bhv));
     }
+
+    if ((gGamestate != CREDITS_SEQUENCE) && (gModeSelection != TIME_TRIALS)) {
+        gWorldInstance.AddObject(new OBat(FVector(0,0,0), FRotation(0, 0, 90.0f)));
+        gWorldInstance.AddObject(new OBoos(5, IPathSpan(180, 190), IPathSpan(200, 210), IPathSpan(280, 290)));
+        gWorldInstance.AddObject(new OBoos(5, IPathSpan(490, 500), IPathSpan(510, 520), IPathSpan(620, 630)));
+    }
 }
 
 void BansheeBoardwalk::SpawnVehicles() {
@@ -192,17 +200,9 @@ void BansheeBoardwalk::MinimapSettings() {
     D_8018D2E8 = 39;
 }
 
-const char* sBoardwalkTexList[] = { gTextureBat1, gTextureBat2, gTextureBat3, gTextureBat4 };
-
 void BansheeBoardwalk::InitCourseObjects() {
     size_t objectId = 0;
     if (gGamestate != CREDITS_SEQUENCE) {
-        objectId = indexObjectList1[0];
-        init_texture_object(objectId, (uint8_t*)d_course_banshee_boardwalk_bat_tlut, sBoardwalkTexList, 0x20U,
-                            (u16) 0x00000040);
-        gObjectList[objectId].orientation[0] = 0;
-        gObjectList[objectId].orientation[1] = 0;
-        gObjectList[objectId].orientation[2] = 0x8000;
         init_object(indexObjectList1[2], 0);
     }
 }
@@ -211,16 +211,16 @@ void BansheeBoardwalk::UpdateCourseObjects() {
     if (gGamestate != CREDITS_SEQUENCE) {
         func_8007E4C4();
         if (gModeSelection != TIME_TRIALS) {
-            update_bat();
+            //update_bat();
         }
-        wrapper_update_boos();
+        //wrapper_update_boos();
     }
 }
 
 void BansheeBoardwalk::RenderCourseObjects(s32 cameraId) {
     if (gGamestate != CREDITS_SEQUENCE) {
-        render_object_bat(cameraId);
-        render_object_boos(cameraId);
+        //render_object_bat(cameraId);
+        //render_object_boos(cameraId);
     }
 }
 

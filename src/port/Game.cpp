@@ -31,6 +31,9 @@
 
 #include "engine/courses/PodiumCeremony.h"
 
+#include "engine/ModelLoader.h"
+#include "engine/actors/BowserStatue.h"
+
 #include "engine/GarbageCollector.h"
 
 #include "engine/TrainCrossing.h"
@@ -45,6 +48,7 @@ extern "C" {
 #include "audio/external.h"
 #include "networking/networking.h"
 #include "render_courses.h"
+#include "menus.h"
 //#include "engine/wasm.h"
 }
 
@@ -85,6 +89,8 @@ Cup* gFlowerCup;
 Cup* gStarCup;
 Cup* gSpecialCup;
 Cup* gBattleCup;
+
+ModelLoader gModelLoader;
 
 void CustomEngineInit() {
 
@@ -152,6 +158,20 @@ void CustomEngineInit() {
     gWorldInstance.CurrentCup = gMushroomCup;
     gWorldInstance.CurrentCup->CursorPosition = 3;
     gWorldInstance.CupIndex = 0;
+
+    ModelLoader::LoadModelList bowserStatueList = {
+        .course = gBowsersCastle,
+        .gfxBuffer = &gBowserStatueGfx[0],
+        .gfxBufferSize = 162,
+        .gfxStart = (0x2BB8 / 8), // 0x2BB8 / sizeof(OldGfx)
+        .vtxBuffer = &gBowserStatueVtx[0],
+        .vtxBufferSize = 717,
+        .vtxStart = 1942,
+    };
+
+    gModelLoader.Add(bowserStatueList);
+
+    gModelLoader.Load();
 }
 
 extern "C" {
@@ -784,6 +804,11 @@ int main(int argc, char* argv[]) {
     sound_init();
 
     CustomEngineInit();
+
+    if (CVarGetInteger("gEnableDebugMode", 0) == true) {
+        gMenuSelection = START_MENU;
+    }
+
     thread5_game_loop();
     while (WindowIsRunning()) {
         push_frame();
