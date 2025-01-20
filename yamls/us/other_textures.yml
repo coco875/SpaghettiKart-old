@@ -3412,8 +3412,8 @@ texture_69C354:
   height: 32
   offset: 0x5A3E4
   format: ia8
-texture_69C4E4:
-  symbol: gTexture69C4E4
+gGroundDust:
+  symbol: gGroundDust
   type: texture
   mio0: true
   ctype: u16

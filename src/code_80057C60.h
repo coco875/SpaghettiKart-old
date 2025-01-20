@@ -611,7 +611,6 @@ extern u8* D_8018D480;
 extern u8* D_8018D484;
 extern u8* D_8018D48C;
 extern u8* D_8018D490;
-extern u8* D_8018D494;
 extern u8* D_8018D49C;
 extern u8* D_8018D4A0;
 extern u8* D_8018D4A4;

@@ -179,7 +179,7 @@ typedef struct {
     /* 0x38 */ s16 red;
     /* 0x3A */ s16 green;
     /* 0x3C */ s16 blue;
-    /* 0x3E */ s16 unk_03E;
+    /* 0x3E */ s16 alpha;
     /* 0x40 */ s16 unk_040;
     /* 0x42 */ s16 unk_042;
     /* 0x44 */ s16 unk_044;

@@ -1469,23 +1469,23 @@ texture_7F109C:
   mio0: true
   format: ia16
 7F1124:
-  symbol: gTexture7F1124
+  symbol: gTextureFontFourPoint
   type: texture
   ctype: u16
   width: 26
   height: 16
   offset: 0xC76F4
   format: i4
-7F11F4:
-  symbol: gTexture7F11F4
+gTextureFontCC:
+  symbol: gTextureFontCC
   type: texture
   ctype: u16
   width: 26
   height: 16
   offset: 0xC77C4
   format: i4
-7F12C4:
-  symbol: gTexture7F12C4
+gTextureFontDoubleQuote:
+  symbol: gTextureFontDoubleQuote
   type: texture
   ctype: u16
   width: 26
@@ -3308,8 +3308,8 @@ gTextureFontLetterZ:
   height: 16
   offset: 0xD0594
   format: i4
-7FA044:
-  symbol: gTexture7FA044
+gTextureFontSimpleQuote:
+  symbol: gTextureFontSimpleQuote
   type: texture
   ctype: u16
   width: 16
