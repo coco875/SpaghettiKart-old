@@ -69,7 +69,7 @@ BansheeBoardwalk::BansheeBoardwalk() {
     this->gfx = d_course_banshee_boardwalk_packed_dls;
     this->gfxSize = 3689;
     Props.textures = banshee_boardwalk_textures;
-    Props.MinimapTexture = gTextureCourseOutlineBansheeBoardwalk;
+    Props.MinimapTexture = minimap_banshee_boardwalk;
     Props.MinimapDimensions =
         IVector2D(ResourceGetTexWidthByName(Props.MinimapTexture), ResourceGetTexHeightByName(Props.MinimapTexture));
 

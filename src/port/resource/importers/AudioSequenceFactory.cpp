@@ -4,10 +4,9 @@
 #include "spdlog/spdlog.h"
 #include "port/Engine.h"
 
-std::shared_ptr<Ship::IResource>
-SM64::AudioSequenceFactoryV0::ReadResource(std::shared_ptr<Ship::File> file,
-                                           std::shared_ptr<Ship::ResourceInitData> initData) {
-    if (!FileHasValidFormatAndReader(file, initData)) {
+std::shared_ptr<Ship::IResource> SM64::AudioSequenceFactoryV0::ReadResource(std::shared_ptr<Ship::File> file) {
+    auto initData = file->InitData;
+    if (!FileHasValidFormatAndReader(file)) {
         return nullptr;
     }
 

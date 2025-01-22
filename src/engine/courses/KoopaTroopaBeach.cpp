@@ -61,7 +61,7 @@ KoopaTroopaBeach::KoopaTroopaBeach() {
     this->gfx = d_course_koopa_troopa_beach_packed_dls;
     this->gfxSize = 5720;
     Props.textures = koopa_troopa_beach_textures;
-    Props.MinimapTexture = gTextureCourseOutlineKoopaTroopaBeach;
+    Props.MinimapTexture = minimap_koopa_troopa_beach;
     Props.MinimapDimensions =
         IVector2D(ResourceGetTexWidthByName(Props.MinimapTexture), ResourceGetTexHeightByName(Props.MinimapTexture));
 

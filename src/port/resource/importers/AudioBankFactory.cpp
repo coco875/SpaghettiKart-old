@@ -4,10 +4,9 @@
 #include "resourcebridge.h"
 #include "ResourceUtil.h"
 
-std::shared_ptr<Ship::IResource>
-SM64::AudioBankFactoryV0::ReadResource(std::shared_ptr<Ship::File> file,
-                                       std::shared_ptr<Ship::ResourceInitData> initData) {
-    if (!FileHasValidFormatAndReader(file, initData)) {
+std::shared_ptr<Ship::IResource> SM64::AudioBankFactoryV0::ReadResource(std::shared_ptr<Ship::File> file) {
+    auto initData = file->InitData;
+    if (!FileHasValidFormatAndReader(file)) {
         return nullptr;
     }
 

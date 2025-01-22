@@ -192,13 +192,11 @@ Vtx gBalloonVertexPlane2[] = {
 // };
 
 u8* gCourseOutlineTextures[] = {
-    gTextureCourseOutlineMarioRaceway,     gTextureCourseOutlineChocoMountain, gTextureCourseOutlineBowsersCastle,
-    gTextureCourseOutlineBansheeBoardwalk, gTextureCourseOutlineYoshiValley,   gTextureCourseOutlineFrappeSnowland,
-    gTextureCourseOutlineKoopaTroopaBeach, gTextureCourseOutlineRoyalRaceway,  gTextureCourseOutlineLuigiRaceway,
-    gTextureCourseOutlineMooMooFarm,       gTextureCourseOutlineToadsTurnpike, gTextureCourseOutlineKalimariDesert,
-    gTextureCourseOutlineSherbetLand,      gTextureCourseOutlineRainbowRoad,   gTextureCourseOutlineWarioStadium,
-    gTextureCourseOutlineBlockFort,        gTextureCourseOutlineSkyscraper,    gTextureCourseOutlineDoubleDeck,
-    gTextureCourseOutlineDksJungleParkway, gTextureCourseOutlineBigDonut,
+    minimap_mario_raceway, minimap_choco_mountain,  minimap_bowsers_castle,     minimap_banshee_boardwalk,
+    minimap_yoshi_valley,  minimap_frappe_snowland, minimap_koopa_troopa_beach, minimap_royal_raceway,
+    minimap_luigi_raceway, minimap_moo_moo_farm,    minimap_toads_turnpike,     gTextureCourseOutlineKalimariDesert,
+    minimap_sherbet_land,  minimap_rainbow_road,    minimap_wario_stadium,      minimap_block_fort,
+    minimap_skyscraper,    minimap_double_deck,     minimap_dks_jungle_parkway, minimap_big_donut,
 };
 
 s16 D_800E5520[] = {
@@ -522,7 +520,8 @@ SplineData D_800E5D78 = {
 
 // Note the use of the plain SplineData type here. Since these are pointers, we don't care
 // about their internal array size
-SplineData* D_800E5D9C[] = { &D_800E5988, &D_800E5A44, &D_800E5B08, &D_800E5BD4, &D_800E5C90, &boo6, &boo7, &boo8, &boo9, &boo10 };
+SplineData* D_800E5D9C[] = { &D_800E5988, &D_800E5A44, &D_800E5B08, &D_800E5BD4, &D_800E5C90,
+                             &boo6,       &boo7,       &boo8,       &boo9,       &boo10 };
 
 // Unused
 SplineData* D_800E5DB0 = &D_800E5988;

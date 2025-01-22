@@ -9,10 +9,9 @@ void* segmented_uintptr_t_to_virtual(uintptr_t);
 }
 
 namespace MK64 {
-std::shared_ptr<Ship::IResource>
-ResourceFactoryBinaryTrackSectionsV0::ReadResource(std::shared_ptr<Ship::File> file,
-                                                   std::shared_ptr<Ship::ResourceInitData> initData) {
-    if (!FileHasValidFormatAndReader(file, initData)) {
+std::shared_ptr<Ship::IResource> ResourceFactoryBinaryTrackSectionsV0::ReadResource(std::shared_ptr<Ship::File> file) {
+    auto initData = file->InitData;
+    if (!FileHasValidFormatAndReader(file)) {
         return nullptr;
     }
 

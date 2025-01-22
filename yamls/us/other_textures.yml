@@ -2575,8 +2575,8 @@ texture_68E2D0:
   offset: 0x4C360
   mio0: true
   format: rgba16
-gTextureGreenShell0:
-  symbol: gTextureGreenShell0
+texture_green_shell_0:
+  symbol: texture_green_shell_0
   type: texture
   mio0: true
   offset: 0x4CBE0
@@ -2585,8 +2585,8 @@ gTextureGreenShell0:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureGreenShell1:
-  symbol: gTextureGreenShell1
+texture_green_shell_1:
+  symbol: texture_green_shell_1
   type: texture
   mio0: true
   offset: 0x4CE30
@@ -2595,8 +2595,8 @@ gTextureGreenShell1:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureGreenShell2:
-  symbol: gTextureGreenShell2
+texture_green_shell_2:
+  symbol: texture_green_shell_2
   type: texture
   mio0: true
   offset: 0x4D080
@@ -2605,8 +2605,8 @@ gTextureGreenShell2:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureGreenShell3:
-  symbol: gTextureGreenShell3
+texture_green_shell_3:
+  symbol: texture_green_shell_3
   type: texture
   mio0: true
   offset: 0x4D2D8
@@ -2615,8 +2615,8 @@ gTextureGreenShell3:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureGreenShell4:
-  symbol: gTextureGreenShell4
+texture_green_shell_4:
+  symbol: texture_green_shell_4
   type: texture
   mio0: true
   offset: 0x4D538
@@ -2625,8 +2625,8 @@ gTextureGreenShell4:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureGreenShell5:
-  symbol: gTextureGreenShell5
+texture_green_shell_5:
+  symbol: texture_green_shell_5
   type: texture
   mio0: true
   offset: 0x4D790
@@ -2635,8 +2635,8 @@ gTextureGreenShell5:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureGreenShell6:
-  symbol: gTextureGreenShell6
+texture_green_shell_6:
+  symbol: texture_green_shell_6
   type: texture
   mio0: true
   offset: 0x4D9FC
@@ -2645,8 +2645,8 @@ gTextureGreenShell6:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureGreenShell7:
-  symbol: gTextureGreenShell7
+texture_green_shell_7:
+  symbol: texture_green_shell_7
   type: texture
   mio0: true
   offset: 0x4DC5C
@@ -2655,8 +2655,8 @@ gTextureGreenShell7:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureRedShell0:
-  symbol: gTextureRedShell0
+texture_red_shell_0:
+  symbol: texture_red_shell_0
   type: texture
   mio0: true
   offset: 0x4CBE0
@@ -2665,8 +2665,8 @@ gTextureRedShell0:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureRedShell1:
-  symbol: gTextureRedShell1
+texture_red_shell_1:
+  symbol: texture_red_shell_1
   type: texture
   mio0: true
   offset: 0x4CE30
@@ -2675,8 +2675,8 @@ gTextureRedShell1:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureRedShell2:
-  symbol: gTextureRedShell2
+texture_red_shell_2:
+  symbol: texture_red_shell_2
   type: texture
   mio0: true
   offset: 0x4D080
@@ -2685,8 +2685,8 @@ gTextureRedShell2:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureRedShell3:
-  symbol: gTextureRedShell3
+texture_red_shell_3:
+  symbol: texture_red_shell_3
   type: texture
   mio0: true
   offset: 0x4D2D8
@@ -2695,8 +2695,8 @@ gTextureRedShell3:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureRedShell4:
-  symbol: gTextureRedShell4
+texture_red_shell_4:
+  symbol: texture_red_shell_4
   type: texture
   mio0: true
   offset: 0x4D538
@@ -2705,8 +2705,8 @@ gTextureRedShell4:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureRedShell5:
-  symbol: gTextureRedShell5
+texture_red_shell_5:
+  symbol: texture_red_shell_5
   type: texture
   mio0: true
   offset: 0x4D790
@@ -2715,8 +2715,8 @@ gTextureRedShell5:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureRedShell6:
-  symbol: gTextureRedShell6
+texture_red_shell_6:
+  symbol: texture_red_shell_6
   type: texture
   mio0: true
   offset: 0x4D9FC
@@ -2725,8 +2725,8 @@ gTextureRedShell6:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureRedShell7:
-  symbol: gTextureRedShell7
+texture_red_shell_7:
+  symbol: texture_red_shell_7
   type: texture
   mio0: true
   offset: 0x4DC5C
@@ -2735,8 +2735,8 @@ gTextureRedShell7:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_green_shell
-gTextureBlueShell0:
-  symbol: gTextureBlueShell0
+texture_blue_shell_0:
+  symbol: texture_blue_shell_0
   type: texture
   mio0: true
   offset: 0x4DEB0
@@ -2745,8 +2745,8 @@ gTextureBlueShell0:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_blue_shell
-gTextureBlueShell1:
-  symbol: gTextureBlueShell1
+texture_blue_shell_1:
+  symbol: texture_blue_shell_1
   type: texture
   mio0: true
   offset: 0x4E0DC
@@ -2755,8 +2755,8 @@ gTextureBlueShell1:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_blue_shell
-gTextureBlueShell2:
-  symbol: gTextureBlueShell2
+texture_blue_shell_2:
+  symbol: texture_blue_shell_2
   type: texture
   mio0: true
   offset: 0x4E314
@@ -2765,8 +2765,8 @@ gTextureBlueShell2:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_blue_shell
-gTextureBlueShell3:
-  symbol: gTextureBlueShell3
+texture_blue_shell_3:
+  symbol: texture_blue_shell_3
   type: texture
   mio0: true
   offset: 0x4E554
@@ -2775,8 +2775,8 @@ gTextureBlueShell3:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_blue_shell
-gTextureBlueShell4:
-  symbol: gTextureBlueShell4
+texture_blue_shell_4:
+  symbol: texture_blue_shell_4
   type: texture
   mio0: true
   offset: 0x4E798
@@ -2785,8 +2785,8 @@ gTextureBlueShell4:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_blue_shell
-gTextureBlueShell5:
-  symbol: gTextureBlueShell5
+texture_blue_shell_5:
+  symbol: texture_blue_shell_5
   type: texture
   mio0: true
   offset: 0x4E9F0
@@ -2795,8 +2795,8 @@ gTextureBlueShell5:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_blue_shell
-gTextureBlueShell6:
-  symbol: gTextureBlueShell6
+texture_blue_shell_6:
+  symbol: texture_blue_shell_6
   type: texture
   mio0: true
   offset: 0x4EC4C
@@ -2805,8 +2805,8 @@ gTextureBlueShell6:
   height: 32
   format: CI8
   tlut_symbol: common_tlut_blue_shell
-gTextureBlueShell7:
-  symbol: gTextureBlueShell7
+texture_blue_shell_7:
+  symbol: texture_blue_shell_7
   type: texture
   mio0: true
   offset: 0x4EE88
@@ -4789,7 +4789,7 @@ exhaust_5:
   mio0: true
   format: ia8
 logo_mario_kart_64:
-  symbol: gTextureLogoMarioKart64
+  symbol: logo_mario_kart_64
   type: texture
   mio0: true
   ctype: u32
@@ -4798,8 +4798,8 @@ logo_mario_kart_64:
   offset: 0xD7510
   mio0: true
   format: rgba32
-gTextureCourseOutlineMarioRaceway:
-  symbol: gTextureCourseOutlineMarioRaceway
+minimap_mario_raceway:
+  symbol: minimap_mario_raceway
   mio0: true
   type: texture
   offset: 0xDEC9C
@@ -4807,8 +4807,8 @@ gTextureCourseOutlineMarioRaceway:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineChocoMountain:
-  symbol: gTextureCourseOutlineChocoMountain
+minimap_choco_mountain:
+  symbol: minimap_choco_mountain
   mio0: true
   type: texture
   offset: 0xDEF60
@@ -4816,8 +4816,8 @@ gTextureCourseOutlineChocoMountain:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineBowsersCastle:
-  symbol: gTextureCourseOutlineBowsersCastle
+minimap_bowsers_castle:
+  symbol: minimap_bowsers_castle
   mio0: true
   type: texture
   offset: 0xDF268
@@ -4825,8 +4825,8 @@ gTextureCourseOutlineBowsersCastle:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineBansheeBoardwalk:
-  symbol: gTextureCourseOutlineBansheeBoardwalk
+minimap_banshee_boardwalk:
+  symbol: minimap_banshee_boardwalk
   mio0: true
   type: texture
   offset: 0xDF4CC
@@ -4834,8 +4834,8 @@ gTextureCourseOutlineBansheeBoardwalk:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineYoshiValley:
-  symbol: gTextureCourseOutlineYoshiValley
+minimap_yoshi_valley:
+  symbol: minimap_yoshi_valley
   mio0: true
   type: texture
   offset: 0xDF6C4
@@ -4843,8 +4843,8 @@ gTextureCourseOutlineYoshiValley:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineFrappeSnowland:
-  symbol: gTextureCourseOutlineFrappeSnowland
+minimap_frappe_snowland:
+  symbol: minimap_frappe_snowland
   mio0: true
   type: texture
   offset: 0xDFAE8
@@ -4852,8 +4852,8 @@ gTextureCourseOutlineFrappeSnowland:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineKoopaTroopaBeach:
-  symbol: gTextureCourseOutlineKoopaTroopaBeach
+minimap_koopa_troopa_beach:
+  symbol: minimap_koopa_troopa_beach
   mio0: true
   type: texture
   offset: 0xDFD60
@@ -4861,8 +4861,8 @@ gTextureCourseOutlineKoopaTroopaBeach:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineRoyalRaceway:
-  symbol: gTextureCourseOutlineRoyalRaceway
+minimap_royal_raceway:
+  symbol: minimap_royal_raceway
   mio0: true
   type: texture
   offset: 0xDFFC8
@@ -4870,8 +4870,8 @@ gTextureCourseOutlineRoyalRaceway:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineLuigiRaceway:
-  symbol: gTextureCourseOutlineLuigiRaceway
+minimap_luigi_raceway:
+  symbol: minimap_luigi_raceway
   mio0: true
   type: texture
   offset: 0xE02A0
@@ -4879,8 +4879,8 @@ gTextureCourseOutlineLuigiRaceway:
   width: 64
   height: 96
   format: I4
-gTextureCourseOutlineMooMooFarm:
-  symbol: gTextureCourseOutlineMooMooFarm
+minimap_moo_moo_farm:
+  symbol: minimap_moo_moo_farm
   mio0: true
   type: texture
   offset: 0xE051C
@@ -4888,8 +4888,8 @@ gTextureCourseOutlineMooMooFarm:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineToadsTurnpike:
-  symbol: gTextureCourseOutlineToadsTurnpike
+minimap_toads_turnpike:
+  symbol: minimap_toads_turnpike
   mio0: true
   type: texture
   offset: 0xE0754
@@ -4906,8 +4906,8 @@ gTextureCourseOutlineKalimariDesert:
   width: 64
   height: 96
   format: I4
-gTextureCourseOutlineSherbetLand:
-  symbol: gTextureCourseOutlineSherbetLand
+minimap_sherbet_land:
+  symbol: minimap_sherbet_land
   mio0: true
   type: texture
   offset: 0xE0DBC
@@ -4915,8 +4915,8 @@ gTextureCourseOutlineSherbetLand:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineRainbowRoad:
-  symbol: gTextureCourseOutlineRainbowRoad
+minimap_rainbow_road:
+  symbol: minimap_rainbow_road
   mio0: true
   type: texture
   offset: 0xE10C4
@@ -4924,8 +4924,8 @@ gTextureCourseOutlineRainbowRoad:
   width: 64
   height: 96
   format: I4
-gTextureCourseOutlineWarioStadium:
-  symbol: gTextureCourseOutlineWarioStadium
+minimap_wario_stadium:
+  symbol: minimap_wario_stadium
   mio0: true
   type: texture
   offset: 0xE1400
@@ -4933,8 +4933,8 @@ gTextureCourseOutlineWarioStadium:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineBlockFort:
-  symbol: gTextureCourseOutlineBlockFort
+minimap_block_fort:
+  symbol: minimap_block_fort
   mio0: true
   type: texture
   offset: 0xE16D4
@@ -4942,8 +4942,8 @@ gTextureCourseOutlineBlockFort:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineSkyscraper:
-  symbol: gTextureCourseOutlineSkyscraper
+minimap_skyscraper:
+  symbol: minimap_skyscraper
   mio0: true
   type: texture
   offset: 0xE1974
@@ -4951,8 +4951,8 @@ gTextureCourseOutlineSkyscraper:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineDoubleDeck:
-  symbol: gTextureCourseOutlineDoubleDeck
+minimap_double_deck:
+  symbol: minimap_double_deck
   mio0: true
   type: texture
   offset: 0xE1BA8
@@ -4960,8 +4960,8 @@ gTextureCourseOutlineDoubleDeck:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineDksJungleParkway:
-  symbol: gTextureCourseOutlineDksJungleParkway
+minimap_dks_jungle_parkway:
+  symbol: minimap_dks_jungle_parkway
   mio0: true
   type: texture
   offset: 0xE1D2C
@@ -4969,8 +4969,8 @@ gTextureCourseOutlineDksJungleParkway:
   width: 64
   height: 64
   format: I4
-gTextureCourseOutlineBigDonut:
-  symbol: gTextureCourseOutlineBigDonut
+minimap_big_donut:
+  symbol: minimap_big_donut
   mio0: true
   type: texture
   offset: 0xE2014

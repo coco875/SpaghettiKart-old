@@ -37,17 +37,17 @@
 
 // Appears to be textures
 // or tluts
-char* gTextureGreenShell[] = {
-    gTextureGreenShell0, gTextureGreenShell1, gTextureGreenShell2, gTextureGreenShell3,
-    gTextureGreenShell4, gTextureGreenShell5, gTextureGreenShell6, gTextureGreenShell7,
+char* texture_green_shell_[] = {
+    texture_green_shell_0, texture_green_shell_1, texture_green_shell_2, texture_green_shell_3,
+    texture_green_shell_4, texture_green_shell_5, texture_green_shell_6, texture_green_shell_7,
 };
 char* gTextureBlueshell[] = {
-    gTextureBlueShell0, gTextureBlueShell1, gTextureBlueShell2, gTextureBlueShell3,
-    gTextureBlueShell4, gTextureBlueShell5, gTextureBlueShell6, gTextureBlueShell7,
+    texture_blue_shell_0, texture_blue_shell_1, texture_blue_shell_2, texture_blue_shell_3,
+    texture_blue_shell_4, texture_blue_shell_5, texture_blue_shell_6, texture_blue_shell_7,
 };
-char* gTextureRedShell[] = {
-    gTextureRedShell0, gTextureRedShell1, gTextureRedShell2, gTextureRedShell3,
-    gTextureRedShell4, gTextureRedShell5, gTextureRedShell6, gTextureRedShell7,
+char* texture_red_shell_[] = {
+    texture_red_shell_0, texture_red_shell_1, texture_red_shell_2, texture_red_shell_3,
+    texture_red_shell_4, texture_red_shell_5, texture_red_shell_6, texture_red_shell_7,
 };
 u8* D_802BA058;
 
@@ -723,10 +723,10 @@ void render_actor_shell(Camera* camera, Mat4 matrix, struct ShellActor* shell) {
 
     switch (shell->type) {
         case ACTOR_GREEN_SHELL:
-            phi_t3 = gTextureGreenShell[index];
+            phi_t3 = texture_green_shell_[index];
             break;
         case ACTOR_RED_SHELL:
-            phi_t3 = gTextureRedShell[index];
+            phi_t3 = texture_red_shell_[index];
             break;
         case ACTOR_BLUE_SPINY_SHELL:
             phi_t3 = gTextureBlueshell[index];

@@ -87,8 +87,9 @@ LuigiRaceway::LuigiRaceway() {
     this->gfx = d_course_luigi_raceway_packed_dls;
     this->gfxSize = 6377;
     Props.textures = luigi_raceway_textures;
-    Props.MinimapTexture = gTextureCourseOutlineLuigiRaceway;
-    Props.MinimapDimensions = IVector2D(ResourceGetTexWidthByName(Props.MinimapTexture), ResourceGetTexHeightByName(Props.MinimapTexture));
+    Props.MinimapTexture = minimap_luigi_raceway;
+    Props.MinimapDimensions =
+        IVector2D(ResourceGetTexWidthByName(Props.MinimapTexture), ResourceGetTexHeightByName(Props.MinimapTexture));
 
     Props.Id = "mk:luigi_raceway";
     Props.Name = "luigi raceway";

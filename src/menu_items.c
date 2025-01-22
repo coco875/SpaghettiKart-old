@@ -771,26 +771,27 @@ MenuTexture* D_800E7D74[] = {
     D_02001E24,
 };
 
-MenuTexture* D_800E7DC4[] = { seg2_mario_raceway_title_texture,
-                              seg2_choco_mountain_title_texture,
-                              D_02004EF8,
-                              D_02004F20,
-                              D_02004F48,
-                              D_02004F70,
-                              D_02004F98,
-                              D_02004FC0,
-                              D_02004FE8,
-                              D_02005010,
-                              D_02005038,
-                              D_02005060,
-                              D_02005088,
-                              D_020050B0,
-                              D_020050D8,
-                              D_02005100,
-                              D_02005128,
-                              D_02005150,
-                              D_02005178,
-                              D_020051A0,
+MenuTexture* D_800E7DC4[] = {
+    seg2_mario_raceway_title_texture,
+    seg2_choco_mountain_title_texture,
+    D_02004EF8,
+    D_02004F20,
+    D_02004F48,
+    D_02004F70,
+    D_02004F98,
+    D_02004FC0,
+    D_02004FE8,
+    D_02005010,
+    D_02005038,
+    D_02005060,
+    D_02005088,
+    D_020050B0,
+    D_020050D8,
+    D_02005100,
+    D_02005128,
+    D_02005150,
+    D_02005178,
+    D_020051A0,
 };
 
 // Unused?
@@ -811,16 +812,96 @@ MkAnimation* D_800E7E34[] = {
 };
 
 MenuTexture* gGlyphTextureLUT[] = {
-    D_0200211C, D_02002144, D_0200216C, D_02002194, D_020021BC, D_020021E4, D_0200220C, D_02002234, D_0200225C,
-    D_02002284, D_020022AC, D_020022D4, D_020022FC, D_02002324, D_0200234C, D_02002374, D_0200239C, D_020023C4,
-    D_020023EC, D_02002414, D_0200243C, D_02002464, D_0200248C, D_020024B4, D_020024DC, D_02002504, D_0200252C,
-    D_02002554, D_0200257C, D_020025A4, D_02004584, D_0200261C, D_02002694, D_020026BC, D_020026E4, D_0200270C,
-    D_02002734, D_0200275C, D_02002784, D_020027AC, D_020027D4, D_020027FC, D_020025CC, D_02002644, D_020025F4,
-    D_0200266C, D_02004534, D_02004584, D_02002824, D_0200284C, D_02002874, D_0200289C, D_020028C4, D_020028EC,
-    D_02002F54, D_02002914, D_02002F7C, D_0200293C, D_02002FA4, D_02002964, D_02002FCC, D_0200298C, D_02002FF4,
-    D_020029B4, D_0200301C, D_020029DC, D_02003044, D_02002A04, D_0200306C, D_02002A2C, D_02003094, D_02002A54,
-    D_020030BC, D_02002A7C, D_020030E4, D_02002AA4, D_0200310C, D_020033B4, D_02002ACC, D_02003134, D_02002AF4,
-    D_0200315C, D_02002B1C, D_02003184, D_02002B44, D_02002B6C, D_02002B94, D_02002BBC, D_02002BE4, D_02002C0C,
+    gTextureFontLetterA,
+    gTextureFontLetterB,
+    gTextureFontLetterC,
+    gTextureFontLetterD,
+    gTextureFontLetterE,
+    gTextureFontLetterF,
+    gTextureFontLetterG,
+    gTextureFontLetterH,
+    gTextureFontLetterI,
+    gTextureFontLetterJ,
+    gTextureFontLetterK,
+    gTextureFontLetterL,
+    gTextureFontLetterM,
+    gTextureFontLetterN,
+    gTextureFontLetterO,
+    gTextureFontLetterP,
+    gTextureFontLetterQ,
+    gTextureFontLetterR,
+    gTextureFontLetterS,
+    gTextureFontLetterT,
+    gTextureFontLetterU,
+    gTextureFontLetterV,
+    gTextureFontLetterW,
+    gTextureFontLetterX,
+    gTextureFontLetterY,
+    gTextureFontLetterZ,
+    gTextureFontExclamationMark,
+    gTextureFontMinus,
+    gTextureFontInterogationMark,
+    gTextureFontSimpleQuote,
+    gTextureFontEmpty,
+    gTextureFontDot,
+    gTextureFontNumberZero,
+    gTextureFontNumberOne,
+    gTextureFontNumberTwo,
+    gTextureFontNumberThree,
+    gTextureFontNumberFour,
+    gTextureFontNumberFive,
+    gTextureFontNumberSix,
+    gTextureFontNumberSeven,
+    gTextureFontNumberEight,
+    gTextureFontNumberNine,
+    gTextureFontDoubleQuote,
+    gTextureFontFourDote,
+    gTextureFontPlus,
+    gTextureFontCC,
+    gTextureFontComma,
+    gTextureFontEmpty,
+    D_02002824,
+    D_0200284C,
+    D_02002874,
+    D_0200289C,
+    D_020028C4,
+    D_020028EC,
+    D_02002F54,
+    D_02002914,
+    D_02002F7C,
+    D_0200293C,
+    D_02002FA4,
+    D_02002964,
+    D_02002FCC,
+    D_0200298C,
+    D_02002FF4,
+    D_020029B4,
+    D_0200301C,
+    D_020029DC,
+    D_02003044,
+    D_02002A04,
+    D_0200306C,
+    D_02002A2C,
+    D_02003094,
+    D_02002A54,
+    D_020030BC,
+    D_02002A7C,
+    D_020030E4,
+    D_02002AA4,
+    D_0200310C,
+    D_020033B4,
+    D_02002ACC,
+    D_02003134,
+    D_02002AF4,
+    D_0200315C,
+    D_02002B1C,
+    D_02003184,
+    D_02002B44,
+    D_02002B6C,
+    D_02002B94,
+    D_02002BBC,
+    D_02002BE4,
+    D_02002C0C,
     D_020031AC,
 };
 
@@ -862,7 +943,7 @@ MenuTexture* D_800E81E4[] = {
 };
 
 MenuTexture* D_800E822C[] = {
-    D_02004534,
+    gTextureFontComma,
     D_0200455C,
 };
 
@@ -878,8 +959,8 @@ MenuTexture* D_800E8254[] = {
     seg2_menu_3p_column,
     seg2_menu_4p_column,
     D_0200487C,
-    D_020048A4,
-    D_020048CC,
+    gTextureMenuLOption,
+    gTextureMenuRData,
     // CC textures
     seg2_50_CC_texture,
     seg2_100_CC_texture,
@@ -2797,8 +2878,8 @@ Gfx* func_80095E10(Gfx* displayListHead, s8 textureFormat, s32 texScaleS, s32 te
                    u32 texHeight) {
     s32 textureWidth = srcWidth;
     s32 textureHeight = srcHeight;
-    gMKLoadTextureTile(displayListHead++, textureData, textureFormat, G_IM_SIZ_16b, texWidth, 0, srcX, srcY,
-                       srcX + textureWidth, srcY + textureHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureTile(displayListHead++, textureData, textureFormat, G_IM_SIZ_16b, texWidth, texHeight, srcX, srcY,
+                       srcX + textureWidth - 1, srcY + textureHeight - 1, 0, G_TX_NOMIRROR | G_TX_WRAP,
                        G_TX_NOMIRROR | G_TX_WRAP, 0, 0, G_TX_NOLOD, G_TX_NOLOD);
     gSPWideTextureRectangle(displayListHead++, screenX << 2, screenY << 2, (screenX + textureWidth) << 2,
                             (screenY + textureHeight) << 2, G_TX_RENDERTILE, 0, 0, texScaleS, texScaleT);
@@ -3070,8 +3151,8 @@ Gfx* func_80097E58(Gfx* displayListHead, s8 textureFormat, u32 uls, u32 ult, u32
         return displayListHead;
     }
     f32 percent = (f32) (32 - width) / 32.0f;
-    gMKLoadTextureTile(displayListHead++, textureData, textureFormat, G_IM_SIZ_16b, textureWidth, textureHeight, uls,
-                       ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD,
+    gDPLoadTextureTile(displayListHead++, textureData, textureFormat, G_IM_SIZ_16b, textureWidth, textureHeight, uls,
+                       ult, lrs - 1, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD,
                        G_TX_NOLOD);
     screenX += (s32) ((f32) (textureWidth / 2) * (1.0f - percent));
     gSPWideTextureRectangle(displayListHead++, (screenX) << 2, screenY << 2,
@@ -3158,7 +3239,7 @@ Gfx* draw_box_fill(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, s32
     if (lry < uly) {
         swap_values(&uly, &lry);
     }
-    if ((ulx >= 0x140) || (uly >= 0xF0)) {
+    if ((ulx >= SCREEN_WIDTH) || (uly >= SCREEN_HEIGHT)) {
         return displayListHead;
     }
     if (ulx < 0) {
@@ -5411,15 +5492,14 @@ void clear_menus(void) {
 void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
     MenuItem* var_ra;
     s32 stackPadding0;
-    UNUSED s32 stackPadding1;
-    UNUSED s32 stackPadding2;
     s32 temp_v0_6;
     s32 var_v0;
     s32 var_v1_3;
     s32 temp_a1;
-    UNUSED MenuTexture* mk64Texture;
     MkAnimation* var_a0;
     s32 one = 1;
+    int original_width;
+    int height;
 
     var_v0 = 0;
     var_ra = gMenuItems;
@@ -5529,16 +5609,13 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
         case MENU_ITEM_UI_START_BACKGROUND:
             // load_menu_img_comp_type(gMenuTexturesBackground[has_unlocked_extra_mode()], LOAD_MENU_IMG_TKMK00_ONCE);
             load_texture_reset_cache(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
-            int original_width = gMenuTexturesBackground[has_unlocked_extra_mode()]->width;
-            int original_height = gMenuTexturesBackground[has_unlocked_extra_mode()]->height;
+            original_width = gMenuTexturesBackground[has_unlocked_extra_mode()]->width;
+            height = gMenuTexturesBackground[has_unlocked_extra_mode()]->height;
             gMenuTexturesBackground[has_unlocked_extra_mode()]->width =
-                ResourceGetTexWidthByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
-            gMenuTexturesBackground[has_unlocked_extra_mode()]->height =
+                ResourceGetTexWidthByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData) * height /
                 ResourceGetTexHeightByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
             gMenuTexturesBackground[has_unlocked_extra_mode()]->dX +=
                 (original_width - gMenuTexturesBackground[has_unlocked_extra_mode()]->width) / 2;
-            gMenuTexturesBackground[has_unlocked_extra_mode()]->dY +=
-                (original_height - gMenuTexturesBackground[has_unlocked_extra_mode()]->height) / 2;
             break;
         case MENU_ITEM_UI_LOGO_AND_COPYRIGHT:
             load_mario_kart_64_logo();
@@ -5546,6 +5623,12 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
             load_menu_img(seg2_copyright_1996_texture);
             break;
         case MENU_ITEM_UI_PUSH_START_BUTTON:
+            original_width = seg2_push_start_button_texture->width;
+            height = seg2_push_start_button_texture->height;
+            seg2_push_start_button_texture->width =
+                ResourceGetTexWidthByName(seg2_push_start_button_texture->textureData) * height /
+                ResourceGetTexHeightByName(seg2_push_start_button_texture->textureData);
+            seg2_push_start_button_texture->dX += (original_width - seg2_push_start_button_texture->width) / 2;
             load_menu_img(seg2_push_start_button_texture);
             break;
         case MAIN_MENU_BACKGROUND:
@@ -5568,16 +5651,22 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
         case 0x17:
         case MAIN_MENU_TIME_TRIALS_BEGIN:
         case MAIN_MENU_TIME_TRIALS_DATA:
-            load_menu_img_comp_type(segmented_to_virtual_dupe(D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]),
-                                    LOAD_MENU_IMG_TKMK00_ONCE);
+            original_width = D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->width;
+            height = D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->height;
+            D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->width =
+                ResourceGetTexWidthByName(D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->textureData) * height /
+                ResourceGetTexHeightByName(D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->textureData);
+            D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->dX +=
+                (original_width - D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->width) / 2;
+            load_menu_img_comp_type(D_800E8254[type - MENU_ITEM_UI_GAME_SELECT], LOAD_MENU_IMG_TKMK00_ONCE);
             break;
         case MENU_ITEM_UI_1P_GAME:
         case MENU_ITEM_UI_2P_GAME:
         case MENU_ITEM_UI_3P_GAME:
         case MENU_ITEM_UI_4P_GAME:
-            load_menu_img_comp_type(segmented_to_virtual_dupe(D_800E8234[((type - 0xB) * 2) + 0]),
+            load_menu_img_comp_type(segmented_to_virtual_dupe(D_800E8234[((type - MENU_ITEM_UI_1P_GAME) * 2) + 0]),
                                     LOAD_MENU_IMG_TKMK00_ONCE);
-            load_menu_img(segmented_to_virtual_dupe(D_800E8234[((type - 0xB) * 2) + 1]));
+            load_menu_img(segmented_to_virtual_dupe(D_800E8234[((type - MENU_ITEM_UI_1P_GAME) * 2) + 1]));
             break;
         case CHARACTER_SELECT_MENU_PLAYER_SELECT_BANNER:
             load_menu_img_comp_type(D_02004B4C, LOAD_MENU_IMG_TKMK00_ONCE);
@@ -6000,7 +6089,7 @@ void render_menus(MenuItem* arg0) {
             case MENU_ITEM_UI_2P_GAME:
             case MENU_ITEM_UI_3P_GAME:
             case MENU_ITEM_UI_4P_GAME:
-                var_a1 = arg0->type - 0xB;
+                var_a1 = arg0->type - MENU_ITEM_UI_1P_GAME;
                 func_800A8270(var_a1, arg0);
                 func_800A0FA4(arg0, var_a1);
                 break;
@@ -6011,20 +6100,22 @@ void render_menus(MenuItem* arg0) {
                 break;
             case MAIN_MENU_OPTION_GFX:
             case MAIN_MENU_DATA_GFX:
-                var_a1 = arg0->type - 0xF;
+                var_a1 = arg0->type - MENU_ITEM_UI_OK;
+                var_v1 = arg0->type - MENU_ITEM_UI_GAME_SELECT;
                 if (arg0->param1 < 0x20) {
                     temp_t9 = (arg0->param1 * 0x3A) / 64;
                     if (var_a1 == gMainMenuSelection) {
                         gDisplayListHead =
-                            draw_flash_select_case_fast(gDisplayListHead, arg0->column + temp_t9, arg0->row,
-                                                        (arg0->column - temp_t9) + 0x39, arg0->row + 0x12);
+                            draw_flash_select_case_fast(gDisplayListHead, arg0->column + 1 + temp_t9, arg0->row,
+                                                        (arg0->column - temp_t9) + D_800E8254[var_v1]->width - 1,
+                                                        arg0->row + D_800E8254[var_v1]->height - 2);
                     } else {
                         gDisplayListHead =
-                            draw_box_fill(gDisplayListHead, arg0->column + temp_t9, arg0->row,
-                                          (arg0->column - temp_t9) + 0x39, arg0->row + 0x12, 1, 1, 1, 0x000000FF);
+                            draw_box_fill(gDisplayListHead, arg0->column + 1 + temp_t9, arg0->row,
+                                          (arg0->column - temp_t9) + D_800E8254[var_v1]->width - 1,
+                                          arg0->row + D_800E8254[var_v1]->height - 2, 1, 1, 1, 0x000000FF);
                     }
                 }
-                var_v1 = arg0->type - 0xA;
                 gDisplayListHead =
                     func_8009BC9C(gDisplayListHead, D_800E8254[var_v1], arg0->column, arg0->row, 2, arg0->param1);
                 break;
@@ -7844,8 +7935,7 @@ void render_pause_grand_prix(MenuItem* arg0) {
             s32 rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
             gDisplayListHead = draw_box_wide(gDisplayListHead, leftEdge - rightEdge, temp_t0 - temp_t4,
                                              leftEdge + rightEdge, temp_t0 + temp_t4, 0, 0, 0, 140);
-            }
-            break;
+        } break;
         default:
             gDisplayListHead = draw_box(gDisplayListHead, temp_v1 - temp_t3, temp_t0 - temp_t4, temp_v1 + temp_t3,
                                         temp_t0 + temp_t4, 0, 0, 0, 140);

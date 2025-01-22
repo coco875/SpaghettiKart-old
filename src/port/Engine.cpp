@@ -34,7 +34,7 @@ float gInterpolationStep = 0.0f;
 #include <BlobFactory.h>
 #include <VertexFactory.h>
 #include <LightFactory.h>
-#include <PngFactory.h>
+// #include <PngFactory.h>
 #include "audio/internal.h"
 #include "audio/GameAudio.h"
 }
@@ -139,8 +139,8 @@ GameEngine::GameEngine() {
     loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryBinaryUnkActorSpawnDataV0>(),
                                     RESOURCE_FORMAT_BINARY, "UnkSpawnData",
                                     static_cast<uint32_t>(MK64::ResourceType::UnkSpawnData), 0);
-    loader->RegisterResourceFactory(std::make_shared<Fast::ResourceFactoryImageTexture>(), RESOURCE_FORMAT_IMG,
-                                    "Texture", static_cast<uint32_t>(Fast::ResourceType::Texture), 0);
+    // loader->RegisterResourceFactory(std::make_shared<Fast::ResourceFactoryImageTexture>(), RESOURCE_FORMAT_IMG,
+    //                                 "Texture", static_cast<uint32_t>(Fast::ResourceType::Texture), 0);
 }
 
 void GameEngine::Create() {

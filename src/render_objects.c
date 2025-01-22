@@ -1978,19 +1978,19 @@ void render_texture_tile_rgba32_block(s16 x, s16 y, u8* texture, u32 width, u32 
     gSPDisplayList(gDisplayListHead++, D_0D007EF8);
     gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
 
-    gMKLoadTextureTile(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_32b, width, height, 0, 0, width - 1,
+    gDPLoadTextureTile(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_32b, width, height, 0, 0, width - 1,
                        height - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                        G_TX_NOLOD, G_TX_NOLOD);
-    gSPWideTextureRectangle(gDisplayListHead++, currX * 4, currY * 4, ((x + width) << 2), ((y + height) << 2),
-                            G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+    gSPWideTextureRectangle(gDisplayListHead++, currX * 4, currY * 4, ((x + (width / 2)) << 2),
+                            ((y + (height / 2)) << 2), G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
     gSPDisplayList(gDisplayListHead++, D_0D007EB8);
 }
 
 void render_game_logo(s16 x, s16 y) {
-    render_texture_tile_rgba32_block(x, y, LOAD_ASSET(gTextureLogoMarioKart64),
-                                     ResourceGetTexWidthByName(gTextureLogoMarioKart64),
-                                     ResourceGetTexHeightByName(gTextureLogoMarioKart64));
+    int height = 128;
+    int width = ResourceGetTexWidthByName(logo_mario_kart_64) * height / ResourceGetTexHeightByName(logo_mario_kart_64);
+    render_texture_tile_rgba32_block(x, y, logo_mario_kart_64, width, height);
 }
 
 UNUSED void func_8004C91C(s32 arg0, s32 arg1, u8* texture, s32 arg3, s32 arg4, s32 arg5) {
