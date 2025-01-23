@@ -470,8 +470,8 @@ texture_r_data:
   tkmk00: true
   alpha: 0xBE
   format: rgba16
-gTextureMenu50cc:
-  symbol: gTextureMenu50cc
+texture_50cc:
+  symbol: texture_50cc
   type: texture
   ctype: u16
   width: 64
@@ -480,8 +480,8 @@ gTextureMenu50cc:
   tkmk00: true
   alpha: 0xBE
   format: rgba16
-gTextureMenu100cc:
-  symbol: gTextureMenu100cc
+texture_100cc:
+  symbol: texture_100cc
   type: texture
   ctype: u16
   width: 64
@@ -490,8 +490,8 @@ gTextureMenu100cc:
   tkmk00: true
   alpha: 0xBE
   format: rgba16
-gTextureMenu150cc:
-  symbol: gTextureMenu150cc
+texture_150cc:
+  symbol: texture_150cc
   type: texture
   ctype: u16
   width: 64
@@ -500,8 +500,8 @@ gTextureMenu150cc:
   tkmk00: true
   alpha: 0xBE
   format: rgba16
-gTextureMenuExtra:
-  symbol: gTextureMenuExtra
+texture_extra:
+  symbol: texture_extra
   type: texture
   ctype: u16
   width: 64
@@ -530,8 +530,8 @@ gTextureMenuWithItem:
   tkmk00: true
   alpha: 0xBE
   format: rgba16
-gTextureMenuBegin:
-  symbol: gTextureMenuBegin
+texture_begin:
+  symbol: texture_begin
   type: texture
   ctype: u16
   width: 64
@@ -540,8 +540,8 @@ gTextureMenuBegin:
   tkmk00: true
   alpha: 0xBE
   format: rgba16
-gTextureMenuGhost:
-  symbol: gTextureMenuGhost
+texture_menu_ghost:
+  symbol: texture_menu_ghost
   type: texture
   ctype: u16
   width: 64
@@ -550,8 +550,8 @@ gTextureMenuGhost:
   tkmk00: true
   alpha: 0xBE
   format: rgba16
-gTextureMenuData:
-  symbol: gTextureMenuData
+texture_data:
+  symbol: texture_data
   type: texture
   ctype: u16
   width: 64
@@ -560,8 +560,8 @@ gTextureMenuData:
   tkmk00: true
   alpha: 0xBE
   format: rgba16
-gTextureMenuOK:
-  symbol: gTextureMenuOK
+texture_ok:
+  symbol: texture_ok
   type: texture
   ctype: u16
   width: 31

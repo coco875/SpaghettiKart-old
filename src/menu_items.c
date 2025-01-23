@@ -286,7 +286,7 @@ RGBA16 D_800E74D0[] = {
     { 0xff, 0xff, 0x00, 0xff },
 };
 
-RGBA16 D_800E74E8[] = {
+RGBA16 gBackgroundColor[] = {
     { 0xff, 0xaf, 0xaf, 0xff },
     { 0xaf, 0xff, 0xaf, 0xff },
     { 0xaf, 0xaf, 0xff, 0xff },
@@ -6072,10 +6072,10 @@ void render_menus(MenuItem* arg0) {
             case MAIN_MENU_BACKGROUND:
             case CHARACTER_SELECT_BACKGROUND:
             case COURSE_SELECT_BACKGROUND:
-                gDPSetGrayscaleColor(gDisplayListHead++, D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].red,
-                                     D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].green,
-                                     D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].blue,
-                                     D_800E74E8[arg0->type - MAIN_MENU_BACKGROUND].alpha);
+                gDPSetGrayscaleColor(gDisplayListHead++, gBackgroundColor[arg0->type - MAIN_MENU_BACKGROUND].red,
+                                     gBackgroundColor[arg0->type - MAIN_MENU_BACKGROUND].green,
+                                     gBackgroundColor[arg0->type - MAIN_MENU_BACKGROUND].blue,
+                                     gBackgroundColor[arg0->type - MAIN_MENU_BACKGROUND].alpha);
                 gSPGrayscale(gDisplayListHead++, true);
                 gDisplayListHead = func_8009BC9C(gDisplayListHead, gMenuTexturesBackground[has_unlocked_extra_mode()],
                                                  arg0->column, arg0->row, 3, 0);
@@ -6261,6 +6261,11 @@ void render_menus(MenuItem* arg0) {
                 break;
             case COURSE_SELECT_OK:
                 func_800A8564(arg0);
+                int original_width = D_02004E80->width;
+                int height = D_02004E80->height;
+                D_02004E80->width = ResourceGetTexWidthByName(D_02004E80->textureData) * height /
+                                    ResourceGetTexHeightByName(D_02004E80->textureData);
+                // D_02004E80->dX += (original_width - D_02004E80->width) / 2;
                 gDisplayListHead =
                     func_8009BC9C(gDisplayListHead, D_02004E80, arg0->column, arg0->row, 2, arg0->param1);
                 break;

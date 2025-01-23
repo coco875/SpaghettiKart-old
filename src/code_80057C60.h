@@ -205,14 +205,14 @@ void func_80066BAC(Player*, s8, s16, s8);
 
 void func_80067280(Player*, s8, s16, s8);
 void func_80067604(Player*, s8, s16, s8);
-void func_80067964(Player*, s8, f32, s8, s8);
+void render_player_onomatopoeia_whrrrr(Player*, s8, f32, s8, s8);
 void func_80067D3C(Player*, s8, u8*, s8, f32, s32);
 
 void func_8006801C(Player*, s8, u8*, s8, f32, s32);
-void func_80068310(Player*, s8, f32, s8, s8);
+void render_player_onomatopoeia_crash(Player*, s8, f32, s8, s8);
 void func_80068724(Player*, s8, f32, s8, s8);
 void func_80068AA4(Player*, s8, f32, s8, s8);
-void func_80068DA0(Player*, s8, f32, s8, s8);
+void render_player_onomatopoeia_poomp(Player*, s8, f32, s8, s8);
 
 void func_800691B8(Player*, s8, s16, s8);
 void func_80069444(Player*, s8, s16, s8);
@@ -613,12 +613,6 @@ extern u8* D_8018D48C;
 extern u8* D_8018D490;
 extern u8* D_8018D49C;
 extern u8* D_8018D4A0;
-extern u8* D_8018D4A4;
-extern u8* D_8018D4A8;
-extern u8* D_8018D4AC;
-extern u8* D_8018D4B0;
-extern u8* D_8018D4B4;
-extern u8* D_8018D4B8;
 extern u8* D_8018D4BC;
 extern u8* D_8018D4C0;
 extern u8* D_8018D4C4;

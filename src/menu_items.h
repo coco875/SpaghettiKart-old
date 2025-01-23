@@ -452,7 +452,8 @@ Gfx* func_8009B9D0(Gfx*, MenuTexture*);
 Gfx* render_menu_textures(Gfx*, MenuTexture*, s32, s32);
 Gfx* func_8009BC9C(Gfx*, MenuTexture*, s32, s32, s32, s32);
 Gfx* print_letter(Gfx*, MenuTexture*, f32, f32, s32, f32, f32);
-Gfx* print_letter_wide_right(Gfx* arg0, MenuTexture* glyphTexture, f32 arg2, f32 arg3, s32 mode, f32 scaleX, f32 scaleY);
+Gfx* print_letter_wide_right(Gfx* arg0, MenuTexture* glyphTexture, f32 arg2, f32 arg3, s32 mode, f32 scaleX,
+                             f32 scaleY);
 Gfx* func_8009C204(Gfx*, MenuTexture*, s32, s32, s32);
 Gfx* func_8009C434(Gfx*, struct_8018DEE0_entry*, s32, s32, s32);
 Gfx* func_8009C708(Gfx*, struct_8018DEE0_entry*, s32, s32, s32, s32);
@@ -729,7 +730,7 @@ extern Unk_D_800E70A0 D_800E7458[];
 extern Unk_D_800E70A0 D_800E7480[];
 extern RGBA16 D_800E74A8[];
 extern RGBA16 D_800E74D0[];
-extern RGBA16 D_800E74E8[];
+extern RGBA16 gBackgroundColor[];
 extern const s16 gGlyphDisplayWidth[];
 extern char* gCupNames[];
 extern const s8 D_800EFD64[];
