@@ -1251,7 +1251,7 @@ void func_80059AC8(void) {
     if (gIsGamePaused == false) {
         func_8008C1D8(&D_80165678);
         gRaceFrameCounter++;
-        for (i = 0; i < NUM_PLAYERS; i++) {
+        for (i = 0; i < 4; i++) {
             D_8018CF68[i] = func_8008A890(&camera1[i]);
             func_800892E0(i);
         }

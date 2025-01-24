@@ -207,15 +207,8 @@ extern OSMesg gPIMesgBuf[];
 extern OSMesgQueue gPIMesgQueue;
 void race_logic_loop(void);
 extern s32 gGamestate;
-#ifndef D_800DC510_AS_U16
-// Prevent overlapping writes in gcc
-// Whether D_800DC510 was intended to be a separate variable in main.c from the rest of the game is unknown
-#ifdef GCC
-extern u16 D_800DC510;
-#else
+
 extern s32 D_800DC510;
-#endif
-#endif
 
 extern u16 D_800DC514;
 extern u16 creditsRenderMode;

@@ -3187,21 +3187,22 @@ ItemProbabilities battleProbabilityCurve[] = { { .banana = 10,
                                                  .superMushroom = 0 } };
 
 void getProbabilityArray(const ItemProbabilities* probStruct, u8* probArray) {
-    probArray[0] = probStruct->banana;
-    probArray[1] = probStruct->bananaBunch;
-    probArray[2] = probStruct->greenShell;
-    probArray[3] = probStruct->tripleGreenShell;
-    probArray[4] = probStruct->redShell;
-    probArray[5] = probStruct->tripleRedShell;
-    probArray[6] = probStruct->blueSpinyShell;
-    probArray[7] = probStruct->thunderbolt;
-    probArray[8] = probStruct->fakeItemBox;
-    probArray[9] = probStruct->star;
-    probArray[10] = probStruct->boo;
-    probArray[11] = probStruct->mushroom;
-    probArray[12] = probStruct->doubleMushroom;
-    probArray[13] = probStruct->tripleMushroom;
-    probArray[14] = probStruct->superMushroom;
+    probArray[0] = 0;
+    probArray[ITEM_BANANA] = probStruct->banana;
+    probArray[ITEM_BANANA_BUNCH] = probStruct->bananaBunch;
+    probArray[ITEM_GREEN_SHELL] = probStruct->greenShell;
+    probArray[ITEM_TRIPLE_GREEN_SHELL] = probStruct->tripleGreenShell;
+    probArray[ITEM_RED_SHELL] = probStruct->redShell;
+    probArray[ITEM_TRIPLE_RED_SHELL] = probStruct->tripleRedShell;
+    probArray[ITEM_BLUE_SPINY_SHELL] = probStruct->blueSpinyShell;
+    probArray[ITEM_THUNDERBOLT] = probStruct->thunderbolt;
+    probArray[ITEM_FAKE_ITEM_BOX] = probStruct->fakeItemBox;
+    probArray[ITEM_STAR] = probStruct->star;
+    probArray[ITEM_BOO] = probStruct->boo;
+    probArray[ITEM_MUSHROOM] = probStruct->mushroom;
+    probArray[ITEM_DOUBLE_MUSHROOM] = probStruct->doubleMushroom;
+    probArray[ITEM_TRIPLE_MUSHROOM] = probStruct->tripleMushroom;
+    probArray[ITEM_SUPER_MUSHROOM] = probStruct->superMushroom;
 }
 
 /**
@@ -3238,21 +3239,20 @@ u8 gen_random_item(s16 rank, s16 isCpu) {
             }
             break;
         case BATTLE:
-            distributionTable = &battleProbabilityCurve[rank];
+            distributionTable = &battleProbabilityCurve[0];
             break;
     }
 
-    u8 itemProbabilities[ITEM_MAX - 1];
+    u8 itemProbabilities[ITEM_MAX];
     getProbabilityArray(distributionTable, itemProbabilities);
 
-    for (int i = 0; i < ITEM_MAX - 1; i++) {
+    for (int i = 0; i < ITEM_MAX; i++) {
         cumulativeProbability += itemProbabilities[i];
         if (rand < cumulativeProbability) {
-            randomItem = i + 1; // + 1 to account for the ITEM_NONE spot
+            randomItem = i; // + 1 to account for the ITEM_NONE spot
             break;
         }
     }
-    return ITEM_RED_SHELL;
     return randomItem;
 }
 
@@ -3563,7 +3563,7 @@ void func_8007BB9C(s32 arg0) {
 }
 
 void wrapper_update_boos(void) {
-    //update_boos();
+    // update_boos();
 }
 
 // Updates the display status on an object based on its relative direction to the camera
@@ -3590,7 +3590,6 @@ void func_8007C420(s32 objectIndex, Player* player, Camera* camera) {
         func_800417B4(gObjectList[objectIndex].direction_angle[1], atan2s(x, z));
     func_8007C360(objectIndex, camera);
 }
-
 
 void func_8007CE0C(s32 objectIndex) {
     Object* object;
@@ -4027,8 +4026,6 @@ void func_800842C8(void) {
         }
     }
 }
-
-
 
 void func_80085BB4(s32 objectIndex) {
     gObjectList[objectIndex].sizeScaling = 8.0f;

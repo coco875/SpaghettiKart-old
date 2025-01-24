@@ -32,6 +32,7 @@
 #include <assets/donkeykong_kart.h>
 #include "port/Game.h"
 #include "engine/Matrix.h"
+#include <stdio.h>
 
 s8 gRenderingFramebufferByPlayer[] = { 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02 };
 
@@ -1951,7 +1952,11 @@ void func_80026A48(Player* player, s8 arg1) {
     if ((temp_f0 <= 1.0f) || (gIsPlayerTripleBButtonCombo[arg1] == true)) {
         player->unk_240 = 0;
     } else {
-        player->unk_240 += D_800DDE74[(s32) (temp_f0 / 12.0f)];
+        int value = (s32) (temp_f0 / 12.0f);
+        if (value >= 9) {
+            value = 8;
+        }
+        player->unk_240 += D_800DDE74[value];
     }
     if (player->unk_240 >= 0x400) {
         player->unk_240 = 0;

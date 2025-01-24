@@ -6732,7 +6732,7 @@ void func_800A12BC(MenuItem* arg0, MenuTexture* arg1) {
 
 void func_800A1350(MenuItem* arg0) {
     s32 thing;
-    if (func_800AAFCC(arg0->type - 0x2B) < 0) {
+    if (func_800AAFCC(arg0->type - CHARACTER_SELECT_MENU_MARIO) < 0) {
         switch (arg0->state) {
             case 0:
             case 2:
@@ -10067,8 +10067,8 @@ void func_800AA69C(MenuItem* arg0) {
     s32 temp_a0;
     UNUSED s32 stackPadding0;
 
-    temp_a0 = arg0->type - 0x2B;
-    temp_v0 = func_800AAFCC(arg0->type - 0x2B);
+    temp_a0 = arg0->type - CHARACTER_SELECT_MENU_MARIO;
+    temp_v0 = func_800AAFCC(arg0->type - CHARACTER_SELECT_MENU_MARIO);
     if (temp_v0 >= 0) {
         var_a0 = 1;
     } else {
@@ -10076,7 +10076,7 @@ void func_800AA69C(MenuItem* arg0) {
     }
     switch (arg0->subState) {
         case 0:
-            if ((gCharacterGridIsSelected[temp_v0] != 0) && (var_a0 != 0)) {
+            if ((var_a0 != 0) && (gCharacterGridIsSelected[temp_v0] != 0)) {
                 arg0->subState = 1;
                 func_8009A594(arg0->D_8018DEE0_index, 0,
                               segmented_to_virtual_dupe_2(gCharacterCelebrateAnimation[temp_a0]));
@@ -10163,7 +10163,7 @@ void func_800AAA9C(MenuItem* arg0) {
             }
             /* fallthrough */
         case 0:
-            if (func_800AAFCC(arg0->type - 0x2B) >= 0) {
+            if (func_800AAFCC(arg0->type - CHARACTER_SELECT_MENU_MARIO) >= 0) {
                 arg0->state = 2;
                 arg0->param1 = 0;
             } else {
@@ -10171,7 +10171,7 @@ void func_800AAA9C(MenuItem* arg0) {
             }
             break;
         case 4:
-            if (func_800AAFCC(arg0->type - 0x2B) >= 0) {
+            if (func_800AAFCC(arg0->type - CHARACTER_SELECT_MENU_MARIO) >= 0) {
                 arg0->state = 2;
                 arg0->param1 = 0;
             }

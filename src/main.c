@@ -1,6 +1,3 @@
-#ifndef GCC
-#define D_800DC510_AS_U16
-#endif
 #include <libultraship.h>
 #include <libultra/vi.h>
 #include <libultra/os.h>
@@ -178,7 +175,7 @@ OSMesgQueue gPIMesgQueue;
 
 s32 gGamestate = 0xFFFF;
 // D_800DC510 is externed as an s32 in other files. D_800DC514 is only used in main.c, likely a developer mistake.
-u16 D_800DC510 = 0;
+s32 D_800DC510 = 0;
 u16 D_800DC514 = 0;
 u16 creditsRenderMode = 0; // Renders the whole track. Displays red if used in normal race mode.
 u16 gDemoMode = DEMO_MODE_INACTIVE;

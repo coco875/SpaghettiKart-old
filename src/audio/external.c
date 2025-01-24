@@ -3554,12 +3554,12 @@ void audio_set_player_volume(u8 player, f32 volume) {
 
 // run audio?
 void func_800CB2C4() {
-    func_800C1F8C();
-    func_800C3724();
-    func_800C3478();
-    func_800C5848();
-    func_800C59C4();
-    func_800C8CCC();
-    func_800C2274(0);
-    func_800CBC24();
+    // func_800C1F8C();
+    // func_800C3724();
+    // func_800C3478();
+    // func_800C5848();
+    // func_800C59C4();
+    // func_800C8CCC();
+    // func_800C2274(0);
+    // func_800CBC24();
 }
