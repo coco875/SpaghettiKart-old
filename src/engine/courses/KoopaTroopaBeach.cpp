@@ -140,7 +140,7 @@ void KoopaTroopaBeach::Load() {
 void KoopaTroopaBeach::LoadTextures() {
 }
 
-void KoopaTroopaBeach::SpawnActors() {
+void KoopaTroopaBeach::BeginPlay() {
     OSeagull::ResetCount();
     gWorldInstance.AddActor(new AFinishline());
 
@@ -180,19 +180,17 @@ void KoopaTroopaBeach::SpawnActors() {
             gWorldInstance.AddObject(new OSeagull(pos2));
         }
     }
-}
 
-void KoopaTroopaBeach::SpawnVehicles() {
     if (gModeSelection == VERSUS) {
         Vec3f pos = { 0, 0, 0 };
 
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][60], 60, 1, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][120], 120, 1, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][200], 200, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][280], 280, 1, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][435], 435, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f);
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][60], 60, 1, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][120], 120, 1, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][200], 200, 3, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][280], 280, 1, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][435], 435, 3, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f));
     }
 }
 

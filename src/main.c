@@ -174,8 +174,8 @@ OSMesg gPIMesgBuf[32];
 OSMesgQueue gPIMesgQueue;
 
 s32 gGamestate = 0xFFFF;
-// D_800DC510 is externed as an s32 in other files. D_800DC514 is only used in main.c, likely a developer mistake.
-s32 D_800DC510 = 0;
+// gRaceState is externed as an s32 in other files. D_800DC514 is only used in main.c, likely a developer mistake.
+s32 gRaceState = RACE_INIT;
 u16 D_800DC514 = 0;
 u16 creditsRenderMode = 0; // Renders the whole track. Displays red if used in normal race mode.
 u16 gDemoMode = DEMO_MODE_INACTIVE;
@@ -767,7 +767,7 @@ void process_game_tick(void) {
     func_8028F474();
     func_80059AC8();
     update_course_actors();
-    CourseManager_TickActors();
+    CM_TickActors();
     func_802966A0();
     func_8028FCBC();
 }

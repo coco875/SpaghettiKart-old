@@ -208,7 +208,7 @@ extern OSMesgQueue gPIMesgQueue;
 void race_logic_loop(void);
 extern s32 gGamestate;
 
-extern s32 D_800DC510;
+extern s32 gRaceState;
 
 extern u16 D_800DC514;
 extern u16 creditsRenderMode;

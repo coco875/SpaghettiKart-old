@@ -44,7 +44,6 @@
 #include "port/Engine.h"
 #include "port/Game.h"
 
-#include "engine/Engine.h"
 #include "engine/courses/Course.h"
 #include "engine/Matrix.h"
 
@@ -404,6 +403,7 @@ char* D_800E7744[] = {
     "1 ｓ", "2 ｎ", "3 ｒ", "4 ｔ", "5 ｔ", " ",
 };
 
+// Also used to render the replay text in the replay mode
 char* gTextPauseButton[] = {
     "CONTINUE GAME", "RETRY", "COURSE CHANGE", "DRIVER CHANGE", "QUIT", "REPLAY", "SAVE GHOST",
 };
@@ -1998,6 +1998,10 @@ void print_text_mode_1(s32 column, s32 row, char* text, s32 tracking, f32 scaleX
     print_text0(column, row, text, tracking, scaleX, scaleY, 1);
 }
 
+void print_text_mode_1_wide_right(s32 column, s32 row, char* text, s32 tracking, f32 scaleX, f32 scaleY) {
+    print_text0_wide_right(column, row, text, tracking, scaleX, scaleY, 1);
+}
+
 void print_text_mode_2(s32 column, s32 row, char* text, s32 tracking, f32 scaleX, f32 scaleY) {
     print_text0(column, row, text, tracking, scaleX, scaleY, 2);
 }
@@ -2583,8 +2587,6 @@ void setup_menus(void) {
     }
 }
 
-CProperties* GetCoursePropsA(void);
-
 void func_80095574(void) {
     s32 var_v0;
 
@@ -2632,7 +2634,7 @@ void func_80095574(void) {
         } else {
             var_v0 = 8;
         }
-        debug_print_str2(var_v0 + 0xB9, 0x0000006E, GetCoursePropsA()->DebugName);
+        debug_print_str2(var_v0 + 0xB9, 0x0000006E, CM_GetProps()->DebugName);
 
         debug_print_str2(80, 120, "cc_mode");
         debug_print_str2(170, 120, gDebugCCModeNames[gCCSelection]);
@@ -3405,7 +3407,7 @@ Gfx* draw_box_wide(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32
     return displayListHead;
 }
 
-// Time trials race data cannot be saved for ghost box
+// Time trials race data cannot be saved for ghost box and time trials replay box
 Gfx* draw_box_wide_right(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32 red, u32 green, u32 blue,
                          u32 alpha) {
     red &= 0xFF;
@@ -4932,7 +4934,7 @@ void func_8009CE64(s32 arg0) {
                     switch (gNextDemoId) { /* switch 4 */
                         case 0:            /* switch 4 */
                             SetCourseByClass(GetMarioRaceway());
-                            CourseManager_SetCup(GetFlowerCup());
+                            CM_SetCup(GetFlowerCup());
                             SetCupCursorPosition(COURSE_FOUR);
                             gCurrentCourseId = 0;
                             gScreenModeSelection = 0;
@@ -4943,7 +4945,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 1: /* switch 4 */
                             SetCourseByClass(GetLuigiRaceway());
-                            CourseManager_SetCup(GetMushroomCup());
+                            CM_SetCup(GetMushroomCup());
                             SetCupCursorPosition(COURSE_ONE);
                             gCurrentCourseId = (s16) 1;
                             gScreenModeSelection = (s32) 1;
@@ -4955,7 +4957,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 2: /* switch 4 */
                             SetCourseByClass(GetKalimariDesert());
-                            CourseManager_SetCup(GetMushroomCup());
+                            CM_SetCup(GetMushroomCup());
                             SetCupCursorPosition(COURSE_FOUR);
                             gCurrentCourseId = COURSE_KALIMARI_DESERT;
                             gScreenModeSelection = 0;
@@ -4966,7 +4968,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 3: /* switch 4 */
                             SetCourseByClass(GetWarioStadium());
-                            CourseManager_SetCup(GetStarCup());
+                            CM_SetCup(GetStarCup());
                             SetCupCursorPosition(COURSE_ONE);
                             gCurrentCourseId = 0x000E;
                             gScreenModeSelection = 3;
@@ -4979,7 +4981,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 4: /* switch 4 */
                             SetCourseByClass(GetBowsersCastle());
-                            CourseManager_SetCup(GetStarCup());
+                            CM_SetCup(GetStarCup());
                             SetCupCursorPosition(COURSE_FOUR);
                             gCurrentCourseId = 2;
                             gScreenModeSelection = 0;
@@ -4990,7 +4992,7 @@ void func_8009CE64(s32 arg0) {
                             break;
                         case 5: /* switch 4 */
                             SetCourseByClass(GetSherbetLand());
-                            CourseManager_SetCup(GetFlowerCup());
+                            CM_SetCup(GetFlowerCup());
                             SetCupCursorPosition(COURSE_TWO);
                             gCurrentCourseId = 0x000C;
                             gScreenModeSelection = 3;
@@ -6030,11 +6032,11 @@ void render_menus(MenuItem* arg0) {
                 }
                 break;
             case MENU_ITEM_UI_START_RECORD_TIME:
-                var_t0 = (s32) ((f32) (get_string_width(CourseManager_GetProps()->Name) + 5) * 0.9f) / 2;
+                var_t0 = (s32) ((f32) (get_string_width(CM_GetProps()->Name) + 5) * 0.9f) / 2;
                 gDisplayListHead = draw_box(gDisplayListHead, 0xA0 - var_t0, 0x0000007B, var_t0 + 0xA0, 0x000000A4, 0,
                                             0, 0, 0x00000096);
                 set_text_color(TEXT_GREEN);
-                print_text1_center_mode_1(0x0000009B, 0x0000008C, CourseManager_GetProps()->Name, 0, 0.9f, 0.9f);
+                print_text1_center_mode_1(0x0000009B, 0x0000008C, CM_GetProps()->Name, 0, 0.9f, 0.9f);
                 temp_v1 = func_800B4EB4(0, 7) & 0xFFFFF;
                 if (temp_v1 < 0x1EAA) {
                     set_text_color((s32) gGlobalTimer % 2);
@@ -6350,8 +6352,7 @@ void render_menus(MenuItem* arg0) {
                 break;
             case MENU_ITEM_TYPE_097:
                 set_text_color(TEXT_BLUE_GREEN_RED_CYCLE_2);
-                print_text_mode_1(arg0->column, arg0->row, CourseManager_GetProps()->Name, arg0->param1, arg0->paramf,
-                                  1.0f);
+                print_text_mode_1(arg0->column, arg0->row, CM_GetProps()->Name, arg0->param1, arg0->paramf, 1.0f);
                 break;
             case MENU_ITEM_TYPE_098:
                 func_800A2D1C(arg0);
@@ -6861,12 +6862,12 @@ void render_menu_item_data_course_info(MenuItem* arg0) {
     arg0->column = 0x14;
     // name of the course
     set_text_color(TEXT_BLUE_GREEN_RED_CYCLE_1);
-    print_text1_center_mode_1(0x69, arg0->row + 0x19, CourseManager_GetProps()->Name, 0, 0.75f, 0.75f);
+    print_text1_center_mode_1(0x69, arg0->row + 0x19, CM_GetProps()->Name, 0, 0.75f, 0.75f);
 
     // distance
     set_text_color(TEXT_RED);
     print_text_mode_1(0x2D, arg0->row + 0x28, (char*) &gTextDistance, 0, 0.75f, 0.75f);
-    print_text1_left(0xA5, arg0->row + 0x28, CourseManager_GetProps()->CourseLength, 1, 0.75f, 0.75f);
+    print_text1_left(0xA5, arg0->row + 0x28, CM_GetProps()->CourseLength, 1, 0.75f, 0.75f);
 
     // Best lap record
     set_text_color(TEXT_YELLOW);
@@ -7109,8 +7110,8 @@ void func_800A1FB0(MenuItem* arg0) {
                     if (var_v1->ghostDataSaved == 0) {
                         print_text_mode_1(0x2A + (var_s1 * 0x89), 0x96 + (0x1E * var_s2), D_800E7A44, 0, 0.5f, 0.5f);
                     } else {
-                        print_text_mode_1(0x2A + (var_s1 * 0x89), 0x96 + (0x1E * var_s2),
-                                          CourseManager_GetProps()->Name, 0, 0.5f, 0.5f);
+                        print_text_mode_1(0x2A + (var_s1 * 0x89), 0x96 + (0x1E * var_s2), CM_GetProps()->Name, 0, 0.5f,
+                                          0.5f);
                     }
                 }
             }
@@ -7146,8 +7147,8 @@ void func_800A1FB0(MenuItem* arg0) {
                     if (var_v1->ghostDataSaved == 0) {
                         print_text_mode_1(0x2A + (var_s1 * 0x89), 0x96 + (0x1E * var_s2), D_800E7A44, 0, 0.5f, 0.5f);
                     } else {
-                        print_text_mode_1(0x2A + (var_s1 * 0x89), 0x96 + (0x1E * var_s2),
-                                          CourseManager_GetProps()->Name, 0, 0.5f, 0.5f);
+                        print_text_mode_1(0x2A + (var_s1 * 0x89), 0x96 + (0x1E * var_s2), CM_GetProps()->Name, 0, 0.5f,
+                                          0.5f);
                     }
                 }
             }
@@ -7196,8 +7197,8 @@ void func_800A1FB0(MenuItem* arg0) {
                     if (var_v1->ghostDataSaved == 0) {
                         print_text_mode_1(0x2A + (var_s1 * 0x89), 0x96 + (0x1E * var_s2), D_800E7A44, 0, 0.5f, 0.5f);
                     } else {
-                        print_text_mode_1(0x2A + (var_s1 * 0x89), 0x96 + (0x1E * var_s2),
-                                          CourseManager_GetProps()->Name, 0, 0.5f, 0.5f);
+                        print_text_mode_1(0x2A + (var_s1 * 0x89), 0x96 + (0x1E * var_s2), CM_GetProps()->Name, 0, 0.5f,
+                                          0.5f);
                     }
                 }
             }
@@ -7488,7 +7489,7 @@ void time_trials_finish_text_render(MenuItem* arg0) {
     s32 rowOffset;
 
     set_text_color(TEXT_BLUE_GREEN_RED_CYCLE_1);
-    print_text1_center_mode_1(arg0->column + 0x43, arg0->row + 0x19, CourseManager_GetProps()->Name, 0, 0.6f, 0.6f);
+    print_text1_center_mode_1(arg0->column + 0x43, arg0->row + 0x19, CM_GetProps()->Name, 0, 0.6f, 0.6f);
     set_text_color(TEXT_YELLOW);
     print_text1_center_mode_1(arg0->column + 0x46, arg0->row + 0x28, gLapTimeText, 0, 0.75f, 0.75f);
     for (recordType = 0, rowOffset = 0; recordType < TIME_TRIAL_3LAP_RECORD_5; recordType += 1, rowOffset += 0xF) {
@@ -7527,7 +7528,7 @@ void func_800A3E60(MenuItem* arg0) {
     }
 
     set_text_color(TEXT_BLUE_GREEN_RED_CYCLE_1);
-    print_text1_center_mode_1(arg0->column + 0x55, 0x19 - arg0->row, CourseManager_GetProps()->Name, 0, 0.6f, 0.6f);
+    print_text1_center_mode_1(arg0->column + 0x55, 0x19 - arg0->row, CM_GetProps()->Name, 0, 0.6f, 0.6f);
     set_text_color(TEXT_YELLOW);
     print_text1_center_mode_1(arg0->column + 0x55, 0x28 - arg0->row, gLapTimeText, 0, 0.75f, 0.75f);
     for (var_s1 = 0; var_s1 < 4; var_s1++) {
@@ -7593,8 +7594,8 @@ void func_800A3E60(MenuItem* arg0) {
                 if (D_8018EE10[var_s1].ghostDataSaved == 0) {
                     print_text_mode_1(0xBB - arg0->column, 0xAA + (0x1E * var_s1), D_800E7A44, 0, 0.45f, 0.45f);
                 } else {
-                    print_text_mode_1(0xBB - arg0->column, 0xAA + (0x1E * var_s1), CourseManager_GetProps()->Name, 0,
-                                      0.45f, 0.45f);
+                    print_text_mode_1(0xBB - arg0->column, 0xAA + (0x1E * var_s1), CM_GetProps()->Name, 0, 0.45f,
+                                      0.45f);
                 }
             }
             break;
@@ -7815,7 +7816,7 @@ void render_pause_menu_time_trials(MenuItem* arg0) {
 
     gDisplayListHead = draw_box_wide(gDisplayListHead, 0, 0, 0x0000013F, 0x000000EF, 0, 0, 0, 0x0000008C);
     set_text_color(TEXT_YELLOW);
-    print_text1_center_mode_1(0x000000A0, 0x00000050, CourseManager_GetProps()->Name, 0, 1.0f, 1.0f);
+    print_text1_center_mode_1(0x000000A0, 0x00000050, CM_GetProps()->Name, 0, 1.0f, 1.0f);
     set_text_color(TEXT_RED);
     print_text1_center_mode_1(0x0000009D, 0x00000060, gBestTimeText[0], 0, 0.8f, 0.8f);
     temp_a0 = func_800B4E24(TIME_TRIAL_3LAP_RECORD_1);
@@ -7955,7 +7956,7 @@ void render_pause_grand_prix(MenuItem* arg0) {
     set_text_color(TEXT_YELLOW);
     print_text1_center_mode_1(160 + temp_s0, temp_s3->row - 50, D_800E76CC[gCCSelection], 0, 1.0f, 1.0f);
     set_text_color(TEXT_YELLOW);
-    print_text1_center_mode_1(160, temp_s3->row - 30, CourseManager_GetProps()->Name, 0, 1.0f, 1.0f);
+    print_text1_center_mode_1(160, temp_s3->row - 30, CM_GetProps()->Name, 0, 1.0f, 1.0f);
     for (var_s0 = 0; var_s0 < 2; var_s0++) {
         text_rainbow_effect(arg0->state - 31, var_s0, TEXT_YELLOW);
         print_text_mode_1(temp_s3->column, temp_s3->row + (var_s0 * 13), gTextPauseButton[var_s0 * 4], 0, 0.75f, 0.75f);
@@ -8069,6 +8070,7 @@ void func_800A54EC(void) {
     func_800A66A8(sp48, &sp50);
 }
 
+// Also used to render the replay text box in time trials replay mode
 void render_menu_item_end_course_option(MenuItem* arg0) {
     Unk_D_800E70A0 sp98;
     f32 why;
@@ -8084,10 +8086,10 @@ void render_menu_item_end_course_option(MenuItem* arg0) {
     if (arg0->state == 0) {
         if ((arg0->param1 >= 0x1E) && ((gGlobalTimer / 16) % 2)) {
             why = get_string_width(gTextPauseButton[REPLAY]) * 0.8f;
-            gDisplayListHead = draw_box_wide(gDisplayListHead, 0x000000C0, 0x00000021, (s32) (why) + 0xC6, 0x00000032,
-                                             0, 0, 0, 0x00000096);
+            gDisplayListHead = draw_box_wide_right(gDisplayListHead, 0x000000C0, 0x00000021, (s32) (why) + 0xC6,
+                                                   0x00000032, 0, 0, 0, 0x00000096);
             set_text_color(TEXT_GREEN);
-            print_text_mode_1(0x000000BF, 0x00000030, gTextPauseButton[REPLAY], 0, 0.8f, 0.8f);
+            print_text_mode_1_wide_right(0x000000BF, 0x00000030, gTextPauseButton[REPLAY], 0, 0.8f, 0.8f);
         }
     } else {
         if (arg0->state == 1) {
@@ -8100,7 +8102,7 @@ void render_menu_item_end_course_option(MenuItem* arg0) {
         gDisplayListHead = draw_box_wide(gDisplayListHead, 0, 0, 0x0000013F, 0x000000EF, 0, 0, 0, var_s1);
         gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x00, 0x00, var_s2);
         set_text_color(TEXT_YELLOW);
-        print_text1_center_mode_2(0x000000A0, 0x00000050, CourseManager_GetProps()->Name, 0, 1.0f, 1.0f);
+        print_text1_center_mode_2(0x000000A0, 0x00000050, CM_GetProps()->Name, 0, 1.0f, 1.0f);
         switch (arg0->state) {
             case 1:
             case 11:
@@ -8164,8 +8166,8 @@ void render_menu_item_end_course_option(MenuItem* arg0) {
                     if (D_8018EE10[var_s1].ghostDataSaved == 0) {
                         print_text_mode_1(0x69 - arg0->column, (0x96 + (0x14 * var_s1)), D_800E7A44, 0, 0.75f, 0.75f);
                     } else {
-                        print_text_mode_1(0x69 - arg0->column, (0x96 + (0x14 * var_s1)), CourseManager_GetProps()->Name,
-                                          0, 0.75f, 0.75f);
+                        print_text_mode_1(0x69 - arg0->column, (0x96 + (0x14 * var_s1)), CM_GetProps()->Name, 0, 0.75f,
+                                          0.75f);
                     }
                 }
                 break;
@@ -8234,7 +8236,7 @@ void func_800A6034(MenuItem* arg0) {
         text = gCupNames[D_800DC540];
         set_text_color(TEXT_BLUE_GREEN_RED_CYCLE_2);
         print_text1_center_mode_2(arg0->column + 0x41, arg0->row + 0xA0, text, 0, 0.85f, 1.0f);
-        text = CourseManager_GetProps()->Name;
+        text = CM_GetProps()->Name;
         set_text_color((s32) gCurrentCourseId % 4);
         print_text1_center_mode_2(arg0->column + 0x41, arg0->row + 0xC3, text, 0, 0.65f, 0.85f);
     }
@@ -10854,7 +10856,7 @@ void func_800ABF68(MenuItem* arg0) {
         case 0:
             arg0->column = 0x140;
             arg0->state = 1;
-            arg0->param2 = 0xA0 - (get_string_width(CourseManager_GetProps()->Name) / 2);
+            arg0->param2 = 0xA0 - (get_string_width(CM_GetProps()->Name) / 2);
             /* fallthrough */
         case 1:
             func_800A9208(arg0, arg0->param2);
