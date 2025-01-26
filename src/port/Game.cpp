@@ -253,7 +253,6 @@ void CM_VehicleCollision(s32 playerId, Player* player) {
 void CM_BombKartsWaypoint(s32 cameraId) {
     for (auto& object : gWorldInstance.Objects) {
         if (auto kart = dynamic_cast<OBombKart*>(object)) {
-            ;
             if (kart) {
                 kart->Waypoint(cameraId);
             }
