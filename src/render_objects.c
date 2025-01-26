@@ -2619,8 +2619,19 @@ void func_8004EF9C(s32 arg0) {
 
     temp_v0 = CM_GetProps()->MinimapDimensions.X;
     temp_t0 = CM_GetProps()->MinimapDimensions.Z;
-    func_8004D37C(0x00000104, 0x0000003C, CM_GetProps()->MinimapTexture, 0x000000FF, 0x000000FF, 0x000000FF,
-                  0x000000FF, temp_v0, temp_t0, temp_v0, temp_t0);
+
+    // rescale minimap
+    int prevWidth = temp_v0;
+    int prevHeight = temp_t0;
+    if (prevHeight < prevWidth) {
+        temp_t0 = 64;
+        temp_v0 = (temp_v0 * 64) / prevHeight;
+    } else {
+        temp_v0 = 64;
+        temp_t0 = (temp_t0 * 64) / prevWidth;
+    }
+    func_8004D37C(0x00000104, 0x0000003C, CM_GetProps()->MinimapTexture, 0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF,
+                  temp_v0, temp_t0, temp_v0, temp_t0);
 }
 
 void set_minimap_finishline_position(s32 arg0) {
@@ -4023,13 +4034,12 @@ void func_800569F4(s32 playerIndex) {
     CM_DisplayBattleBombKart(playerIndex, 0);
 }
 
-
 void func_80056A40(s32 playerIndex, s32 arg1) {
     CM_DisplayBattleBombKart(playerIndex, arg1);
 }
 
 void func_80056A94(s32 playerIndex) {
-    //func_80072428(gIndexObjectBombKart[playerIndex]);
+    // func_80072428(gIndexObjectBombKart[playerIndex]);
     CM_DisplayBattleBombKart(playerIndex, 0);
 }
 

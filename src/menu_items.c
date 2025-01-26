@@ -1397,6 +1397,7 @@ void func_80091B78(void) {
         gTimeTrialsResultCursorSelection = 5;
         gBattleResultCursorSelection = 10;
         if (osEepromProbe(&gSIEventMesgQueue) != 0) {
+            // save data disabled for now due to array overflow
             load_save_data();
         }
         if (func_80091D74() != 0) {
@@ -1460,7 +1461,7 @@ s32 func_80091D74(void) {
     }
     osPfsIsPlug(&gSIEventMesgQueue, &sp67);
     if (sp67 & 1) {
-        if (osPfsInit(&gSIEventMesgQueue, &gControllerPak1FileHandle, 0)) {
+        if (osPfsInit(&gSIEventMesgQueue, &gControllerPak1FileHandle, CONTROLLER_1)) {
             return 0;
         }
     } else {
@@ -6921,12 +6922,12 @@ void render_menu_item_data_course_info(MenuItem* arg0) {
     arg0->column = 0x14;
     // name of the course
     set_text_color(TEXT_BLUE_GREEN_RED_CYCLE_1);
-    print_text1_center_mode_1(0x69, arg0->row + 0x19, CM_GetProps()->Name, 0, 0.75f, 0.75f);
+    print_text1_center_mode_1(0x69, arg0->row + 0x19, CM_GetPropsCourseId(courseId)->Name, 0, 0.75f, 0.75f);
 
     // distance
     set_text_color(TEXT_RED);
     print_text_mode_1(0x2D, arg0->row + 0x28, (char*) &gTextDistance, 0, 0.75f, 0.75f);
-    print_text1_left(0xA5, arg0->row + 0x28, CM_GetProps()->CourseLength, 1, 0.75f, 0.75f);
+    print_text1_left(0xA5, arg0->row + 0x28, CM_GetPropsCourseId(courseId)->CourseLength, 1, 0.75f, 0.75f);
 
     // Best lap record
     set_text_color(TEXT_YELLOW);
@@ -10028,26 +10029,26 @@ void func_800AA2EC(MenuItem* arg0) {
                 break;
             }
 
-            if (gControllerPak1State != 0) {
+            if (gControllerPak1State != BAD) {
                 var_t1 = 0;
                 switch (osPfsFindFile(&gControllerPak1FileHandle, gCompanyCode, gGameCode, (u8*) gGameName,
                                       (u8*) gExtCode, &gControllerPak1FileNote)) {
-                    case 5:
+                    case PFS_ERR_INVALID:
                         break;
                     case 0:
                         arg0->state = 1;
                         var_t1 = 1;
                         break;
                     case 2:
-                        gControllerPak1State = 0;
+                        gControllerPak1State = BAD;
                         break;
                     default:
-                        gControllerPak1State = 0;
+                        gControllerPak1State = BAD;
                         break;
                 }
             }
             if (var_t1 == 0) {
-                if (gControllerPak1State == 0) {
+                if (gControllerPak1State == BAD) {
                     if (check_for_controller_pak(0) == 0) {
                         arg0->state = 2;
                         break;
@@ -10069,7 +10070,7 @@ void func_800AA2EC(MenuItem* arg0) {
                         }
                         return;
                     } else {
-                        gControllerPak1State = 1;
+                        gControllerPak1State = OK;
                     }
                     if (osPfsFindFile(&gControllerPak1FileHandle, gCompanyCode, gGameCode, (u8*) gGameName,
                                       (u8*) gExtCode, &gControllerPak1FileNote) == 0) {
