@@ -1397,7 +1397,6 @@ void func_80091B78(void) {
         gTimeTrialsResultCursorSelection = 5;
         gBattleResultCursorSelection = 10;
         if (osEepromProbe(&gSIEventMesgQueue) != 0) {
-            // save data disabled for now due to array overflow
             load_save_data();
         }
         if (func_80091D74() != 0) {
