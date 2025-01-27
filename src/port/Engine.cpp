@@ -41,6 +41,19 @@ float gInterpolationStep = 0.0f;
 
 GameEngine* GameEngine::Instance;
 
+bool CreateDirectoryRecursive(std::string const& dirName, std::error_code& err) {
+    err.clear();
+    if (!std::filesystem::create_directories(dirName, err)) {
+        if (std::filesystem::exists(dirName)) {
+            // The folder already exists:
+            err.clear();
+            return true;
+        }
+        return false;
+    }
+    return true;
+}
+
 GameEngine::GameEngine() {
     std::vector<std::string> OTRFiles;
     if (const std::string spaghetti_path = Ship::Context::GetPathRelativeToAppDirectory("spaghetti.o2r");
@@ -50,6 +63,11 @@ GameEngine::GameEngine() {
     if (const std::string ship_otr_path = Ship::Context::GetPathRelativeToAppBundle("ship.o2r");
         std::filesystem::exists(ship_otr_path)) {
         OTRFiles.push_back(ship_otr_path);
+    }
+    std::error_code err;
+    if (!CreateDirectoryRecursive("mods", err)) {
+        // Report the error:
+        SPDLOG_ERROR("CreateDirectoryRecursive FAILED, err: {}", err.message());
     }
     if (const std::string patches_path = Ship::Context::GetPathRelativeToAppDirectory("mods");
         !patches_path.empty() && std::filesystem::exists(patches_path)) {

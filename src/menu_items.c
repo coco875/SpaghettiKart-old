@@ -2984,13 +2984,11 @@ func_80095BD0_label2:
 Gfx* func_80095E10(Gfx* displayListHead, s8 textureFormat, s32 texScaleS, s32 texScaleT, s32 srcX, s32 srcY,
                    s32 srcWidth, s32 srcHeight, s32 screenX, s32 screenY, u8* textureData, u32 texWidth,
                    u32 texHeight) {
-    s32 textureWidth = srcWidth;
-    s32 textureHeight = srcHeight;
     gDPLoadTextureTile(displayListHead++, textureData, textureFormat, G_IM_SIZ_16b, texWidth, texHeight, srcX, srcY,
-                       srcX + textureWidth - 1, srcY + textureHeight - 1, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                       srcX + srcWidth - 1, srcY + srcHeight - 1, 0, G_TX_NOMIRROR | G_TX_WRAP,
                        G_TX_NOMIRROR | G_TX_WRAP, 0, 0, G_TX_NOLOD, G_TX_NOLOD);
-    gSPWideTextureRectangle(displayListHead++, screenX << 2, screenY << 2, (screenX + textureWidth) << 2,
-                            (screenY + textureHeight) << 2, G_TX_RENDERTILE, 0, 0, texScaleS, texScaleT);
+    gSPWideTextureRectangle(displayListHead++, screenX << 2, screenY << 2, (screenX + srcWidth) << 2,
+                            (screenY + srcHeight) << 2, G_TX_RENDERTILE, 0, 0, texScaleS, texScaleT);
     return displayListHead;
 }
 
@@ -3209,7 +3207,7 @@ Gfx* func_80097E58(Gfx* displayListHead, s8 textureFormat, u32 uls, u32 ult, u32
     }
     f32 percent = (f32) (32 - width) / 32.0f;
     gDPLoadTextureTile(displayListHead++, textureData, textureFormat, G_IM_SIZ_16b, textureWidth, textureHeight, uls,
-                       ult, lrs - 1, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD,
+                       ult, lrs - 1, lrt - 1, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD,
                        G_TX_NOLOD);
     screenX += (s32) ((f32) (textureWidth / 2) * (1.0f - percent));
     gSPWideTextureRectangle(displayListHead++, (screenX) << 2, screenY << 2,
@@ -4444,7 +4442,7 @@ Gfx* func_8009BC9C(Gfx* arg0, MenuTexture* texProps, s32 arg2, s32 arg3, s32 arg
                     break;
 
                 case 2: // OK ?
-                    arg0 = func_80097E58(arg0, 0, 0, 0U, textureProps->width, textureProps->height,
+                    arg0 = func_80097E58(arg0, 0, 0, 0U, textureProps->width - 1, textureProps->height - 1,
                                          textureProps->dX + arg2, textureProps->dY + arg3, texture, textureProps->width,
                                          textureProps->height, width);
                     break;
@@ -5671,6 +5669,11 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
             gMenuTexturesBackground[has_unlocked_extra_mode()]->width =
                 ResourceGetTexWidthByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData) * height /
                 ResourceGetTexHeightByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
+            if (ResourceGetTexWidthByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData) * height %
+                    ResourceGetTexHeightByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData) !=
+                0) {
+                gMenuTexturesBackground[has_unlocked_extra_mode()]->width++;
+            }
             gMenuTexturesBackground[has_unlocked_extra_mode()]->dX +=
                 (original_width - gMenuTexturesBackground[has_unlocked_extra_mode()]->width) / 2;
             break;
