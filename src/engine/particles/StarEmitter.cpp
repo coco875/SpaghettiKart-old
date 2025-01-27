@@ -103,7 +103,7 @@ void StarEmitter::Draw(s32 cameraId) { // func_80054BE8
 
     camera = &camera1[cameraId];
     gSPDisplayList(gDisplayListHead++, (Gfx*) D_0D007AE0);
-    load_texture_block_ia8_nomirror(gTexture69C80C, 0x00000020, 0x00000020);
+    load_texture_block_ia8_nomirror((u8*) gTexture69C80C, 0x00000020, 0x00000020);
     func_8004B35C(0x000000FF, 0x000000FF, 0, 0x000000FF);
     D_80183E80[0] = 0;
     for (var_s0 = 0; var_s0 < gObjectParticle3_SIZE; var_s0++) {
