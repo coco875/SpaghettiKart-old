@@ -50,7 +50,6 @@ extern "C" {
 #include "render_courses.h"
 #include "menus.h"
 #include "update_objects.h"
-#include "Engine.h"
 // #include "engine/wasm.h"
 }
 
@@ -219,6 +218,22 @@ void LoadCourse() {
     }
 }
 
+size_t GetCourseIndex() {
+    return gWorldInstance.CourseIndex;
+}
+
+void SetCourse(const char* name) {
+    gWorldInstance.SetCourse(name);
+}
+
+void NextCourse() {
+    gWorldInstance.NextCourse();
+}
+
+void PreviousCourse() {
+    gWorldInstance.PreviousCourse();
+}
+
 void SetCourseById(s32 course) {
     if (course < 0 || course >= gWorldInstance.Courses.size()) {
         return;
@@ -238,7 +253,6 @@ void CM_VehicleCollision(s32 playerId, Player* player) {
 void CM_BombKartsWaypoint(s32 cameraId) {
     for (auto& object : gWorldInstance.Objects) {
         if (auto kart = dynamic_cast<OBombKart*>(object)) {
-            ;
             if (kart) {
                 kart->Waypoint(cameraId);
             }
@@ -726,32 +740,6 @@ void* GetBattleCup(void) {
 // End of frame cleanup of actors, objects, etc.
 void CM_RunGarbageCollector(void) {
     RunGarbageCollector();
-}
-
-size_t GetCourseIndex() {
-    return gWorldInstance.CourseIndex;
-}
-
-void SetCourse(const char* name) {
-    gWorldInstance.SetCourse(name);
-}
-
-void NextCourse() {
-    gWorldInstance.NextCourse();
-}
-
-void PreviousCourse() {
-    gWorldInstance.PreviousCourse();
-}
-
-// Helps prevents users from forgetting to add a finishline to their course
-bool cm_DoesFinishlineExist() {
-    for (AActor* actor : gWorldInstance.Actors) {
-        if (dynamic_cast<AFinishline*>(actor)) {
-            return true;
-        }
-    }
-    return false;
 }
 }
 

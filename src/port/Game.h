@@ -12,7 +12,7 @@ extern "C" {
 #include "actor_types.h"
 
 Properties* CM_GetProps();
-Properties* CM_GetPropsCourseId(s32);
+Properties* CM_GetPropsCourseId(s32 courseId);
 
 void CM_DisplayBattleBombKart(s32 playerId, s32 primAlpha);
 void CM_DrawBattleBombKarts(s32 cameraId);

@@ -347,7 +347,7 @@ char* D_800E76A8[] = {
     "WARIO",
     "PEACH",
     "BOWSER",
-    "\xA1\xBC\xA1\xBC\xA1\xBC\xA1\xBC", // NOT HYPHENS!!! These are EUC-JP characters (0xa1 0xbc)
+    "\xA1\xBC\xA1\xBC\xA1\xBC\xA1\xBC", // These are EUC-JP characters. Looks sort of like - or ー
 };
 
 char* D_800E76CC[] = {
@@ -405,9 +405,8 @@ char* gPrefixTimeText[] = {
 };
 
 char* D_800E7744[] = {
-    // The s/n/r/t here are not ASCII, they are EUC-JP characters
-    // 0xae 0xf3/0xae 0xee/0xae 0xf2/0xae 0xf4
-    "1 ｓ", "2 ｎ", "3 ｒ", "4 ｔ", "5 ｔ", " ",
+    // These are EUC-JP characters; 1 st, 2 st, 3 rd, 4 th, 5 th
+    "1 \xA3\xF3", "2 \xA3\xEE", "3 \xA3\xF2", "4 \xA3\xF4", "5 \xA3\xF4", " ",
 };
 
 // Also used to render the replay text in the replay mode
@@ -3499,7 +3498,7 @@ Gfx* draw_box_wide_right(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lr
     return displayListHead;
 }
 
-// Renders pause background
+// Renders pause background and lakitu tow transition black fade in/out
 Gfx* draw_box_wide_pause_background(Gfx* displayListHead, s32 ulx, s32 uly, s32 lrx, s32 lry, u32 red, u32 green,
                                     u32 blue, u32 alpha) {
     red &= 0xFF;
@@ -4772,9 +4771,12 @@ void func_8009CA6C(s32 arg0) {
     }
 }
 
+// Lakitu tow transition out of black
 void func_8009CBE4(s32 arg0, s32 arg1, s32 arg2) {
     RGBA16* color;
     s16 x, y, w, h;
+    s32 leftEdge;
+    s32 rightEdge;
     UNUSED s32 pad[3];
     struct UnkStruct_8018E7E8 *size, *start;
 
@@ -4799,8 +4801,33 @@ void func_8009CBE4(s32 arg0, s32 arg1, s32 arg2) {
         h = D_8015F480[arg0].screenHeight;
     }
     color = &D_800E7AE8[arg2];
-    gDisplayListHead = draw_box_wide(gDisplayListHead, x - (w / 2), y - (h / 2), (w / 2) + x, (h / 2) + y, color->red,
-                                     color->green, color->blue, 0xFF - (D_8018E7D0[arg0] * 0xFF / D_8018E7B8[arg0]));
+
+    switch (gScreenModeSelection) {
+        case SCREEN_MODE_1P:
+        case SCREEN_MODE_2P_SPLITSCREEN_HORIZONTAL:
+            gDisplayListHead =
+                draw_box_wide(gDisplayListHead, x - (w / 2), y - (h / 2), (w / 2) + x, (h / 2) + y, color->red,
+                              color->green, color->blue, 0xFF - (D_8018E7D0[arg0] * 0xFF / D_8018E7B8[arg0]));
+            break;
+        case SCREEN_MODE_2P_SPLITSCREEN_VERTICAL:
+            gDisplayListHead =
+                draw_box_wide(gDisplayListHead, x - (w / 2), y - (h / 2), (w / 2) + x, (h / 2) + y, color->red,
+                              color->green, color->blue, 0xFF - (D_8018E7D0[arg0] * 0xFF / D_8018E7B8[arg0]));
+            break;
+        case SCREEN_MODE_3P_4P_SPLITSCREEN:
+            if ((arg0 == 0) || (arg0 == 2)) {
+                leftEdge = OTRGetDimensionFromLeftEdge(0);
+                gDisplayListHead = draw_box_wide_pause_background(
+                    gDisplayListHead, leftEdge - (x - (w / 2)), y - (h / 2), (w / 2) + x, (h / 2) + y, color->red,
+                    color->green, color->blue, 0xFF - (D_8018E7D0[arg0] * 0xFF / D_8018E7B8[arg0]));
+            } else if ((arg0 == 1) || (arg0 == 3)) {
+                rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
+                gDisplayListHead = draw_box_wide_pause_background(
+                    gDisplayListHead, x - (w / 2), y - (h / 2), rightEdge + ((w / 2) + x), (h / 2) + y, color->red,
+                    color->green, color->blue, 0xFF - (D_8018E7D0[arg0] * 0xFF / D_8018E7B8[arg0]));
+            }
+            break;
+    }
 
     if ((arg1 == 0) && (D_8018E7D0[arg0] += 1, (D_8018E7D0[arg0] >= D_8018E7B8[arg0]))) {
         if (gGamestate == 4) {
@@ -5174,6 +5201,7 @@ void func_8009CE64(s32 arg0) {
     }
 }
 
+// Lakitu tow transition to black
 void func_8009D77C(s32 arg0, s32 arg1, s32 arg2) {
     s16 var_ra;
     s16 var_t3;
@@ -5186,6 +5214,8 @@ void func_8009D77C(s32 arg0, s32 arg1, s32 arg2) {
     RGBA16* temp_v0_2;
     s32 sp44;
     UNUSED s32 stackPadding0;
+    s32 leftEdge;
+    s32 rightEdge;
 
     if ((gModeSelection == 0) || (gModeSelection == 1)) {
         var_t3 = D_8018E7E8[arg0].x;
@@ -5215,8 +5245,33 @@ void func_8009D77C(s32 arg0, s32 arg1, s32 arg2) {
     someMath0 += var_t3;
     someMath1 = temp_t8;
     someMath1 += var_t4;
-    gDisplayListHead = draw_box_wide(gDisplayListHead, var_t3 - temp_v1, var_t4 - temp_t8, someMath0, someMath1,
-                                     temp_v0_2->red, temp_v0_2->green, temp_v0_2->blue, var_t2);
+
+    switch (gScreenModeSelection) {
+        case SCREEN_MODE_1P:
+        case SCREEN_MODE_2P_SPLITSCREEN_HORIZONTAL:
+            gDisplayListHead = draw_box_wide(gDisplayListHead, var_t3 - temp_v1, var_t4 - temp_t8, someMath0, someMath1,
+                                             temp_v0_2->red, temp_v0_2->green, temp_v0_2->blue, var_t2);
+            break;
+        case SCREEN_MODE_2P_SPLITSCREEN_VERTICAL:
+            gDisplayListHead = draw_box_wide(gDisplayListHead, var_t3 - temp_v1, var_t4 - temp_t8, someMath0, someMath1,
+                                             temp_v0_2->red, temp_v0_2->green, temp_v0_2->blue, var_t2);
+            break;
+        case SCREEN_MODE_3P_4P_SPLITSCREEN:
+            if ((arg0 == 0) || (arg0 == 2)) {
+                leftEdge = OTRGetDimensionFromLeftEdge(0);
+                gDisplayListHead = draw_box_wide_pause_background(
+                    gDisplayListHead, leftEdge - (var_t3 - temp_v1), var_t4 - temp_t8, someMath0, someMath1,
+                    temp_v0_2->red, temp_v0_2->green, temp_v0_2->blue, var_t2);
+
+            } else if ((arg0 == 1) || (arg0 == 3)) {
+                rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
+                gDisplayListHead = draw_box_wide_pause_background(gDisplayListHead, var_t3 - temp_v1, var_t4 - temp_t8,
+                                                                  rightEdge + someMath0, someMath1, temp_v0_2->red,
+                                                                  temp_v0_2->green, temp_v0_2->blue, var_t2);
+            }
+            break;
+    }
+
     if (arg1 == 0) {
         D_8018E7D0[arg0]++;
         if ((D_8018E7B8[arg0] + 1) < D_8018E7D0[arg0]) {
@@ -5233,6 +5288,7 @@ void func_8009D978(s32 arg0, s32 arg1) {
     func_8009D77C(arg0, arg1, 1);
 }
 
+// Lakitu tow transition box show up for 1 frame; full black
 void func_8009D998(s32 arg0) {
     s16 var_t0;
     s16 var_t1;
@@ -5242,6 +5298,8 @@ void func_8009D998(s32 arg0) {
     s32 temp_v1;
     s32 someMath0;
     s32 someMath1;
+    s32 leftEdge;
+    s32 rightEdge;
 
     if ((gModeSelection == 0) || (gModeSelection == 1)) {
         var_t0 = D_8018E7E8[arg0].x;
@@ -5266,8 +5324,31 @@ void func_8009D998(s32 arg0) {
     someMath0 += var_t0;
     someMath1 = temp_v1;
     someMath1 += var_t1;
-    gDisplayListHead =
-        draw_box_wide(gDisplayListHead, var_t0 - temp_v0, var_t1 - temp_v1, someMath0, someMath1, 0, 0, 0, 0x000000FF);
+
+    switch (gScreenModeSelection) {
+        case SCREEN_MODE_1P:
+        case SCREEN_MODE_2P_SPLITSCREEN_HORIZONTAL:
+            gDisplayListHead = draw_box_wide(gDisplayListHead, var_t0 - temp_v0, var_t1 - temp_v1, someMath0, someMath1,
+                                             0, 0, 0, 0x000000FF);
+            break;
+        case SCREEN_MODE_2P_SPLITSCREEN_VERTICAL:
+            gDisplayListHead = draw_box_wide(gDisplayListHead, var_t0 - temp_v0, var_t1 - temp_v1, someMath0, someMath1,
+                                             0, 0, 0, 0x000000FF);
+            break;
+        case SCREEN_MODE_3P_4P_SPLITSCREEN:
+            if ((arg0 == 0) || (arg0 == 2)) {
+                leftEdge = OTRGetDimensionFromLeftEdge(0);
+                gDisplayListHead = draw_box_wide_pause_background(
+                    gDisplayListHead, leftEdge - temp_v0, var_t1 - temp_v1, someMath0, someMath1, 0, 0, 0, 0x000000FF);
+
+            } else if ((arg0 == 1) || (arg0 == 3)) {
+                rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
+                gDisplayListHead =
+                    draw_box_wide_pause_background(gDisplayListHead, var_t0 - temp_v0, var_t1 - temp_v1,
+                                                   rightEdge + someMath0, someMath1, 0, 0, 0, 0x000000FF);
+            }
+            break;
+    }
 }
 
 void func_8009DAA8(void) {
@@ -6862,8 +6943,8 @@ void func_800A15EC(MenuItem* arg0) {
     s16 courseId = gCupCourseOrder[(arg0->type - 0x7C) / 4][(arg0->type - 0x7C) % 4];
     gDisplayListHead =
         func_8009C204(gDisplayListHead, segmented_to_virtual_dupe(D_800E7D74[courseId]), arg0->column, arg0->row, 2);
-    gDisplayListHead = draw_box_wide(gDisplayListHead, arg0->column, arg0->row + 0x27, arg0->column + 0x40,
-                                     arg0->row + 0x30, 0, 0, 0, 0xFF);
+    gDisplayListHead = draw_box(gDisplayListHead, arg0->column, arg0->row + 0x27, arg0->column + 0x40, arg0->row + 0x30,
+                                0, 0, 0, 0xFF);
     gDisplayListHead = func_8009C204(gDisplayListHead, segmented_to_virtual_dupe(D_800E7DC4[courseId]), arg0->column,
                                      arg0->row + 0x27, 3);
     if (func_800B639C(arg0->type - 0x7C) >= 0) {
@@ -8471,8 +8552,8 @@ void func_800A69C8(UNUSED MenuItem* arg0) {
         print_text1_center_mode_2(D_800E7380[var_s0].column, D_800E7380[var_s0].row, temp_s3, 0, 0.65f, 1.0f);
     }
     set_text_color(TEXT_BLUE);
-    // Not a hyphen, that is an EUC-JP character
-    text_draw(0x0000009E, D_800E7300[0].row + 0x6D, "ー", 0, 1.0f, 1.0f);
+    // EUC-JP character which sort of looks like a hyphen -
+    text_draw(0x0000009E, D_800E7300[0].row + 0x6D, "\xA1\xBC", 0, 1.0f, 1.0f);
 }
 
 void func_800A6BEC(UNUSED MenuItem* arg0) {
@@ -8530,7 +8611,6 @@ void func_800A6D94(s32 arg0, s32 arg1, u8* arg2) {
               0.75f);
 }
 
-// The ｓ/ｎ/ｒ/ー are not ASCII characters, they're EUC-JP characters
 void func_800A6E94(s32 arg0, s32 arg1, u8* arg2) {
     UNUSED s32 stackPadding0;
     u8* temp_v0;
@@ -8547,7 +8627,8 @@ void func_800A6E94(s32 arg0, s32 arg1, u8* arg2) {
     } else {
         set_text_color(TEXT_YELLOW);
     }
-    text_draw(temp_s0->column + 4, temp_s0->row + 0x5A, "1 ｓ ー", 0, 0.8f, 0.8f);
+    //                                       EUC-JP char 1 st       ー
+    text_draw(temp_s0->column + 4, temp_s0->row + 0x5A, "1 \xA3\xF3 \xA1\xBC", 0, 0.8f, 0.8f);
     temp_v0 = arg2 + (arg1 * 3);
     convert_number_to_ascii(temp_v0[0], sp40);
     text_draw(temp_s0->column + 0x2D, temp_s0->row + 0x5A, sp40, 0, 0.8f, 0.8f);
@@ -8556,7 +8637,8 @@ void func_800A6E94(s32 arg0, s32 arg1, u8* arg2) {
     } else {
         set_text_color(TEXT_BLUE);
     }
-    text_draw(temp_s0->column + 4, temp_s0->row + 0x69, "2 ｎ ー", 0, 0.8f, 0.8f);
+    //                                       EUC-JP char 2 nd       ー
+    text_draw(temp_s0->column + 4, temp_s0->row + 0x69, "2 \xA3\xEE \xA1\xBC", 0, 0.8f, 0.8f);
     convert_number_to_ascii(temp_v0[1], sp40);
     text_draw(temp_s0->column + 0x2D, temp_s0->row + 0x69, sp40, 0, 0.8f, 0.8f);
     if (++sp38 == rank) {
@@ -8564,7 +8646,8 @@ void func_800A6E94(s32 arg0, s32 arg1, u8* arg2) {
     } else {
         set_text_color(TEXT_RED);
     }
-    text_draw(temp_s0->column + 4, temp_s0->row + 0x78, "3 ｒ ー", 0, 0.8f, 0.8f);
+    //                                       EUC-JP char 3 rd       ー
+    text_draw(temp_s0->column + 4, temp_s0->row + 0x78, "3 \xA3\xF2 \xA1\xBC", 0, 0.8f, 0.8f);
     convert_number_to_ascii(temp_v0[2], sp40);
     text_draw(temp_s0->column + 0x2D, temp_s0->row + 0x78, sp40, 0, 0.8f, 0.8f);
 }
@@ -9379,9 +9462,9 @@ void func_800A8CA4(MenuItem* arg0) {
                 // Wut?
                 if ((var_s0 != (temp_v0->param1 % 4)) != 0) {
                     gDisplayListHead =
-                        draw_box_wide(gDisplayListHead, D_800E7208[var_s0][0].column + temp_s2,
-                                      D_800E7208[var_s0][0].row + temp_s3, D_800E7208[var_s0][1].column + temp_s2,
-                                      D_800E7208[var_s0][1].row + temp_s3, 0, 0, 0, 0x00000064);
+                        draw_box(gDisplayListHead, D_800E7208[var_s0][0].column + temp_s2,
+                                 D_800E7208[var_s0][0].row + temp_s3, D_800E7208[var_s0][1].column + temp_s2,
+                                 D_800E7208[var_s0][1].row + temp_s3, 0, 0, 0, 0x00000064);
                 }
             }
         }

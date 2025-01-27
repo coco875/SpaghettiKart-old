@@ -65,6 +65,9 @@ OSYieldResult osSpTaskYielded(OSTask* task) {
 }
 
 s32 osPfsDeleteFile(OSPfs* pfs, u16 company_code, u32 game_code, u8* game_name, u8* ext_name) {
+    char filename[1024];
+    sprintf(filename, "channel_%d_%hu_%hd_%s.sav", pfs->channel, company_code, game_code, game_name);
+    remove(filename);
     return PFS_NO_ERROR;
 }
 

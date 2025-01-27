@@ -1004,7 +1004,7 @@ s32 func_800B6A68(void) {
     s32 i;
 
     ret = osPfsAllocateFile(&gControllerPak1FileHandle, gCompanyCode, gGameCode, (u8*) &gGameName, (u8*) &gExtCode,
-                            0x7900, &gControllerPak1FileNote);
+                            sizeof(u8) * 0x1000 * 2 + 0x100, &gControllerPak1FileNote);
     if (ret == 0) {
         for (i = 0; i < 2; i++) {
             func_800B69BC(i);
