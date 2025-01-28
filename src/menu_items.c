@@ -5859,8 +5859,9 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
         case MENU_ITEM_TYPE_05A:
         case MENU_ITEM_TYPE_05B:
         case COURSE_SELECT_BATTLE_NAMES:
-            load_menu_img_comp_type(segmented_to_virtual_dupe(gMenuTexturesTrackSelection[type - 0x52]),
-                                    LOAD_MENU_IMG_TKMK00_ONCE);
+            load_menu_img_comp_type(
+                segmented_to_virtual_dupe(gMenuTexturesTrackSelection[type - COURSE_SELECT_MAP_SELECT]),
+                LOAD_MENU_IMG_TKMK00_ONCE);
             break;
         case MENU_ITEM_TYPE_05F:
         case MENU_ITEM_TYPE_060:
