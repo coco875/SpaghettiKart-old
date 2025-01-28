@@ -5622,11 +5622,28 @@ void clear_menus(void) {
     }
 }
 
+f32 integral_part(f32 arg0) {
+    return (f32) (s32) arg0;
+}
+
+f32 fractional_part(f32 arg0) {
+    return arg0 - integral_part(arg0);
+}
+
 void resize_menu_texture(MenuTexture* mi) {
     int original_width = mi->width;
     int original_height = mi->height;
-    mi->width =
-        ResourceGetTexWidthByName(mi->textureData) / (ResourceGetTexHeightByName(mi->textureData) / original_height);
+    float new_width = (f32) ResourceGetTexWidthByName(mi->textureData) /
+                      ((f32) ResourceGetTexHeightByName(mi->textureData) / (f32) original_height);
+    if (fractional_part(new_width) >= 0.5) {
+        new_width += 1.0;
+        if (fractional_part(new_width) <= 0.7) {
+            new_width += 1.0;
+            mi->height += 1;
+        }
+    }
+
+    mi->width = (s32) new_width;
 
     int textureWidth = ResourceGetTexWidthByName(mi->textureData);
     int textureHeight = ResourceGetTexHeightByName(mi->textureData);
