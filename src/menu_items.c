@@ -4441,7 +4441,7 @@ Gfx* func_8009BC9C(Gfx* arg0, MenuTexture* texProps, s32 arg2, s32 arg3, s32 arg
                     break;
 
                 case 2: // OK ?
-                    arg0 = func_80097E58(arg0, 0, 0, 0U, textureProps->width - 1, textureProps->height - 1,
+                    arg0 = func_80097E58(arg0, 0, 0, 0U, textureProps->width, textureProps->height,
                                          textureProps->dX + arg2, textureProps->dY + arg3, texture, textureProps->width,
                                          textureProps->height, width);
                     break;
@@ -5622,6 +5622,20 @@ void clear_menus(void) {
     }
 }
 
+void resize_menu_texture(MenuTexture* mi) {
+    int original_width = mi->width;
+    int original_height = mi->height;
+    mi->width =
+        ResourceGetTexWidthByName(mi->textureData) / (ResourceGetTexHeightByName(mi->textureData) / original_height);
+    int diff =
+        (ResourceGetTexWidthByName(mi->textureData) % (ResourceGetTexHeightByName(mi->textureData) / original_height));
+    mi->width -= diff / 2;
+    int textureWidth = ResourceGetTexWidthByName(mi->textureData);
+    int textureHeight = ResourceGetTexHeightByName(mi->textureData);
+
+    mi->dX += (original_width - mi->width) / 2;
+}
+
 #ifdef NON_MATCHING
 // https://decomp.me/scratch/1BHpa
 // Stack differences, can't figure out how to fix them
@@ -5745,18 +5759,7 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
         case MENU_ITEM_UI_START_BACKGROUND:
             // load_menu_img_comp_type(gMenuTexturesBackground[has_unlocked_extra_mode()], LOAD_MENU_IMG_TKMK00_ONCE);
             load_texture_reset_cache(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
-            original_width = gMenuTexturesBackground[has_unlocked_extra_mode()]->width;
-            height = gMenuTexturesBackground[has_unlocked_extra_mode()]->height;
-            gMenuTexturesBackground[has_unlocked_extra_mode()]->width =
-                ResourceGetTexWidthByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData) * height /
-                ResourceGetTexHeightByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData);
-            if (ResourceGetTexWidthByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData) * height %
-                    ResourceGetTexHeightByName(gMenuTexturesBackground[has_unlocked_extra_mode()]->textureData) !=
-                0) {
-                gMenuTexturesBackground[has_unlocked_extra_mode()]->width++;
-            }
-            gMenuTexturesBackground[has_unlocked_extra_mode()]->dX +=
-                (original_width - gMenuTexturesBackground[has_unlocked_extra_mode()]->width) / 2;
+            resize_menu_texture(gMenuTexturesBackground[has_unlocked_extra_mode()]);
             break;
         case MENU_ITEM_UI_LOGO_AND_COPYRIGHT:
             load_mario_kart_64_logo();
@@ -5764,12 +5767,7 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
             load_menu_img(seg2_copyright_1996_texture);
             break;
         case MENU_ITEM_UI_PUSH_START_BUTTON:
-            original_width = seg2_push_start_button_texture->width;
-            height = seg2_push_start_button_texture->height;
-            seg2_push_start_button_texture->width =
-                ResourceGetTexWidthByName(seg2_push_start_button_texture->textureData) * height /
-                ResourceGetTexHeightByName(seg2_push_start_button_texture->textureData);
-            seg2_push_start_button_texture->dX += (original_width - seg2_push_start_button_texture->width) / 2;
+            resize_menu_texture(seg2_push_start_button_texture);
             load_menu_img(seg2_push_start_button_texture);
             break;
         case MAIN_MENU_BACKGROUND:
@@ -5792,13 +5790,7 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
         case 0x17:
         case MAIN_MENU_TIME_TRIALS_BEGIN:
         case MAIN_MENU_TIME_TRIALS_DATA:
-            original_width = D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->width;
-            height = D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->height;
-            D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->width =
-                ResourceGetTexWidthByName(D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->textureData) * height /
-                ResourceGetTexHeightByName(D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->textureData);
-            D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->dX +=
-                (original_width - D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]->width) / 2;
+            resize_menu_texture(D_800E8254[type - MENU_ITEM_UI_GAME_SELECT]);
             load_menu_img_comp_type(D_800E8254[type - MENU_ITEM_UI_GAME_SELECT], LOAD_MENU_IMG_TKMK00_ONCE);
             break;
         case MENU_ITEM_UI_1P_GAME:
