@@ -5627,9 +5627,7 @@ void resize_menu_texture(MenuTexture* mi) {
     int original_height = mi->height;
     mi->width =
         ResourceGetTexWidthByName(mi->textureData) / (ResourceGetTexHeightByName(mi->textureData) / original_height);
-    int diff =
-        (ResourceGetTexWidthByName(mi->textureData) % (ResourceGetTexHeightByName(mi->textureData) / original_height));
-    mi->width -= diff / 2;
+
     int textureWidth = ResourceGetTexWidthByName(mi->textureData);
     int textureHeight = ResourceGetTexHeightByName(mi->textureData);
 
@@ -11577,8 +11575,8 @@ void func_800AD2E8(MenuItem* arg0) {
                         }
                     }
                 }
-                if (gControllerOne->buttonPressed & 0x9000) {
-                    if (arg0->state == 0x0000000A) {
+                if (gControllerOne->buttonPressed & (A_BUTTON | START_BUTTON)) {
+                    if (arg0->state == 10) {
                         var_v1 = 0;
                         if (arg0->paramf < 4.2) {
                             arg0->paramf += 4.0;
@@ -11744,7 +11742,7 @@ void func_800AD2E8(MenuItem* arg0) {
             break;
         case 20:
         case 21:
-            if (((gControllerOne->buttonPressed | gControllerOne->stickPressed) & 0x800) && (arg0->state >= 0x15)) {
+            if (((gControllerOne->buttonPressed | gControllerOne->stickPressed) & 0x800) && (arg0->state >= 21)) {
                 arg0->state--;
                 play_sound2(SOUND_MENU_CURSOR_MOVE);
                 if (arg0->paramf < 4.2) {
@@ -11753,7 +11751,7 @@ void func_800AD2E8(MenuItem* arg0) {
                 arg0->subState = -1;
             }
             if ((gControllerOne->buttonPressed | gControllerOne->stickPressed) & 0x400) {
-                if (arg0->state < 0x15) {
+                if (arg0->state < 21) {
                     arg0->state++;
                     play_sound2(SOUND_MENU_CURSOR_MOVE);
                     if (arg0->paramf < 4.2) {
@@ -11768,8 +11766,8 @@ void func_800AD2E8(MenuItem* arg0) {
                 return;
             }
             if (gControllerOne->buttonPressed & 0x9000) {
-                if (arg0->state == 0x00000015) {
-                    arg0->state = 0x00000019;
+                if (arg0->state == 21) {
+                    arg0->state = 25;
                     arg0->param1 = 0;
                     play_sound2(SOUND_MENU_SELECT);
                     if (arg0->paramf < 4.2) {
@@ -12166,8 +12164,8 @@ void func_800AE218(MenuItem* arg0) {
                 arg0->state = arg0->param2 + 0x1E;
                 play_sound2(SOUND_MENU_GO_BACK);
             } else if (gControllerOne->buttonPressed & 0x9000) {
-                if (arg0->state == 0x00000024) {
-                    arg0->state = 0x00000028;
+                if (arg0->state == 36) {
+                    arg0->state = 40;
                     arg0->param1 = 0;
                     play_sound2(SOUND_MENU_SELECT);
                     if (arg0->paramf < 4.2) {
