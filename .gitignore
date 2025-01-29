@@ -121,3 +121,6 @@ spaghettify.cfg.json
 
 # modding
 *.wasm
+out.*
+perf*
+*kernel.svg
