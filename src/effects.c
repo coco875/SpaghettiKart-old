@@ -214,7 +214,7 @@ void func_8008C528(Player* player, s8 arg1) {
         func_800C90F4(arg1, (temp_v1 * 0x10) + 0x29008005);
         func_800C9060(arg1, SOUND_ACTION_EXPLOSION);
     } else {
-        func_800098FC(arg1, player);
+        play_cpu_sound_effect(arg1, player);
     }
     player->soundEffects = (s32) (player->soundEffects & ~4);
 }
@@ -285,7 +285,7 @@ void func_8008C73C(Player* player, s8 arg1) {
             ((player->type & PLAYER_INVISIBLE_OR_BOMB) != PLAYER_INVISIBLE_OR_BOMB)) {
             func_800C90F4(arg1, (player->characterId * 0x10) + 0x29008003);
         } else {
-            func_800098FC(arg1, player);
+            play_cpu_sound_effect(arg1, player);
         }
     }
 }
@@ -714,7 +714,7 @@ void apply_hit_sound_effect(Player* player, s8 arg1) {
 
         player->effects |= HIT_EFFECT;
         if (((player->type) & 0x1000) != 0) {
-            func_800098FC(arg1, player);
+            play_cpu_sound_effect(arg1, player);
         }
     }
 }
@@ -854,7 +854,7 @@ void apply_hit_rotating_sound_effect(Player* player, s8 arg1) {
         ((player->type & PLAYER_INVISIBLE_OR_BOMB) != PLAYER_INVISIBLE_OR_BOMB)) {
         func_800C90F4(arg1, (player->characterId * 0x10) + 0x29008003);
     } else {
-        func_800098FC(arg1, player);
+        play_cpu_sound_effect(arg1, player);
     }
     if (gModeSelection == BATTLE) {
         func_8006B8B4(player, arg1);
@@ -1022,7 +1022,7 @@ void apply_reverse_sound_effect(Player* player, s8 arg1) {
         }
         func_800C9060(arg1, SOUND_ACTION_EXPLOSION);
     } else {
-        func_800098FC(arg1, player);
+        play_cpu_sound_effect(arg1, player);
     }
 
     player->soundEffects &= ~(REVERSE_SOUND_EFFECT | 0x80000);
@@ -1121,7 +1121,7 @@ void apply_hit_by_item_sound_effect(Player* player, s8 arg1) {
         func_800C90F4(arg1, (player->characterId * 0x10) + 0x29008005);
         func_800C9060(arg1, SOUND_ACTION_EXPLOSION);
     } else {
-        func_800098FC(arg1, player);
+        play_cpu_sound_effect(arg1, player);
     }
 
     player->effects |= HIT_BY_ITEM_EFFECT;
@@ -1595,26 +1595,26 @@ void func_8008FF08(Player* player, s8 playerId) {
 
     //     switch (gCurrentCourseId) {
     //         case COURSE_BOWSER_CASTLE:
-    //             waypoint = gNearestWaypointByPlayerId[playerId];
+    //             waypoint = gNearestPathPointByPlayerId[playerId];
     //             if ((waypoint >= 0x235) && (waypoint < 0x247)) {
     //                 player->nearestWaypointId = 0x214;
     //             } else if ((waypoint >= 0x267) && (waypoint < 0x277)) {
     //                 player->nearestWaypointId = 0x25B;
     //             } else {
-    //                 player->nearestWaypointId = gNearestWaypointByPlayerId[playerId];
+    //                 player->nearestWaypointId = gNearestPathPointByPlayerId[playerId];
     //                 if (player->nearestWaypointId < 0) {
-    //                     player->nearestWaypointId = gWaypointCountByPathIndex[0] + player->nearestWaypointId;
+    //                     player->nearestWaypointId = gPathCountByPathIndex[0] + player->nearestWaypointId;
     //                 }
     //             }
     //             break;
     //         case COURSE_BANSHEE_BOARDWALK:
-    //             waypoint = gNearestWaypointByPlayerId[playerId];
+    //             waypoint = gNearestPathPointByPlayerId[playerId];
     //             if ((waypoint >= 0x12C) && (waypoint < 0x13C)) {
     //                 player->nearestWaypointId = 0x12CU;
     //             } else {
-    //                 player->nearestWaypointId = gNearestWaypointByPlayerId[playerId];
+    //                 player->nearestWaypointId = gNearestPathPointByPlayerId[playerId];
     //                 if (player->nearestWaypointId < 0) {
-    //                     player->nearestWaypointId = gWaypointCountByPathIndex[0] + player->nearestWaypointId;
+    //                     player->nearestWaypointId = gPathCountByPathIndex[0] + player->nearestWaypointId;
     //                 }
     //             }
     //             break;
@@ -1623,7 +1623,7 @@ void func_8008FF08(Player* player, s8 playerId) {
     //             player->nearestWaypointId = gCopyNearestWaypointByPlayerId[playerId];
     //             break;
     //         case COURSE_FRAPPE_SNOWLAND:
-    //             waypoint = gNearestWaypointByPlayerId[playerId];
+    //             waypoint = gNearestPathPointByPlayerId[playerId];
     // #ifdef VERSION_EU
     //             if (((waypoint >= 0xF0) && (waypoint < 0x11E)) || ((gCopyNearestWaypointByPlayerId[playerId] >= 0xF0)
     //             &&
@@ -1637,29 +1637,29 @@ void func_8008FF08(Player* player, s8 playerId) {
     //             } else {
     //                 player->nearestWaypointId = gCopyNearestWaypointByPlayerId[playerId];
     //                 if (player->nearestWaypointId < 0) {
-    //                     player->nearestWaypointId = gWaypointCountByPathIndex[0] + player->nearestWaypointId;
+    //                     player->nearestWaypointId = gPathCountByPathIndex[0] + player->nearestWaypointId;
     //                 }
     //             }
     //             break;
     //         case COURSE_ROYAL_RACEWAY:
-    //             waypoint = gNearestWaypointByPlayerId[playerId];
+    //             waypoint = gNearestPathPointByPlayerId[playerId];
     //             if ((waypoint >= 0x258) && (waypoint < 0x2A4)) {
     //                 player->nearestWaypointId = 0x258U;
     //             } else {
     //                 player->nearestWaypointId = gCopyNearestWaypointByPlayerId[playerId];
     //                 if (player->nearestWaypointId < 0) {
-    //                     player->nearestWaypointId = gWaypointCountByPathIndex[0] + player->nearestWaypointId;
+    //                     player->nearestWaypointId = gPathCountByPathIndex[0] + player->nearestWaypointId;
     //                 }
     //             }
     //             break;
     //         case COURSE_DK_JUNGLE:
-    //             waypoint = gNearestWaypointByPlayerId[playerId];
+    //             waypoint = gNearestPathPointByPlayerId[playerId];
     //             if ((waypoint >= 0xB9) && (waypoint < 0x119)) {
     //                 player->nearestWaypointId = 0xB9U;
     //             } else {
-    //                 player->nearestWaypointId = gNearestWaypointByPlayerId[playerId];
+    //                 player->nearestWaypointId = gNearestPathPointByPlayerId[playerId];
     //                 if (player->nearestWaypointId < 0) {
-    //                     player->nearestWaypointId = gWaypointCountByPathIndex[0] + player->nearestWaypointId;
+    //                     player->nearestWaypointId = gPathCountByPathIndex[0] + player->nearestWaypointId;
     //                 }
     //             }
     //             break;
@@ -1670,9 +1670,9 @@ void func_8008FF08(Player* player, s8 playerId) {
     //             player->nearestWaypointId = 0U;
     //             break;
     //         default:
-    //             player->nearestWaypointId = gNearestWaypointByPlayerId[playerId];
+    //             player->nearestWaypointId = gNearestPathPointByPlayerId[playerId];
     //             if (player->nearestWaypointId < 0) {
-    //                 player->nearestWaypointId = gWaypointCountByPathIndex[0] + player->nearestWaypointId;
+    //                 player->nearestWaypointId = gPathCountByPathIndex[0] + player->nearestWaypointId;
     //             }
     //             break;
     //     }
@@ -1680,7 +1680,7 @@ void func_8008FF08(Player* player, s8 playerId) {
 
 void func_80090178(Player* player, s8 playerId, Vec3f arg2, Vec3f arg3) {
     u16 test;
-    TrackWaypoint* temp_v1;
+    TrackPathPoint* temp_v1;
     f32 spF8[4] = { 0.0f, 0.0f, -700.0f, 700.0f };
     f32 spE8[4] = { 700.0f, -700.0f, 0.0f, 0.0f };
     f32 spD8[4] = { 0.0f, 0.0f, -650.0f, 650.0f };
@@ -1700,13 +1700,13 @@ void func_80090178(Player* player, s8 playerId, Vec3f arg2, Vec3f arg3) {
 
     if (GetCourse() == GetYoshiValley()) {
         test = player->nearestWaypointId;
-        temp_v1 = &D_80164550[gCopyPathIndexByPlayerId[playerId]][test];
+        temp_v1 = &gTrackPaths[gCopyPathIndexByPlayerId[playerId]][test];
         arg2[0] = temp_v1->posX;
         arg2[1] = temp_v1->posY;
         arg2[2] = temp_v1->posZ;
-        temp_v1 = &D_80164550[gCopyPathIndexByPlayerId[playerId]]
-                             [(player->nearestWaypointId + 5) %
-                              (gWaypointCountByPathIndex[gCopyPathIndexByPlayerId[playerId]] + 1)];
+        temp_v1 = &gTrackPaths[gCopyPathIndexByPlayerId[playerId]]
+                              [(player->nearestWaypointId + 5) %
+                               (gPathCountByPathIndex[gCopyPathIndexByPlayerId[playerId]] + 1)];
         arg3[0] = temp_v1->posX;
         arg3[1] = temp_v1->posY;
         arg3[2] = temp_v1->posZ;
@@ -1740,11 +1740,11 @@ void func_80090178(Player* player, s8 playerId, Vec3f arg2, Vec3f arg3) {
         arg3[2] = sp08[playerId];
     } else {
         test = player->nearestWaypointId;
-        temp_v1 = &D_80164550[0][test];
+        temp_v1 = &gTrackPaths[0][test];
         arg2[0] = temp_v1->posX;
         arg2[1] = temp_v1->posY;
         arg2[2] = temp_v1->posZ;
-        temp_v1 = &D_80164550[0][(player->nearestWaypointId + 5) % (gWaypointCountByPathIndex[0] + 1)];
+        temp_v1 = &gTrackPaths[0][(player->nearestWaypointId + 5) % (gPathCountByPathIndex[0] + 1)];
         arg3[0] = temp_v1->posX;
         arg3[1] = temp_v1->posY;
         arg3[2] = temp_v1->posZ;
@@ -1818,7 +1818,7 @@ void func_80090970(Player* player, s8 playerId, s8 arg2) {
     UNUSED s32 stackPadding1;
     Vec3f sp44;
     Vec3f sp38;
-    TrackWaypoint* waypoint;
+    TrackPathPoint* waypoint;
     UNUSED s32 stackPadding2;
     UNUSED s32 stackPadding3;
 
@@ -1914,7 +1914,7 @@ void func_80090970(Player* player, s8 playerId, s8 arg2) {
                 player->pos[0] = player->pos[0] + sins(-player->rotation[1]) * -10.0f;
             }
             if (player->unk_0C8 == 0x00FC) {
-                waypoint = D_80164550[0];
+                waypoint = gTrackPaths[0];
                 player->pos[0] = waypoint->posX;
                 player->pos[1] = waypoint->posY;
                 player->pos[2] = waypoint->posZ;

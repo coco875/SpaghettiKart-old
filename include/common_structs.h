@@ -34,7 +34,7 @@ typedef struct {
     /* 0x0 */ s16 waypointStart;
     /* 0x2 */ s16 waypointEnd;
     /* 0x4 */ s32 type;
-} KartAIBehaviour; // size = 0x8
+} CPUBehaviour; // size = 0x8
 
 enum SpTaskState {
     SPTASK_STATE_NOT_STARTED,
@@ -393,7 +393,7 @@ typedef struct {
     s32 nCharacter;    // Networked character choice
     s32 nStartingRank;
     u32 nHasAuthority;
-} Player;        // size = 0xDD8
+} Player; // size = 0xDD8
 
 typedef struct {
     // Something related to time trial ghost data?
@@ -409,7 +409,6 @@ typedef struct {
 typedef struct {
     uint8_t r, g, b;
 } RGB8;
-
 
 typedef struct {
     /* 0x00 */ u16 red;

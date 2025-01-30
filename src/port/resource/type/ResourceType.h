@@ -18,9 +18,9 @@ enum class ResourceType {
     Vec3s = 0x56433353,        // VC3S
     GenericArray = 0x47415252, // GARR
     // NAudio v0
-    Bank = 0x42414E4B,         // BANK
-    Sample = 0x41554643,       // AIFC
-    Sequence = 0x53455143,     // SEQC
+    Bank = 0x42414E4B,     // BANK
+    Sample = 0x41554643,   // AIFC
+    Sequence = 0x53455143, // SEQC
 };
 } // namespace SF64
 
@@ -33,6 +33,6 @@ enum class ResourceType {
     Metadata = 0x4D444154,     // MDAT
     SpawnData = 0x53444154,    // SDAT
     UnkSpawnData = 0x55534454, // USDT
-    KartAI = 0x44424856,       // DBHV
+    CPU = 0x44424856,          // DBHV
 };
 }

@@ -15,7 +15,7 @@ typedef struct {
     /* 0x0A */ char padA[6];
 } _struct_gCoursePathSizes_0x10; // size 0x10
 
-extern TrackWaypoint nullPath;
+extern TrackPathPoint nullPath;
 extern s16 D_800DCAF4[];
 extern s16 D_800DCB34[];
 extern s32 D_800DDB20;

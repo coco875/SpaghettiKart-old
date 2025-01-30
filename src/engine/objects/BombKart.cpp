@@ -29,9 +29,9 @@ extern s8 gPlayerCount;
 
 size_t OBombKart::_count = 0;
 
-OBombKart::OBombKart(Vec3f pos, TrackWaypoint* waypoint, uint16_t waypointIndex, uint16_t state, f32 unk_3C) {
+OBombKart::OBombKart(Vec3f pos, TrackPathPoint* waypoint, uint16_t waypointIndex, uint16_t state, f32 unk_3C) {
     _idx = _count;
-    Vec3f _pos = {0, 0, 0};
+    Vec3f _pos = { 0, 0, 0 };
 
     if (waypoint) { // Spawn kart on waypoint
         _pos[0] = waypoint->posX;
@@ -80,7 +80,7 @@ OBombKart::OBombKart(Vec3f pos, TrackWaypoint* waypoint, uint16_t waypointIndex,
 void OBombKart::Tick() {
     f32 sp118;
     f32 var_f18;
-    TrackWaypoint* temp_v0_2;
+    TrackPathPoint* temp_v0_2;
     f32 temp_f0_3;
     f32 sp108;
     f32 temp_f14;
@@ -108,7 +108,7 @@ void OBombKart::Tick() {
     u16 temp_t6;
     u16 temp_t7;
     u16 circleTimer;
-    TrackWaypoint* temp_v0_4;
+    TrackPathPoint* temp_v0_4;
     Player* player;
 
     state = State;
@@ -161,13 +161,13 @@ void OBombKart::Tick() {
                 }
             }
         }
-        switch(state) {
+        switch (state) {
             case States::CCW:
                 circleTimer = (circleTimer + 356) % 360;
                 temp_t6 = (circleTimer * 0xFFFF) / 360;
                 sp118 = coss(temp_t6) * 25.0;
                 temp_f0_3 = sins(temp_t6) * 25.0;
-                temp_v0_2 = &D_80164550[0][waypoint];
+                temp_v0_2 = &gTrackPaths[0][waypoint];
                 newPos[0] = temp_v0_2->posX + sp118;
                 newPos[1] = CenterY + 3.5f;
                 newPos[2] = temp_v0_2->posZ + temp_f0_3;
@@ -187,7 +187,7 @@ void OBombKart::Tick() {
                 temp_t6 = (circleTimer * 0xFFFF) / 360;
                 sp118 = coss(temp_t6) * 25.0;
                 temp_f0_3 = sins(temp_t6) * 25.0;
-                temp_v0_2 = &D_80164550[0][waypoint];
+                temp_v0_2 = &gTrackPaths[0][waypoint];
                 newPos[0] = temp_v0_2->posX + sp118;
                 newPos[1] = CenterY + 3.5f;
                 newPos[2] = temp_v0_2->posZ + temp_f0_3;
@@ -208,19 +208,19 @@ void OBombKart::Tick() {
                 break;
 
             case States::PODIUM_CEREMONY:
-                if ((D_8016347C == 0) || (gNearestWaypointByPlayerId[3] < 5)) {
+                if ((D_8016347C == 0) || (gNearestPathPointByPlayerId[3] < 5)) {
                     break;
                 } else {
                     waypoint = func_8000D2B4(newPos[0], newPos[1], newPos[2], waypoint, 3);
-                    if ((waypoint < 0) || (gWaypointCountByPathIndex[3] < waypoint)) {
+                    if ((waypoint < 0) || (gPathCountByPathIndex[3] < waypoint)) {
                         waypoint = 0;
                     }
                     if (((s32) waypoint) < 0x1A) {
-                        temp_v0_2 = &D_80164550[3][(waypoint + 1) % gWaypointCountByPathIndex[3]];
+                        temp_v0_2 = &gTrackPaths[3][(waypoint + 1) % gPathCountByPathIndex[3]];
                         D_80162FB0[0] = temp_v0_2->posX;
                         D_80162FB0[1] = temp_v0_2->posY;
                         D_80162FB0[2] = temp_v0_2->posZ;
-                        temp_v0_4 = &D_80164550[3][(waypoint + 2) % gWaypointCountByPathIndex[3]];
+                        temp_v0_4 = &gTrackPaths[3][(waypoint + 2) % gPathCountByPathIndex[3]];
                         D_80162FC0[0] = temp_v0_4->posX;
                         D_80162FC0[1] = temp_v0_4->posY;
                         D_80162FC0[2] = temp_v0_4->posZ;
@@ -259,11 +259,11 @@ void OBombKart::Tick() {
                 }
                 break;
             case States::EXPLODE:
-                temp_v0_2 = &D_80164550[0][waypoint];
+                temp_v0_2 = &gTrackPaths[0][waypoint];
                 D_80162FB0[0] = temp_v0_2->posX;
                 D_80162FB0[1] = temp_v0_2->posY;
                 D_80162FB0[2] = temp_v0_2->posZ;
-                temp_v0_4 = &D_80164550[0][(waypoint + 1) % gWaypointCountByPathIndex[0]];
+                temp_v0_4 = &gTrackPaths[0][(waypoint + 1) % gPathCountByPathIndex[0]];
                 D_80162FC0[0] = temp_v0_4->posX;
                 D_80162FC0[1] = temp_v0_4->posY;
                 D_80162FC0[2] = temp_v0_4->posZ;
@@ -388,22 +388,21 @@ void OBombKart::Draw(s32 cameraId) {
 }
 
 void OBombKart::DrawBattle(s32 cameraId) {
-
 }
 
 void OBombKart::SomeRender(Vec3f arg1) {
     D_80183E80[0] = 0;
     D_80183E80[2] = 0x8000;
-    gSPDisplayList(gDisplayListHead++, (Gfx*)D_0D0079C8);
+    gSPDisplayList(gDisplayListHead++, (Gfx*) D_0D0079C8);
     load_texture_block_rgba16_mirror((u8*) D_0D02AA58, 0x00000010, 0x00000010);
     D_80183E80[1] = func_800418AC(WheelPos[0][0], WheelPos[0][2], arg1);
-    func_800431B0(WheelPos[0], D_80183E80, 0.15f, (Vtx*)common_vtx_rectangle);
+    func_800431B0(WheelPos[0], D_80183E80, 0.15f, (Vtx*) common_vtx_rectangle);
     D_80183E80[1] = func_800418AC(WheelPos[1][0], WheelPos[1][2], arg1);
-    func_800431B0(WheelPos[1], D_80183E80, 0.15f, (Vtx*)common_vtx_rectangle);
+    func_800431B0(WheelPos[1], D_80183E80, 0.15f, (Vtx*) common_vtx_rectangle);
     D_80183E80[1] = func_800418AC(WheelPos[2][0], WheelPos[2][2], arg1);
-    func_800431B0(WheelPos[2], D_80183E80, 0.15f, (Vtx*)common_vtx_rectangle);
+    func_800431B0(WheelPos[2], D_80183E80, 0.15f, (Vtx*) common_vtx_rectangle);
     D_80183E80[1] = func_800418AC(WheelPos[3][0], WheelPos[3][2], arg1);
-    func_800431B0(WheelPos[3], D_80183E80, 0.15f, (Vtx*)common_vtx_rectangle);
+    func_800431B0(WheelPos[3], D_80183E80, 0.15f, (Vtx*) common_vtx_rectangle);
     gSPTexture(gDisplayListHead++, 1, 1, 0, G_TX_RENDERTILE, G_OFF);
 }
 
@@ -414,13 +413,13 @@ void OBombKart::LoadMtx() {
     D_80183E50[1] = CenterY + 1.0;
     D_80183E50[2] = Pos[2];
     set_transform_matrix(mat, _Collision.orientationVector, D_80183E50, 0U, 0.5f);
-    //convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], mat);
+    // convert_to_fixed_point_matrix(&gGfxPool->mtxHud[gMatrixHudCount], mat);
 
     AddHudMatrix(mat, G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
 
     // gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxHud[gMatrixHudCount++]),
     //           G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
-    gSPDisplayList(gDisplayListHead++, (Gfx*)D_0D007B98);
+    gSPDisplayList(gDisplayListHead++, (Gfx*) D_0D007B98);
 }
 
 void OBombKart::Waypoint(s32 screenId) {
@@ -428,12 +427,16 @@ void OBombKart::Waypoint(s32 screenId) {
     s32 bombWaypoint;
     s32 waypointDiff;
 
-    playerWaypoint = gNearestWaypointByPlayerId[screenId];
+    playerWaypoint = gNearestPathPointByPlayerId[screenId];
     playerHUD[screenId].unk_74 = 0;
-    if ((State == States::EXPLODE) || (State == States::DISABLED)) { return; };
+    if ((State == States::EXPLODE) || (State == States::DISABLED)) {
+        return;
+    };
     bombWaypoint = WaypointIndex;
     waypointDiff = bombWaypoint - playerWaypoint;
-    if ((waypointDiff < -5) || (waypointDiff > 0x1E)) { return; };
+    if ((waypointDiff < -5) || (waypointDiff > 0x1E)) {
+        return;
+    };
     playerHUD[screenId].unk_74 = 1;
 }
 
@@ -451,7 +454,8 @@ Player* OBombKart::FindTarget() {
 void OBombKart::Chase(Player* player, Vec3f pos) {
     const f32 speed = 2.7f; // Speed the kart uses in a chase
 
-    if (!player) return; // Ensure player is valid
+    if (!player)
+        return; // Ensure player is valid
 
     // Calculate the directional vector toward the player
     Vec3f direction;
@@ -481,7 +485,7 @@ void OBombKart::Chase(Player* player, Vec3f pos) {
     }
 
     if (xz_dist > 0.0f) {
-        
+
         // Normalize the direction vector in the XZ plane
         direction[0] /= xz_dist;
         direction[2] /= xz_dist;

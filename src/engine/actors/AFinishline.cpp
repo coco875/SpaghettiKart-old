@@ -22,31 +22,29 @@ AFinishline::AFinishline(Vec3f pos) {
         Pos[1] = pos[1] - 15;
         Pos[2] = pos[2];
     } else { // Default to first waypoint position
-        Pos[0] = D_80164490->posX;
-        Pos[1] = (f32) (D_80164490->posY - 15);
-        Pos[2] = D_80164490->posZ;
+        Pos[0] = gCurrentTrackPath->posX;
+        Pos[1] = (f32) (gCurrentTrackPath->posY - 15);
+        Pos[2] = gCurrentTrackPath->posZ;
     }
 
     Rot[0] = 0;
     Rot[1] = 0;
     Rot[2] = 0;
 
-
-
     Flags = -0x8000 | 0x4000;
 
     BoundingBoxSize = 0.0f;
 }
 
-void AFinishline::Tick() {}
+void AFinishline::Tick() {
+}
 
 extern Gfx cloud_mesh[];
 
-void AFinishline::Draw(Camera *camera) {
+void AFinishline::Draw(Camera* camera) {
     Mat4 mtx;
     s16 temp = Pos[2];
     s32 maxObjectsReached;
-
 
     if (gGamestate == CREDITS_SEQUENCE) {
         return;
@@ -63,18 +61,21 @@ void AFinishline::Draw(Camera *camera) {
         if (D_800DC5BC != 0) {
 
             gDPSetFogColor(gDisplayListHead++, D_801625EC, D_801625F4, D_801625F0, 0xFF);
-            gSPDisplayList(gDisplayListHead++, (Gfx*)D_0D001C20);
+            gSPDisplayList(gDisplayListHead++, (Gfx*) D_0D001C20);
         } else {
-            gSPDisplayList(gDisplayListHead++, (Gfx*)D_0D001B90);
+            gSPDisplayList(gDisplayListHead++, (Gfx*) D_0D001B90);
         }
     } else if (D_800DC5BC != 0) {
         gDPSetFogColor(gDisplayListHead++, D_801625EC, D_801625F4, D_801625F0, 0xFF);
-        gSPDisplayList(gDisplayListHead++, (Gfx*)D_0D001C88);
+        gSPDisplayList(gDisplayListHead++, (Gfx*) D_0D001C88);
     } else {
-        gSPDisplayList(gDisplayListHead++, (Gfx*)D_0D001BD8);
+        gSPDisplayList(gDisplayListHead++, (Gfx*) D_0D001BD8);
     }
 }
 
-void AFinishline::Collision(Player* player, AActor* actor) {}
+void AFinishline::Collision(Player* player, AActor* actor) {
+}
 
-bool AFinishline::IsMod() { return true; }
+bool AFinishline::IsMod() {
+    return true;
+}

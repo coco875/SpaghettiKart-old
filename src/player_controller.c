@@ -26,170 +26,165 @@
 
 extern s32 D_8018D168;
 
-s16 gKartAIforMario[] = { LUIGI, YOSHI, TOAD, DK, WARIO, PEACH, BOWSER, 0 };
+s16 cpu_forMario[] = { LUIGI, YOSHI, TOAD, DK, WARIO, PEACH, BOWSER, 0 };
 
-s16 gKartAIforLuigi[] = { MARIO, YOSHI, TOAD, DK, WARIO, PEACH, BOWSER, 0 };
+s16 cpu_forLuigi[] = { MARIO, YOSHI, TOAD, DK, WARIO, PEACH, BOWSER, 0 };
 
-s16 gKartAIforYoshi[] = { MARIO, LUIGI, TOAD, DK, WARIO, PEACH, BOWSER, 0 };
+s16 cpu_forYoshi[] = { MARIO, LUIGI, TOAD, DK, WARIO, PEACH, BOWSER, 0 };
 
-s16 gKartAIforToad[] = { MARIO, LUIGI, YOSHI, DK, WARIO, PEACH, BOWSER, 0 };
+s16 cpu_forToad[] = { MARIO, LUIGI, YOSHI, DK, WARIO, PEACH, BOWSER, 0 };
 
-s16 gKartAIforDk[] = { MARIO, LUIGI, YOSHI, TOAD, WARIO, PEACH, BOWSER, 0 };
+s16 cpu_forDk[] = { MARIO, LUIGI, YOSHI, TOAD, WARIO, PEACH, BOWSER, 0 };
 
-s16 gKartAIforWario[] = { MARIO, LUIGI, YOSHI, TOAD, DK, PEACH, BOWSER, 0 };
+s16 cpu_forWario[] = { MARIO, LUIGI, YOSHI, TOAD, DK, PEACH, BOWSER, 0 };
 
-s16 gKartAIforPeach[] = { MARIO, LUIGI, YOSHI, TOAD, DK, WARIO, BOWSER, 0 };
+s16 cpu_forPeach[] = { MARIO, LUIGI, YOSHI, TOAD, DK, WARIO, BOWSER, 0 };
 
-s16 gKartAIforBowser[] = { MARIO, LUIGI, YOSHI, TOAD, DK, WARIO, PEACH, 0 };
+s16 cpu_forBowser[] = { MARIO, LUIGI, YOSHI, TOAD, DK, WARIO, PEACH, 0 };
 
-s16* gKartAIforPlayer[] = { gKartAIforMario, gKartAIforLuigi, gKartAIforYoshi, gKartAIforToad,
-                            gKartAIforDk,    gKartAIforWario, gKartAIforPeach, gKartAIforBowser };
+s16* cpu_forPlayer[] = { cpu_forMario, cpu_forLuigi, cpu_forYoshi, cpu_forToad,
+                         cpu_forDk,    cpu_forWario, cpu_forPeach, cpu_forBowser };
 
-s16 gKartAIforMarioAndLuigi[] = { YOSHI, TOAD, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forMarioAndLuigi[] = { YOSHI, TOAD, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforMarioAndYoshi[] = { LUIGI, TOAD, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forMarioAndYoshi[] = { LUIGI, TOAD, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforMarioAndToad[] = { LUIGI, YOSHI, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forMarioAndToad[] = { LUIGI, YOSHI, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforMarioAndDk[] = { LUIGI, YOSHI, TOAD, WARIO, PEACH, BOWSER };
+s16 cpu_forMarioAndDk[] = { LUIGI, YOSHI, TOAD, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforMarioAndWario[] = { LUIGI, YOSHI, TOAD, DK, PEACH, BOWSER };
+s16 cpu_forMarioAndWario[] = { LUIGI, YOSHI, TOAD, DK, PEACH, BOWSER };
 
-s16 gKartAIforMarioAndPeach[] = { LUIGI, YOSHI, TOAD, DK, WARIO, BOWSER };
+s16 cpu_forMarioAndPeach[] = { LUIGI, YOSHI, TOAD, DK, WARIO, BOWSER };
 
-s16 gKartAIforMarioAndBowser[] = { LUIGI, YOSHI, TOAD, DK, WARIO, PEACH };
+s16 cpu_forMarioAndBowser[] = { LUIGI, YOSHI, TOAD, DK, WARIO, PEACH };
 
-s16 gKartAIforLuigiAndMario[] = { YOSHI, TOAD, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forLuigiAndMario[] = { YOSHI, TOAD, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforLuigiAndYoshi[] = { MARIO, TOAD, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forLuigiAndYoshi[] = { MARIO, TOAD, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforLuigiAndToad[] = { MARIO, YOSHI, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forLuigiAndToad[] = { MARIO, YOSHI, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforLuigiAndDk[] = { MARIO, YOSHI, TOAD, WARIO, PEACH, BOWSER };
+s16 cpu_forLuigiAndDk[] = { MARIO, YOSHI, TOAD, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforLuigiAndWario[] = { MARIO, YOSHI, TOAD, DK, PEACH, BOWSER };
+s16 cpu_forLuigiAndWario[] = { MARIO, YOSHI, TOAD, DK, PEACH, BOWSER };
 
-s16 gKartAIforLuigiAndPeach[] = { MARIO, YOSHI, TOAD, DK, WARIO, BOWSER };
+s16 cpu_forLuigiAndPeach[] = { MARIO, YOSHI, TOAD, DK, WARIO, BOWSER };
 
-s16 gKartAIforLuigiAndBowser[] = { MARIO, YOSHI, TOAD, DK, WARIO, PEACH };
+s16 cpu_forLuigiAndBowser[] = { MARIO, YOSHI, TOAD, DK, WARIO, PEACH };
 
-s16 gKartAIforYoshiAndMario[] = { LUIGI, TOAD, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forYoshiAndMario[] = { LUIGI, TOAD, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforYoshiAndLuigi[] = { MARIO, TOAD, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forYoshiAndLuigi[] = { MARIO, TOAD, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforYoshiAndToad[] = { MARIO, LUIGI, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forYoshiAndToad[] = { MARIO, LUIGI, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforYoshiAndDk[] = { MARIO, LUIGI, TOAD, WARIO, PEACH, BOWSER };
+s16 cpu_forYoshiAndDk[] = { MARIO, LUIGI, TOAD, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforYoshiAndWario[] = { MARIO, LUIGI, TOAD, DK, PEACH, BOWSER };
+s16 cpu_forYoshiAndWario[] = { MARIO, LUIGI, TOAD, DK, PEACH, BOWSER };
 
-s16 gKartAIforYoshiAndPeach[] = { MARIO, LUIGI, TOAD, DK, WARIO, BOWSER };
+s16 cpu_forYoshiAndPeach[] = { MARIO, LUIGI, TOAD, DK, WARIO, BOWSER };
 
-s16 gKartAIforYoshiAndBowser[] = { MARIO, LUIGI, TOAD, DK, WARIO, PEACH };
+s16 cpu_forYoshiAndBowser[] = { MARIO, LUIGI, TOAD, DK, WARIO, PEACH };
 
-s16 gKartAIforToadAndMario[] = { LUIGI, YOSHI, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forToadAndMario[] = { LUIGI, YOSHI, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforToadAndLuigi[] = { MARIO, YOSHI, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forToadAndLuigi[] = { MARIO, YOSHI, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforToadAndYoshi[] = { MARIO, LUIGI, DK, WARIO, PEACH, BOWSER };
+s16 cpu_forToadAndYoshi[] = { MARIO, LUIGI, DK, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforToadAndDk[] = { MARIO, LUIGI, YOSHI, WARIO, PEACH, BOWSER };
+s16 cpu_forToadAndDk[] = { MARIO, LUIGI, YOSHI, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforToadAndWario[] = { MARIO, LUIGI, YOSHI, DK, PEACH, BOWSER };
+s16 cpu_forToadAndWario[] = { MARIO, LUIGI, YOSHI, DK, PEACH, BOWSER };
 
-s16 gKartAIforToadAndPeach[] = { MARIO, LUIGI, YOSHI, DK, WARIO, BOWSER };
+s16 cpu_forToadAndPeach[] = { MARIO, LUIGI, YOSHI, DK, WARIO, BOWSER };
 
-s16 gKartAIforToadAndBowser[] = { MARIO, LUIGI, YOSHI, DK, WARIO, PEACH };
+s16 cpu_forToadAndBowser[] = { MARIO, LUIGI, YOSHI, DK, WARIO, PEACH };
 
-s16 gKartAIforDkAndMario[] = { LUIGI, YOSHI, TOAD, WARIO, PEACH, BOWSER };
+s16 cpu_forDkAndMario[] = { LUIGI, YOSHI, TOAD, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforDkAndLuigi[] = { MARIO, YOSHI, TOAD, WARIO, PEACH, BOWSER };
+s16 cpu_forDkAndLuigi[] = { MARIO, YOSHI, TOAD, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforDkAndToad[] = { MARIO, LUIGI, TOAD, WARIO, PEACH, BOWSER };
+s16 cpu_forDkAndToad[] = { MARIO, LUIGI, TOAD, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforDkAndYoshi[] = { MARIO, LUIGI, YOSHI, WARIO, PEACH, BOWSER };
+s16 cpu_forDkAndYoshi[] = { MARIO, LUIGI, YOSHI, WARIO, PEACH, BOWSER };
 
-s16 gKartAIforDkAndWario[] = { MARIO, LUIGI, YOSHI, TOAD, PEACH, BOWSER };
+s16 cpu_forDkAndWario[] = { MARIO, LUIGI, YOSHI, TOAD, PEACH, BOWSER };
 
-s16 gKartAIforDkAndPeach[] = { MARIO, LUIGI, YOSHI, TOAD, WARIO, BOWSER };
+s16 cpu_forDkAndPeach[] = { MARIO, LUIGI, YOSHI, TOAD, WARIO, BOWSER };
 
-s16 gKartAIforDkAndBowser[] = { MARIO, LUIGI, YOSHI, TOAD, WARIO, PEACH };
+s16 cpu_forDkAndBowser[] = { MARIO, LUIGI, YOSHI, TOAD, WARIO, PEACH };
 
-s16 gKartAIforWarioAndMario[] = { LUIGI, YOSHI, TOAD, DK, PEACH, BOWSER };
+s16 cpu_forWarioAndMario[] = { LUIGI, YOSHI, TOAD, DK, PEACH, BOWSER };
 
-s16 gKartAIforWarioAndLuigi[] = { MARIO, YOSHI, TOAD, DK, PEACH, BOWSER };
+s16 cpu_forWarioAndLuigi[] = { MARIO, YOSHI, TOAD, DK, PEACH, BOWSER };
 
-s16 gKartAIforWarioAndYoshi[] = { MARIO, LUIGI, TOAD, DK, PEACH, BOWSER };
+s16 cpu_forWarioAndYoshi[] = { MARIO, LUIGI, TOAD, DK, PEACH, BOWSER };
 
-s16 gKartAIforWarioAndDk[] = { MARIO, LUIGI, YOSHI, TOAD, PEACH, BOWSER };
+s16 cpu_forWarioAndDk[] = { MARIO, LUIGI, YOSHI, TOAD, PEACH, BOWSER };
 
-s16 gKartAIforWarioAndToad[] = { MARIO, LUIGI, YOSHI, DK, PEACH, BOWSER };
+s16 cpu_forWarioAndToad[] = { MARIO, LUIGI, YOSHI, DK, PEACH, BOWSER };
 
-s16 gKartAIforWarioAndPeach[] = { MARIO, LUIGI, YOSHI, TOAD, DK, BOWSER };
+s16 cpu_forWarioAndPeach[] = { MARIO, LUIGI, YOSHI, TOAD, DK, BOWSER };
 
-s16 gKartAIforWarioAndBowser[] = { MARIO, LUIGI, YOSHI, TOAD, DK, PEACH };
+s16 cpu_forWarioAndBowser[] = { MARIO, LUIGI, YOSHI, TOAD, DK, PEACH };
 
-s16 gKartAIforPeachAndMario[] = { LUIGI, YOSHI, TOAD, DK, WARIO, BOWSER };
+s16 cpu_forPeachAndMario[] = { LUIGI, YOSHI, TOAD, DK, WARIO, BOWSER };
 
-s16 gKartAIforPeachAndLuigi[] = { MARIO, YOSHI, TOAD, DK, WARIO, BOWSER };
+s16 cpu_forPeachAndLuigi[] = { MARIO, YOSHI, TOAD, DK, WARIO, BOWSER };
 
-s16 gKartAIforPeachAndYoshi[] = { MARIO, LUIGI, TOAD, DK, WARIO, BOWSER };
+s16 cpu_forPeachAndYoshi[] = { MARIO, LUIGI, TOAD, DK, WARIO, BOWSER };
 
-s16 gKartAIforPeachAndDk[] = { MARIO, LUIGI, YOSHI, TOAD, WARIO, BOWSER };
+s16 cpu_forPeachAndDk[] = { MARIO, LUIGI, YOSHI, TOAD, WARIO, BOWSER };
 
-s16 gKartAIforPeachAndWario[] = { MARIO, LUIGI, YOSHI, TOAD, DK, BOWSER };
+s16 cpu_forPeachAndWario[] = { MARIO, LUIGI, YOSHI, TOAD, DK, BOWSER };
 
-s16 gKartAIforPeachAndToad[] = { MARIO, LUIGI, YOSHI, DK, WARIO, BOWSER };
+s16 cpu_forPeachAndToad[] = { MARIO, LUIGI, YOSHI, DK, WARIO, BOWSER };
 
-s16 gKartAIforPeachAndBowser[] = { MARIO, LUIGI, YOSHI, TOAD, DK, WARIO };
+s16 cpu_forPeachAndBowser[] = { MARIO, LUIGI, YOSHI, TOAD, DK, WARIO };
 
-s16 gKartAIforBowserAndMario[] = { LUIGI, YOSHI, TOAD, DK, WARIO, PEACH };
+s16 cpu_forBowserAndMario[] = { LUIGI, YOSHI, TOAD, DK, WARIO, PEACH };
 
-s16 gKartAIforBowserAndLuigi[] = { MARIO, YOSHI, TOAD, DK, WARIO, PEACH };
+s16 cpu_forBowserAndLuigi[] = { MARIO, YOSHI, TOAD, DK, WARIO, PEACH };
 
-s16 gKartAIforBowserAndYoshi[] = { MARIO, LUIGI, TOAD, DK, WARIO, PEACH };
+s16 cpu_forBowserAndYoshi[] = { MARIO, LUIGI, TOAD, DK, WARIO, PEACH };
 
-s16 gKartAIforBowserAndDk[] = { MARIO, LUIGI, YOSHI, TOAD, WARIO, PEACH };
+s16 cpu_forBowserAndDk[] = { MARIO, LUIGI, YOSHI, TOAD, WARIO, PEACH };
 
-s16 gKartAIforBowserAndWario[] = { MARIO, LUIGI, YOSHI, TOAD, DK, PEACH };
+s16 cpu_forBowserAndWario[] = { MARIO, LUIGI, YOSHI, TOAD, DK, PEACH };
 
-s16 gKartAIforBowserAndToad[] = { MARIO, LUIGI, YOSHI, DK, WARIO, PEACH };
+s16 cpu_forBowserAndToad[] = { MARIO, LUIGI, YOSHI, DK, WARIO, PEACH };
 
-s16 gKartAIforBowserAndPeach[] = { MARIO, LUIGI, YOSHI, TOAD, DK, WARIO };
+s16 cpu_forBowserAndPeach[] = { MARIO, LUIGI, YOSHI, TOAD, DK, WARIO };
 
-s16* gListKartAIforMario[] = { gKartAIforMarioAndLuigi, gKartAIforMarioAndLuigi, gKartAIforMarioAndYoshi,
-                               gKartAIforMarioAndToad,  gKartAIforMarioAndDk,    gKartAIforMarioAndWario,
-                               gKartAIforMarioAndPeach, gKartAIforMarioAndBowser };
+s16* gListCPUforMario[] = { cpu_forMarioAndLuigi, cpu_forMarioAndLuigi, cpu_forMarioAndYoshi, cpu_forMarioAndToad,
+                            cpu_forMarioAndDk,    cpu_forMarioAndWario, cpu_forMarioAndPeach, cpu_forMarioAndBowser };
 
-s16* gListKartAIforLuigi[] = { gKartAIforLuigiAndMario, gKartAIforLuigiAndMario, gKartAIforLuigiAndYoshi,
-                               gKartAIforLuigiAndToad,  gKartAIforLuigiAndDk,    gKartAIforLuigiAndWario,
-                               gKartAIforLuigiAndPeach, gKartAIforLuigiAndBowser };
+s16* gListCPUforLuigi[] = { cpu_forLuigiAndMario, cpu_forLuigiAndMario, cpu_forLuigiAndYoshi, cpu_forLuigiAndToad,
+                            cpu_forLuigiAndDk,    cpu_forLuigiAndWario, cpu_forLuigiAndPeach, cpu_forLuigiAndBowser };
 
-s16* gListKartAIforYoshi[] = { gKartAIforYoshiAndMario, gKartAIforYoshiAndLuigi, gKartAIforYoshiAndLuigi,
-                               gKartAIforYoshiAndToad,  gKartAIforYoshiAndDk,    gKartAIforYoshiAndWario,
-                               gKartAIforYoshiAndPeach, gKartAIforYoshiAndBowser };
+s16* gListCPUforYoshi[] = { cpu_forYoshiAndMario, cpu_forYoshiAndLuigi, cpu_forYoshiAndLuigi, cpu_forYoshiAndToad,
+                            cpu_forYoshiAndDk,    cpu_forYoshiAndWario, cpu_forYoshiAndPeach, cpu_forYoshiAndBowser };
 
-s16* gListKartAIforToad[] = { gKartAIforToadAndMario, gKartAIforToadAndLuigi, gKartAIforToadAndYoshi,
-                              gKartAIforToadAndYoshi, gKartAIforToadAndDk,    gKartAIforToadAndWario,
-                              gKartAIforToadAndPeach, gKartAIforToadAndBowser };
+s16* gListCPUforToad[] = { cpu_forToadAndMario, cpu_forToadAndLuigi, cpu_forToadAndYoshi, cpu_forToadAndYoshi,
+                           cpu_forToadAndDk,    cpu_forToadAndWario, cpu_forToadAndPeach, cpu_forToadAndBowser };
 
-s16* gListKartAIforDk[] = { gKartAIforDkAndMario, gKartAIforDkAndLuigi, gKartAIforDkAndToad,  gKartAIforDkAndYoshi,
-                            gKartAIforDkAndYoshi, gKartAIforDkAndWario, gKartAIforDkAndPeach, gKartAIforDkAndBowser };
+s16* gListCPUforDk[] = { cpu_forDkAndMario, cpu_forDkAndLuigi, cpu_forDkAndToad,  cpu_forDkAndYoshi,
+                         cpu_forDkAndYoshi, cpu_forDkAndWario, cpu_forDkAndPeach, cpu_forDkAndBowser };
 
-s16* gListKartAIforWario[] = { gKartAIforWarioAndMario, gKartAIforWarioAndLuigi, gKartAIforWarioAndYoshi,
-                               gKartAIforWarioAndToad,  gKartAIforWarioAndDk,    gKartAIforWarioAndDk,
-                               gKartAIforWarioAndPeach, gKartAIforWarioAndBowser };
+s16* gListCPUforWario[] = { cpu_forWarioAndMario, cpu_forWarioAndLuigi, cpu_forWarioAndYoshi, cpu_forWarioAndToad,
+                            cpu_forWarioAndDk,    cpu_forWarioAndDk,    cpu_forWarioAndPeach, cpu_forWarioAndBowser };
 
-s16* gListKartAIforPeach[] = { gKartAIforPeachAndMario, gKartAIforPeachAndLuigi, gKartAIforPeachAndYoshi,
-                               gKartAIforPeachAndToad,  gKartAIforPeachAndDk,    gKartAIforPeachAndWario,
-                               gKartAIforPeachAndDk,    gKartAIforPeachAndBowser };
+s16* gListCPUforPeach[] = { cpu_forPeachAndMario, cpu_forPeachAndLuigi, cpu_forPeachAndYoshi, cpu_forPeachAndToad,
+                            cpu_forPeachAndDk,    cpu_forPeachAndWario, cpu_forPeachAndDk,    cpu_forPeachAndBowser };
 
-s16* gListKartAIforBowser[] = { gKartAIforBowserAndMario, gKartAIforBowserAndLuigi, gKartAIforBowserAndYoshi,
-                                gKartAIforBowserAndToad,  gKartAIforBowserAndDk,    gKartAIforBowserAndWario,
-                                gKartAIforBowserAndPeach, gKartAIforBowserAndPeach };
+s16* gListCPUforBowser[] = {
+    cpu_forBowserAndMario, cpu_forBowserAndLuigi, cpu_forBowserAndYoshi, cpu_forBowserAndToad,
+    cpu_forBowserAndDk,    cpu_forBowserAndWario, cpu_forBowserAndPeach, cpu_forBowserAndPeach
+};
 
-s16** gKartAIforTwoPlayer[] = { gListKartAIforMario, gListKartAIforLuigi, gListKartAIforYoshi, gListKartAIforToad,
-                                gListKartAIforDk,    gListKartAIforWario, gListKartAIforPeach, gListKartAIforBowser };
+s16** cpu_forTwoPlayer[] = { gListCPUforMario, gListCPUforLuigi, gListCPUforYoshi, gListCPUforToad,
+                             gListCPUforDk,    gListCPUforWario, gListCPUforPeach, gListCPUforBowser };
 
 // func_80027D00
 s32 get_player_index_for_player(Player* player) {
@@ -253,8 +248,8 @@ void func_80027EDC(Player* player, s8 playerId) {
 
         // switch (gCurrentCourseId) {
         //     // case COURSE_MARIO_RACEWAY:
-        //     //     if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x19B) &&
-        //     //         ((s16) gNearestWaypointByPlayerId[playerId] < 0x1B9)) {
+        //     //     if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x19B) &&
+        //     //         ((s16) gNearestPathPointByPlayerId[playerId] < 0x1B9)) {
         //     //         if (D_80165300[playerId] != 1) {
         //     //             func_800CA288(playerId, 0x55);
         //     //         }
@@ -267,8 +262,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //     //     }
         //         break;
         //     case COURSE_CHOCO_MOUNTAIN:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0xA0) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0xB4)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0xA0) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0xB4)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA288(playerId, 0x55);
         //             }
@@ -281,8 +276,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         }
         //         break;
         //     case COURSE_BOWSER_CASTLE:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x29) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0x1D2)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x29) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0x1D2)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA288(playerId, 0x41);
         //             }
@@ -295,8 +290,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         }
         //         break;
         //     case COURSE_BANSHEE_BOARDWALK:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x180) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0x1E1)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x180) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0x1E1)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA288(playerId, 0x41);
         //             }
@@ -309,8 +304,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         }
         //         break;
         //     case COURSE_LUIGI_RACEWAY:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x145) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0x18B)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x145) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0x18B)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA288(playerId, 0x55);
         //             }
@@ -336,8 +331,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         }
         //         break;
         //     case COURSE_SHERBET_LAND:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x11C) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0x209)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x11C) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0x209)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA288(playerId, 0x55);
         //             }
@@ -350,17 +345,17 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         }
         //         break;
         //     case COURSE_DK_JUNGLE:
-        //         if ((((s16) gNearestWaypointByPlayerId[playerId] >= 0) &&
-        //              ((s16) gNearestWaypointByPlayerId[playerId] < 0x65)) ||
-        //             (((s16) gNearestWaypointByPlayerId[playerId] >= 0x14A) &&
-        //              ((s16) gNearestWaypointByPlayerId[playerId] < 0x21F))) {
+        //         if ((((s16) gNearestPathPointByPlayerId[playerId] >= 0) &&
+        //              ((s16) gNearestPathPointByPlayerId[playerId] < 0x65)) ||
+        //             (((s16) gNearestPathPointByPlayerId[playerId] >= 0x14A) &&
+        //              ((s16) gNearestPathPointByPlayerId[playerId] < 0x21F))) {
         //             if (D_80165300[playerId] != 2) {
         //                 func_800C8F80(playerId, 0x0170802D);
         //             }
         //             D_80165300[playerId] = 2;
         //         } else {
-        //             if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x288) &&
-        //                 ((s16) gNearestWaypointByPlayerId[playerId] < 0x305)) {
+        //             if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x288) &&
+        //                 ((s16) gNearestPathPointByPlayerId[playerId] < 0x305)) {
         //                 if (D_80165300[playerId] != 1) {
         //                     func_800CA288(playerId, 0x55);
         //                 }
@@ -387,8 +382,8 @@ void func_80027EDC(Player* player, s8 playerId) {
 
         // switch (gCurrentCourseId) {
         //     case COURSE_MARIO_RACEWAY:
-        //         // if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x19B) &&
-        //         //     ((s16) gNearestWaypointByPlayerId[playerId] < 0x1B9)) {
+        //         // if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x19B) &&
+        //         //     ((s16) gNearestPathPointByPlayerId[playerId] < 0x1B9)) {
         //         //     if (D_80165300[playerId] != 1) {
         //         //         func_800CA2E4(playerId, 0x55);
         //         //     }
@@ -401,8 +396,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         // }
         //         break;
         //     case COURSE_CHOCO_MOUNTAIN:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0xA0) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0xB4)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0xA0) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0xB4)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA2E4(playerId, 0x55);
         //             }
@@ -415,8 +410,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         }
         //         break;
         //     case COURSE_BOWSER_CASTLE:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x29) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0x1D2)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x29) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0x1D2)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA2E4(playerId, 0x41);
         //             }
@@ -429,8 +424,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         }
         //         break;
         //     case COURSE_BANSHEE_BOARDWALK:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x180) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0x1E1)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x180) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0x1E1)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA2E4(playerId, 0x41);
         //             }
@@ -443,8 +438,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         }
         //         break;
         //     case COURSE_LUIGI_RACEWAY:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x145) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0x18B)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x145) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0x18B)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA2E4(playerId, 0x55);
         //             }
@@ -470,8 +465,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         }
         //         break;
         //     case COURSE_SHERBET_LAND:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x11C) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0x209)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x11C) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0x209)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA2E4(playerId, 0x55);
         //             }
@@ -484,8 +479,8 @@ void func_80027EDC(Player* player, s8 playerId) {
         //         }
         //         break;
         //     case COURSE_DK_JUNGLE:
-        //         if (((s16) gNearestWaypointByPlayerId[playerId] >= 0x288) &&
-        //             ((s16) gNearestWaypointByPlayerId[playerId] < 0x305)) {
+        //         if (((s16) gNearestPathPointByPlayerId[playerId] >= 0x288) &&
+        //             ((s16) gNearestPathPointByPlayerId[playerId] < 0x305)) {
         //             if (D_80165300[playerId] != 1) {
         //                 func_800CA2E4(playerId, 0x55);
         //             }
@@ -585,8 +580,8 @@ void func_80028C44(Player* player, Camera* camera, s8 playerId, s8 screenId) {
 }
 
 void func_80028D3C(Player* player, Camera* camera, s8 playerId, s8 screenId) {
-    if ((((player->type & PLAYER_START_SEQUENCE) == 0) && (gRaceState != RACE_FINISHED)) || (player->unk_0CA & 2) != 0 ||
-        (player->unk_0CA & 8) != 0 || (player->effects & 0x4F010CC0) != 0) {
+    if ((((player->type & PLAYER_START_SEQUENCE) == 0) && (gRaceState != RACE_FINISHED)) ||
+        (player->unk_0CA & 2) != 0 || (player->unk_0CA & 8) != 0 || (player->effects & 0x4F010CC0) != 0) {
         player->effects &= ~0x1000;
 
         if (((player->effects & 0x80) == 0x80) || ((player->effects & 0x40) == 0x40) ||
@@ -1714,10 +1709,10 @@ void func_8002C17C(Player* player, s8 playerId) {
     if (GetCourse() == GetYoshiValley()) {
         if ((player->collision.surfaceDistance[2] >= 600.0f) && (D_80165330[playerId] == 0)) {
             D_80165330[playerId] = 1;
-            gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
+            gCopyNearestWaypointByPlayerId[playerId] = gNearestPathPointByPlayerId[playerId];
             gCopyPathIndexByPlayerId[playerId] = gPathIndexByPlayerId[playerId];
         } else if (D_80165330[playerId] == 0) {
-            gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
+            gCopyNearestWaypointByPlayerId[playerId] = gNearestPathPointByPlayerId[playerId];
             gCopyPathIndexByPlayerId[playerId] = gPathIndexByPlayerId[playerId];
         } else if (!(player->effects & 8)) {
             if (func_802ABDF4(player->collision.meshIndexZX) == 0) {
@@ -1727,30 +1722,30 @@ void func_8002C17C(Player* player, s8 playerId) {
     } else if (GetCourse() == GetFrappeSnowland()) {
         if ((player->surfaceType == SNOW_OFFROAD) && (D_80165330[playerId] == 0)) {
             D_80165330[playerId] = 1;
-            gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
+            gCopyNearestWaypointByPlayerId[playerId] = gNearestPathPointByPlayerId[playerId];
             gCopyPathIndexByPlayerId[playerId] = gPathIndexByPlayerId[playerId];
         } else if (player->surfaceType != SNOW_OFFROAD) {
             D_80165330[playerId] = 0;
-            gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
+            gCopyNearestWaypointByPlayerId[playerId] = gNearestPathPointByPlayerId[playerId];
             gCopyPathIndexByPlayerId[playerId] = gPathIndexByPlayerId[playerId];
         }
     } else if (GetCourse() == GetRoyalRaceway()) {
         if (((player->effects & BOOST_RAMP_ASPHALT_EFFECT) != 0) && (D_80165330[playerId] == 0)) {
             D_80165330[playerId] = 1;
-            gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
+            gCopyNearestWaypointByPlayerId[playerId] = gNearestPathPointByPlayerId[playerId];
             gCopyPathIndexByPlayerId[playerId] = gPathIndexByPlayerId[playerId];
         } else if (((player->effects & BOOST_RAMP_ASPHALT_EFFECT) == 0) && !(player->effects & 8)) {
             D_80165330[playerId] = 0;
-            gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
+            gCopyNearestWaypointByPlayerId[playerId] = gNearestPathPointByPlayerId[playerId];
             gCopyPathIndexByPlayerId[playerId] = gPathIndexByPlayerId[playerId];
         }
     } else if (GetCourse() == GetRainbowRoad()) {
         if ((player->collision.surfaceDistance[2] >= 600.0f) && (D_80165330[playerId] == 0)) {
             D_80165330[playerId] = 1;
-            gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
+            gCopyNearestWaypointByPlayerId[playerId] = gNearestPathPointByPlayerId[playerId];
             gCopyPathIndexByPlayerId[playerId] = gPathIndexByPlayerId[playerId];
         } else if (D_80165330[playerId] == 0) {
-            gCopyNearestWaypointByPlayerId[playerId] = gNearestWaypointByPlayerId[playerId];
+            gCopyNearestWaypointByPlayerId[playerId] = gNearestPathPointByPlayerId[playerId];
             gCopyPathIndexByPlayerId[playerId] = gPathIndexByPlayerId[playerId];
         } else if (!((player->effects & 8) || (player->unk_0CA & 1))) {
             D_80165330[playerId] = 0;
@@ -2368,10 +2363,10 @@ void func_8002E4C4(Player* player) {
     player->kartHopJerk = 0.0f;
     player->kartHopAcceleration = 0.0f;
     player->kartHopVelocity = 0.0f;
-    player->pos[1] = spawn_actor_on_surface(player->pos[0], D_80164510[player_index] + 10.0f, player->pos[2]) +
+    player->pos[1] = spawn_actor_on_surface(player->pos[0], gPlayerPathY[player_index] + 10.0f, player->pos[2]) +
                      player->boundingBoxSize;
-    if (((player->pos[1] - D_80164510[player_index]) > 1200.0f) ||
-        ((player->pos[1] - D_80164510[player_index]) < -1200.0f)) {
+    if (((player->pos[1] - gPlayerPathY[player_index]) > 1200.0f) ||
+        ((player->pos[1] - gPlayerPathY[player_index]) < -1200.0f)) {
         player->pos[1] = player->oldPos[1];
     }
     player->velocity[1] = 0.0f;
@@ -2643,7 +2638,7 @@ void control_kart_ai_movement(Player* player, UNUSED Camera* camera, s8 arg2, s8
     f32 test;
     player->effects |= 0x1000;
     player->unk_044 |= 0x10;
-    test = D_80164510[playerId];
+    test = gPlayerPathY[playerId];
     player->unk_204 = 0;
     player->effects &= ~0x10;
     func_8002B830(player, playerId, arg2);

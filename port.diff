@@ -1,0 +1,74 @@
+1,2c1,2
+< #ifndef CODE_80005FD0_H
+< #define CODE_80005FD0_H
+---
+> #ifndef cpu_vehicles_camera_path_H
+> #define cpu_vehicles_camera_path_H
+6c6
+< #include "waypoints.h"
+---
+> #include "path.h"
+50a51,79
+> 
+> enum CpuItemStrategyEnum {
+>     CPU_STRATEGY_WAIT_NEXT_ITEM = 0,
+> 
+>     CPU_STRATEGY_ITEM_BANANA,
+>     CPU_STRATEGY_HOLD_BANANA,
+>     CPU_STRATEGY_DROP_BANANA,
+> 
+>     CPU_STRATEGY_ITEM_GREEN_SHELL,
+>     CPU_STRATEGY_HOLD_GREEN_SHELL,
+>     CPU_STRATEGY_THROW_GREEN_SHELL,
+> 
+>     CPU_STRATEGY_ITEM_RED_SHELL,
+>     CPU_STRATEGY_HOLD_RED_SHELL,
+>     CPU_STRATEGY_THROW_RED_SHELL,
+> 
+>     CPU_STRATEGY_ITEM_BANANA_BUNCH,
+>     CPU_STRATEGY_WAIT_INIT_BANANA_BUNCH,
+>     CPU_STRATEGY_DROP_BANANA_BUNCH,
+> 
+>     CPU_STRATEGY_ITEM_FAKE_ITEM_BOX,
+>     CPU_STRATEGY_HOLD_FAKE_ITEM_BOX,
+>     CPU_STRATEGY_THROW_FAKE_ITEM_BOX,
+> 
+>     CPU_STRATEGY_ITEM_THUNDERBOLT = 0x16,
+>     CPU_STRATEGY_END_THUNDERBOLT,
+> 
+>     CPU_STRATEGY_ITEM_STAR = 0x19,
+>     CPU_STRATEGY_END_ITEM_STAR,
+51a81,94
+>     CPU_STRATEGY_ITEM_BOO,
+>     CPU_STRATEGY_WAIT_END_BOO,
+> 
+>     CPU_STRATEGY_ITEM_MUSHROOM,
+>     CPU_STRATEGY_ITEM_DOUBLE_MUSHROOM,
+>     CPU_STRATEGY_ITEM_TRIPLE_MUSHROOM,
+>     CPU_STRATEGY_ITEM_SUPER_MUSHROOM,
+>     CPU_STRATEGY_USE_SUPER_MUSHROOM,
+> 
+>     CPU_STRATEGY_THROW_BANANA,
+>     CPU_STRATEGY_HOLD_THROW_BANANA,
+>     CPU_STRATEGY_END_THROW_BANANA
+> };
+> 
+148,149c191,192
+< void spawn_vehicle_on_road(Vec3f position, Vec3s rotation, Vec3f velocity, s32 waypointIndex,
+<                            s32 someMultiplierTheSequel, f32 speed);
+---
+> void spawn_vehicle_on_road(VehicleStuff*);
+> void spawn_course_vehicles(void);
+151c194
+< void init_vehicles_trains(size_t, size_t, f32);
+---
+> void init_vehicles_trains(void);
+286a330
+> // Exact pointer type unknown
+380a425,430
+> #define SEVERE_WRONG_DIRECTION_MIN 136
+> #define SEVERE_WRONG_DIRECTION_MAX 225
+> #define SEVERE_CORRECT_DIRECTION_MIN 45
+> #define SEVERE_CORRECT_DIRECTION_MAX 316
+> #define WRONG_DIRECTION_FRAMES_LIMIT 5
+> 
