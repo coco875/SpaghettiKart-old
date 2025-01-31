@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <align_asset_macro.h>
+
 #include "mixer.h"
 
 #ifndef __clang__
@@ -377,6 +379,10 @@ void aEnvMixerImpl(uint16_t in_addr, uint16_t n_samples, bool swap_reverb, bool 
 
 #endif
 
+// https://godbolt.org/z/Eh6Tb7Tra
+
+#ifndef SSE2_AVAILABLE
+
 void aMixImpl(int16_t gain, uint16_t in_addr, uint16_t out_addr, uint16_t count) {
     int nbytes = ROUND_UP_32(ROUND_DOWN_16(count));
     int16_t* in = BUF_S16(in_addr);
@@ -403,6 +409,70 @@ void aMixImpl(int16_t gain, uint16_t in_addr, uint16_t out_addr, uint16_t count)
         nbytes -= 16 * sizeof(int16_t);
     }
 }
+
+#else
+
+static const ALIGN_ASSET(16) int16_t x7fff[8] = {
+    0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF,
+};
+
+static const ALIGN_ASSET(16) int32_t x4000[4] = {
+    0x4000,
+    0x4000,
+    0x4000,
+    0x4000,
+};
+
+void aMixImpl(int16_t gain, uint16_t in_addr, uint16_t out_addr, uint16_t count) {
+    int nbytes = ROUND_UP_32(ROUND_DOWN_16(count));
+    int16_t* in = BUF_S16(in_addr);
+    int16_t* out = BUF_S16(out_addr);
+    int i;
+    int32_t sample;
+
+    if (gain == -0x8000) {
+        while (nbytes > 0) {
+            for (unsigned int i = 0; i < 2; i++) {
+                // sample = *out - *in++;
+                __m128i outVec = _mm_loadu_si128((__m128i*) out);
+                __m128i inVec = _mm_loadu_si128((__m128i*) in);
+                in += 8;
+                __m128i subsVec = _mm_subs_epi16(outVec, inVec);
+
+                // *out++ = clamp16(sample);
+                _mm_storeu_si128((__m128i_u*) out, subsVec);
+                out += 8;
+            }
+            nbytes -= 16 * sizeof(int16_t);
+        }
+    }
+
+    __m128i x7fffVec = _mm_load_si128((__m128i*) x7fff);
+    __m128i x4000Vec = _mm_load_si128((__m128i*) x4000);
+
+    while (nbytes > 0) {
+        for (i = 0; i < 2; i++) {
+            // sample = ((*out * 0x7fff + *in++ * gain) + 0x4000) >> 15;
+            __m128i outVec = _mm_loadu_si128((__m128i*) out);
+            __m128i inVec = _mm_loadu_si128((__m128i*) in);
+            in += 8;
+
+            __m128i mulVec = _mm_mullo_epi16(outVec, x7fffVec);
+            __m128i mulVec2 = _mm_mullo_epi16(inVec, _mm_set1_epi16(gain));
+            __m128i addVec = _mm_add_epi32(mulVec, mulVec2);
+            __m128i addVec2 = _mm_add_epi32(addVec, x4000Vec);
+            __m128i shrVec = _mm_srai_epi32(addVec2, 15);
+
+            // *out++ = clamp16(sample);
+            _mm_storeu_si128((__m128i_u*) out, shrVec);
+            out += 8;
+        }
+
+        nbytes -= 16 * sizeof(int16_t);
+    }
+}
+
+#endif
 
 void aS8DecImpl(uint8_t flags, ADPCM_STATE state) {
     uint8_t* in = BUF_U8(rspa.in);
