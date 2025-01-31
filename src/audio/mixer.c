@@ -440,7 +440,7 @@ void aMixImpl(int16_t gain, uint16_t in_addr, uint16_t out_addr, uint16_t count)
                 __m128i subsVec = _mm_subs_epi16(outVec, inVec);
 
                 // *out++ = clamp16(sample);
-                _mm_storeu_si128((__m128i_u*) out, subsVec);
+                _mm_storeu_si128((__m128i*) out, subsVec);
                 out += 8;
             }
             nbytes -= 16 * sizeof(int16_t);
@@ -464,7 +464,7 @@ void aMixImpl(int16_t gain, uint16_t in_addr, uint16_t out_addr, uint16_t count)
             __m128i shrVec = _mm_srai_epi32(addVec2, 15);
 
             // *out++ = clamp16(sample);
-            _mm_storeu_si128((__m128i_u*) out, shrVec);
+            _mm_storeu_si128((__m128i*) out, shrVec);
             out += 8;
         }
 
