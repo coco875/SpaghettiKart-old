@@ -76,9 +76,9 @@ Gfx* sGfxPtr;
 s32 gNumD_8018E768Entries;
 struct_8018E768_entry D_8018E768[D_8018E768_SIZE];
 s32 gCycleFlashMenu;
-s8 D_8018E7AC[5];
-u32 D_8018E7B8[5];
-u32 D_8018E7D0[5];
+s8 gTransitionType[5];
+u32 gTransitionDuration[5];
+u32 gCurrentTransitionTime[5];
 struct UnkStruct_8018E7E8 D_8018E7E8[D_8018E7E8_SIZE];
 struct UnkStruct_8018E7E8 D_8018E810[D_8018E810_SIZE];
 s8 D_8018E838[4]; // Import to C was required for matching.
@@ -1417,7 +1417,7 @@ void func_80091B78(void) {
     unref_D_8018EE0C = 0;
 
     for (i = 0; i < 5; i++) {
-        D_8018E7AC[i] = 0;
+        gTransitionType[i] = 0;
     }
 
     for (i = 0; i < 4; i++) {
@@ -1511,7 +1511,7 @@ void func_80091FA4(void) {
     sGPPointsCopy = get_next_available_memory_addr(4);
 
     for (i = 0; i < 5; i++) {
-        D_8018E7AC[i] = 0;
+        gTransitionType[i] = 0;
     }
 
     for (i = 0; i < 4; i++) {
@@ -2362,7 +2362,7 @@ void func_80093E60(void) {
     sGPPointsCopy = get_next_available_memory_addr(4U);
 
     for (i = 0; i < 5; i++) {
-        D_8018E7AC[i] = 0;
+        gTransitionType[i] = 0;
     }
 
     for (i = 0; i < 4; i++) {
@@ -2699,7 +2699,7 @@ void setup_menus(void) {
 void func_80095574(void) {
     s32 var_v0;
 
-    if ((unref_D_8018EE0C < 3) || (D_8018E7AC[4] != 0)) {
+    if ((unref_D_8018EE0C < 3) || (gTransitionType[4] != 0)) {
         handle_menus_default();
     }
     if (gDebugMenuSelection >= 2) {
@@ -3249,12 +3249,12 @@ Gfx* func_800987D0(Gfx* displayListHead, u32 arg1, u32 arg2, u32 width, u32 heig
     f32 temp_f18;
     f32 temp_f24;
 
-    if (D_8018E7B8[0] == 0) {
-        D_8018E7B8[0] = 1;
+    if (gTransitionDuration[0] == 0) {
+        gTransitionDuration[0] = 1;
     }
-    temp_f24 = sins(((D_8018E7D0[0] * 0x4E20) / D_8018E7B8[0]) % 20000U);
-    temp_f0 = coss(((D_8018E7D0[0] * 0x4E20) / D_8018E7B8[0]) % 20000U);
-    temp_f18 = (((f32) D_8018E7D0[0] * 0.5) / D_8018E7B8[0]) + 1.0;
+    temp_f24 = sins(((gCurrentTransitionTime[0] * 0x4E20) / gTransitionDuration[0]) % 20000U);
+    temp_f0 = coss(((gCurrentTransitionTime[0] * 0x4E20) / gTransitionDuration[0]) % 20000U);
+    temp_f18 = (((f32) gCurrentTransitionTime[0] * 0.5) / gTransitionDuration[0]) + 1.0;
     columnCopy = column;
     for (var_v0_2 = arg2; (u32) var_v0_2 < height; var_v0_2 += 0x20) {
         for (var_a2 = arg1; (u32) var_a2 < width; var_a2 += 0x20) {
@@ -4404,7 +4404,7 @@ Gfx* render_menu_textures(Gfx* arg0, MenuTexture* arg1, s32 column, s32 row) {
         }
         temp_v0_3 = (u8*) func_8009B8C4(arg1->textureData);
         if (temp_v0_3 != 0) {
-            if (D_8018E7AC[4] != 4) {
+            if (gTransitionType[4] != 4) {
                 arg0 = func_80095E10(arg0, var_s4, 0x00000400, 0x00000400, 0, 0, arg1->width, arg1->height,
                                      arg1->dX + column, arg1->dY + row, temp_v0_3, arg1->width, arg1->height);
             } else {
@@ -4741,9 +4741,9 @@ void func_8009CA6C(s32 arg0) {
         if ((arg0 != 4) && (gIsGamePaused != 0)) {
             var_a1 = 1;
         }
-        switch (D_8018E7AC[arg0]) {
+        switch (gTransitionType[arg0]) {
             case 1:
-                func_8009CDDC(arg0, var_a1);
+                draw_black_fade_in(arg0, var_a1);
                 return;
             case 2:
                 func_8009D958(arg0, var_a1);
@@ -4771,7 +4771,7 @@ void func_8009CA6C(s32 arg0) {
 }
 
 // Lakitu tow transition out of black
-void func_8009CBE4(s32 arg0, s32 arg1, s32 arg2) {
+void draw_fade_in(s32 arg0, s32 arg1, s32 arg2) {
     RGBA16* color;
     s16 x, y, w, h;
     s32 leftEdge;
@@ -4804,46 +4804,49 @@ void func_8009CBE4(s32 arg0, s32 arg1, s32 arg2) {
     switch (gScreenModeSelection) {
         case SCREEN_MODE_1P:
         case SCREEN_MODE_2P_SPLITSCREEN_HORIZONTAL:
-            gDisplayListHead =
-                draw_box_wide(gDisplayListHead, x - (w / 2), y - (h / 2), (w / 2) + x, (h / 2) + y, color->red,
-                              color->green, color->blue, 0xFF - (D_8018E7D0[arg0] * 0xFF / D_8018E7B8[arg0]));
+            gDisplayListHead = draw_box_wide(gDisplayListHead, x - (w / 2), y - (h / 2), (w / 2) + x, (h / 2) + y,
+                                             color->red, color->green, color->blue,
+                                             0xFF - (gCurrentTransitionTime[arg0] * 0xFF / gTransitionDuration[arg0]));
             break;
         case SCREEN_MODE_2P_SPLITSCREEN_VERTICAL:
-            gDisplayListHead =
-                draw_box_wide(gDisplayListHead, x - (w / 2), y - (h / 2), (w / 2) + x, (h / 2) + y, color->red,
-                              color->green, color->blue, 0xFF - (D_8018E7D0[arg0] * 0xFF / D_8018E7B8[arg0]));
+            gDisplayListHead = draw_box_wide(gDisplayListHead, x - (w / 2), y - (h / 2), (w / 2) + x, (h / 2) + y,
+                                             color->red, color->green, color->blue,
+                                             0xFF - (gCurrentTransitionTime[arg0] * 0xFF / gTransitionDuration[arg0]));
             break;
         case SCREEN_MODE_3P_4P_SPLITSCREEN:
             if ((arg0 == 0) || (arg0 == 2)) {
                 leftEdge = OTRGetDimensionFromLeftEdge(0);
                 gDisplayListHead = draw_box_wide_pause_background(
                     gDisplayListHead, leftEdge - (x - (w / 2)), y - (h / 2), (w / 2) + x, (h / 2) + y, color->red,
-                    color->green, color->blue, 0xFF - (D_8018E7D0[arg0] * 0xFF / D_8018E7B8[arg0]));
+                    color->green, color->blue,
+                    0xFF - (gCurrentTransitionTime[arg0] * 0xFF / gTransitionDuration[arg0]));
             } else if ((arg0 == 1) || (arg0 == 3)) {
                 rightEdge = OTRGetDimensionFromRightEdge(SCREEN_WIDTH);
                 gDisplayListHead = draw_box_wide_pause_background(
                     gDisplayListHead, x - (w / 2), y - (h / 2), rightEdge + ((w / 2) + x), (h / 2) + y, color->red,
-                    color->green, color->blue, 0xFF - (D_8018E7D0[arg0] * 0xFF / D_8018E7B8[arg0]));
+                    color->green, color->blue,
+                    0xFF - (gCurrentTransitionTime[arg0] * 0xFF / gTransitionDuration[arg0]));
             }
             break;
     }
 
-    if ((arg1 == 0) && (D_8018E7D0[arg0] += 1, (D_8018E7D0[arg0] >= D_8018E7B8[arg0]))) {
+    if ((arg1 == 0) &&
+        (gCurrentTransitionTime[arg0] += 1, (gCurrentTransitionTime[arg0] >= gTransitionDuration[arg0]))) {
         if (gGamestate == 4) {
-            D_8018E7AC[arg0] = 6;
+            gTransitionType[arg0] = 6;
             return;
         }
-        D_8018E7AC[arg0] = 0;
+        gTransitionType[arg0] = 0;
         unref_D_8018EE0C = 0;
     }
 }
 
-void func_8009CDDC(s32 arg0, s32 arg1) {
-    func_8009CBE4(arg0, arg1, 0);
+void draw_black_fade_in(s32 arg0, s32 arg1) {
+    draw_fade_in(arg0, arg1, 0);
 }
 
 void func_8009CDFC(s32 arg0, s32 arg1) {
-    func_8009CBE4(arg0, arg1, 1);
+    draw_fade_in(arg0, arg1, 1);
 }
 
 void func_8009CE1C(void) {
@@ -4880,9 +4883,9 @@ void func_8009CE64(s32 arg0) {
             gMenuSelection = 0x0000000B;
         }
     } else if (gGamestate == 4) {
-        if (D_8018E7AC[arg0] == 2) {
+        if (gTransitionType[arg0] == 2) {
             if (arg0 != 4) {
-                D_8018E7AC[arg0] = 5;
+                gTransitionType[arg0] = 5;
             } else {
                 var_a1 = 0;
                 menuItem = find_menu_items(0x000000B0);
@@ -4945,7 +4948,7 @@ void func_8009CE64(s32 arg0) {
                                     var_a1 = 1;
                                     break;
                                 default:
-                                    D_8018E7AC[arg0] = 5;
+                                    gTransitionType[arg0] = 5;
                                     break;
                             }
                             if (var_a1 != 0) {
@@ -4984,14 +4987,14 @@ void func_8009CE64(s32 arg0) {
                                     break;
                             }
                         } else {
-                            D_8018E7AC[arg0] = 5;
+                            gTransitionType[arg0] = 5;
                         }
                     }
                 }
             }
         }
     } else {
-        D_8018E7AC[arg0] = 0;
+        gTransitionType[arg0] = 0;
         if (gDebugMenuSelection != 0x40) {
             switch (gMenuFadeType) {
                 case 0:
@@ -5232,7 +5235,7 @@ void func_8009D77C(s32 arg0, s32 arg1, s32 arg2) {
         var_ra = D_8015F480[arg0].screenWidth;
         sp44 = D_8015F480[arg0].screenHeight;
     }
-    var_t2 = (D_8018E7D0[arg0] * 0xFF) / D_8018E7B8[arg0];
+    var_t2 = (gCurrentTransitionTime[arg0] * 0xFF) / gTransitionDuration[arg0];
     if (var_t2 >= 0x100) {
         var_t2 = 0x000000FF;
     }
@@ -5272,8 +5275,8 @@ void func_8009D77C(s32 arg0, s32 arg1, s32 arg2) {
     }
 
     if (arg1 == 0) {
-        D_8018E7D0[arg0]++;
-        if ((D_8018E7B8[arg0] + 1) < D_8018E7D0[arg0]) {
+        gCurrentTransitionTime[arg0]++;
+        if ((gTransitionDuration[arg0] + 1) < gCurrentTransitionTime[arg0]) {
             func_8009CE64(arg0);
         }
     }
@@ -5353,12 +5356,12 @@ void func_8009D998(s32 arg0) {
 void func_8009DAA8(void) {
     u32 var_t0;
 
-    D_8018E7D0[4]++;
-    if (D_8018E7D0[4] >= (D_8018E7B8[4] + 1)) {
+    gCurrentTransitionTime[4]++;
+    if (gCurrentTransitionTime[4] >= (gTransitionDuration[4] + 1)) {
         func_8009CE64(4);
     }
     gDPPipeSync(gDisplayListHead++);
-    var_t0 = (D_8018E7D0[4] * 255) / D_8018E7B8[4];
+    var_t0 = (gCurrentTransitionTime[4] * 255) / gTransitionDuration[4];
     if ((s32) var_t0 >= 0x100) {
         var_t0 = 0x000000FF;
     }
@@ -5372,11 +5375,11 @@ void func_8009DB8C(void) {
     u32 var_s3;
     s32 var_v1;
 
-    D_8018E7D0[4]++;
+    gCurrentTransitionTime[4]++;
     // why?
-    var_v1 = D_8018E7D0[4];
-    if ((u32) var_v1 >= D_8018E7B8[4]) {
-        if ((u32) var_v1 == D_8018E7B8[4]) {
+    var_v1 = gCurrentTransitionTime[4];
+    if ((u32) var_v1 >= gTransitionDuration[4]) {
+        if ((u32) var_v1 == gTransitionDuration[4]) {
             for (var_s0 = 0; var_s0 < 0x4B0; var_s0++) {
                 sTKMK00_LowResBuffer[var_s0] = 1;
             }
@@ -5386,8 +5389,9 @@ void func_8009DB8C(void) {
     } else {
         var_s0 = 0;
         var_s3 = 0;
-        while (var_s3 < (0x4B0U / D_8018E7B8[4])) {
-            if ((sTKMK00_LowResBuffer[var_s0] == 0) && (random_int((0x4B0U - D_8018E7D0[4]) / D_8018E7B8[4]) == 0)) {
+        while (var_s3 < (0x4B0U / gTransitionDuration[4])) {
+            if ((sTKMK00_LowResBuffer[var_s0] == 0) &&
+                (random_int((0x4B0U - gCurrentTransitionTime[4]) / gTransitionDuration[4]) == 0)) {
                 var_s3 += 1;
                 sTKMK00_LowResBuffer[var_s0] = 1;
             }
@@ -5409,7 +5413,7 @@ void func_8009DB8C(void) {
         }
     }
     gDPPipeSync(gDisplayListHead++);
-    var_v1 = (D_8018E7D0[4] * 255) / D_8018E7B8[4];
+    var_v1 = (gCurrentTransitionTime[4] * 255) / gTransitionDuration[4];
     if (var_v1 >= 0x100) {
         var_v1 = 0x000000FF;
     }
@@ -5420,13 +5424,13 @@ void func_8009DEF8(u32 arg0, u32 arg1) {
     if (arg0 == 0) {
         arg0 = 1;
     }
-    if ((D_8018E7AC[4] != 1) && (D_8018E7AC[4] != 6)) {
-        D_8018E7AC[4] = arg1;
-        D_8018E7B8[4] = arg0;
-        if (D_8018E7B8[4] >= 0x100U) {
-            D_8018E7B8[4] = 0xFFU;
+    if ((gTransitionType[4] != 1) && (gTransitionType[4] != 6)) {
+        gTransitionType[4] = arg1;
+        gTransitionDuration[4] = 0;
+        if (gTransitionDuration[4] >= 0x100U) {
+            gTransitionDuration[4] = 0xFFU;
         }
-        D_8018E7D0[4] = 0;
+        gCurrentTransitionTime[4] = 0;
     }
 }
 
@@ -5442,13 +5446,13 @@ void func_8009DF8C(u32 arg0, u32 arg1) {
     if (arg0 == 0) {
         arg0 = 1;
     }
-    if ((D_8018E7AC[4] != 2) && (D_8018E7AC[4] != 5)) {
-        D_8018E7AC[4] = arg1;
-        D_8018E7B8[4] = arg0;
-        if (D_8018E7B8[4] >= 0x100U) {
-            D_8018E7B8[4] = 0xFFU;
+    if ((gTransitionType[4] != 2) && (gTransitionType[4] != 5)) {
+        gTransitionType[4] = arg1;
+        gTransitionDuration[4] = 0;
+        if (gTransitionDuration[4] >= 0x100U) {
+            gTransitionDuration[4] = 0xFFU;
         }
-        D_8018E7D0[4] = 0;
+        gCurrentTransitionTime[4] = 0;
     }
 }
 
@@ -5467,14 +5471,14 @@ void func_8009E020(s32 arg0, s32 arg1) {
         arg1 = 1;
     }
 
-    temp = D_8018E7AC[arg0];
+    temp = gTransitionType[arg0];
     if ((temp != 1) && (temp != 6)) {
-        D_8018E7AC[arg0] = 1;
-        D_8018E7B8[arg0] = arg1;
+        gTransitionType[arg0] = 1;
+        gTransitionDuration[arg0] = arg1;
         if ((u32) arg1 >= 0x100U) {
-            D_8018E7B8[arg0] = 0xFF;
+            gTransitionDuration[arg0] = 0xFF;
         }
-        D_8018E7D0[arg0] = 0;
+        gCurrentTransitionTime[arg0] = 0;
     }
 }
 
@@ -5485,27 +5489,27 @@ void func_8009E088(s32 arg0, s32 arg1) {
         arg1 = 1;
     }
 
-    temp = D_8018E7AC[arg0];
+    temp = gTransitionType[arg0];
     if ((temp != 2) && (temp != 5)) {
-        D_8018E7AC[arg0] = 2;
-        D_8018E7B8[arg0] = arg1;
+        gTransitionType[arg0] = 2;
+        gTransitionDuration[arg0] = arg1;
         if ((u32) arg1 >= 0x100U) {
-            D_8018E7B8[arg0] = 0xFF;
+            gTransitionDuration[arg0] = 0xFF;
         }
-        D_8018E7D0[arg0] = 0;
+        gCurrentTransitionTime[arg0] = 0;
     }
 }
 
 void func_8009E0F0(s32 arg0) {
     s32 var_v0;
 
-    if (D_8018E7AC[4] != 3) {
-        D_8018E7AC[4] = 3;
-        D_8018E7B8[4] = arg0;
-        if (D_8018E7B8[4] >= 0x100U) {
-            D_8018E7B8[4] = 0x000000FF;
+    if (gTransitionType[4] != 3) {
+        gTransitionType[4] = 3;
+        gTransitionDuration[4] = 0;
+        if (gTransitionDuration[4] >= 0x100U) {
+            gTransitionDuration[4] = 0x000000FF;
         }
-        D_8018E7D0[4] = 0;
+        gCurrentTransitionTime[4] = 0;
         for (var_v0 = 0; var_v0 < 0x4B0; var_v0++) {
             sTKMK00_LowResBuffer[var_v0] = 0;
         }
@@ -5513,13 +5517,13 @@ void func_8009E0F0(s32 arg0) {
 }
 
 void func_8009E17C(u32 arg0) {
-    if (D_8018E7AC[4] != 4) {
-        D_8018E7AC[4] = 4;
-        D_8018E7B8[4] = arg0;
-        if (D_8018E7B8[4] >= 0x100U) {
-            D_8018E7B8[4] = 0x000000FFU;
+    if (gTransitionType[4] != 4) {
+        gTransitionType[4] = 4;
+        gTransitionDuration[4] = 0;
+        if (gTransitionDuration[4] >= 0x100U) {
+            gTransitionDuration[4] = 0x000000FFU;
         }
-        D_8018E7D0[4] = 0;
+        gCurrentTransitionTime[4] = 0;
     }
 }
 
