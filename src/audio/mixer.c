@@ -23,6 +23,48 @@
 #include "sse2neon.h"
 #endif
 
+#ifdef SSE2_AVAILABLE
+typedef struct {
+    __m128i lo, hi;
+} m256i;
+
+static m256i m256i_mul_epi16(__m128i a, __m128i b) {
+    m256i res;
+    res.lo = _mm_mullo_epi16(a, b);
+    res.hi = _mm_mulhi_epi16(a, b);
+
+    m256i ret;
+    ret.lo = _mm_unpacklo_epi16(res.lo, res.hi);
+    ret.hi = _mm_unpackhi_epi16(res.lo, res.hi);
+    return ret;
+}
+
+static m256i m256i_add_m256i_epi32(m256i a, m256i b) {
+    m256i res;
+    res.lo = _mm_add_epi32(a.lo, b.lo);
+    res.hi = _mm_add_epi32(a.hi, b.hi);
+    return res;
+}
+
+static m256i m256i_add_m128i_epi32(m256i a, __m128i b) {
+    m256i res;
+    res.lo = _mm_add_epi32(a.lo, b);
+    res.hi = _mm_add_epi32(a.hi, b);
+    return res;
+}
+
+static m256i m256i_srai(m256i a, int b) {
+    m256i res;
+    res.lo = _mm_srai_epi32(a.lo, b);
+    res.hi = _mm_srai_epi32(a.hi, b);
+    return res;
+}
+
+static __m128i m256i_clamp_to_m128i(m256i a) {
+    return _mm_packs_epi32(a.lo, a.hi);
+}
+#endif
+
 #define ROUND_UP_64(v) (((v) + 63) & ~63)
 #define ROUND_UP_32(v) (((v) + 31) & ~31)
 #define ROUND_UP_16(v) (((v) + 15) & ~15)
@@ -225,6 +267,10 @@ void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
     memcpy(state, out - 16, 16 * sizeof(int16_t));
 }
 
+// https://godbolt.org/z/899876deo
+
+#ifndef SSE2_AVAILABLE
+
 void aResampleImpl(uint8_t flags, uint16_t pitch, RESAMPLE_STATE state) {
     int16_t tmp[32];
     int16_t* in_initial = BUF_S16(rspa.in);
@@ -273,6 +319,110 @@ void aResampleImpl(uint8_t flags, uint16_t pitch, RESAMPLE_STATE state) {
     state[5] = i;
     memcpy(state + 8, in, 8 * sizeof(int16_t));
 }
+
+#else
+
+static const ALIGN_ASSET(16) int32_t x4000[4] = {
+    0x4000,
+    0x4000,
+    0x4000,
+    0x4000,
+};
+
+static int _mm_extract_epi32_alt(__m128i a, const int n) {
+    return ((int*) &a)[n];
+}
+
+void aResampleImpl(uint8_t flags, uint16_t pitch, RESAMPLE_STATE state) {
+    int16_t tmp[32];
+    int16_t* in_initial = BUF_S16(rspa.in);
+    int16_t* in = in_initial;
+    int16_t* out = BUF_S16(rspa.out);
+    int nbytes = ROUND_UP_16(rspa.nbytes);
+    uint32_t pitch_accumulator;
+    int i;
+    int16_t* tbl;
+    int32_t sample;
+
+    if (flags & A_INIT) {
+        memset(tmp, 0, 5 * sizeof(int16_t));
+    } else {
+        memcpy(tmp, state, 16 * sizeof(int16_t));
+    }
+    if (flags & 2) {
+        memcpy(in - 8, tmp + 8, 8 * sizeof(int16_t));
+        in -= tmp[5] / sizeof(int16_t);
+    }
+    in -= 4;
+    pitch_accumulator = (uint16_t) tmp[4];
+    memcpy(in, tmp, 4 * sizeof(int16_t));
+
+    __m128i x4000Vec = _mm_load_si128((__m128i*) x4000);
+
+    do {
+        for (i = 0; i < 4; i++) {
+            tbl = resample_table[pitch_accumulator * 64 >> 16];
+
+            __m128i tbl_vec = _mm_loadl_epi64((__m128i*) tbl);
+
+            __m128i in_vec = _mm_loadl_epi64((__m128i*) in);
+
+            pitch_accumulator += (pitch << 1);
+            in += pitch_accumulator >> 16;
+            pitch_accumulator %= 0x10000;
+
+            tbl = resample_table[pitch_accumulator * 64 >> 16];
+
+            tbl_vec = _mm_set_epi64(_mm_movepi64_pi64(_mm_loadl_epi64((__m128i*) tbl)), _mm_movepi64_pi64((tbl_vec)));
+
+            in_vec = _mm_set_epi64(_mm_movepi64_pi64(_mm_loadl_epi64((__m128i*) in)), _mm_movepi64_pi64((in_vec)));
+
+            pitch_accumulator += (pitch << 1);
+            in += pitch_accumulator >> 16;
+            pitch_accumulator %= 0x10000;
+
+            __m128i out1_vec;
+            __m128i out2_vec;
+            m256i res;
+            res.lo = _mm_mullo_epi16(in_vec, tbl_vec);
+            res.hi = _mm_mulhi_epi16(in_vec, tbl_vec);
+
+            out1_vec = _mm_unpacklo_epi16(res.lo, res.hi);
+            out2_vec = _mm_unpackhi_epi16(res.lo, res.hi);
+
+            out1_vec = _mm_add_epi32(out1_vec, x4000Vec);
+            out1_vec = _mm_srai_epi32(out1_vec, 15);
+            sample = _mm_extract_epi32_alt(out1_vec, 0) + _mm_extract_epi32_alt(out1_vec, 1) +
+                     _mm_extract_epi32_alt(out1_vec, 2) + _mm_extract_epi32_alt(out1_vec, 3);
+
+            // sample = ((in[0] * tbl[0] + 0x4000) >> 15) + ((in[1] * tbl[1] + 0x4000) >> 15) +
+            //          ((in[2] * tbl[2] + 0x4000) >> 15) + ((in[3] * tbl[3] + 0x4000) >> 15);
+            *out++ = clamp16(sample);
+
+            out2_vec = _mm_add_epi32(out2_vec, x4000Vec);
+            out2_vec = _mm_srai_epi32(out2_vec, 15);
+            sample = _mm_extract_epi32_alt(out2_vec, 0) + _mm_extract_epi32_alt(out2_vec, 1) +
+                     _mm_extract_epi32_alt(out2_vec, 2) + _mm_extract_epi32_alt(out2_vec, 3);
+
+            // sample = ((in[0] * tbl[0] + 0x4000) >> 15) + ((in[1] * tbl[1] + 0x4000) >> 15) +
+            //          ((in[2] * tbl[2] + 0x4000) >> 15) + ((in[3] * tbl[3] + 0x4000) >> 15);
+            *out++ = clamp16(sample);
+        }
+        nbytes -= 8 * sizeof(int16_t);
+    } while (nbytes > 0);
+
+    state[4] = (int16_t) pitch_accumulator;
+    memcpy(state, in, 4 * sizeof(int16_t));
+    i = (in - in_initial + 4) & 7;
+    in -= i;
+    if (i != 0) {
+        i = -8 - i;
+    }
+    state[5] = i;
+    memcpy(state + 8, in, 8 * sizeof(int16_t));
+}
+
+#endif
 
 void aEnvSetup1Impl(uint8_t initial_vol_wet, uint16_t rate_wet, uint16_t rate_left, uint16_t rate_right) {
     rspa.vol_wet = (uint16_t) (initial_vol_wet << 8);
@@ -379,7 +529,7 @@ void aEnvMixerImpl(uint16_t in_addr, uint16_t n_samples, bool swap_reverb, bool 
 
 #endif
 
-// https://godbolt.org/z/Eh6Tb7Tra
+// https://godbolt.org/z/9a1qWvTee
 
 #ifndef SSE2_AVAILABLE
 
@@ -416,13 +566,6 @@ static const ALIGN_ASSET(16) int16_t x7fff[8] = {
     0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF, 0x7FFF,
 };
 
-static const ALIGN_ASSET(16) int32_t x4000[4] = {
-    0x4000,
-    0x4000,
-    0x4000,
-    0x4000,
-};
-
 void aMixImpl(int16_t gain, uint16_t in_addr, uint16_t out_addr, uint16_t count) {
     int nbytes = ROUND_UP_32(ROUND_DOWN_16(count));
     int16_t* in = BUF_S16(in_addr);
@@ -433,38 +576,46 @@ void aMixImpl(int16_t gain, uint16_t in_addr, uint16_t out_addr, uint16_t count)
     if (gain == -0x8000) {
         while (nbytes > 0) {
             for (unsigned int i = 0; i < 2; i++) {
-                // sample = *out - *in++;
                 __m128i outVec = _mm_loadu_si128((__m128i*) out);
                 __m128i inVec = _mm_loadu_si128((__m128i*) in);
-                in += 8;
                 __m128i subsVec = _mm_subs_epi16(outVec, inVec);
-
-                // *out++ = clamp16(sample);
                 _mm_storeu_si128((__m128i*) out, subsVec);
+                nbytes -= 8 * sizeof(int16_t);
+                in += 8;
                 out += 8;
             }
-            nbytes -= 16 * sizeof(int16_t);
         }
     }
 
     __m128i x7fffVec = _mm_load_si128((__m128i*) x7fff);
     __m128i x4000Vec = _mm_load_si128((__m128i*) x4000);
+    __m128i gainVec = _mm_set1_epi16(gain);
 
     while (nbytes > 0) {
         for (i = 0; i < 2; i++) {
-            // sample = ((*out * 0x7fff + *in++ * gain) + 0x4000) >> 15;
+            // Load input and output data into vectors
             __m128i outVec = _mm_loadu_si128((__m128i*) out);
             __m128i inVec = _mm_loadu_si128((__m128i*) in);
+            // Multiply `out` by `0x7FFF` producing 32 bit results, and store the upper and lower bits in each vector.
+            // Equivalent to `out[0..8] * 0x7FFF`
+            m256i outx7fff = m256i_mul_epi16(outVec, x7fffVec);
+            // Same as above but for in and gain. Equivalent to `in[0..8] * gain`
+            m256i inxGain = m256i_mul_epi16(inVec, gainVec);
             in += 8;
 
-            __m128i mulVec = _mm_mullo_epi16(outVec, x7fffVec);
-            __m128i mulVec2 = _mm_mullo_epi16(inVec, _mm_set1_epi16(gain));
-            __m128i addVec = _mm_add_epi32(mulVec, mulVec2);
-            __m128i addVec2 = _mm_add_epi32(addVec, x4000Vec);
-            __m128i shrVec = _mm_srai_epi32(addVec2, 15);
-
-            // *out++ = clamp16(sample);
-            _mm_storeu_si128((__m128i*) out, shrVec);
+            // Now we have 4 32 bit elements.  Continue the calculaton per the reference implementation.
+            // We already did out + 0x7fff and in * gain.
+            // *out * 0x7fff + *in++ * gain is the final result of these two calculations.
+            m256i addVec = m256i_add_m256i_epi32(outx7fff, inxGain);
+            // Add 0x4000 to each element
+            addVec = m256i_add_m128i_epi32(addVec, x4000Vec);
+            // Shift each element over by 15
+            m256i shiftedVec = m256i_srai(addVec, 15);
+            // Convert each 32 bit element to 16 bit with saturation (clamp) and store in `outVec`
+            outVec = m256i_clamp_to_m128i(shiftedVec);
+            // Write the final vector back to memory
+            // The final calculation is ((out[0..8] * 0x7fff + in[0..8] * gain) + 0x4000) >> 15;
+            _mm_storeu_si128((__m128i*) out, outVec);
             out += 8;
         }
 
