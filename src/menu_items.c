@@ -4032,7 +4032,6 @@ s32 animate_character_select_menu(MkAnimation* anim) {
     s32 i;
     struct_8018DEE0_entry* entry;
 
-    anim = segmented_to_virtual_dupe_2(anim);
     i = 0;
     while (D_8018DEE0[i].visible) {
         i++;
@@ -4617,7 +4616,7 @@ Gfx* func_8009C434(Gfx* arg0, struct_8018DEE0_entry* arg1, s32 arg2, s32 arg3, s
     Gfx* temp;
     MenuTexture* var_s0;
 
-    var_s0 = segmented_to_virtual_dupe(arg1->textureSequence[arg1->sequenceIndex].mk64Texture);
+    var_s0 = arg1->textureSequence[arg1->sequenceIndex].mk64Texture;
     temp = D_02007728;
     while (var_s0->textureData != NULL) {
         var_t1 = 0;
@@ -4648,18 +4647,18 @@ Gfx* func_8009C434(Gfx* arg0, struct_8018DEE0_entry* arg1, s32 arg2, s32 arg3, s
         if (arg4 >= 0) {
             arg0 =
                 func_80097E58(arg0, var_t1, 0, 0U, var_s0->width, var_s0->height, var_s0->dX + arg2, var_s0->dY + arg3,
-                              (u8*) sMenuTextureList[var_t0], var_s0->width, var_s0->height, (u32) arg4);
+                              (u8*) var_s0->textureData, var_s0->width, var_s0->height, (u32) arg4);
         } else {
             switch (arg4) {
                 case -1:
                     arg0 = func_80095E10(arg0, var_t1, 0x00000400, 0x00000400, 0, 0, var_s0->width, var_s0->height,
-                                         var_s0->dX + arg2, var_s0->dY + arg3, (u8*) sMenuTextureList[var_t0],
-                                         var_s0->width, var_s0->height);
+                                         var_s0->dX + arg2, var_s0->dY + arg3, (u8*) var_s0->textureData, var_s0->width,
+                                         var_s0->height);
                     break;
                 case -2:
                     arg0 = func_800963F0(arg0, var_t1, 0x00000400, 0x00000400, 0.5f, 0.5f, 0, 0, var_s0->width,
                                          var_s0->height, var_s0->dX + arg2, var_s0->dY + arg3,
-                                         (u8*) sMenuTextureList[var_t0], var_s0->width, var_s0->height);
+                                         (u8*) var_s0->textureData, var_s0->width, var_s0->height);
                     break;
             }
         }
@@ -5837,14 +5836,15 @@ void add_menu_item(s32 type, s32 column, s32 row, s8 priority) {
         case CHARACTER_SELECT_MENU_DK:
         case CHARACTER_SELECT_MENU_WARIO:
         case CHARACTER_SELECT_MENU_BOWSER:
-            var_ra->D_8018DEE0_index =
-                animate_character_select_menu(segmented_to_virtual_dupe_2(D_800E8320[type - 0x2B]));
-            load_menu_img_comp_type(segmented_to_virtual_dupe(D_800E7D54[type - 0x2B]), LOAD_MENU_IMG_TKMK00_ONCE);
+            var_ra->D_8018DEE0_index = animate_character_select_menu(
+                segmented_to_virtual_dupe_2(D_800E8320[type - CHARACTER_SELECT_MENU_MARIO]));
+            load_menu_img_comp_type(segmented_to_virtual_dupe(D_800E7D54[type - CHARACTER_SELECT_MENU_MARIO]),
+                                    LOAD_MENU_IMG_TKMK00_ONCE);
             break;
         case MENU_ITEM_TYPE_0A0:
         case MENU_ITEM_TYPE_0A1:
             var_ra->D_8018DEE0_index =
-                animate_character_select_menu(segmented_to_virtual_dupe_2(D_800E8320[type - 0xA0]));
+                animate_character_select_menu(segmented_to_virtual_dupe_2(D_800E8320[type - MENU_ITEM_TYPE_0A0]));
             break;
         case COURSE_SELECT_OK:
             var_ra->param1 = 0x00000020;
@@ -6370,7 +6370,7 @@ void render_menus(MenuItem* arg0) {
             case CHARACTER_SELECT_MENU_DK:
             case CHARACTER_SELECT_MENU_WARIO:
             case CHARACTER_SELECT_MENU_BOWSER:
-                func_800A12BC(arg0, segmented_to_virtual_dupe(D_800E7D54[arg0->type - 0x2B]));
+                func_800A12BC(arg0, segmented_to_virtual_dupe(D_800E7D54[arg0->type - CHARACTER_SELECT_MENU_MARIO]));
                 /* fallthrough */
             case MENU_ITEM_TYPE_0A0:
             case MENU_ITEM_TYPE_0A1:
