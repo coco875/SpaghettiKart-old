@@ -267,7 +267,7 @@ void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
     memcpy(state, out - 16, 16 * sizeof(int16_t));
 }
 
-// https://godbolt.org/z/899876deo
+// https://godbolt.org/z/jsYM3zooP
 
 #ifndef SSE2_AVAILABLE
 
@@ -329,8 +329,34 @@ static const ALIGN_ASSET(16) int32_t x4000[4] = {
     0x4000,
 };
 
-static int _mm_extract_epi32_alt(__m128i a, const int n) {
-    return ((int*) &a)[n];
+static void mm128_transpose(__m128i* r0, __m128i* r1, __m128i* r2, __m128i* r3) {
+    __m128 tmp0, tmp1, tmp2, tmp3;
+    __m128 row0, row1, row2, row3;
+
+    row0 = _mm_castsi128_ps(*r0);
+    row1 = _mm_castsi128_ps(*r1);
+    row2 = _mm_castsi128_ps(*r2);
+    row3 = _mm_castsi128_ps(*r3);
+
+    tmp0 = _mm_shuffle_ps(row0, row1, 0x88); // 0 2 4 6
+    tmp1 = _mm_shuffle_ps(row0, row1, 0xdd); // 1 3 5 7
+    tmp2 = _mm_shuffle_ps(row2, row3, 0x88); // 8 a c e
+    tmp3 = _mm_shuffle_ps(row2, row3, 0xdd); // 9 b d f
+
+    row0 = _mm_shuffle_ps(tmp0, tmp2, 0x88); // 0 4 8 c
+    row1 = _mm_shuffle_ps(tmp1, tmp3, 0x88); // 1 5 9 d
+    row2 = _mm_shuffle_ps(tmp0, tmp2, 0xdd); // 2 6 a e
+    row3 = _mm_shuffle_ps(tmp1, tmp3, 0xdd); // 3 7 b f
+
+    *r0 = _mm_castps_si128(row0);
+    *r1 = _mm_castps_si128(row1);
+    *r2 = _mm_castps_si128(row2);
+    *r3 = _mm_castps_si128(row3);
+}
+
+static __m128i move_two_4x16(int16_t* a, int16_t* b) {
+    return _mm_set_epi64(_mm_movepi64_pi64(_mm_loadl_epi64((__m128i*) a)),
+                         _mm_movepi64_pi64(_mm_loadl_epi64((__m128i*) b)));
 }
 
 void aResampleImpl(uint8_t flags, uint16_t pitch, RESAMPLE_STATE state) {
@@ -341,8 +367,6 @@ void aResampleImpl(uint8_t flags, uint16_t pitch, RESAMPLE_STATE state) {
     int nbytes = ROUND_UP_16(rspa.nbytes);
     uint32_t pitch_accumulator;
     int i;
-    int16_t* tbl;
-    int32_t sample;
 
     if (flags & A_INIT) {
         memset(tmp, 0, 5 * sizeof(int16_t));
@@ -360,53 +384,90 @@ void aResampleImpl(uint8_t flags, uint16_t pitch, RESAMPLE_STATE state) {
     __m128i x4000Vec = _mm_load_si128((__m128i*) x4000);
 
     do {
-        for (i = 0; i < 4; i++) {
-            tbl = resample_table[pitch_accumulator * 64 >> 16];
+        for (i = 0; i < 2; i++) {
+            int16_t* tbl0 = resample_table[pitch_accumulator * 64 >> 16];
 
-            __m128i tbl_vec = _mm_loadl_epi64((__m128i*) tbl);
-
-            __m128i in_vec = _mm_loadl_epi64((__m128i*) in);
+            int16_t* in0 = in;
 
             pitch_accumulator += (pitch << 1);
             in += pitch_accumulator >> 16;
             pitch_accumulator %= 0x10000;
 
-            tbl = resample_table[pitch_accumulator * 64 >> 16];
+            int16_t* tbl1 = resample_table[pitch_accumulator * 64 >> 16];
 
-            tbl_vec = _mm_set_epi64(_mm_movepi64_pi64(_mm_loadl_epi64((__m128i*) tbl)), _mm_movepi64_pi64((tbl_vec)));
-
-            in_vec = _mm_set_epi64(_mm_movepi64_pi64(_mm_loadl_epi64((__m128i*) in)), _mm_movepi64_pi64((in_vec)));
+            int16_t* in1 = in;
 
             pitch_accumulator += (pitch << 1);
             in += pitch_accumulator >> 16;
             pitch_accumulator %= 0x10000;
 
-            __m128i out1_vec;
-            __m128i out2_vec;
+            int16_t* tbl2 = resample_table[pitch_accumulator * 64 >> 16];
+
+            int16_t* in2 = in;
+
+            pitch_accumulator += (pitch << 1);
+            in += pitch_accumulator >> 16;
+            pitch_accumulator %= 0x10000;
+
+            int16_t* tbl3 = resample_table[pitch_accumulator * 64 >> 16];
+
+            int16_t* in3 = in;
+
+            pitch_accumulator += (pitch << 1);
+            in += pitch_accumulator >> 16;
+            pitch_accumulator %= 0x10000;
+
+            __m128i vec_in0 = move_two_4x16(in1, in0);
+
+            __m128i vec_tbl0 = move_two_4x16(tbl1, tbl0);
+
+            __m128i vec_in1 = move_two_4x16(in3, in2);
+
+            __m128i vec_tbl1 = move_two_4x16(tbl3, tbl2);
+
+            // we multiply in by tbl
+
             m256i res;
-            res.lo = _mm_mullo_epi16(in_vec, tbl_vec);
-            res.hi = _mm_mulhi_epi16(in_vec, tbl_vec);
+            res.lo = _mm_mullo_epi16(vec_in0, vec_tbl0);
+            res.hi = _mm_mulhi_epi16(vec_in0, vec_tbl0);
 
-            out1_vec = _mm_unpacklo_epi16(res.lo, res.hi);
-            out2_vec = _mm_unpackhi_epi16(res.lo, res.hi);
+            __m128i out0_vec = _mm_unpacklo_epi16(res.lo, res.hi);
+            __m128i out1_vec = _mm_unpackhi_epi16(res.lo, res.hi);
 
+            res.lo = _mm_mullo_epi16(vec_in1, vec_tbl1);
+            res.hi = _mm_mulhi_epi16(vec_in1, vec_tbl1);
+
+            __m128i out2_vec = _mm_unpacklo_epi16(res.lo, res.hi);
+            __m128i out3_vec = _mm_unpackhi_epi16(res.lo, res.hi);
+
+            // transpose to more easily make a sum at the end
+
+            mm128_transpose(&out0_vec, &out1_vec, &out2_vec, &out3_vec);
+
+            // add 0x4000
+
+            out0_vec = _mm_add_epi32(out0_vec, x4000Vec);
             out1_vec = _mm_add_epi32(out1_vec, x4000Vec);
-            out1_vec = _mm_srai_epi32(out1_vec, 15);
-            sample = _mm_extract_epi32_alt(out1_vec, 0) + _mm_extract_epi32_alt(out1_vec, 1) +
-                     _mm_extract_epi32_alt(out1_vec, 2) + _mm_extract_epi32_alt(out1_vec, 3);
-
-            // sample = ((in[0] * tbl[0] + 0x4000) >> 15) + ((in[1] * tbl[1] + 0x4000) >> 15) +
-            //          ((in[2] * tbl[2] + 0x4000) >> 15) + ((in[3] * tbl[3] + 0x4000) >> 15);
-            *out++ = clamp16(sample);
-
             out2_vec = _mm_add_epi32(out2_vec, x4000Vec);
-            out2_vec = _mm_srai_epi32(out2_vec, 15);
-            sample = _mm_extract_epi32_alt(out2_vec, 0) + _mm_extract_epi32_alt(out2_vec, 1) +
-                     _mm_extract_epi32_alt(out2_vec, 2) + _mm_extract_epi32_alt(out2_vec, 3);
+            out3_vec = _mm_add_epi32(out3_vec, x4000Vec);
 
+            // shift by 15
+
+            out0_vec = _mm_srai_epi32(out0_vec, 15);
+            out1_vec = _mm_srai_epi32(out1_vec, 15);
+            out2_vec = _mm_srai_epi32(out2_vec, 15);
+            out3_vec = _mm_srai_epi32(out3_vec, 15);
+
+            // sum all to make sample
+            __m128i sample_vec = _mm_add_epi32(_mm_add_epi32(_mm_add_epi32(out0_vec, out1_vec), out2_vec), out3_vec);
+
+            // at the end we do this below but four time
             // sample = ((in[0] * tbl[0] + 0x4000) >> 15) + ((in[1] * tbl[1] + 0x4000) >> 15) +
             //          ((in[2] * tbl[2] + 0x4000) >> 15) + ((in[3] * tbl[3] + 0x4000) >> 15);
-            *out++ = clamp16(sample);
+            sample_vec = _mm_packs_epi32(sample_vec, _mm_setzero_si128());
+            _mm_storeu_si64(out, sample_vec);
+
+            out += 4;
         }
         nbytes -= 8 * sizeof(int16_t);
     } while (nbytes > 0);
