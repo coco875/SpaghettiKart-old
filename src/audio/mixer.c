@@ -225,6 +225,8 @@ void aSetLoopImpl(ADPCM_STATE* adpcm_loop_state) {
     rspa.adpcm_loop_state = adpcm_loop_state;
 }
 
+#ifndef SSE2_AVAILABLE
+
 void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
     uint8_t* in = BUF_U8(rspa.in);
     int16_t* out = BUF_S16(rspa.out);
@@ -266,6 +268,139 @@ void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
     }
     memcpy(state, out - 16, 16 * sizeof(int16_t));
 }
+
+#else
+
+static uint16_t lower_bit[] = {
+    0xf,
+    0xf,
+    0xf,
+    0xf,
+};
+
+static int16_t _mm_extract_epi16_alt(__m128i a, int imm) {
+    return ((int16_t*) &a)[imm];
+}
+
+void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
+    uint8_t* in = BUF_U8(rspa.in);
+    int16_t* out = BUF_S16(rspa.out);
+    int nbytes = ROUND_UP_32(rspa.nbytes);
+    if (flags & A_INIT) {
+        memset(out, 0, 16 * sizeof(int16_t));
+    } else if (flags & A_LOOP) {
+        memcpy(out, rspa.adpcm_loop_state, 16 * sizeof(int16_t));
+    } else {
+        memcpy(out, state, 16 * sizeof(int16_t));
+    }
+    out += 16;
+
+    __m128i mask = _mm_loadl_epi64((__m128i*) lower_bit);
+
+    while (nbytes > 0) {
+        int shift = *in >> 4; // should be in 0..12 or 0..14
+        __m128i shift_vec = _mm_set1_epi16(shift);
+        int table_index = *in++ & 0xf; // should be in 0..7
+        int16_t(*tbl)[8] = rspa.adpcm_table[table_index];
+        int i;
+
+        for (i = 0; i < 2; i++) {
+            int16_t ins[8];
+            int16_t prev1 = out[-1];
+            int16_t prev2 = out[-2];
+            __m128i prev1_vec = _mm_set1_epi16(prev1);
+            __m128i prev2_vec = _mm_set1_epi16(prev2);
+
+            int j, k;
+            __m128i ins_vec = _mm_loadu_si32((__m128i*) in);
+            ins_vec = _mm_unpacklo_epi8(ins_vec, _mm_setzero_si128());
+            __m128i in_vec_up4bit = _mm_srli_epi16(ins_vec, 4);
+            __m128i in_vec_lower4bit = _mm_and_si128(ins_vec, mask);
+            ins_vec = _mm_unpacklo_epi16(in_vec_up4bit, in_vec_lower4bit);
+            ins_vec = _mm_slli_epi16(ins_vec, 12);
+            ins_vec = _mm_srai_epi16(ins_vec, 12);
+            ins_vec = _mm_slli_epi16(ins_vec, shift);
+            _mm_storeu_si128((__m128i*) ins, ins_vec);
+
+            in += 4;
+            for (j = 0; j < 2; j++) {
+                __m128i tbl0_vec = _mm_loadu_si64((__m128i*) (tbl[0] + (j * 4)));
+                __m128i tbl1_vec = _mm_loadu_si64((__m128i*) (tbl[1] + (j * 4)));
+
+                m256i res;
+                res.lo = _mm_mullo_epi16(tbl0_vec, prev2_vec);
+                res.hi = _mm_mulhi_epi16(tbl0_vec, prev2_vec);
+
+                tbl0_vec = _mm_unpacklo_epi16(res.lo, res.hi);
+
+                res.lo = _mm_mullo_epi16(tbl1_vec, prev1_vec);
+                res.hi = _mm_mulhi_epi16(tbl1_vec, prev1_vec);
+
+                tbl1_vec = _mm_unpacklo_epi16(res.lo, res.hi);
+                __m128i acc_vec = _mm_add_epi32(tbl0_vec, tbl1_vec);
+
+                __m128i shift_ins = _mm_srai_epi32(j ? _mm_unpackhi_epi16(_mm_setzero_si128(), ins_vec)
+                                                     : _mm_unpacklo_epi16(_mm_setzero_si128(), ins_vec),
+                                                   5);
+                acc_vec = _mm_add_epi32(acc_vec, shift_ins);
+
+                if (j == 0) {
+                    tbl1_vec = _mm_loadu_si64((__m128i*) tbl[1]);
+                    tbl1_vec = _mm_shufflelo_epi16(tbl1_vec, _MM_SHUFFLE(0, 1, 2, 3));
+                    tbl1_vec = _mm_slli_si128(tbl1_vec, 2);
+                    for (k = 0; k < 4; k++) {
+                        __m128i ins_vec2 = _mm_set1_epi16(_mm_extract_epi16(ins_vec, k));
+                        res.lo = _mm_mullo_epi16(tbl1_vec, ins_vec2);
+                        res.hi = _mm_mulhi_epi16(tbl1_vec, ins_vec2);
+
+                        __m128i mult = _mm_unpacklo_epi16(res.lo, res.hi);
+                        acc_vec = _mm_add_epi32(acc_vec, mult);
+                        tbl1_vec = _mm_slli_si128(tbl1_vec, 2);
+                    }
+                } else {
+                    int acc_tab[4];
+                    _mm_storeu_si128((__m128i*) acc_tab, acc_vec);
+                    for (int j_ = 0; j_ < 4; j_++) {
+                        for (k = 0; k < (j_ + (j * 4)); k++) {
+                            acc_tab[j_] += tbl[1][(((j_ + (j * 4)) - k) - 1)] * ins[k];
+                        }
+                    }
+                    acc_vec = _mm_loadu_si128((__m128i*) acc_tab);
+                    // tbl1_vec = _mm_loadu_si128((__m128i*) tbl[1]);
+                    // tbl1_vec = _mm_shufflelo_epi16(tbl1_vec, _MM_SHUFFLE(0, 1, 2, 3));
+                    // tbl1_vec = _mm_shufflehi_epi16(tbl1_vec, _MM_SHUFFLE(0, 1, 2, 3));
+                    // tbl1_vec = _mm_shuffle_epi32(tbl1_vec, _MM_SHUFFLE(1, 0, 3, 2));
+                    // tbl1_vec = _mm_slli_si128(tbl1_vec, 2);
+                    // int16_t tbl1_vec_tab[8];
+                    // _mm_storeu_si128((__m128i*) tbl1_vec_tab, tbl1_vec);
+                    // for (k = 0; k < 8; k++) {
+                    //     int a = ins[k];
+                    //     __m128i ins_vec2 = _mm_set1_epi16(ins[k]);
+                    //     res.lo = _mm_mullo_epi16(tbl1_vec, ins_vec2);
+                    //     res.hi = _mm_mulhi_epi16(tbl1_vec, ins_vec2);
+
+                    //     __m128i mult = _mm_unpackhi_epi16(res.lo, res.hi);
+                    //     int mult_vec_tab[4];
+                    //     _mm_storeu_si128((__m128i*) mult_vec_tab, mult);
+
+                    //     acc_vec = _mm_add_epi32(acc_vec, mult);
+                    //     tbl1_vec = _mm_slli_si128(tbl1_vec, 2);
+                    //     _mm_storeu_si128((__m128i*) tbl1_vec_tab, tbl1_vec);
+                    // }
+                }
+
+                acc_vec = _mm_srai_epi32(acc_vec, 11);
+                acc_vec = _mm_packs_epi32(acc_vec, _mm_setzero_si128());
+                _mm_storeu_si64((__m128*) out, acc_vec);
+                out += 4;
+            }
+        }
+        nbytes -= 16 * sizeof(int16_t);
+    }
+    memcpy(state, out - 16, 16 * sizeof(int16_t));
+}
+
+#endif
 
 // https://godbolt.org/z/jsYM3zooP
 
@@ -338,15 +473,15 @@ static void mm128_transpose(__m128i* r0, __m128i* r1, __m128i* r2, __m128i* r3) 
     row2 = _mm_castsi128_ps(*r2);
     row3 = _mm_castsi128_ps(*r3);
 
-    tmp0 = _mm_shuffle_ps(row0, row1, 0x88); // 0 2 4 6
-    tmp1 = _mm_shuffle_ps(row0, row1, 0xdd); // 1 3 5 7
-    tmp2 = _mm_shuffle_ps(row2, row3, 0x88); // 8 a c e
-    tmp3 = _mm_shuffle_ps(row2, row3, 0xdd); // 9 b d f
+    tmp0 = _mm_shuffle_ps(row0, row1, _MM_SHUFFLE(2, 0, 2, 0)); // 0 2 4 6
+    tmp1 = _mm_shuffle_ps(row0, row1, _MM_SHUFFLE(3, 1, 3, 1)); // 1 3 5 7
+    tmp2 = _mm_shuffle_ps(row2, row3, _MM_SHUFFLE(2, 0, 2, 0)); // 8 a c e
+    tmp3 = _mm_shuffle_ps(row2, row3, _MM_SHUFFLE(3, 1, 3, 1)); // 9 b d f
 
-    row0 = _mm_shuffle_ps(tmp0, tmp2, 0x88); // 0 4 8 c
-    row1 = _mm_shuffle_ps(tmp1, tmp3, 0x88); // 1 5 9 d
-    row2 = _mm_shuffle_ps(tmp0, tmp2, 0xdd); // 2 6 a e
-    row3 = _mm_shuffle_ps(tmp1, tmp3, 0xdd); // 3 7 b f
+    row0 = _mm_shuffle_ps(tmp0, tmp2, _MM_SHUFFLE(2, 0, 2, 0)); // 0 4 8 c
+    row1 = _mm_shuffle_ps(tmp1, tmp3, _MM_SHUFFLE(2, 0, 2, 0)); // 1 5 9 d
+    row2 = _mm_shuffle_ps(tmp0, tmp2, _MM_SHUFFLE(3, 1, 3, 1)); // 2 6 a e
+    row3 = _mm_shuffle_ps(tmp1, tmp3, _MM_SHUFFLE(3, 1, 3, 1)); // 3 7 b f
 
     *r0 = _mm_castps_si128(row0);
     *r1 = _mm_castps_si128(row1);
