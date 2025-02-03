@@ -340,41 +340,16 @@ void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
                                                    5);
                 acc_vec = _mm_add_epi32(acc_vec, shift_ins);
 
-                if (j == 0) {
-                    tbl1_vec = _mm_loadu_si64((__m128i*) tbl[1]);
-                    tbl1_vec = _mm_shufflelo_epi16(tbl1_vec, _MM_SHUFFLE(0, 1, 2, 3));
+                tbl1_vec = _mm_loadu_si128((__m128i*) tbl[1]);
+                tbl1_vec = _mm_slli_si128(tbl1_vec, (1 - j) * 8 + 2);
+                for (k = 0; k < ((j + 1) * 4); k++) {
+                    __m128i ins_vec2 = _mm_set1_epi16(ins[k]);
+                    res.lo = _mm_mullo_epi16(tbl1_vec, ins_vec2);
+                    res.hi = _mm_mulhi_epi16(tbl1_vec, ins_vec2);
+
+                    __m128i mult = _mm_unpackhi_epi16(res.lo, res.hi);
+                    acc_vec = _mm_add_epi32(acc_vec, mult);
                     tbl1_vec = _mm_slli_si128(tbl1_vec, 2);
-                    for (k = 0; k < 4; k++) {
-                        __m128i ins_vec2 = _mm_set1_epi16(ins[k]);
-                        res.lo = _mm_mullo_epi16(tbl1_vec, ins_vec2);
-                        res.hi = _mm_mulhi_epi16(tbl1_vec, ins_vec2);
-
-                        __m128i mult = _mm_unpacklo_epi16(res.lo, res.hi);
-                        acc_vec = _mm_add_epi32(acc_vec, mult);
-                        tbl1_vec = _mm_slli_si128(tbl1_vec, 2);
-                    }
-                } else {
-                    tbl1_vec = _mm_loadu_si128((__m128i*) tbl[1]);
-
-                    // tbl1_vec = _mm_shufflelo_epi16(tbl1_vec, _MM_SHUFFLE(0, 1, 2, 3));
-                    // tbl1_vec = _mm_shufflehi_epi16(tbl1_vec, _MM_SHUFFLE(0, 1, 2, 3));
-                    // tbl1_vec = _mm_shuffle_epi32(tbl1_vec, _MM_SHUFFLE(1, 0, 3, 2));
-                    tbl1_vec = _mm_slli_si128(tbl1_vec, 2);
-                    int16_t tbl1_vec_tab[8];
-                    _mm_storeu_si128((__m128i*) tbl1_vec_tab, tbl1_vec);
-                    int mult_vec_tab[8][4];
-                    for (k = 0; k < 8; k++) {
-                        int a = ins[k];
-                        __m128i ins_vec2 = _mm_set1_epi16(ins[k]);
-                        res.lo = _mm_mullo_epi16(tbl1_vec, ins_vec2);
-                        res.hi = _mm_mulhi_epi16(tbl1_vec, ins_vec2);
-
-                        __m128i mult = _mm_unpackhi_epi16(res.lo, res.hi);
-                        _mm_storeu_si128((__m128i*) mult_vec_tab[k], mult);
-
-                        acc_vec = _mm_add_epi32(acc_vec, mult);
-                        tbl1_vec = _mm_slli_si128(tbl1_vec, 2);
-                    }
                 }
 
                 acc_vec = _mm_srai_epi32(acc_vec, 11);
