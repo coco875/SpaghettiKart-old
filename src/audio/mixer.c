@@ -341,7 +341,11 @@ void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
                 acc_vec = _mm_add_epi32(acc_vec, shift_ins);
 
                 tbl1_vec = _mm_loadu_si128((__m128i*) tbl[1]);
-                tbl1_vec = _mm_slli_si128(tbl1_vec, (1 - j) * 8 + 2);
+                if (j == 0) {
+                    tbl1_vec = _mm_slli_si128(tbl1_vec, (1 - 0) * 8 + 2);
+                } else {
+                    tbl1_vec = _mm_slli_si128(tbl1_vec, (1 - 1) * 8 + 2);
+                }
                 for (int k = 0; k < ((j + 1) * 4); k++) {
                     __m128i ins_vec2 = _mm_set1_epi16(ins[k]);
                     res.lo = _mm_mullo_epi16(tbl1_vec, ins_vec2);
