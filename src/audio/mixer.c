@@ -225,6 +225,8 @@ void aSetLoopImpl(ADPCM_STATE* adpcm_loop_state) {
     rspa.adpcm_loop_state = adpcm_loop_state;
 }
 
+// https://godbolt.org/z/eMo5ad6n6
+
 #ifndef SSE2_AVAILABLE
 
 void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
@@ -298,16 +300,14 @@ void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
         __m128i shift_vec = _mm_set1_epi16(shift);
         int table_index = *in++ & 0xf; // should be in 0..7
         int16_t(*tbl)[8] = rspa.adpcm_table[table_index];
-        int i;
 
-        for (i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             int16_t ins[8];
             int16_t prev1 = out[-1];
             int16_t prev2 = out[-2];
             __m128i prev1_vec = _mm_set1_epi16(prev1);
             __m128i prev2_vec = _mm_set1_epi16(prev2);
 
-            int j, k;
             __m128i ins_vec = _mm_loadu_si32((__m128i*) in);
             ins_vec = _mm_unpacklo_epi8(ins_vec, _mm_setzero_si128());
             __m128i in_vec_up4bit = _mm_srli_epi16(ins_vec, 4);
@@ -319,7 +319,7 @@ void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
             _mm_storeu_si128((__m128i*) ins, ins_vec);
 
             in += 4;
-            for (j = 0; j < 2; j++) {
+            for (int j = 0; j < 2; j++) {
                 __m128i tbl0_vec = _mm_loadu_si64((__m128i*) (tbl[0] + (j * 4)));
                 __m128i tbl1_vec = _mm_loadu_si64((__m128i*) (tbl[1] + (j * 4)));
 
@@ -342,7 +342,7 @@ void aADPCMdecImpl(uint8_t flags, ADPCM_STATE state) {
 
                 tbl1_vec = _mm_loadu_si128((__m128i*) tbl[1]);
                 tbl1_vec = _mm_slli_si128(tbl1_vec, (1 - j) * 8 + 2);
-                for (k = 0; k < ((j + 1) * 4); k++) {
+                for (int k = 0; k < ((j + 1) * 4); k++) {
                     __m128i ins_vec2 = _mm_set1_epi16(ins[k]);
                     res.lo = _mm_mullo_epi16(tbl1_vec, ins_vec2);
                     res.hi = _mm_mulhi_epi16(tbl1_vec, ins_vec2);
