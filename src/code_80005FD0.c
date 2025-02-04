@@ -1777,9 +1777,9 @@ void update_player(s32 playerId) {
                         gPreviousCpuTargetSpeed[playerId] = CM_GetProps()->D_0D0096B8[gCCSelection];
                         gPlayerTrackPositionFactorInstruction[playerId].target = -0.5f;
                     } else if (gCurrentTrackConsecutiveCurveCountsPath[sSomeNearestPathPoint] > 0) {
-                        gPreviousCpuTargetSpeed[playerId] = CM_GetProps()->D_0D009418[gCCSelection];
+                        gPreviousCpuTargetSpeed[playerId] = CM_GetProps()->CurveTargetSpeed[gCCSelection];
                     } else {
-                        gPreviousCpuTargetSpeed[playerId] = CM_GetProps()->D_0D009568[gCCSelection];
+                        gPreviousCpuTargetSpeed[playerId] = CM_GetProps()->NormalTargetSpeed[gCCSelection];
                     }
                     CM_AICrossingBehaviour(playerId);
                     // check_ai_crossing_distance(playerId);
@@ -1985,18 +1985,49 @@ void update_player(s32 playerId) {
                 gPreviousAngleSteering[playerId] = var_a1;
                 if ((gIsPlayerInCurve[playerId] == true) || (D_801630E8[playerId] == 1) ||
                     (D_801630E8[playerId] == -1) || (player->effects & 0x1000000C)) {
-                    cpu_TargetSpeed[playerId] = CM_GetProps()->D_0D009418[gCCSelection];
+                    cpu_TargetSpeed[playerId] = CM_GetProps()->CurveTargetSpeed[gCCSelection];
                 } else {
-                    cpu_TargetSpeed[playerId] = CM_GetProps()->D_0D009568[gCCSelection];
+                    cpu_TargetSpeed[playerId] = CM_GetProps()->NormalTargetSpeed[gCCSelection];
                 }
                 if ((gTrackPositionFactor[playerId] > 0.9f) || (gTrackPositionFactor[playerId] < -0.9f)) {
-                    cpu_TargetSpeed[playerId] = CM_GetProps()->D_0D009808[gCCSelection];
+                    cpu_TargetSpeed[playerId] = CM_GetProps()->OffTrackTargetSpeed[gCCSelection];
                 }
                 if (D_80162FD0 == 1) {
                     cpu_TargetSpeed[playerId] = CM_GetProps()->D_0D0096B8[gCCSelection];
                 }
+
+                if (CVarGetInteger("gEnableCustomCC", 0) == 1) {
+#define calc_a(x, y, x2, y2) (y2 - y) / (x2 - x)
+#define calc_b(x, y, b) y - (b * x)
+                    f32 a;
+                    f32 b;
+
+#define calc(table)                                   \
+    a = calc_a(50, table[CC_50], 150, table[CC_150]); \
+    b = calc_b(50, table[CC_50], a);                  \
+    cpu_TargetSpeed[playerId] = a * CVarGetFloat("gCustomCC", 150.0f) + b;
+                    if ((gIsPlayerInCurve[playerId] == true) || (D_801630E8[playerId] == 1) ||
+                        (D_801630E8[playerId] == -1) || (player->effects & 0x1000000C)) {
+                        calc(CM_GetProps()->CurveTargetSpeed);
+                    } else {
+                        calc(CM_GetProps()->NormalTargetSpeed);
+                    }
+                    if ((gTrackPositionFactor[playerId] > 0.9f) || (gTrackPositionFactor[playerId] < -0.9f)) {
+                        calc(CM_GetProps()->OffTrackTargetSpeed);
+                    }
+                    if (D_80162FD0 == 1) {
+                        calc(CM_GetProps()->D_0D0096B8);
+                    }
+#undef calc_a
+#undef calc_b
+#undef calc
+                }
+
                 if ((D_801630E8[playerId] == 2) || (D_801630E8[playerId] == -2) || (D_801630E8[playerId] == 3)) {
                     cpu_TargetSpeed[playerId] = 3.3333333f;
+                }
+                if (CVarGetInteger("gHarderCPU", 0) == 1) {
+                    cpu_TargetSpeed[playerId] = player->topSpeed * 1.5f;
                 }
                 gCurrentCpuTargetSpeed = cpu_TargetSpeed[playerId];
                 player->effects &= ~0x00200000;
@@ -2656,25 +2687,26 @@ s16 func_8000D33C(f32 posX, f32 posY, f32 posZ, s16 waypointIndex, s32 pathIndex
 
 f32 cpu_track_position_factor(s32 playerId) {
     TrackPositionFactorInstruction* temp_v0;
-    f32 temp_f0;
-    f32 var_f2;
+    f32 target;
+    f32 current;
 
     temp_v0 = &gPlayerTrackPositionFactorInstruction[playerId];
-    var_f2 = temp_v0->current;
-    temp_f0 = temp_v0->target;
-    if (var_f2 < temp_f0) {
-        var_f2 += temp_v0->step;
-        if (temp_f0 < var_f2) {
-            var_f2 = temp_f0;
+    current = temp_v0->current;
+    target = temp_v0->target;
+    if (current < target) {
+        current += temp_v0->step;
+        if (target < current) {
+            current = target;
         }
-    } else if (temp_f0 < var_f2) {
-        var_f2 -= temp_v0->step;
-        if (var_f2 < temp_f0) {
-            var_f2 = temp_f0;
+    } else if (target < current) {
+        current -= temp_v0->step;
+        if (current < target) {
+            current = target;
         }
     }
-    temp_v0->current = var_f2;
-    return var_f2;
+
+    temp_v0->current = current;
+    return current;
 }
 
 void determine_ideal_cpu_position_offset(s32 arg0, u16 arg1) {
@@ -3500,7 +3532,7 @@ void init_players(void) {
             update_player_position_factor(i, 0, 0);
         }
         //! todo: @BUG this doesn't seem right. This variable is metadata.
-        cpu_TargetSpeed[i] = CM_GetProps()->D_0D009418[gCCSelection];
+        cpu_TargetSpeed[i] = CM_GetProps()->CurveTargetSpeed[gCCSelection];
         D_801630E8[i] = 0;
         D_80163100[i] = 0;
         gPreviousPlayerAiOffsetX[i] = 0.0f;
@@ -6991,6 +7023,38 @@ void cpu_decisions_branch_item(UNUSED s32 playerId, s16* branch, s32 itemId) {
             break;
     }
 
+    if (CVarGetInteger("gHarderCPU", 0) == 1) {
+        switch (itemId) {
+            case ITEM_BANANA_BUNCH:
+                value = CPU_STRATEGY_ITEM_BANANA_BUNCH;
+                break;
+            // case ITEM_BLUE_SPINY_SHELL:
+            //     value = CPU_STRATEGY_ITEM_BLUE_SPINY_SHELL;
+            //     break;
+            case ITEM_GREEN_SHELL:
+                value = CPU_STRATEGY_ITEM_GREEN_SHELL;
+                break;
+            case ITEM_RED_SHELL:
+                value = CPU_STRATEGY_ITEM_RED_SHELL;
+                break;
+            // case ITEM_TRIPLE_GREEN_SHELL:
+            //     value = CPU_STRATEGY_ITEM_TRIPLE_GREEN_SHELL;
+            //     break;
+            // case ITEM_TRIPLE_RED_SHELL:
+            //     value = CPU_STRATEGY_ITEM_TRIPLE_RED_SHELL;
+            //     break;
+            case ITEM_DOUBLE_MUSHROOM:
+                value = CPU_STRATEGY_ITEM_DOUBLE_MUSHROOM;
+                break;
+            case ITEM_TRIPLE_MUSHROOM:
+                value = CPU_STRATEGY_ITEM_TRIPLE_MUSHROOM;
+                break;
+            case ITEM_SUPER_MUSHROOM:
+                value = CPU_STRATEGY_ITEM_SUPER_MUSHROOM;
+                break;
+        }
+    }
+
     if (value >= 0) {
         *branch = value;
     }
@@ -7029,6 +7093,14 @@ void cpu_use_item_strategy(s32 playerId) {
         switch (temp_s0->branch) {
             case CPU_STRATEGY_WAIT_NEXT_ITEM:
                 temp_s0->actorIndex = -1;
+                if (CVarGetInteger("gHarderCPU", 0) == 1) {
+                    if (((gNumPathPointsTraversed[playerId] + (playerId * 0x14) + 0x64) % 0x8 == 0) &&
+                        (temp_s0->timer >= 0x200)) {
+                        cpu_decisions_branch_item(playerId, &temp_s0->branch,
+                                                  gen_random_item_human((s16) gLapCountByPlayerId[playerId],
+                                                                        gGPCurrentRaceRankByPlayerId[playerId]));
+                    }
+                }
                 if ((((playerId * 0x14) + 0x64) < gNumPathPointsTraversed[playerId]) && (temp_s0->timer >= 0x259) &&
                     (temp_s0->numItemUse < 3) && (gLapCountByPlayerId[playerId] < 3)) {
                     cpu_decisions_branch_item(playerId, &temp_s0->branch,
@@ -7085,7 +7157,7 @@ void cpu_use_item_strategy(s32 playerId) {
                 break;
 
             case CPU_STRATEGY_HOLD_BANANA:
-                banana = (struct BananaActor*) &gActorList[temp_s0->actorIndex];
+                banana = (struct BananaActor*) GET_ACTOR(temp_s0->actorIndex);
                 if ((!(banana->flags & 0x8000)) || (banana->type != ACTOR_BANANA) || (banana->state != HELD_BANANA) ||
                     (playerId != banana->playerId)) {
                     temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
@@ -7097,7 +7169,7 @@ void cpu_use_item_strategy(s32 playerId) {
                 break;
 
             case CPU_STRATEGY_DROP_BANANA:
-                banana = (struct BananaActor*) &gActorList[temp_s0->actorIndex];
+                banana = (struct BananaActor*) GET_ACTOR(temp_s0->actorIndex);
                 if ((((!(banana->flags & 0x8000)) || (banana->type != ACTOR_BANANA)) ||
                      (banana->state != HELD_BANANA)) ||
                     (playerId != banana->playerId)) {
@@ -7108,9 +7180,9 @@ void cpu_use_item_strategy(s32 playerId) {
                     banana->velocity[1] = 0.0f;
                     banana->velocity[2] = 0.0f;
                     if (D_801631E0[playerId] == ((u16) true)) {
-                        banana->pos[1] =
-                            get_surface_height(player->pos[0], (f32) (((f64) player->pos[1]) + 30.0), player->pos[2]) +
-                            (banana->boundingBoxSize + 1.0f);
+                        banana->pos[1] = spawn_actor_on_surface(player->pos[0], (f32) (((f64) player->pos[1]) + 30.0),
+                                                                player->pos[2]) +
+                                         (banana->boundingBoxSize + 1.0f);
                     }
                 }
                 player->soundEffects &= ~HOLD_BANANA_SOUND_EFFECT;
@@ -7121,7 +7193,7 @@ void cpu_use_item_strategy(s32 playerId) {
             case CPU_STRATEGY_THROW_BANANA:
                 temp_s0->actorIndex = use_banana_item(player);
                 if ((temp_s0->actorIndex >= 0) && (temp_s0->actorIndex < 0x64)) {
-                    banana = (struct BananaActor*) &gActorList[temp_s0->actorIndex];
+                    banana = (struct BananaActor*) GET_ACTOR(temp_s0->actorIndex);
                     banana->state = BANANA_ON_GROUND;
                     player->soundEffects |= HOLD_BANANA_SOUND_EFFECT;
                     temp_s0->branch = CPU_STRATEGY_HOLD_THROW_BANANA;
@@ -7143,7 +7215,7 @@ void cpu_use_item_strategy(s32 playerId) {
                 break;
 
             case CPU_STRATEGY_HOLD_THROW_BANANA:
-                banana = (struct BananaActor*) &gActorList[temp_s0->actorIndex];
+                banana = (struct BananaActor*) GET_ACTOR(temp_s0->actorIndex);
                 if ((((!(banana->flags & 0x8000)) || (banana->type != ACTOR_BANANA)) ||
                      (banana->state != BANANA_ON_GROUND)) ||
                     (playerId != banana->playerId)) {
@@ -7162,7 +7234,7 @@ void cpu_use_item_strategy(s32 playerId) {
                 break;
 
             case CPU_STRATEGY_END_THROW_BANANA:
-                banana = (struct BananaActor*) &gActorList[temp_s0->actorIndex];
+                banana = (struct BananaActor*) GET_ACTOR(temp_s0->actorIndex);
                 if ((((!(banana->flags & 0x8000)) || (banana->type != ACTOR_BANANA)) ||
                      (banana->state != BANANA_ON_GROUND)) ||
                     (playerId != banana->playerId)) {
@@ -7173,7 +7245,7 @@ void cpu_use_item_strategy(s32 playerId) {
                     banana->velocity[1] = 0.0f;
                     banana->velocity[2] = 0.0f;
                     banana->pos[1] =
-                        get_surface_height(banana->pos[0], (f32) (((f64) banana->pos[1]) + 30.0), banana->pos[2]) +
+                        spawn_actor_on_surface(banana->pos[0], (f32) (((f64) banana->pos[1]) + 30.0), banana->pos[2]) +
                         (banana->boundingBoxSize + 1.0f);
                 }
                 player->soundEffects &= ~HOLD_BANANA_SOUND_EFFECT;
@@ -7198,7 +7270,7 @@ void cpu_use_item_strategy(s32 playerId) {
                 break;
 
             case CPU_STRATEGY_HOLD_GREEN_SHELL:
-                actor = &gActorList[temp_s0->actorIndex];
+                actor = GET_ACTOR(temp_s0->actorIndex);
                 if ((((!(actor->flags & 0x8000)) || (actor->type != ACTOR_GREEN_SHELL)) ||
                      (actor->state != HELD_SHELL)) ||
                     (playerId != actor->rot[2])) {
@@ -7211,7 +7283,7 @@ void cpu_use_item_strategy(s32 playerId) {
                 break;
 
             case CPU_STRATEGY_THROW_GREEN_SHELL:
-                actor = &gActorList[temp_s0->actorIndex];
+                actor = GET_ACTOR(temp_s0->actorIndex);
                 if ((((!(actor->flags & 0x8000)) || (actor->type != ACTOR_GREEN_SHELL)) ||
                      (actor->state != HELD_SHELL)) ||
                     (playerId != actor->rot[2])) {
@@ -7241,7 +7313,7 @@ void cpu_use_item_strategy(s32 playerId) {
                 break;
 
             case CPU_STRATEGY_HOLD_RED_SHELL:
-                shell = (struct ShellActor*) &gActorList[temp_s0->actorIndex];
+                shell = (struct ShellActor*) GET_ACTOR(temp_s0->actorIndex);
                 if ((((!(shell->flags & 0x8000)) || (shell->type != ACTOR_RED_SHELL)) ||
                      (shell->state != HELD_SHELL)) ||
                     (playerId != shell->playerId)) {
@@ -7254,7 +7326,7 @@ void cpu_use_item_strategy(s32 playerId) {
 
             case CPU_STRATEGY_THROW_RED_SHELL:
                 clear_expired_strategies(temp_s0);
-                shell = (struct ShellActor*) &gActorList[temp_s0->actorIndex];
+                shell = (struct ShellActor*) GET_ACTOR(temp_s0->actorIndex);
                 if ((((!(shell->flags & 0x8000)) || (shell->type != ACTOR_RED_SHELL)) ||
                      (shell->state != HELD_SHELL)) ||
                     (playerId != shell->playerId)) {
@@ -7284,7 +7356,7 @@ void cpu_use_item_strategy(s32 playerId) {
                 break;
 
             case CPU_STRATEGY_WAIT_INIT_BANANA_BUNCH:
-                bananaBunchParent = (struct BananaBunchParent*) &gActorList[temp_s0->actorIndex];
+                bananaBunchParent = (struct BananaBunchParent*) GET_ACTOR(temp_s0->actorIndex);
                 if (bananaBunchParent->state == 6) {
                     isNoProblem = false;
                     if (bananaBunchParent->bananaIndices[4] != (-1)) {
@@ -7316,7 +7388,7 @@ void cpu_use_item_strategy(s32 playerId) {
             case CPU_STRATEGY_DROP_BANANA_BUNCH:
                 if ((((s16) temp_s0->timer) % 10) == 0) {
                     if (temp_s0->numDroppedBananaBunch < 5) {
-                        bananaBunchParent = (struct BananaBunchParent*) &gActorList[temp_s0->actorIndex];
+                        bananaBunchParent = (struct BananaBunchParent*) GET_ACTOR(temp_s0->actorIndex);
                         isNoProblem = 0;
                         switch (temp_s0->numDroppedBananaBunch) {
                             case 0:
@@ -7375,7 +7447,7 @@ void cpu_use_item_strategy(s32 playerId) {
                 break;
 
             case CPU_STRATEGY_HOLD_FAKE_ITEM_BOX:
-                fakeItemBox = (struct FakeItemBox*) &gActorList[temp_s0->actorIndex];
+                fakeItemBox = (struct FakeItemBox*) GET_ACTOR(temp_s0->actorIndex);
                 if ((((!(fakeItemBox->flags & 0x8000)) || (fakeItemBox->type != ACTOR_FAKE_ITEM_BOX)) ||
                      (fakeItemBox->state != 0)) ||
                     (playerId != ((s32) fakeItemBox->playerId))) {
@@ -7387,7 +7459,7 @@ void cpu_use_item_strategy(s32 playerId) {
                 break;
 
             case CPU_STRATEGY_THROW_FAKE_ITEM_BOX:
-                fakeItemBox = (struct FakeItemBox*) &gActorList[temp_s0->actorIndex];
+                fakeItemBox = (struct FakeItemBox*) GET_ACTOR(temp_s0->actorIndex);
                 if ((((!(fakeItemBox->flags & 0x8000)) || (fakeItemBox->type != ACTOR_FAKE_ITEM_BOX)) ||
                      (fakeItemBox->state != 0)) ||
                     (playerId != ((s32) fakeItemBox->playerId))) {
@@ -7395,9 +7467,9 @@ void cpu_use_item_strategy(s32 playerId) {
                 } else {
                     func_802A1064(fakeItemBox);
                     if (D_801631E0[playerId] == true) {
-                        fakeItemBox->pos[1] =
-                            get_surface_height(fakeItemBox->pos[0], fakeItemBox->pos[1] + 30.0, fakeItemBox->pos[2]) +
-                            fakeItemBox->boundingBoxSize;
+                        fakeItemBox->pos[1] = spawn_actor_on_surface(fakeItemBox->pos[0], fakeItemBox->pos[1] + 30.0,
+                                                                     fakeItemBox->pos[2]) +
+                                              fakeItemBox->boundingBoxSize;
                     }
                 }
                 temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;

@@ -305,6 +305,8 @@ enum CPU_BEHAVIOURS {
 
 enum DIRECTION { NORTH, EAST, SOUTH, WEST };
 
+enum PLACE { FIRST_PLACE, SECOND_PLACE, THIRD_PLACE, FOURTH_PLACE };
+
 /**
  * @brief Balloon status
  */

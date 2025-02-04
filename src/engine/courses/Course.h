@@ -50,10 +50,10 @@ typedef struct Properties {
     int16_t* SomePtr;
     uint32_t AISteeringSensitivity;
     _struct_gCoursePathSizes_0x10 PathSizes;
-    Vec4f D_0D009418;
-    Vec4f D_0D009568;
+    Vec4f CurveTargetSpeed;
+    Vec4f NormalTargetSpeed;
     Vec4f D_0D0096B8;
-    Vec4f D_0D009808;
+    Vec4f OffTrackTargetSpeed;
     TrackPathPoint* PathTable[4];
     TrackPathPoint* PathTable2[4];
     CloudData* Clouds;

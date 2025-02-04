@@ -546,7 +546,7 @@ void func_80028864(Player* player, Camera* camera, s8 playerId, s8 screenId) {
                 func_8002D268(player, camera, screenId, playerId);
             }
         } else {
-            control_kart_ai_movement(player, camera, screenId, playerId);
+            control_cpu_movement(player, camera, screenId, playerId);
         }
     } else if ((player->type & PLAYER_STAGING) == PLAYER_STAGING) {
         func_8002D028(player, playerId);
@@ -2618,7 +2618,7 @@ void func_8002E594(Player* player, UNUSED Camera* camera, s8 screenId, s8 player
     func_8002C4F8(player, playerId);
 }
 
-void control_kart_ai_movement(Player* player, UNUSED Camera* camera, s8 arg2, s8 playerId) {
+void control_cpu_movement(Player* player, UNUSED Camera* camera, s8 arg2, s8 playerId) {
     Vec3f spF4 = { 0.0f, 0.0f, 1.0f };
     UNUSED Vec3f spE8 = { 0.0f, 0.0f, 0.0f };
     Vec3f spDC = { 0.0f, 0.0f, 0.0f };
