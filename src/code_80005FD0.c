@@ -570,18 +570,21 @@ s16 get_angle_between_path(Vec3f arg0, Vec3f arg1) {
     return phi_v1;
 }
 
-s32 is_collide_with_vehicle(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7) {
-    f32 temp_f0;
+s32 is_collide_with_vehicle(f32 vehicleX, f32 vehicleZ, f32 vehicleVelocityX, f32 vehicleVelocityZ, f32 distanceX,
+                            f32 distanceY, f32 playerX, f32 playerZ) {
+    f32 velocity;
     f32 temp_f18;
 
-    temp_f0 = sqrtf((arg2 * arg2) + (arg3 * arg3));
-    if (temp_f0 < 0.01f) {
+    velocity = sqrtf((vehicleVelocityX * vehicleVelocityX) + (vehicleVelocityZ * vehicleVelocityZ));
+    if (velocity < 0.01f) {
         return 0;
     }
-    temp_f18 = ((arg2 / temp_f0) * (arg6 - arg0)) + ((arg3 / temp_f0) * (arg7 - arg1));
-    if ((-arg4 < temp_f18) && (temp_f18 < arg4)) {
-        temp_f18 = ((arg3 / temp_f0) * (arg6 - arg0)) + (-(arg2 / temp_f0) * (arg7 - arg1));
-        if ((-arg5 < temp_f18) && (temp_f18 < arg5)) {
+    temp_f18 =
+        ((vehicleVelocityX / velocity) * (playerX - vehicleX)) + ((vehicleVelocityZ / velocity) * (playerZ - vehicleZ));
+    if ((-distanceX < temp_f18) && (temp_f18 < distanceX)) {
+        temp_f18 = ((vehicleVelocityZ / velocity) * (playerX - vehicleX)) +
+                   (-(vehicleVelocityX / velocity) * (playerZ - vehicleZ));
+        if ((-distanceY < temp_f18) && (temp_f18 < distanceY)) {
             return 1;
         }
     }
@@ -922,15 +925,31 @@ void set_places_end_course_with_time(void) {
     }
 }
 
-s32 is_path_point_in_range(u16 arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
+/**
+ * Checks if a path point is within a valid range of another path point, accounting for track wrapping
+ *
+ * @param pathPoint The path point to check
+ * @param currentPathPoint The reference path point
+ * @param backwardRange Number of path to look behind
+ * @param forwardRange Number of path to look ahead
+ * @param totalPathPoints Total number of path in the track
+ * @return
+ *   1: path point is within normal range
+ *  -1: path point is within wrapped range
+ *   2: path point is out of range
+ *   0: invalid range parameters
+ */
+s32 is_path_point_in_range(u16 pathPoint, u16 currentPathPoint, u16 backwardRange, u16 forwardRange,
+                           u16 totalPathPoints) {
     s32 var_v1;
 
     var_v1 = 0;
-    if ((arg1 >= arg2) && (arg1 < (arg4 - arg3))) {
-        if ((arg0 >= (arg1 - arg2)) && ((arg1 + arg3) >= arg0)) {
+    if ((currentPathPoint >= backwardRange) && (currentPathPoint < (totalPathPoints - forwardRange))) {
+        if ((pathPoint >= (currentPathPoint - backwardRange)) && ((currentPathPoint + forwardRange) >= pathPoint)) {
             var_v1 = 1;
         }
-    } else if ((((arg1 + arg3) % arg4) < arg0) && ((((arg1 + arg4) - arg2) % arg4) >= arg0)) {
+    } else if ((((currentPathPoint + forwardRange) % totalPathPoints) < pathPoint) &&
+               ((((currentPathPoint + totalPathPoints) - backwardRange) % totalPathPoints) >= pathPoint)) {
         var_v1 = -1;
     } else {
         var_v1 = 2;
@@ -1066,7 +1085,7 @@ void func_80007FA4(s32 arg0, Player* player, f32 arg2) {
     }
 }
 
-void regulate_cpu_speed(s32 playerId, f32 arg1, Player* player) {
+void regulate_cpu_speed(s32 playerId, f32 targetSpeed, Player* player) {
     f32 var_f2;
     f32 var_f0;
     UNUSED s32 thing;
@@ -1101,7 +1120,7 @@ void regulate_cpu_speed(s32 playerId, f32 arg1, Player* player) {
                 player->effects &= ~0x00200000;
                 player_speed(player);
             } else if (player->type & 0x800) {
-                if (var_f2 < arg1) {
+                if (var_f2 < targetSpeed) {
                     player->effects &= ~0x00200000;
                     player_speed(player);
                 } else {
@@ -1130,7 +1149,7 @@ void regulate_cpu_speed(s32 playerId, f32 arg1, Player* player) {
                         break;
                     case SPEED_CPU_BEHAVIOUR_SLOW: /* switch 1 */
                         if (((var_f2 / 18.0f) * 216.0f) > 20.0f) {
-                            arg1 = 1.6666666f;
+                            targetSpeed = 1.6666666f;
                         }
                         var_a1 = 0;
                         break;
@@ -1140,7 +1159,7 @@ void regulate_cpu_speed(s32 playerId, f32 arg1, Player* player) {
                         break;
                 }
                 if (var_a1 != 1) {
-                    if (var_f2 < arg1) {
+                    if (var_f2 < targetSpeed) {
                         if ((gDemoMode == 1) && (GetCourse() != GetPodiumCeremony())) {
                             player_speed(player);
                         } else if (D_80163330[playerId] == 1) {
@@ -1155,7 +1174,7 @@ void regulate_cpu_speed(s32 playerId, f32 arg1, Player* player) {
                         }
                     } else {
                         player->effects &= ~0x00200000;
-                        if (arg1 > 1.0f) {
+                        if (targetSpeed > 1.0f) {
                             decelerate_ai_player(player, 2.0f);
                         } else {
                             decelerate_ai_player(player, 5.0f);
@@ -6935,7 +6954,7 @@ void func_8001AB00(void) {
     s32 var_v1;
 
     for (var_v1 = 0; var_v1 < NUM_PLAYERS; var_v1++) {
-        cpu_ItemStrategy[var_v1].branch = 0;
+        cpu_ItemStrategy[var_v1].branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
         cpu_ItemStrategy[var_v1].timer = 0;
         cpu_ItemStrategy[var_v1].actorIndex = -1;
         cpu_ItemStrategy[var_v1].numItemUse = 0;
@@ -6943,26 +6962,26 @@ void func_8001AB00(void) {
     }
 }
 
-void cpu_decisions_branch_item(UNUSED s32 arg0, s16* arg1, s32 arg2) {
+void cpu_decisions_branch_item(UNUSED s32 playerId, s16* branch, s32 itemId) {
     s32 value = -1;
-    switch (arg2) {
+    switch (itemId) {
         case ITEM_FAKE_ITEM_BOX:
-            value = 0xD;
+            value = CPU_STRATEGY_ITEM_FAKE_ITEM_BOX;
             break;
         case ITEM_BOO:
-            value = 0x1B;
+            value = CPU_STRATEGY_ITEM_BOO;
             break;
         case ITEM_BANANA:
-            value = 1;
+            value = CPU_STRATEGY_ITEM_BANANA;
             break;
         case ITEM_THUNDERBOLT:
-            value = 0x16;
+            value = CPU_STRATEGY_ITEM_THUNDERBOLT;
             break;
         case ITEM_STAR:
-            value = 0x19;
+            value = CPU_STRATEGY_ITEM_STAR;
             break;
         case ITEM_MUSHROOM:
-            value = 0x1D;
+            value = CPU_STRATEGY_ITEM_MUSHROOM;
             break;
         case ITEM_DOUBLE_MUSHROOM:
             break;
@@ -6971,8 +6990,9 @@ void cpu_decisions_branch_item(UNUSED s32 arg0, s16* arg1, s32 arg2) {
         case ITEM_SUPER_MUSHROOM:
             break;
     }
+
     if (value >= 0) {
-        *arg1 = value;
+        *branch = value;
     }
 }
 
@@ -6981,7 +7001,7 @@ void func_8001ABE0(UNUSED s32 arg0, UNUSED CpuItemStrategyData* arg1) {
 
 void clear_expired_strategies(CpuItemStrategyData* arg0) {
     if ((arg0->actorIndex < 0) || (arg0->actorIndex >= 0x64)) {
-        arg0->branch = 0;
+        arg0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
         arg0->timer = 0;
     }
 }
@@ -6992,9 +7012,9 @@ void clear_expired_strategies(CpuItemStrategyData* arg0) {
 // might have to get creative/ugly with just a single generic `Actor` variable.
 // https://decomp.me/scratch/FOlbG
 void cpu_use_item_strategy(s32 playerId) {
-    s32 var_v0;
+    bool isNoProblem;
     Player* player;
-    TrackPathPoint* waypoint;
+    TrackPathPoint* pathPoint;
     CpuItemStrategyData* temp_s0;
     struct Actor* actor;
     struct ShellActor* shell;
@@ -7007,36 +7027,37 @@ void cpu_use_item_strategy(s32 playerId) {
         (!(player->type & PLAYER_CINEMATIC_MODE))) {
         temp_s0 = &cpu_ItemStrategy[playerId];
         switch (temp_s0->branch) {
-            case 0:
+            case CPU_STRATEGY_WAIT_NEXT_ITEM:
                 temp_s0->actorIndex = -1;
                 if ((((playerId * 0x14) + 0x64) < gNumPathPointsTraversed[playerId]) && (temp_s0->timer >= 0x259) &&
                     (temp_s0->numItemUse < 3) && (gLapCountByPlayerId[playerId] < 3)) {
                     cpu_decisions_branch_item(playerId, &temp_s0->branch,
-                                              kart_ai_gen_random_item((s16) gLapCountByPlayerId[playerId],
-                                                                      gGPCurrentRaceRankByPlayerId[playerId]));
+                                              cpu_gen_random_item((s16) gLapCountByPlayerId[playerId],
+                                                                  gGPCurrentRaceRankByPlayerId[playerId]));
                 } else {
                     func_8001ABE0(playerId, temp_s0);
                 }
                 break;
 
-            case 1:
+            case CPU_STRATEGY_ITEM_BANANA:
+                // never true
                 if ((gLapCountByPlayerId[playerId] > 0) &&
                     (gGPCurrentRaceRankByPlayerId[gBestRankedHumanPlayer] > gGPCurrentRaceRankByPlayerId[playerId]) &&
-                    (gGPCurrentRaceRankByPlayerId[gBestRankedHumanPlayer] == 0)) {
+                    (gGPCurrentRaceRankByPlayerId[gBestRankedHumanPlayer] == FIRST_PLACE)) {
                     switch (player->characterId) {
-                        case 4:
+                        case DK:
                             if (is_path_point_in_range(gNearestPathPointByPlayerId[playerId],
                                                        gNearestPathPointByPlayerId[gBestRankedHumanPlayer], 0x0028U, 2U,
                                                        (u16) ((s32) gSelectedPathCount)) > 0) {
-                                temp_s0->branch = 0x0022;
+                                temp_s0->branch = CPU_STRATEGY_THROW_BANANA;
                             }
                             break;
 
-                        case 6:
+                        case PEACH:
                             if (is_path_point_in_range(gNearestPathPointByPlayerId[playerId],
                                                        gNearestPathPointByPlayerId[gBestRankedHumanPlayer], 4U, 2U,
                                                        (u16) ((s32) gSelectedPathCount)) > 0) {
-                                temp_s0->branch = 0x0022;
+                                temp_s0->branch = CPU_STRATEGY_THROW_BANANA;
                             }
                             break;
 
@@ -7044,416 +7065,424 @@ void cpu_use_item_strategy(s32 playerId) {
                             if (is_path_point_in_range(gNearestPathPointByPlayerId[playerId],
                                                        gNearestPathPointByPlayerId[gBestRankedHumanPlayer], 0x000AU, 2U,
                                                        (u16) ((s32) gSelectedPathCount)) > 0) {
-                                temp_s0->branch = 0x0022;
+                                temp_s0->branch = CPU_STRATEGY_THROW_BANANA;
                             }
                             break;
                     }
-                } else if (temp_s0->branch == 1) {
+                } else if (temp_s0->branch == CPU_STRATEGY_ITEM_BANANA) {
                     temp_s0->actorIndex = use_banana_item(player);
                     if ((temp_s0->actorIndex >= 0) && (temp_s0->actorIndex < 0x64)) {
                         player->soundEffects |= HOLD_BANANA_SOUND_EFFECT;
-                        temp_s0->branch = 2;
+                        temp_s0->branch = CPU_STRATEGY_HOLD_BANANA;
                         temp_s0->timer = 0;
                         temp_s0->numItemUse += 1;
                         temp_s0->timeBeforeThrow = (random_int(3U) * 0x14) + 0xA;
                     } else {
-                        temp_s0->branch = 0;
+                        temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                         temp_s0->timer = 0;
                     }
                 }
                 break;
 
-            case 2:
-                banana = (struct BananaActor*) GET_ACTOR(temp_s0->actorIndex);
-                if ((!(banana->flags & 0x8000)) || (banana->type != 6) || (banana->state != 0) ||
+            case CPU_STRATEGY_HOLD_BANANA:
+                banana = (struct BananaActor*) &gActorList[temp_s0->actorIndex];
+                if ((!(banana->flags & 0x8000)) || (banana->type != ACTOR_BANANA) || (banana->state != HELD_BANANA) ||
                     (playerId != banana->playerId)) {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     temp_s0->timer = 0;
-                    player->soundEffects &= ~0x00040000;
+                    player->soundEffects &= ~HOLD_BANANA_SOUND_EFFECT;
                 } else if (temp_s0->timeBeforeThrow < temp_s0->timer) {
-                    temp_s0->branch = 3;
+                    temp_s0->branch = CPU_STRATEGY_DROP_BANANA;
                 }
                 break;
 
-            case 3:
-                banana = (struct BananaActor*) GET_ACTOR(temp_s0->actorIndex);
-                if ((((!(banana->flags & 0x8000)) || (banana->type != 6)) || (banana->state != 0)) ||
+            case CPU_STRATEGY_DROP_BANANA:
+                banana = (struct BananaActor*) &gActorList[temp_s0->actorIndex];
+                if ((((!(banana->flags & 0x8000)) || (banana->type != ACTOR_BANANA)) ||
+                     (banana->state != HELD_BANANA)) ||
                     (playerId != banana->playerId)) {
                     if (playerId != banana->playerId) {}
                 } else {
-                    banana->state = 1;
+                    banana->state = DROPPED_BANANA;
                     banana->velocity[0] = 0.0f;
                     banana->velocity[1] = 0.0f;
                     banana->velocity[2] = 0.0f;
-                    if (D_801631E0[playerId] == ((u16) 1)) {
-                        banana->pos[1] = spawn_actor_on_surface(player->pos[0], (f32) (((f64) player->pos[1]) + 30.0),
-                                                                player->pos[2]) +
-                                         (banana->boundingBoxSize + 1.0f);
+                    if (D_801631E0[playerId] == ((u16) true)) {
+                        banana->pos[1] =
+                            get_surface_height(player->pos[0], (f32) (((f64) player->pos[1]) + 30.0), player->pos[2]) +
+                            (banana->boundingBoxSize + 1.0f);
                     }
                 }
-                player->soundEffects &= ~0x00040000;
+                player->soundEffects &= ~HOLD_BANANA_SOUND_EFFECT;
                 temp_s0->timer = 0;
-                temp_s0->branch = 0;
+                temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 break;
 
-            case 34:
+            case CPU_STRATEGY_THROW_BANANA:
                 temp_s0->actorIndex = use_banana_item(player);
                 if ((temp_s0->actorIndex >= 0) && (temp_s0->actorIndex < 0x64)) {
-                    banana = (struct BananaActor*) GET_ACTOR(temp_s0->actorIndex);
-                    banana->state = 4;
+                    banana = (struct BananaActor*) &gActorList[temp_s0->actorIndex];
+                    banana->state = BANANA_ON_GROUND;
                     player->soundEffects |= HOLD_BANANA_SOUND_EFFECT;
-                    temp_s0->branch = 0x0023;
+                    temp_s0->branch = CPU_STRATEGY_HOLD_THROW_BANANA;
                     temp_s0->timer = 0;
                     temp_s0->numItemUse += 1;
-                    waypoint = &gTrackPaths[gPathIndexByPlayerId[0]]
-                                           [(gNearestPathPointByPlayerId[gBestRankedHumanPlayer] + 0x1E) %
-                                            gPathCountByPathIndex[gPathIndexByPlayerId[gBestRankedHumanPlayer]]];
-                    banana->velocity[0] = (waypoint->posX - player->pos[0]) / 20.0;
-                    banana->velocity[1] = ((waypoint->posY - player->pos[1]) / 20.0) + 4.0;
-                    banana->velocity[2] = (waypoint->posZ - player->pos[2]) / 20.0;
+                    pathPoint = &gTrackPaths[gPathIndexByPlayerId[0]]
+                                            [(gNearestPathPointByPlayerId[gBestRankedHumanPlayer] + 0x1E) %
+                                             gPathCountByPathIndex[gPathIndexByPlayerId[gBestRankedHumanPlayer]]];
+                    banana->velocity[0] = (pathPoint->posX - player->pos[0]) / 20.0;
+                    banana->velocity[1] = ((pathPoint->posY - player->pos[1]) / 20.0) + 4.0;
+                    banana->velocity[2] = (pathPoint->posZ - player->pos[2]) / 20.0;
                     banana->pos[1] = player->pos[1];
                     func_800C92CC(playerId, SOUND_ARG_LOAD(0x29, 0x00, 0x80, 0x09));
                     func_800C98B8(player->pos, player->velocity, SOUND_ARG_LOAD(0x19, 0x01, 0x80, 0x14));
                 } else {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     temp_s0->timer = 0;
                 }
                 break;
 
-            case 35:
-                banana = (struct BananaActor*) GET_ACTOR(temp_s0->actorIndex);
-                if ((((!(banana->flags & 0x8000)) || (banana->type != 6)) || (banana->state != 4)) ||
+            case CPU_STRATEGY_HOLD_THROW_BANANA:
+                banana = (struct BananaActor*) &gActorList[temp_s0->actorIndex];
+                if ((((!(banana->flags & 0x8000)) || (banana->type != ACTOR_BANANA)) ||
+                     (banana->state != BANANA_ON_GROUND)) ||
                     (playerId != banana->playerId)) {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     temp_s0->timer = 0;
-                    player->soundEffects &= ~0x00040000;
+                    player->soundEffects &= ~HOLD_BANANA_SOUND_EFFECT;
                 } else {
                     banana->velocity[1] -= 0.4;
                     banana->pos[0] += banana->velocity[0];
                     banana->pos[1] += banana->velocity[1];
                     banana->pos[2] += banana->velocity[2];
                     if (temp_s0->timer >= 0x15) {
-                        temp_s0->branch = 0x0024;
+                        temp_s0->branch = CPU_STRATEGY_END_THROW_BANANA;
                     }
                 }
                 break;
 
-            case 36:
-                banana = (struct BananaActor*) GET_ACTOR(temp_s0->actorIndex);
-                if ((((!(banana->flags & 0x8000)) || (banana->type != 6)) || (banana->state != 4)) ||
+            case CPU_STRATEGY_END_THROW_BANANA:
+                banana = (struct BananaActor*) &gActorList[temp_s0->actorIndex];
+                if ((((!(banana->flags & 0x8000)) || (banana->type != ACTOR_BANANA)) ||
+                     (banana->state != BANANA_ON_GROUND)) ||
                     (playerId != banana->playerId)) {
                     if (playerId != banana->playerId) {}
                 } else {
-                    banana->state = 1;
+                    banana->state = DROPPED_BANANA;
                     banana->velocity[0] = 0.0f;
                     banana->velocity[1] = 0.0f;
                     banana->velocity[2] = 0.0f;
                     banana->pos[1] =
-                        spawn_actor_on_surface(banana->pos[0], (f32) (((f64) banana->pos[1]) + 30.0), banana->pos[2]) +
+                        get_surface_height(banana->pos[0], (f32) (((f64) banana->pos[1]) + 30.0), banana->pos[2]) +
                         (banana->boundingBoxSize + 1.0f);
                 }
-                player->soundEffects &= ~0x00040000;
-                temp_s0->branch = 0;
+                player->soundEffects &= ~HOLD_BANANA_SOUND_EFFECT;
+                temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 temp_s0->timer = 0;
                 break;
 
-            case 4:
+            case CPU_STRATEGY_ITEM_GREEN_SHELL:
                 if (((s32) gNumActors) < 0x50) {
                     temp_s0->actorIndex = use_green_shell_item(player);
                     if ((temp_s0->actorIndex >= 0) && (temp_s0->actorIndex < 0x64)) {
-                        temp_s0->branch = 5;
+                        temp_s0->branch = CPU_STRATEGY_HOLD_GREEN_SHELL;
                         temp_s0->timer = 0;
                         temp_s0->numItemUse += 1;
                         temp_s0->timeBeforeThrow = (random_int(3U) * 0x14) + 0xA;
                     } else {
-                        temp_s0->branch = 0;
+                        temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     }
                 } else {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 }
                 break;
 
-            case 5:
-                actor = GET_ACTOR(temp_s0->actorIndex);
-                if ((((!(actor->flags & 0x8000)) || (actor->type != 7)) || (actor->state != 0)) ||
+            case CPU_STRATEGY_HOLD_GREEN_SHELL:
+                actor = &gActorList[temp_s0->actorIndex];
+                if ((((!(actor->flags & 0x8000)) || (actor->type != ACTOR_GREEN_SHELL)) ||
+                     (actor->state != HELD_SHELL)) ||
                     (playerId != actor->rot[2])) {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     temp_s0->timer = 0;
                 } else if (temp_s0->timeBeforeThrow < temp_s0->timer) {
-                    temp_s0->branch = 6;
+                    temp_s0->branch = CPU_STRATEGY_THROW_GREEN_SHELL;
                     temp_s0->timer = 0;
                 }
                 break;
 
-            case 6:
-                actor = GET_ACTOR(temp_s0->actorIndex);
-                if ((((!(actor->flags & 0x8000)) || (actor->type != 7)) || (actor->state != 0)) ||
+            case CPU_STRATEGY_THROW_GREEN_SHELL:
+                actor = &gActorList[temp_s0->actorIndex];
+                if ((((!(actor->flags & 0x8000)) || (actor->type != ACTOR_GREEN_SHELL)) ||
+                     (actor->state != HELD_SHELL)) ||
                     (playerId != actor->rot[2])) {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     temp_s0->timer = 0;
                 } else {
-                    actor->state = 1;
+                    actor->state = RELEASED_SHELL;
                     temp_s0->timer = 0;
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 }
                 break;
 
-            case 7:
+            case CPU_STRATEGY_ITEM_RED_SHELL:
                 if (((s32) gNumActors) < 0x50) {
                     temp_s0->actorIndex = use_red_shell_item(player);
                     if ((temp_s0->actorIndex >= 0) && (temp_s0->actorIndex < 0x64)) {
-                        temp_s0->branch = 8;
+                        temp_s0->branch = CPU_STRATEGY_HOLD_RED_SHELL;
                         temp_s0->timer = 0;
                         temp_s0->numItemUse += 1;
                         temp_s0->timeBeforeThrow = (random_int(3U) * 0x14) + 0xA;
                     } else {
-                        temp_s0->branch = 0;
+                        temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     }
                 } else {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 }
                 break;
 
-            case 8:
-                shell = (struct ShellActor*) GET_ACTOR(temp_s0->actorIndex);
-                if ((((!(shell->flags & 0x8000)) || (shell->type != 8)) || (shell->state != 0)) ||
+            case CPU_STRATEGY_HOLD_RED_SHELL:
+                shell = (struct ShellActor*) &gActorList[temp_s0->actorIndex];
+                if ((((!(shell->flags & 0x8000)) || (shell->type != ACTOR_RED_SHELL)) ||
+                     (shell->state != HELD_SHELL)) ||
                     (playerId != shell->playerId)) {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     temp_s0->timer = 0;
                 } else if (temp_s0->timeBeforeThrow < temp_s0->timer) {
-                    temp_s0->branch = 9;
+                    temp_s0->branch = CPU_STRATEGY_THROW_RED_SHELL;
                 }
                 break;
 
-            case 9:
+            case CPU_STRATEGY_THROW_RED_SHELL:
                 clear_expired_strategies(temp_s0);
-                shell = (struct ShellActor*) GET_ACTOR(temp_s0->actorIndex);
-                if ((((!(shell->flags & 0x8000)) || (shell->type != 8)) || (shell->state != 0)) ||
+                shell = (struct ShellActor*) &gActorList[temp_s0->actorIndex];
+                if ((((!(shell->flags & 0x8000)) || (shell->type != ACTOR_RED_SHELL)) ||
+                     (shell->state != HELD_SHELL)) ||
                     (playerId != shell->playerId)) {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     temp_s0->timer = 0;
                 } else {
-                    shell->state = 1;
+                    shell->state = RELEASED_SHELL;
                     temp_s0->timer = 0;
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 }
                 break;
 
-            case 10:
+            case CPU_STRATEGY_ITEM_BANANA_BUNCH:
                 if (((s32) gNumActors) < 0x50) {
                     temp_s0->actorIndex = use_banana_bunch_item(player);
                     if ((temp_s0->actorIndex >= 0) && (temp_s0->actorIndex < 0x64)) {
-                        temp_s0->branch = 0x000B;
+                        temp_s0->branch = CPU_STRATEGY_WAIT_INIT_BANANA_BUNCH;
                         temp_s0->timer = 0;
                         temp_s0->numItemUse += 1;
                         temp_s0->timeBeforeThrow = (random_int(3U) * 0x14) + 0x3C;
                     } else {
-                        temp_s0->branch = 0;
+                        temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     }
                 } else {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 }
                 break;
 
-            case 11:
-                bananaBunchParent = (struct BananaBunchParent*) GET_ACTOR(temp_s0->actorIndex);
+            case CPU_STRATEGY_WAIT_INIT_BANANA_BUNCH:
+                bananaBunchParent = (struct BananaBunchParent*) &gActorList[temp_s0->actorIndex];
                 if (bananaBunchParent->state == 6) {
-                    var_v0 = 0;
+                    isNoProblem = false;
                     if (bananaBunchParent->bananaIndices[4] != (-1)) {
-                        var_v0 = 1;
+                        isNoProblem = true;
                     }
                     if (bananaBunchParent->bananaIndices[3] != (-1)) {
-                        var_v0 = 1;
+                        isNoProblem = true;
                     }
                     if (bananaBunchParent->bananaIndices[2] != (-1)) {
-                        var_v0 = 1;
+                        isNoProblem = true;
                     }
                     if (bananaBunchParent->bananaIndices[1] != (-1)) {
-                        var_v0 = 1;
+                        isNoProblem = true;
                     }
                     if (bananaBunchParent->bananaIndices[0] != (-1)) {
-                        var_v0 = 1;
+                        isNoProblem = true;
                     }
-                    if ((bananaBunchParent->type != 0x000E) || (var_v0 == 0)) {
-                        temp_s0->branch = 0;
+                    if ((bananaBunchParent->type != ACTOR_BANANA_BUNCH) || (isNoProblem == false)) {
+                        temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                         temp_s0->timer = 0;
                     } else if (temp_s0->timeBeforeThrow < temp_s0->timer) {
-                        temp_s0->branch = 0x000C;
+                        temp_s0->branch = CPU_STRATEGY_DROP_BANANA_BUNCH;
                         temp_s0->numDroppedBananaBunch = 0;
                         temp_s0->timer = 0;
                     }
                 }
                 break;
 
-            case 12:
+            case CPU_STRATEGY_DROP_BANANA_BUNCH:
                 if ((((s16) temp_s0->timer) % 10) == 0) {
                     if (temp_s0->numDroppedBananaBunch < 5) {
-                        bananaBunchParent = (struct BananaBunchParent*) GET_ACTOR(temp_s0->actorIndex);
-                        var_v0 = 0;
+                        bananaBunchParent = (struct BananaBunchParent*) &gActorList[temp_s0->actorIndex];
+                        isNoProblem = 0;
                         switch (temp_s0->numDroppedBananaBunch) {
                             case 0:
                                 if (bananaBunchParent->bananaIndices[4] != (-1)) {
-                                    var_v0 = 1;
+                                    isNoProblem = true;
                                 }
                                 break;
 
                             case 1:
                                 if (bananaBunchParent->bananaIndices[3] != (-1)) {
-                                    var_v0 = 1;
+                                    isNoProblem = true;
                                 }
                                 break;
 
                             case 2:
                                 if (bananaBunchParent->bananaIndices[2] != (-1)) {
-                                    var_v0 = 1;
+                                    isNoProblem = true;
                                 }
                                 break;
 
                             case 3:
                                 if (bananaBunchParent->bananaIndices[1] != (-1)) {
-                                    var_v0 = 1;
+                                    isNoProblem = true;
                                 }
                                 break;
 
                             case 4:
                                 if (bananaBunchParent->bananaIndices[0] != (-1)) {
-                                    var_v0 = 1;
+                                    isNoProblem = true;
                                 }
                                 break;
                         }
 
-                        if (((bananaBunchParent->type == 0x000E) && (bananaBunchParent->state == 6)) && (var_v0 == 1)) {
-                            func_802B0648(bananaBunchParent);
+                        if (((bananaBunchParent->type == ACTOR_BANANA_BUNCH) && (bananaBunchParent->state == 6)) &&
+                            (isNoProblem == true)) {
+                            drop_banana_in_banana_bunch(bananaBunchParent);
                         }
                         temp_s0->numDroppedBananaBunch += 1;
                     } else {
-                        temp_s0->branch = 0;
+                        temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                         temp_s0->timer = 0;
                     }
                 }
                 break;
 
-            case 13:
+            case CPU_STRATEGY_ITEM_FAKE_ITEM_BOX:
                 temp_s0->actorIndex = use_fake_itembox_item(player);
                 if ((temp_s0->actorIndex >= 0) && (temp_s0->actorIndex < 0x64)) {
-                    temp_s0->branch = 0x000E;
+                    temp_s0->branch = CPU_STRATEGY_HOLD_FAKE_ITEM_BOX;
                     temp_s0->timer = 0;
                     temp_s0->numItemUse += 1;
                     temp_s0->timeBeforeThrow = (random_int(3U) * 0x14) + 0xA;
                 } else {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 }
                 break;
 
-            case 14:
-                fakeItemBox = (struct FakeItemBox*) GET_ACTOR(temp_s0->actorIndex);
-                if ((((!(fakeItemBox->flags & 0x8000)) || (fakeItemBox->type != 0x000D)) ||
+            case CPU_STRATEGY_HOLD_FAKE_ITEM_BOX:
+                fakeItemBox = (struct FakeItemBox*) &gActorList[temp_s0->actorIndex];
+                if ((((!(fakeItemBox->flags & 0x8000)) || (fakeItemBox->type != ACTOR_FAKE_ITEM_BOX)) ||
                      (fakeItemBox->state != 0)) ||
                     (playerId != ((s32) fakeItemBox->playerId))) {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     temp_s0->timer = 0;
                 } else if (temp_s0->timeBeforeThrow < temp_s0->timer) {
-                    temp_s0->branch = 0x000F;
+                    temp_s0->branch = CPU_STRATEGY_THROW_FAKE_ITEM_BOX;
                 }
                 break;
 
-            case 15:
-                fakeItemBox = (struct FakeItemBox*) GET_ACTOR(temp_s0->actorIndex);
-                if ((((!(fakeItemBox->flags & 0x8000)) || (fakeItemBox->type != 0x000D)) ||
+            case CPU_STRATEGY_THROW_FAKE_ITEM_BOX:
+                fakeItemBox = (struct FakeItemBox*) &gActorList[temp_s0->actorIndex];
+                if ((((!(fakeItemBox->flags & 0x8000)) || (fakeItemBox->type != ACTOR_FAKE_ITEM_BOX)) ||
                      (fakeItemBox->state != 0)) ||
                     (playerId != ((s32) fakeItemBox->playerId))) {
                     if (playerId != fakeItemBox->rot[0]) {}
                 } else {
                     func_802A1064(fakeItemBox);
-                    if (D_801631E0[playerId] == 1) {
-                        fakeItemBox->pos[1] = spawn_actor_on_surface(fakeItemBox->pos[0], fakeItemBox->pos[1] + 30.0,
-                                                                     fakeItemBox->pos[2]) +
-                                              fakeItemBox->boundingBoxSize;
+                    if (D_801631E0[playerId] == true) {
+                        fakeItemBox->pos[1] =
+                            get_surface_height(fakeItemBox->pos[0], fakeItemBox->pos[1] + 30.0, fakeItemBox->pos[2]) +
+                            fakeItemBox->boundingBoxSize;
                     }
                 }
-                temp_s0->branch = 0;
+                temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 temp_s0->timer = 0;
                 break;
 
-            case 22:
+            case CPU_STRATEGY_ITEM_THUNDERBOLT:
                 use_thunder_item(player);
                 func_800CAC60(playerId);
                 func_8009E5BC();
-                temp_s0->branch = 0x0017;
+                temp_s0->branch = CPU_STRATEGY_END_THUNDERBOLT;
                 temp_s0->timer = 0;
                 temp_s0->numItemUse += 1;
                 break;
 
-            case 23:
+            case CPU_STRATEGY_END_THUNDERBOLT:
                 if (temp_s0->timer >= 0xF1) {
                     func_800CAD40((s32) ((u8) playerId));
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                     temp_s0->timer = 0;
                 }
                 break;
 
-            case 25:
+            case CPU_STRATEGY_ITEM_STAR:
                 player->soundEffects |= STAR_SOUND_EFFECT;
-                temp_s0->branch = 0x001A;
+                temp_s0->branch = CPU_STRATEGY_END_ITEM_STAR;
                 temp_s0->timer = 0;
                 temp_s0->numItemUse += 1;
                 break;
 
-            case 26:
+            case CPU_STRATEGY_END_ITEM_STAR:
                 if (!(player->effects & STAR_EFFECT)) {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 }
                 temp_s0->timer = 0;
                 break;
 
-            case 27:
+            case CPU_STRATEGY_ITEM_BOO:
                 player->soundEffects |= BOO_SOUND_EFFECT;
-                temp_s0->branch = 0x001C;
+                temp_s0->branch = CPU_STRATEGY_WAIT_END_BOO;
                 temp_s0->timer = 0;
                 temp_s0->numItemUse += 1;
                 break;
 
-            case 28:
+            case CPU_STRATEGY_WAIT_END_BOO:
                 if (!(player->effects & BOO_EFFECT)) {
-                    temp_s0->branch = 0;
+                    temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 }
                 temp_s0->timer = 0;
                 break;
 
-            case 29:
+            case CPU_STRATEGY_ITEM_MUSHROOM:
                 player->soundEffects |= BOOST_SOUND_EFFECT;
-                temp_s0->branch = 0;
+                temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                 temp_s0->timer = 0;
                 temp_s0->numItemUse += 1;
                 break;
 
-            case 30:
+            case CPU_STRATEGY_ITEM_DOUBLE_MUSHROOM:
                 if (temp_s0->timer >= 0x3D) {
                     player->soundEffects |= BOOST_SOUND_EFFECT;
-                    temp_s0->branch = 0x001D;
+                    temp_s0->branch = CPU_STRATEGY_ITEM_MUSHROOM;
                     temp_s0->timer = 0;
                 }
                 break;
 
-            case 31:
+            case CPU_STRATEGY_ITEM_TRIPLE_MUSHROOM:
                 if (temp_s0->timer >= 0x3D) {
                     player->soundEffects |= BOOST_SOUND_EFFECT;
-                    temp_s0->branch = 0x001E;
+                    temp_s0->branch = CPU_STRATEGY_ITEM_DOUBLE_MUSHROOM;
                     temp_s0->timer = 0;
                 }
                 break;
 
-            case 32:
-                temp_s0->branch = 0x0021;
+            case CPU_STRATEGY_ITEM_SUPER_MUSHROOM:
+                temp_s0->branch = CPU_STRATEGY_USE_SUPER_MUSHROOM;
                 temp_s0->timer = 0;
                 temp_s0->timeBeforeThrow = 0x0258;
                 break;
 
-            case 33:
+            case CPU_STRATEGY_USE_SUPER_MUSHROOM:
                 if ((((s16) temp_s0->timer) % 60) == 0) {
                     player->soundEffects |= BOOST_SOUND_EFFECT;
                     if (temp_s0->timeBeforeThrow < temp_s0->timer) {
-                        temp_s0->branch = 0;
+                        temp_s0->branch = CPU_STRATEGY_WAIT_NEXT_ITEM;
                         temp_s0->timer = 0;
                     }
                 }
