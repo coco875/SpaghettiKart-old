@@ -247,7 +247,7 @@ void YoshiValley::Collision() {
 }
 
 void YoshiValley::Waypoints(Player* player, int8_t playerId) {
-    player->nearestWaypointId = gCopyNearestWaypointByPlayerId[playerId];
+    player->nearestPathPointId = gCopyNearestWaypointByPlayerId[playerId];
 }
 
 void YoshiValley::ScrollingTextures() {

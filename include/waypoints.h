@@ -3,6 +3,14 @@
 
 #include <common_structs.h>
 
+enum {
+    RIGHT_LEANING_CURVE = 0,
+    LEFT_LEANING_CURVE = 1,
+    RIGHT_CURVE = 2, // strong curve
+    LEFT_CURVE = 3,  // strong curve
+    STRAIGHT = 4
+};
+
 typedef struct {
     /* 0x00 */ s16 posX;
     /* 0x02 */ s16 posY;

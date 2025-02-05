@@ -4,8 +4,8 @@
 #include <vector>
 
 struct CPUBehaviour {
-    /* 0x0 */ int16_t waypointStart;
-    /* 0x2 */ int16_t waypointEnd;
+    /* 0x0 */ int16_t pathPointStart;
+    /* 0x2 */ int16_t pathPointEnd;
     /* 0x4 */ int32_t type;
 }; // size = 0x8
 

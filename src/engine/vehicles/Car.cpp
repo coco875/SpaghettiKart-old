@@ -135,7 +135,7 @@ void ACar::Draw(Camera* camera) {
     u16 temp_a1;
 
     waypointCount = gPathCountByPathIndex[0];
-    if (!(gPlayers[camera->playerId].unk_094 < 1.6666666666666667)) {
+    if (!(gPlayers[camera->playerId].speed < 1.6666666666666667)) {
         temp_a1 = WaypointIndex;
         for (var_v0 = 0; var_v0 < 0x18; var_v0 += 3) {
             if (((sSomeNearestPathPoint + var_v0) % waypointCount) == temp_a1) {
@@ -156,7 +156,7 @@ void ACar::VehicleCollision(s32 playerId, Player* player) {
     f32 spC0;
     f32 spBC;
 
-    if (((D_801631E0[playerId] != 1) || ((((player->type & PLAYER_HUMAN) != 0)) && !(player->type & PLAYER_KART_AI))) &&
+    if (((D_801631E0[playerId] != 1) || ((((player->type & PLAYER_HUMAN) != 0)) && !(player->type & PLAYER_CPU))) &&
         !(player->effects & 0x01000000)) {
 
         spC4 = player->pos[0];
@@ -178,7 +178,7 @@ void ACar::VehicleCollision(s32 playerId, Player* player) {
                 }
             }
         }
-        if ((player->type & PLAYER_HUMAN) && !(player->type & PLAYER_KART_AI)) {
+        if ((player->type & PLAYER_HUMAN) && !(player->type & PLAYER_CPU)) {
             if (((temp_f12) > -300.0) && ((temp_f12) < 300.0) && ((temp_f22 > -20.0)) && (temp_f22 < 20.0) &&
                 (((temp_f14) > -300.0)) && ((temp_f14) < 300.0)) {
                 if ((sVehicleSoundRenderCounter > 0) && (SomeFlags == 0)) {
@@ -209,7 +209,7 @@ void ACar::VehicleCollision(s32 playerId, Player* player) {
                         case 0:
                             t1 = is_path_point_in_range(WaypointIndex, gNearestPathPointByPlayerId[playerId], 10, 0,
                                                         path);
-                            if ((gIsPlayerWrongDirection[playerId] == 0) && (t1 > 0) && (player->unk_094 < Speed)) {
+                            if ((gIsPlayerWrongDirection[playerId] == 0) && (t1 > 0) && (player->speed < Speed)) {
                                 var_s1 = 1;
                             }
                             if ((gIsPlayerWrongDirection[playerId] == 1) && (t1 > 0)) {
@@ -225,7 +225,7 @@ void ACar::VehicleCollision(s32 playerId, Player* player) {
                                     if (gIsPlayerWrongDirection[playerId] == 0) {
                                         var_s1 = 1;
                                     }
-                                    if ((gIsPlayerWrongDirection[playerId] == 1) && (player->unk_094 < Speed)) {
+                                    if ((gIsPlayerWrongDirection[playerId] == 1) && (player->speed < Speed)) {
                                         var_s1 = 1;
                                     }
                                 } else {

@@ -297,11 +297,11 @@ void DKJungle::SomeCollisionThing(Player* player, Vec3f arg1, Vec3f arg2, Vec3f 
 void DKJungle::Waypoints(Player* player, int8_t playerId) {
     s16 waypoint = gNearestPathPointByPlayerId[playerId];
     if ((waypoint >= 0xB9) && (waypoint < 0x119)) {
-        player->nearestWaypointId = 0xB9U;
+        player->nearestPathPointId = 0xB9U;
     } else {
-        player->nearestWaypointId = gNearestPathPointByPlayerId[playerId];
-        if (player->nearestWaypointId < 0) {
-            player->nearestWaypointId = gPathCountByPathIndex[0] + player->nearestWaypointId;
+        player->nearestPathPointId = gNearestPathPointByPlayerId[playerId];
+        if (player->nearestPathPointId < 0) {
+            player->nearestPathPointId = gPathCountByPathIndex[0] + player->nearestPathPointId;
         }
     }
 }

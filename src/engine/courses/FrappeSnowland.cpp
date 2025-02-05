@@ -259,11 +259,11 @@ void FrappeSnowland::Waypoints(Player* player, int8_t playerId) {
     s16 waypoint = gNearestPathPointByPlayerId[playerId];
 
     if ((waypoint >= 0xF0) && (waypoint < 0x105)) {
-        player->nearestWaypointId = 0xF0U;
+        player->nearestPathPointId = 0xF0U;
     } else {
-        player->nearestWaypointId = gCopyNearestWaypointByPlayerId[playerId];
-        if (player->nearestWaypointId < 0) {
-            player->nearestWaypointId = gPathCountByPathIndex[0] + player->nearestWaypointId;
+        player->nearestPathPointId = gCopyNearestWaypointByPlayerId[playerId];
+        if (player->nearestPathPointId < 0) {
+            player->nearestPathPointId = gPathCountByPathIndex[0] + player->nearestPathPointId;
         }
     }
 }

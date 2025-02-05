@@ -490,7 +490,7 @@ void func_8028EF28(void) {
                     func_8028EEF0(i);
 
                     currentPosition = gPlayers[i].currentRank;
-                    gPlayers[i].type |= PLAYER_KART_AI;
+                    gPlayers[i].type |= PLAYER_CPU;
 
                     if (currentPosition < 4) {
                         D_80150120 = 1;
@@ -527,7 +527,7 @@ void func_8028EF28(void) {
                                 gRaceState = RACE_FINISHED;
                                 i = gPlayerPositionLUT[1];
                                 gPlayers[i].soundEffects |= 0x200000;
-                                gPlayers[i].type |= PLAYER_KART_AI;
+                                gPlayers[i].type |= PLAYER_CPU;
                                 func_800CA118((u8) i);
                                 break;
                             case 3:
@@ -545,7 +545,7 @@ void func_8028EF28(void) {
                                         *(gNmiUnknown2 + i * 3 + 2) = 99;
                                     }
                                     gPlayers[i].soundEffects |= 0x200000;
-                                    gPlayers[i].type |= PLAYER_KART_AI;
+                                    gPlayers[i].type |= PLAYER_CPU;
                                     func_800CA118((u8) i);
                                 }
                                 break;
@@ -560,7 +560,7 @@ void func_8028EF28(void) {
                                     gRaceState = RACE_FINISHED;
                                     i = gPlayerPositionLUT[3];
                                     gPlayers[i].soundEffects |= 0x200000;
-                                    gPlayers[i].type |= PLAYER_KART_AI;
+                                    gPlayers[i].type |= PLAYER_CPU;
                                     func_800CA118((u8) i);
                                 }
                                 break;
@@ -752,7 +752,7 @@ void func_8028F970(void) {
         if (!(player->type & PLAYER_HUMAN)) {
             continue;
         }
-        if (player->type & PLAYER_KART_AI) {
+        if (player->type & PLAYER_CPU) {
             continue;
         }
 

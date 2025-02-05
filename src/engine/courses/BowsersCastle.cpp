@@ -335,13 +335,13 @@ void BowsersCastle::SomeCollisionThing(Player* player, Vec3f arg1, Vec3f arg2, V
 void BowsersCastle::Waypoints(Player* player, int8_t playerId) {
     s16 waypoint = gNearestPathPointByPlayerId[playerId];
     if ((waypoint >= 0x235) && (waypoint < 0x247)) {
-        player->nearestWaypointId = 0x214;
+        player->nearestPathPointId = 0x214;
     } else if ((waypoint >= 0x267) && (waypoint < 0x277)) {
-        player->nearestWaypointId = 0x25B;
+        player->nearestPathPointId = 0x25B;
     } else {
-        player->nearestWaypointId = gNearestPathPointByPlayerId[playerId];
-        if (player->nearestWaypointId < 0) {
-            player->nearestWaypointId = gPathCountByPathIndex[0] + player->nearestWaypointId;
+        player->nearestPathPointId = gNearestPathPointByPlayerId[playerId];
+        if (player->nearestPathPointId < 0) {
+            player->nearestPathPointId = gPathCountByPathIndex[0] + player->nearestPathPointId;
         }
     }
 }

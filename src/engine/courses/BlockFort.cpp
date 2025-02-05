@@ -178,7 +178,7 @@ void BlockFort::Collision() {
 }
 
 void BlockFort::Waypoints(Player* player, int8_t playerId) {
-    player->nearestWaypointId = 0;
+    player->nearestPathPointId = 0;
 }
 
 void BlockFort::Destroy() {

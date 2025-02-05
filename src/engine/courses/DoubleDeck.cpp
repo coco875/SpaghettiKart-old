@@ -178,7 +178,7 @@ void DoubleDeck::Collision() {
 }
 
 void DoubleDeck::Waypoints(Player* player, int8_t playerId) {
-    player->nearestWaypointId = 0;
+    player->nearestPathPointId = 0;
 }
 
 void DoubleDeck::Destroy() {

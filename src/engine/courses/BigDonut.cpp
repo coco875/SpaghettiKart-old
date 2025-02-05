@@ -196,7 +196,7 @@ void BigDonut::Collision() {
 }
 
 void BigDonut::Waypoints(Player* player, int8_t playerId) {
-    player->nearestWaypointId = 0;
+    player->nearestPathPointId = 0;
 }
 
 void BigDonut::Destroy() {

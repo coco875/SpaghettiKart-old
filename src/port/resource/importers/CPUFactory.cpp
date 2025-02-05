@@ -17,8 +17,8 @@ std::shared_ptr<Ship::IResource> ResourceFactoryBinaryCPUV0::ReadResource(std::s
 
     for (uint32_t i = 0; i < count; i++) {
         CPUBehaviour data;
-        data.waypointStart = reader->ReadInt16();
-        data.waypointEnd = reader->ReadInt16();
+        data.pathPointStart = reader->ReadInt16();
+        data.pathPointEnd = reader->ReadInt16();
         data.type = reader->ReadInt32();
 
         ai->CPUList.push_back(data);

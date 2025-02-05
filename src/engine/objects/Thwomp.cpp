@@ -356,7 +356,7 @@ void OThwomp::func_8007F8D8() {
 
     if (var_s4 != 0) {
         for (var_s0 = 0; var_s0 < 4; var_s0++, player++) {
-            if ((player->type & PLAYER_EXISTS) && !(player->type & PLAYER_KART_AI)) {
+            if ((player->type & PLAYER_EXISTS) && !(player->type & PLAYER_CPU)) {
                 if (OThwomp::func_8007F75C(var_s0) != 0) {
                     break;
                 }
@@ -611,20 +611,20 @@ void OThwomp::func_8007F6C4(s32 objectIndex, s32 playerId) {
 
 void OThwomp::func_80080B28(s32 objectIndex, s32 playerId) {
     f32 temp_f0;
-    Player* temp_s0;
+    Player* player;
 
-    temp_s0 = &gPlayerOne[playerId];
+    player = &gPlayerOne[playerId];
     if (is_obj_flag_status_active(objectIndex, 0x00000200) != 0) {
-        if (!(temp_s0->soundEffects & 0x100)) {
-            temp_f0 = func_80088F54(objectIndex, temp_s0);
-            if ((temp_f0 <= 9.0) && !(temp_s0->effects & 0x04000000) &&
-                (has_collided_horizontally_with_player(objectIndex, temp_s0) != 0)) {
-                if ((temp_s0->type & 0x8000) && !(temp_s0->type & 0x100)) {
-                    if (!(temp_s0->effects & 0x200)) {
+        if (!(player->soundEffects & 0x100)) {
+            temp_f0 = func_80088F54(objectIndex, player);
+            if ((temp_f0 <= 9.0) && !(player->effects & 0x04000000) &&
+                (has_collided_horizontally_with_player(objectIndex, player) != 0)) {
+                if ((player->type & 0x8000) && !(player->type & 0x100)) {
+                    if (!(player->effects & 0x200)) {
                         func_80089474(objectIndex, playerId, 1.4f, 1.1f, SOUND_ARG_LOAD(0x19, 0x00, 0xA0, 0x4C));
                     } else if (func_80072354(objectIndex, 0x00000040) != 0) {
-                        if (temp_s0->type & 0x1000) {
-                            func_800C98B8(temp_s0->pos, temp_s0->velocity, SOUND_ARG_LOAD(0x19, 0x01, 0xA2, 0x4A));
+                        if (player->type & 0x1000) {
+                            func_800C98B8(player->pos, player->velocity, SOUND_ARG_LOAD(0x19, 0x01, 0xA2, 0x4A));
                         } else {
                             func_800C9060((u8) playerId, SOUND_ARG_LOAD(0x19, 0x01, 0xA2, 0x4A));
                         }
@@ -637,21 +637,21 @@ void OThwomp::func_80080B28(s32 objectIndex, s32 playerId) {
                     }
                 }
             } else if ((temp_f0 <= 17.5) && (func_80072320(objectIndex, 1) != 0) &&
-                       (is_within_horizontal_distance_of_player(objectIndex, temp_s0,
-                                                                (temp_s0->unk_094 * 0.5) + _boundingBoxSize) != 0)) {
-                if ((temp_s0->type & 0x8000) && !(temp_s0->type & 0x100)) {
+                       (is_within_horizontal_distance_of_player(objectIndex, player,
+                                                                (player->speed * 0.5) + _boundingBoxSize) != 0)) {
+                if ((player->type & 0x8000) && !(player->type & 0x100)) {
                     if (is_obj_flag_status_active(objectIndex, 0x04000000) != 0) {
                         func_80072180();
                     }
                     func_800722A4(objectIndex, 2);
-                    temp_s0->unk_040 = (s16) objectIndex;
-                    temp_s0->unk_046 |= 2;
-                    temp_s0->soundEffects |= 0x100;
-                    func_80088FF0(temp_s0);
+                    player->unk_040 = (s16) objectIndex;
+                    player->unk_046 |= 2;
+                    player->soundEffects |= 0x100;
+                    func_80088FF0(player);
                 }
             }
         } else {
-            func_80088FF0(temp_s0);
+            func_80088FF0(player);
         }
     }
 }
@@ -978,7 +978,7 @@ void OThwomp::func_8007FB48(s32 objectIndex) {
             func_80086FD4(objectIndex);
             break;
         case 2:
-            gObjectList[objectIndex].velocity[0] = player->unk_094 * xOrientation * 1.25;
+            gObjectList[objectIndex].velocity[0] = player->speed * xOrientation * 1.25;
             if (gObjectList[objectIndex].unk_048 >= gObjectList[objectIndex].unk_0B0) {
                 if (gObjectList[objectIndex].unk_0B0 == gObjectList[objectIndex].unk_048) {
                     if (D_8018D400 & 1) {

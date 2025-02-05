@@ -233,7 +233,7 @@ void RainbowRoad::Collision() {
 }
 
 void RainbowRoad::Waypoints(Player* player, int8_t playerId) {
-    player->nearestWaypointId = gCopyNearestWaypointByPlayerId[playerId];
+    player->nearestPathPointId = gCopyNearestWaypointByPlayerId[playerId];
 }
 
 void RainbowRoad::DrawWater(struct UnkStruct_800DC5EC* screen, uint16_t pathCounter, uint16_t cameraRot,

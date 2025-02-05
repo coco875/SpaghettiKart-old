@@ -341,11 +341,11 @@ void BansheeBoardwalk::ScrollingTextures() {
 void BansheeBoardwalk::Waypoints(Player* player, int8_t playerId) {
     s16 waypoint = gNearestPathPointByPlayerId[playerId];
     if ((waypoint >= 0x12C) && (waypoint < 0x13C)) {
-        player->nearestWaypointId = 0x12CU;
+        player->nearestPathPointId = 0x12CU;
     } else {
-        player->nearestWaypointId = gNearestPathPointByPlayerId[playerId];
-        if (player->nearestWaypointId < 0) {
-            player->nearestWaypointId = gPathCountByPathIndex[0] + player->nearestWaypointId;
+        player->nearestPathPointId = gNearestPathPointByPlayerId[playerId];
+        if (player->nearestPathPointId < 0) {
+            player->nearestPathPointId = gPathCountByPathIndex[0] + player->nearestPathPointId;
         }
     }
 }
