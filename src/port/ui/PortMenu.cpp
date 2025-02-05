@@ -11,10 +11,10 @@
 #include "ResolutionEditor.h"
 
 extern "C" {
-    extern s32 gGamestateNext;
-    extern s32 gMenuSelection;
-    #include "audio/external.h"
-    #include "defines.h"
+extern s32 gGamestateNext;
+extern s32 gMenuSelection;
+#include "audio/external.h"
+#include "defines.h"
 }
 
 namespace GameUI {
@@ -146,9 +146,8 @@ void PortMenu::AddSettings() {
                      .IsPercentage());
     AddWidget(path, "Main Music Volume: %.0f%%", WIDGET_CVAR_SLIDER_FLOAT)
         .CVar("gMainMusicVolume")
-        .Callback([](WidgetInfo& info) {
-            audio_set_player_volume(SEQ_PLAYER_LEVEL, CVarGetFloat("gMainMusicVolume", 1.0f));
-        })
+        .Callback(
+            [](WidgetInfo& info) { audio_set_player_volume(SEQ_PLAYER_LEVEL, CVarGetFloat("gMainMusicVolume", 1.0f)); })
         .Options(FloatSliderOptions()
                      .Tooltip("Adjust the background music volume.")
                      .ShowButtons(false)
@@ -156,16 +155,17 @@ void PortMenu::AddSettings() {
                      .IsPercentage());
     AddWidget(path, "Sound Effects Volume: %.0f%%", WIDGET_CVAR_SLIDER_FLOAT)
         .CVar("gSFXMusicVolume")
-        .Callback([](WidgetInfo& info) {
-            audio_set_player_volume(SEQ_PLAYER_SFX, CVarGetFloat("gSFXMusicVolume", 1.0f));
-        })
-        .Options(
-            FloatSliderOptions().Tooltip("Adjust the sound effects volume.").ShowButtons(false).Format("").IsPercentage());
+        .Callback(
+            [](WidgetInfo& info) { audio_set_player_volume(SEQ_PLAYER_SFX, CVarGetFloat("gSFXMusicVolume", 1.0f)); })
+        .Options(FloatSliderOptions()
+                     .Tooltip("Adjust the sound effects volume.")
+                     .ShowButtons(false)
+                     .Format("")
+                     .IsPercentage());
     AddWidget(path, "Sound Effects Volume: %.0f%%", WIDGET_CVAR_SLIDER_FLOAT)
         .CVar("gEnvironmentVolume")
-        .Callback([](WidgetInfo& info) {
-            audio_set_player_volume(SEQ_PLAYER_ENV, CVarGetFloat("gEnvironmentVolume", 1.0f));
-        })
+        .Callback(
+            [](WidgetInfo& info) { audio_set_player_volume(SEQ_PLAYER_ENV, CVarGetFloat("gEnvironmentVolume", 1.0f)); })
         .Options(FloatSliderOptions()
                      .Tooltip("Adjust the environment volume.")
                      .ShowButtons(false)
@@ -325,41 +325,48 @@ void PortMenu::AddEnhancements() {
     AddMenuEntry("Enhancements", "gSettings.Menu.EnhancementsSidebarSection");
     WidgetPath path = { "Enhancements", "General", SECTION_COLUMN_1 };
     AddSidebarEntry("Enhancements", "General", 3);
-        //UIWidgets::WindowButton("Multiplayer", "gMultiplayerWindowEnabled", GameUI::mMultiplayerWindow,
-        //                        { .tooltip = "Shows the multiplayer window" });
-        //    UIWidgets::WindowButton("Freecam", "gFreecam", GameUI::mFreecamWindow,
-        //                            { .tooltip = "Allows you to fly around the course" });
+    // UIWidgets::WindowButton("Multiplayer", "gMultiplayerWindowEnabled", GameUI::mMultiplayerWindow,
+    //                         { .tooltip = "Shows the multiplayer window" });
+    //     UIWidgets::WindowButton("Freecam", "gFreecam", GameUI::mFreecamWindow,
+    //                             { .tooltip = "Allows you to fly around the course" });
     AddWidget(path, "No multiplayer feature cuts", WIDGET_CVAR_CHECKBOX)
         .CVar("gMultiplayerNoFeatureCuts")
         .Options(CheckboxOptions().Tooltip("Allows full train and jumbotron in multiplayer, etc."));
     AddWidget(path, "General Improvements", WIDGET_CVAR_CHECKBOX)
-        .CVar("gImprovements").Options(CheckboxOptions().Tooltip("General improvements to the game experience."));
+        .CVar("gImprovements")
+        .Options(CheckboxOptions().Tooltip("General improvements to the game experience."));
     AddWidget(path, "No Level of Detail (LOD)", WIDGET_CVAR_CHECKBOX)
         .CVar("gDisableLod")
-        .Options(CheckboxOptions().Tooltip("Disable Level of Detail (LOD) to avoid models using lower poly versions at a distance"));
+        .Options(CheckboxOptions().Tooltip(
+            "Disable Level of Detail (LOD) to avoid models using lower poly versions at a distance"));
     AddWidget(path, "Disable Culling", WIDGET_CVAR_CHECKBOX)
-        .CVar("gNoCulling").Options(CheckboxOptions().Tooltip("Disable original culling of mk64"));
+        .CVar("gNoCulling")
+        .Options(CheckboxOptions().Tooltip("Disable original culling of mk64"));
     AddWidget(path, "Far Frustrum", WIDGET_CVAR_SLIDER_FLOAT)
         .CVar("gFarFrustrum")
-        .Options(FloatSliderOptions().Min(0.0f).Max(10000.0f).DefaultValue(10000.0f)
-                    .Tooltip("Say how Far the Frustrum are when 'Disable Culling' are enable").Step(10.0f));
-
-    path = { "Enhancements", "Cheats", SECTION_COLUMN_1 };
-    AddSidebarEntry("Enhancements", "Cheats", 3);
-    AddWidget(path, "Moon Jump", WIDGET_CVAR_CHECKBOX)
-        .CVar("gEnableMoonJump");
-    AddWidget(path, "Enable Custom CC", WIDGET_CVAR_CHECKBOX)
-        .CVar("gEnableCustomCC");
+        .Options(FloatSliderOptions()
+                     .Min(0.0f)
+                     .Max(10000.0f)
+                     .DefaultValue(10000.0f)
+                     .Tooltip("Say how Far the Frustrum are when 'Disable Culling' are enable")
+                     .Step(10.0f));
+    AddWidget(path, "Enable Custom CC", WIDGET_CVAR_CHECKBOX).CVar("gEnableCustomCC");
     AddWidget(path, "Custom CC", WIDGET_CVAR_SLIDER_FLOAT)
         .CVar("gCustomCC")
         .Options(FloatSliderOptions().Min(0.0f).Max(1000.0f).DefaultValue(150.0f).Step(10.0f));
+
+    AddWidget(path, "Harder CPU", WIDGET_CVAR_CHECKBOX).CVar("gHarderCPU");
+
+    path = { "Enhancements", "Cheats", SECTION_COLUMN_1 };
+    AddSidebarEntry("Enhancements", "Cheats", 3);
+    AddWidget(path, "Moon Jump", WIDGET_CVAR_CHECKBOX).CVar("gEnableMoonJump");
     AddWidget(path, "Disable Wall Collision", WIDGET_CVAR_CHECKBOX)
         .CVar("gNoWallColision")
         .Options(CheckboxOptions().Tooltip("Disable wall collision."));
     AddWidget(path, "Min Height", WIDGET_CVAR_SLIDER_FLOAT)
         .CVar("gMinHeight")
-        .Options(FloatSliderOptions().Min(-50.0f).Max(50.0f).DefaultValue(0.0f)
-                     .Tooltip("When Disable Wall Collision are enable what is the minimal height you can get."));
+        .Options(FloatSliderOptions().Min(-50.0f).Max(50.0f).DefaultValue(0.0f).Tooltip(
+            "When Disable Wall Collision are enable what is the minimal height you can get."));
 }
 
 void PortMenu::AddDevTools() {
@@ -388,15 +395,15 @@ void PortMenu::AddDevTools() {
     AddSidebarEntry("Developer", "Game Info", 1);
     AddWidget(path, "Popout Game Info", WIDGET_WINDOW_BUTTON)
         .CVar("gGameInfoEnabled")
-        .Options(ButtonOptions().Tooltip(
-            "Shows the game info window, contains player and actor information"))
+        .Options(ButtonOptions().Tooltip("Shows the game info window, contains player and actor information"))
         .WindowName("GfxDebuggerWindow");
 
     path = { "Developer", "Stats", SECTION_COLUMN_1 };
     AddSidebarEntry("Developer", "Stats", 1);
     AddWidget(path, "Popout Stats", WIDGET_WINDOW_BUTTON)
         .CVar("gStatsEnabled")
-        .Options(ButtonOptions().Tooltip("Shows the stats window, with your FPS and frametimes, and the OS you're playing on"))
+        .Options(ButtonOptions().Tooltip(
+            "Shows the stats window, with your FPS and frametimes, and the OS you're playing on"))
         .WindowName("Stats");
 
     path = { "Developer", "Console", SECTION_COLUMN_1 };
@@ -412,9 +419,9 @@ PortMenu::PortMenu(const std::string& consoleVariable, const std::string& name)
     : Menu(consoleVariable, name, 0, UIWidgets::Colors::LightBlue) {
 }
 
-//bool CheckNetworkConnected(disabledInfo& info) {
-//    return gNetwork.isConnected;
-//}
+// bool CheckNetworkConnected(disabledInfo& info) {
+//     return gNetwork.isConnected;
+// }
 
 void PortMenu::InitElement() {
     Ship::Menu::InitElement();
@@ -494,4 +501,4 @@ void PortMenu::Draw() {
 void PortMenu::DrawElement() {
     Ship::Menu::DrawElement();
 }
-} // namespace BenGui
+} // namespace GameUI
