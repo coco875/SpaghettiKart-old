@@ -11,7 +11,7 @@ extern "C" {
 }
 
 class ASpaghettiShip : public AActor {
-public:
+  public:
     explicit ASpaghettiShip(FVector pos);
     virtual ~ASpaghettiShip() = default;
 
@@ -21,8 +21,9 @@ public:
 
     FVector Spawn;
     FVector Pos;
-    FRotation Rot = {0, 0, 0};
-    FRotation WheelRot = {0, 0, 0};
-private:
+    FRotation Rot = { 0, 0, 0 };
+    FRotation WheelRot = { 0, 0, 0 };
+
+  private:
     f32 scale;
 };

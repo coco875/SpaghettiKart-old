@@ -7,6 +7,6 @@ namespace GameUI {
 bool IsDroppingFrames();
 void RegisterResolutionWidgets();
 void UpdateResolutionVars();
-} // namespace BenGui
+} // namespace GameUI
 
 #endif // RESOLUTIONEDITOR_H

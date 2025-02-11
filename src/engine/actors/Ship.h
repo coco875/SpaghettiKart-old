@@ -11,8 +11,7 @@ extern "C" {
 }
 
 class AShip : public AActor {
-public:
-
+  public:
     enum Skin {
         GHOSTSHIP,
         SHIP2,
@@ -28,7 +27,8 @@ public:
 
     FVector Spawn;
     FVector Pos;
-    FRotation Rot = {0, 0, 0};
-private:
+    FRotation Rot = { 0, 0, 0 };
+
+  private:
     Gfx* _skin;
 };

@@ -31,10 +31,10 @@ void AStarship::Tick() {
     Rot.yaw = angle * (180.0f / M_PI) + 90.0f;
 }
 
-void AStarship::Draw(Camera *camera) {
+void AStarship::Draw(Camera* camera) {
     Mat4 shipMtx;
-    Vec3f hullPos = {Pos.x, Pos.y, Pos.z};
-    Vec3s hullRot = {Rot.pitch, Rot.yaw, Rot.roll};
+    Vec3f hullPos = { Pos.x, Pos.y, Pos.z };
+    Vec3s hullRot = { Rot.pitch, Rot.yaw, Rot.roll };
 
     gSPSetGeometryMode(gDisplayListHead++, G_SHADING_SMOOTH);
     gSPClearGeometryMode(gDisplayListHead++, G_LIGHTING);
@@ -46,4 +46,6 @@ void AStarship::Draw(Camera *camera) {
     }
 }
 
-bool AStarship::IsMod() { return true; }
+bool AStarship::IsMod() {
+    return true;
+}

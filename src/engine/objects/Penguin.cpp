@@ -33,7 +33,6 @@ extern "C" {
 extern s8 gPlayerCount;
 }
 
-
 OPenguin::OPenguin(Vec3f pos, u16 direction, PenguinType type, Behaviour behaviour) {
     _type = type;
     _bhv = behaviour;
@@ -42,13 +41,13 @@ OPenguin::OPenguin(Vec3f pos, u16 direction, PenguinType type, Behaviour behavio
 
     init_object(_objectIndex, 0);
 
-    Object *object = &gObjectList[_objectIndex];
+    Object* object = &gObjectList[_objectIndex];
     object->origin_pos[0] = pos[0] * xOrientation;
     object->origin_pos[1] = pos[1];
     object->origin_pos[2] = pos[2];
     object->unk_0C6 = direction;
 
-    switch(type) {
+    switch (type) {
         case PenguinType::CHICK:
             object->surfaceHeight = 5.0f;
             object->sizeScaling = 0.04f;
@@ -90,8 +89,7 @@ void OPenguin::Tick(void) {
     } else {
         func_80089820(objectIndex, 1.5f, 1.25f, 0x1900A046U);
     }
-    if ((is_obj_flag_status_active(objectIndex, 0x02000000) != 0) &&
-        (func_80072354(objectIndex, 0x00000020) != 0)) {
+    if ((is_obj_flag_status_active(objectIndex, 0x02000000) != 0) && (func_80072354(objectIndex, 0x00000020) != 0)) {
         func_800722A4(objectIndex, 0x00000060);
         clear_object_flag(objectIndex, 0x02000000);
     }
@@ -112,7 +110,6 @@ void OPenguin::Draw(s32 cameraId) {
         var_s3 = 0x00015F90;
     }
 
-
     if (gObjectList[objectIndex].state >= 2) {
 
         // This code decreased draw dist if there's more players.
@@ -120,9 +117,9 @@ void OPenguin::Draw(s32 cameraId) {
         // It seems to check the angle of the camera.
         // These changes were so instance indices are not required.
 
-        //if (gPlayerCountSelection1 == 1) {
-            var_s1 = 0x4000;
-            drawDistance = 1500;
+        // if (gPlayerCountSelection1 == 1) {
+        var_s1 = 0x4000;
+        drawDistance = 1500;
         //} else {
         //    if (func_80072320(objectIndex, 8) != 0) {
         //        drawDistance = 500;
@@ -282,7 +279,6 @@ void OPenguin::func_8008502C(s32 objectIndex) {
     func_800873F4(objectIndex);
 }
 
-
 void OPenguin::EmperorPenguin(s32 objectIndex) {
     switch (gObjectList[objectIndex].state) {
         case 0:
@@ -303,8 +299,8 @@ void OPenguin::InitEmperorPenguin(s32 objectIndex) {
     object->unk_0D8 = 0;
     object->model = (Gfx*) d_course_sherbet_land_unk_data1;
     object->vertex = (Vtx*) d_course_sherbet_land_unk_data11;
-    //object->sizeScaling = 0.2f;
-    //object->boundingBoxSize = 0x000C;
+    // object->sizeScaling = 0.2f;
+    // object->boundingBoxSize = 0x000C;
     object->unk_09C = 1;
     set_obj_direction_angle(objectIndex, 0U, 0U, 0U);
     object->unk_0DD = 1;
@@ -371,14 +367,14 @@ void OPenguin::InitOtherPenguin(s32 objectIndex) {
     object->unk_0D8 = 0;
     object->model = (Gfx*) d_course_sherbet_land_unk_data1;
     object->vertex = (Vtx*) d_course_sherbet_land_unk_data11;
-    //object->boundingBoxSize = 4;
+    // object->boundingBoxSize = 4;
     object->unk_09C = 2;
     object->unk_04C = random_int(300);
     set_object_flag(objectIndex, 0x04000220);
 
     // This code has been significantly refactored from the original func_800845C8
     // Into a switch statement instead of checking for the index of the penguin
-    switch(_bhv) {
+    switch (_bhv) {
         case Behaviour::CIRCLE:
             object->unk_01C[1] = Diameter;
 
@@ -390,7 +386,7 @@ void OPenguin::InitOtherPenguin(s32 objectIndex) {
 
             _toggle = !_toggle;
 
-            //object->unk_0DD = 2;
+            // object->unk_0DD = 2;
             func_800722A4(objectIndex, 8);
             break;
         case Behaviour::SLIDE3:

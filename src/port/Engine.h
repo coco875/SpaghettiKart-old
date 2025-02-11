@@ -1,14 +1,13 @@
 #pragma once
 
-
 #define LOAD_ASSET(path) \
-(path == NULL ? NULL \
-  : (GameEngine_OTRSigCheck((const char*) path) ? ResourceGetDataByName((const char*) path) : path))
-  #define LOAD_ASSET_RAW(path) ResourceGetDataByName((const char*) path)
-  
-  #ifdef __cplusplus
-  #include <vector>
-  #include <SDL2/SDL.h>
+    (path == NULL ? NULL \
+                  : (GameEngine_OTRSigCheck((const char*) path) ? ResourceGetDataByName((const char*) path) : path))
+#define LOAD_ASSET_RAW(path) ResourceGetDataByName((const char*) path)
+
+#ifdef __cplusplus
+#include <vector>
+#include <SDL2/SDL.h>
 #include <Fast3D/gfx_pc.h>
 #include "libultraship/src/Context.h"
 
@@ -73,6 +72,7 @@ class GameEngine {
     uint32_t OTRGetGameRenderHeight();
     uint32_t OTRCalculateCenterOfAreaFromRightEdge(int32_t center);
     uint32_t OTRCalculateCenterOfAreaFromLeftEdge(int32_t center);
+
   private:
     ImFont* CreateFontWithSize(float size, std::string fontPath = "");
 };
@@ -105,4 +105,3 @@ uint32_t OTRCalculateCenterOfAreaFromLeftEdge(int32_t center);
 #ifdef __cplusplus
 }
 #endif
-

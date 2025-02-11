@@ -113,7 +113,7 @@ void DrawColumn2(WidgetInfo& info) {
 
     for (size_t i = 0; i < NETWORK_MAX_PLAYERS; i++) {
         ImGui::Text("Slot %d: char: %d, hasAuthority: %d", clients[i].slot, clients[i].character,
-            gPlayers[i].nHasAuthority);
+                    gPlayers[i].nHasAuthority);
     }
 
     /*  Stick UI to the bottom of the panel  */
@@ -121,8 +121,7 @@ void DrawColumn2(WidgetInfo& info) {
     float windowHeight = ImGui::GetWindowHeight();
 
     // Move the cursor to a position relative to the bottom of the window
-    ImGui::SetCursorPosY(windowHeight -
-        ImGui::GetFrameHeightWithSpacing() * 2); // Adjust Y position for two buttons
+    ImGui::SetCursorPosY(windowHeight - ImGui::GetFrameHeightWithSpacing() * 2); // Adjust Y position for two buttons
 
     char buttonLabel[32];
 
@@ -154,11 +153,9 @@ void DrawColumn2(WidgetInfo& info) {
 void RegisterMultiplayerWidgets() {
     mPortMenu->AddSidebarEntry("Enhancements", "Multiplayer", 2);
     WidgetPath path = { "Enhancements", "Multiplayer", SECTION_COLUMN_1 };
-    mPortMenu->AddWidget(path, "Multi Custom 1", WIDGET_CUSTOM)
-        .CustomFunction(DrawColumn1);
+    mPortMenu->AddWidget(path, "Multi Custom 1", WIDGET_CUSTOM).CustomFunction(DrawColumn1);
     path.column = SECTION_COLUMN_2;
-    mPortMenu->AddWidget(path, "Multi Custom 2", WIDGET_CUSTOM)
-        .CustomFunction(DrawColumn2);
+    mPortMenu->AddWidget(path, "Multi Custom 2", WIDGET_CUSTOM).CustomFunction(DrawColumn2);
 }
 
 static RegisterMenuInitFunc initFunc(RegisterMultiplayerWidgets);
