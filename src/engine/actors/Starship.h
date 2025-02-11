@@ -11,7 +11,7 @@ extern "C" {
 }
 
 class AStarship : public AActor {
-public:
+  public:
     explicit AStarship(FVector pos);
     virtual ~AStarship() = default;
 
@@ -21,5 +21,5 @@ public:
 
     FVector Spawn;
     FVector Pos;
-    FRotation Rot = {0, 0, 0};
+    FRotation Rot = { 0, 0, 0 };
 };

@@ -1679,7 +1679,7 @@ void render_texture_rectangle_wide_left(s32 x, s32 y, s32 width, s32 height, s32
             if (gPlayerCount == 3) {
                 // Center item in area of screen
                 s32 center = (s32) ((OTRGetDimensionFromLeftEdge(SCREEN_WIDTH) - SCREEN_WIDTH) / 2) +
-                                ((SCREEN_WIDTH / 4) + (SCREEN_WIDTH / 2));
+                             ((SCREEN_WIDTH / 4) + (SCREEN_WIDTH / 2));
                 s32 coordX = (s32) (center - (width / 2)) << 2;
                 s32 coordX2 = (s32) (center + (width / 2)) << 2;
                 gSPWideTextureRectangle(gDisplayListHead++, coordX, yl, coordX2, yh2, G_TX_RENDERTILE, arg4 << 5,
@@ -2682,15 +2682,17 @@ void func_8004EB38(s32 playerId) {
     }
     if ((u8) temp_s0->unk_7E != 0) {
         func_8004C9D8_wide((s32) temp_s0->lapAfterImage1X, temp_s0->lapY + 3, 0x00000080, (u8*) common_texture_hud_lap,
-                      0x00000020, 8, 0x00000020, 8);
+                           0x00000020, 8, 0x00000020, 8);
         func_8004C9D8_wide(temp_s0->lapAfterImage1X + 0x1C, (s32) temp_s0->lapY, 0x00000080,
-                      (u8*) gHudLapTextures[temp_s0->alsoLapCount], 0x00000020, 0x00000010, 0x00000020, 0x00000010);
+                           (u8*) gHudLapTextures[temp_s0->alsoLapCount], 0x00000020, 0x00000010, 0x00000020,
+                           0x00000010);
     }
     if ((u8) temp_s0->unk_7F != 0) {
         func_8004C9D8_wide((s32) temp_s0->lapAfterImage2X, temp_s0->lapY + 3, 0x00000050, (u8*) common_texture_hud_lap,
-                      0x00000020, 8, 0x00000020, 8);
+                           0x00000020, 8, 0x00000020, 8);
         func_8004C9D8_wide(temp_s0->lapAfterImage2X + 0x1C, (s32) temp_s0->lapY, 0x00000050,
-                      (u8*) gHudLapTextures[temp_s0->alsoLapCount], 0x00000020, 0x00000010, 0x00000020, 0x00000010);
+                           (u8*) gHudLapTextures[temp_s0->alsoLapCount], 0x00000020, 0x00000010, 0x00000020,
+                           0x00000010);
     }
 }
 
@@ -2719,8 +2721,8 @@ void func_8004EF9C(s32 arg0) {
 
     temp_v0 = CM_GetProps()->MinimapDimensions.X;
     temp_t0 = CM_GetProps()->MinimapDimensions.Z;
-    func_8004D37C(0x00000104, 0x0000003C, CM_GetProps()->MinimapTexture, 0x000000FF, 0x000000FF, 0x000000FF,
-                  0x000000FF, temp_v0, temp_t0, temp_v0, temp_t0);
+    func_8004D37C(0x00000104, 0x0000003C, CM_GetProps()->MinimapTexture, 0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF,
+                  temp_v0, temp_t0, temp_v0, temp_t0);
 }
 
 void set_minimap_finishline_position(s32 arg0) {
@@ -4087,13 +4089,12 @@ void func_800569F4(s32 playerIndex) {
     CM_DisplayBattleBombKart(playerIndex, 0);
 }
 
-
 void func_80056A40(s32 playerIndex, s32 arg1) {
     CM_DisplayBattleBombKart(playerIndex, arg1);
 }
 
 void func_80056A94(s32 playerIndex) {
-    //func_80072428(gIndexObjectBombKart[playerIndex]);
+    // func_80072428(gIndexObjectBombKart[playerIndex]);
     CM_DisplayBattleBombKart(playerIndex, 0);
 }
 
