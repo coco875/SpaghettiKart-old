@@ -59,7 +59,7 @@ s32 is_cc_mode_complete(s32);
 s32 has_unlocked_extra_mode(void);
 s32 has_completed_extra_mode(void);
 void func_800B559C(s32);
-s32 func_800B578C(s32);
+u8 func_800B578C(s32);
 s32 func_800B5888(s32);
 s32 func_800B58C4(s32);
 void update_save_data_backup(void);
@@ -73,7 +73,7 @@ s32 controller_pak_2_status(void);
 s32 func_800B5F30(void);
 s32 func_800B6014(void);
 s32 func_800B6088(s32);
-u8 func_800B60E8(s32);
+u8 func_800B60E8(s32, u8*);
 s32 func_800B6178(s32);
 s32 func_800B64EC(s32);
 s32 func_800B65F4(s32, s32);
@@ -87,7 +87,7 @@ s32 func_800B6A68(void);
 /* data */
 // these might not be in this file, but for now...
 
-extern u32* D_800DC714;
+extern u32* gReplayGhostCompressed;
 extern struct_8018EE10_entry D_8018EE10[];
 
 extern u16 gCompanyCode;

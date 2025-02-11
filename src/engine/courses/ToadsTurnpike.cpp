@@ -118,6 +118,14 @@ ToadsTurnpike::ToadsTurnpike() {
 
     Props.Clouds = gToadsTurnpikeRainbowRoadStars;
     Props.CloudList = gToadsTurnpikeRainbowRoadStars;
+
+    FVector finish;
+    finish.x = (gIsMirrorMode != 0) ? 100 + 138.0f : 100 - 138.0f;
+    finish.y = (f32) (0 - 15);
+    finish.z = 16;
+
+    this->FinishlineSpawnPoint = finish;
+
     Props.MinimapFinishlineX = 0;
     Props.MinimapFinishlineY = 0;
 
@@ -148,15 +156,55 @@ void ToadsTurnpike::Load() {
 void ToadsTurnpike::LoadTextures() {
 }
 
-void ToadsTurnpike::SpawnActors() {
-    Vec3f pos;
-    pos[0] = (gIsMirrorMode != 0) ? D_80164490->posX + 138.0f : D_80164490->posX - 138.0f;
-    pos[1] = (f32) (D_80164490->posY - 15);
-    pos[2] = D_80164490->posZ;
-
-    gWorldInstance.AddActor(new AFinishline(pos));
-
+void ToadsTurnpike::BeginPlay() {
     spawn_all_item_boxes((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_toads_turnpike_item_box_spawns));
+
+    if (gGamestate != CREDITS_SEQUENCE) {
+        uint32_t waypoint;
+        f32 a = ((gCCSelection * 90.0) / 216.0f) + 4.583333333333333;
+        f32 b = ((gCCSelection * 90.0) / 216.0f) + 2.9166666666666665;
+        a /= 2; // Normally vehicle logic is only ran every 2 frames. This slows the vehicles down to match.
+        b /= 2;
+
+        // Other game modes spawn seven of each vehicle
+        if (gModeSelection == TIME_TRIALS) {
+            _numTrucks = 8;
+            _numBuses = 8;
+            _numTankerTrucks = 8;
+            _numCars = 8;
+        }
+
+        for (size_t i = 0; i < _numTrucks; i++) {
+            waypoint = CalculateWaypointDistribution(i, _numTrucks, gWaypointCountByPathIndex[0], 0);
+            gWorldInstance.AddActor(new ATruck(a, b,  &D_80164550[0][0], waypoint));
+        }
+
+        for (size_t i = 0; i < _numBuses; i++) {
+            waypoint = CalculateWaypointDistribution(i, _numBuses, gWaypointCountByPathIndex[0], 75);
+            gWorldInstance.AddActor(new ABus(a, b, &D_80164550[0][0], waypoint));
+        }
+
+        for (size_t i = 0; i < _numTankerTrucks; i++) {
+            waypoint = CalculateWaypointDistribution(i, _numTankerTrucks, gWaypointCountByPathIndex[0], 50);
+            gWorldInstance.AddActor(new ATankerTruck(a, b, &D_80164550[0][0], waypoint));
+        }
+
+        for (size_t i = 0; i < _numCars; i++) {
+            waypoint = CalculateWaypointDistribution(i, _numCars, gWaypointCountByPathIndex[0], 25);
+            gWorldInstance.AddActor(new ACar(a, b, &D_80164550[0][0], waypoint));
+        }
+
+        if (gModeSelection == VERSUS) {
+            Vec3f pos = {0, 0, 0};
+            gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][50], 50, 3, 0.8333333f));
+            gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][100], 100, 1, 0.8333333f));
+            gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][150], 150, 3, 0.8333333f));
+            gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][200], 200, 1, 0.8333333f));
+            gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][250], 250, 3, 0.8333333f));
+            gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f));
+            gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f));
+        }
+    }
 }
 
 void ToadsTurnpike::InitClouds() {
@@ -242,53 +290,5 @@ void ToadsTurnpike::RenderCredits() {
 }
 
 void ToadsTurnpike::Collision() {}
-
-void ToadsTurnpike::SpawnVehicles() {
-    uint32_t waypoint;
-    f32 a = ((gCCSelection * 90.0) / 216.0f) + 4.583333333333333;
-    f32 b = ((gCCSelection * 90.0) / 216.0f) + 2.9166666666666665;
-    a /= 2; // Normally vehicle logic is only ran every 2 frames. This slows the vehicles down to match.
-    b /= 2;
-
-    // Other game modes spawn seven of each vehicle
-    if (gModeSelection == TIME_TRIALS) {
-        _numTrucks = 8;
-        _numBuses = 8;
-        _numTankerTrucks = 8;
-        _numCars = 8;
-    }
-    
-    for (size_t i = 0; i < _numTrucks; i++) {
-        waypoint = CalculateWaypointDistribution(i, _numTrucks, gWaypointCountByPathIndex[0], 0);
-        gWorldInstance.AddVehicle(new ATruck(a, b,  &D_80164550[0][0], waypoint));
-    }
-
-    for (size_t i = 0; i < _numBuses; i++) {
-        waypoint = CalculateWaypointDistribution(i, _numBuses, gWaypointCountByPathIndex[0], 75);
-        gWorldInstance.AddVehicle(new ABus(a, b,&D_80164550[0][0], waypoint));
-    }
-
-    for (size_t i = 0; i < _numTankerTrucks; i++) {
-        waypoint = CalculateWaypointDistribution(i, _numTankerTrucks, gWaypointCountByPathIndex[0], 50);
-        gWorldInstance.AddVehicle(new ATankerTruck(a, b, &D_80164550[0][0], waypoint));
-    }
-
-    for (size_t i = 0; i < _numCars; i++) {
-        waypoint = CalculateWaypointDistribution(i, _numCars, gWaypointCountByPathIndex[0], 25);
-        gWorldInstance.AddVehicle(new ACar(a, b, &D_80164550[0][0], waypoint));
-    }
-
-    if (gModeSelection == VERSUS) {
-        Vec3f pos = {0, 0, 0};
-
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][50], 50, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][100], 100, 1, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][150], 150, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][200], 200, 1, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][250], 250, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f);
-    }
-}
 
 void ToadsTurnpike::Destroy() { }

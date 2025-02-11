@@ -2,7 +2,6 @@
 #include "World.h"
 #include "Cup.h"
 #include "courses/Course.h"
-#include "vehicles/Vehicle.h"
 #include "objects/BombKart.h"
 #include "TrainCrossing.h"
 #include <memory>
@@ -12,8 +11,9 @@ extern "C" {
    #include "camera.h"
    #include "objects.h"
    #include "main.h"
-   #include "engine/Engine.h"
    #include "defines.h"
+   #include "audio/external.h"
+   #include "menus.h"
 }
 
 World::World() {}
@@ -33,24 +33,10 @@ void World::SetCourseFromCup() {
     CurrentCourse = CurrentCup->GetCourse();
 }
 
-
-AVehicle* World::AddVehicle(AVehicle* vehicle) {
-    Vehicles.push_back(vehicle);
-    return Vehicles.back();
-}
-
-void World::ClearVehicles(void) {
-    Vehicles.clear();
-}
-
 TrainCrossing* World::AddCrossing(Vec3f position, u32 waypointMin, u32 waypointMax, f32 approachRadius, f32 exitRadius) {
     auto crossing = std::make_shared<TrainCrossing>(position, waypointMin, waypointMax, approachRadius, exitRadius);
     Crossings.push_back(crossing);
     return crossing.get();
-}
-
-void World::AddBombKart(Vec3f pos, TrackWaypoint* waypoint, uint16_t waypointIndex, uint16_t state, f32 unk_3C) {
-    BombKarts.push_back(new OBombKart(pos, waypoint, waypointIndex, state, unk_3C));
 }
 
 u32 World::GetCupIndex() {
@@ -69,6 +55,8 @@ u32 World::NextCup() {
         CupIndex++;
         CurrentCup = Cups[CupIndex];
         CurrentCup->CursorPosition = 0;
+        reset_cycle_flash_menu();
+        play_sound2(SOUND_MENU_CURSOR_MOVE);
         return CupIndex;
     }
     return Cups.size() - hack;
@@ -79,6 +67,8 @@ u32 World::PreviousCup() {
         CupIndex--;
         CurrentCup = Cups[CupIndex];
         CurrentCup->CursorPosition = 0;
+        reset_cycle_flash_menu();
+        play_sound2(SOUND_MENU_CURSOR_MOVE);
         return CupIndex;
     }
     return 0;
@@ -89,13 +79,6 @@ void World::SetCup(Cup* cup) {
         CurrentCup = cup;
         CurrentCup->CursorPosition = 0;
     }
-}
-
-CProperties* World::GetCourseProps() {
-    if (Courses[CourseIndex]) {
-        return (CProperties*) &Courses[CourseIndex]->Props;
-    }
-    return nullptr;
 }
 
 void World::SetCourse(const char* name) {
@@ -162,6 +145,7 @@ AActor* World::GetActor(size_t index) {
 }
 
 void World::TickActors() {
+    // This only ticks modded actors
     for (AActor* actor : Actors) {
         if (actor->IsMod()) {
             actor->Tick();
@@ -208,6 +192,13 @@ void World::TickParticles() {
 void World::DrawParticles(s32 cameraId) {
     for (const auto& emitter : Emitters) {
        emitter->Draw(cameraId);
+    }
+}
+
+// Sets OObjects or AActors static member variables back to default values
+void World::Reset() {
+    for (const auto& object : Objects) {
+        object->Reset();
     }
 }
 

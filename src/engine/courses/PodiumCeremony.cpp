@@ -11,6 +11,7 @@
 #include "engine/objects/Trophy.h"
 #include "engine/objects/Podium.h"
 #include "engine/objects/CheepCheep.h"
+#include "engine/particles/StarEmitter.h"
 
 extern "C" {
     #include "main.h"
@@ -159,7 +160,7 @@ void PodiumCeremony::Load() {
 void PodiumCeremony::LoadTextures() {
 }
 
-void PodiumCeremony::SpawnActors() {
+void PodiumCeremony::BeginPlay() {
     spawn_foliage((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_royal_raceway_tree_spawn));
     spawn_all_item_boxes((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_royal_raceway_item_box_spawns));
     spawn_piranha_plants((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_royal_raceway_piranha_plant_spawn));
@@ -171,47 +172,31 @@ void PodiumCeremony::SpawnActors() {
 
     OTrophy::TrophyType type = OTrophy::TrophyType::BRONZE;
     switch(D_802874D8.unk1D) {
-        case 0: // Bronze
-            if (gCCSelection == CC_150) {
-                OTrophy::TrophyType::BRONZE_150;
-            } else {
-                OTrophy::TrophyType::BRONZE;
-            }
+        case 2: // Bronze
+            type = gCCSelection == CC_150 ? OTrophy::TrophyType::BRONZE_150 : OTrophy::TrophyType::BRONZE;
             break;
         case 1: // Silver
             pos.x -= 3.0;
             pos.z += 15.0;
-
-            if (gCCSelection == CC_150) {
-                OTrophy::TrophyType::SILVER_150;
-            } else {
-                OTrophy::TrophyType::SILVER;
-            }
+            type = gCCSelection == CC_150 ? OTrophy::TrophyType::SILVER_150 : OTrophy::TrophyType::SILVER;
             break;
-        case 2: // Gold
+        case 0: // Gold
             pos.x -= 2.0;
             pos.z -= 15.0;
-            if (gCCSelection == CC_150) {
-                OTrophy::TrophyType::GOLD_150;
-            } else {
-                OTrophy::TrophyType::GOLD;
-            }
+            type = gCCSelection == CC_150 ? OTrophy::TrophyType::GOLD_150 : OTrophy::TrophyType::GOLD;
             break;
     }
 
-    gWorldInstance.AddObject(new OTrophy(pos, type, OTrophy::Behaviour::PODIUM_CEREMONY));
-}
+    OTrophy* trophy = reinterpret_cast<OTrophy*>(gWorldInstance.AddObject(new OTrophy(pos, type, OTrophy::Behaviour::PODIUM_CEREMONY)));
 
-void PodiumCeremony::SpawnVehicles() {
-        Vec3f pos = {0, 0, 0};
-
-        gWorldInstance.AddBombKart(pos, &D_80164550[3][3], 3, 5, 1.25f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[3][40], 40, 0, 1.0f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[3][60], 60, 0, 1.0f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[3][80], 80, 0, 1.0f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[3][100], 100, 0, 1.0f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[3][120], 120, 0, 1.0f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[3][140], 140, 0, 1.0f);
+    Vec3f kart = {0, 0, 0};
+    gWorldInstance.AddObject(new OBombKart(kart, &D_80164550[3][3], 3, 5, 1.25f));
+    gWorldInstance.AddObject(new OBombKart(kart, &D_80164550[3][40], 40, 0, 1.0f));
+    gWorldInstance.AddObject(new OBombKart(kart, &D_80164550[3][60], 60, 0, 1.0f));
+    gWorldInstance.AddObject(new OBombKart(kart, &D_80164550[3][80], 80, 0, 1.0f));
+    gWorldInstance.AddObject(new OBombKart(kart, &D_80164550[3][100], 100, 0, 1.0f));
+    gWorldInstance.AddObject(new OBombKart(kart, &D_80164550[3][120], 120, 0, 1.0f));
+    gWorldInstance.AddObject(new OBombKart(kart, &D_80164550[3][140], 140, 0, 1.0f));
 }
 
 // Likely sets minimap boundaries

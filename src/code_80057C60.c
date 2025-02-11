@@ -557,8 +557,6 @@ void render_object_p1(void) {
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxLookAt[0]),
               G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
 
-    CourseManager_DrawBombKarts(PLAYER_ONE); // render_bomb_karts_wrap(PLAYER_ONE);
-
     // if (gGamestate == ENDING) {
     //     //func_80055F48(PLAYER_ONE);
     //     //func_80056160(PLAYER_ONE);
@@ -576,7 +574,6 @@ void render_object_p2(void) {
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxLookAt[1]),
               G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
-    CourseManager_DrawBombKarts(PLAYER_TWO);
     // render_bomb_karts_wrap(PLAYER_TWO);
     render_object_for_player(PLAYER_TWO);
 }
@@ -587,7 +584,6 @@ void render_object_p3(void) {
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxLookAt[2]),
               G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
-    CourseManager_DrawBombKarts(PLAYER_THREE);
     // render_bomb_karts_wrap(PLAYER_THREE);
     render_object_for_player(PLAYER_THREE);
 }
@@ -599,7 +595,6 @@ void render_object_p4(void) {
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gGfxPool->mtxLookAt[3]),
               G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
-    CourseManager_DrawBombKarts(PLAYER_FOUR);
     // render_bomb_karts_wrap(PLAYER_FOUR);
     if ((!gDemoMode) && (gPlayerCountSelection1 == 4)) {
         // render_lakitu(PLAYER_FOUR);
@@ -689,8 +684,9 @@ void render_player_snow_effect_four(void) {
 }
 
 void render_object_for_player(s32 cameraId) {
-    CourseManager_DrawObjects(cameraId);
+    CM_DrawObjects(cameraId);
     CM_DrawParticles(cameraId);
+    CM_RenderCourseObjects(cameraId);
 
     // switch (gCurrentCourseId) {
     //     case COURSE_MARIO_RACEWAY:
@@ -784,8 +780,7 @@ void render_object_for_player(s32 cameraId) {
         render_balloons_grand_prix(cameraId);
     }
     if (gModeSelection == BATTLE) {
-        CourseManager_DrawBattleBombKarts(cameraId);
-        // render_battle_bomb_karts(cameraId);
+        CM_DrawBattleBombKarts(cameraId);
     }
 }
 
@@ -799,7 +794,7 @@ void render_snowing_effect(s32 playerId) {
             render_object_snowflakes_particles();
         }
     }
-    if (CourseManager_GetProps()->LakituTowType == 1) {
+    if (CM_GetProps()->LakituTowType == 1) {
         render_ice_block(playerId);
     }
 }
@@ -1240,7 +1235,7 @@ void func_8005995C(void) {
 void func_80059A88(s32 playerId) {
     func_80059820(playerId);
     if (!gDemoMode) {
-        // update_object_lakitu(playerId); // Moved to CourseManager_TickObjects60fps
+        // update_object_lakitu(playerId); // Moved to CM_TickObjects60fps
         func_8007BB9C(playerId);
     }
 }
@@ -1251,10 +1246,14 @@ void func_80059AC8(void) {
     if (gIsGamePaused == false) {
         func_8008C1D8(&D_80165678);
         gRaceFrameCounter++;
-        for (i = 0; i < NUM_PLAYERS; i++) {
+        for (i = 0; i < gPlayerCount; i++) {
             D_8018CF68[i] = func_8008A890(&camera1[i]);
+        }
+
+        for (i = 0; i < NUM_PLAYERS; i++) {
             func_800892E0(i);
         }
+
         switch (gScreenModeSelection) {
             case SCREEN_MODE_1P:
                 if (gGamestate != CREDITS_SEQUENCE) {
@@ -1282,7 +1281,7 @@ void func_80059AC8(void) {
                 break;
         }
 
-        CourseManager_TickObjects60fps();
+        CM_TickObjects60fps();
     }
 }
 
@@ -1399,7 +1398,7 @@ void func_80059D00(void) {
                 break;
         }
         update_object();
-        CourseManager_TickObjects();
+        CM_TickObjects();
         CM_TickParticles();
         func_800744CC();
     }
@@ -1417,12 +1416,12 @@ void func_8005A070(void) {
             // func_80086D80();
             // update_cheep_cheep(1);
             // func_80077640();
-            CourseManager_TickObjects();
+            CM_TickObjects();
             CM_TickParticles();
         } else if (gGamestate == CREDITS_SEQUENCE) {
             func_80059820(PLAYER_ONE);
             func_80078C70(0);
-            CourseManager_TickObjects();
+            CM_TickObjects();
             CM_TickParticles();
         } else { // normal gameplay
             func_80059D00();
@@ -1571,7 +1570,7 @@ void func_8005A71C(void) {
 
 void update_object(void) {
 
-    CourseManager_UpdateCourseObjects();
+    CM_UpdateCourseObjects();
 
     // switch (gCurrentCourseId) {
     //     case COURSE_MARIO_RACEWAY:
@@ -2717,7 +2716,7 @@ void func_8005D18C(void) {
 
 void func_8005D1F4(s32 cameraId) {
 
-    CourseManager_BombKartsWaypoint(cameraId);
+    CM_BombKartsWaypoint(cameraId);
     // s32 playerWaypoint;
     // s32 bombWaypoint;
     // s32 var_a2;

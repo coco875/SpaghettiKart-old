@@ -127,9 +127,7 @@ void FrappeSnowland::LoadTextures() {
     dma_textures(gTextureFrappeSnowlandTreeRight, 0x00000432U, 0x00000800U);
 }
 
-void FrappeSnowland::SpawnActors() {
-    gWorldInstance.AddActor(new AFinishline());
-
+void FrappeSnowland::BeginPlay() {
     spawn_foliage((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_frappe_snowland_tree_spawns));
     spawn_all_item_boxes((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_frappe_snowland_item_box_spawns));
     
@@ -154,19 +152,17 @@ void FrappeSnowland::SpawnActors() {
         gWorldInstance.AddObject(new OSnowman(FVector(-701, 3, 853)));
         gWorldInstance.AddObject(new OSnowman(FVector(-602, 0, 929)));
     }
-}
 
-void FrappeSnowland::SpawnVehicles() {
     if (gModeSelection == VERSUS) {
         Vec3f pos = {0, 0, 0};
 
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][50], 50, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][100], 100, 1, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][150], 150, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][290], 290, 1, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][350], 350, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f);
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][50], 50, 3, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][100], 100, 1, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][150], 150, 3, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][290], 290, 1, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][350], 350, 3, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f));
     }
 }
 

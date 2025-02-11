@@ -16,7 +16,6 @@ extern "C" {
 #include "render_objects.h"
 #include "save.h"
 #include "staff_ghosts.h"
-#include "Engine.h"
 #include "code_800029B0.h"
 #include "render_courses.h"
 extern StaffGhost* d_mario_raceway_staff_ghost;
@@ -153,7 +152,7 @@ void Course::Init() {
 void Course::LoadTextures() {
 }
 
-void Course::SpawnActors() {
+void Course::BeginPlay() {
 }
 
 void Course::InitClouds() {
@@ -224,11 +223,6 @@ void Course::Waypoints(Player* player, int8_t playerId) {
     if (player->nearestWaypointId < 0) {
         player->nearestWaypointId = gWaypointCountByPathIndex[0] + player->nearestWaypointId;
     }
-}
-
-void Course::SpawnVehicles() {
-}
-void Course::UpdateVehicles() {
 }
 
 void Course::Render(struct UnkStruct_800DC5EC* arg0) {

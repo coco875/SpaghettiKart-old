@@ -115,7 +115,7 @@ UNUSED u32 D_8015F718[3]; // Likely held ptrs to segmented data.
 size_t gFreeMemorySize;
 uintptr_t gNextFreeMemoryAddress;
 uintptr_t gHeapEndPtr;
-u32 D_8015F730;
+uintptr_t gFreeMemoryCourseAnchor; // Reset gNextFreeMemoryAddress to just after courses were loaded
 uintptr_t gFreeMemoryResetAnchor;
 Vec3f D_8015F738;
 Vec3f D_8015F748;
@@ -204,15 +204,15 @@ void setup_race(void) {
         gNextFreeMemoryAddress = gFreeMemoryResetAnchor;
         load_course(gCurrentCourseId);
         course_init();
-        D_8015F730 = gNextFreeMemoryAddress;
+        gFreeMemoryCourseAnchor = gNextFreeMemoryAddress;
     } else {
-        gNextFreeMemoryAddress = D_8015F730;
+        gNextFreeMemoryAddress = gFreeMemoryCourseAnchor;
     }
     func_802969F8();
     func_80005310();
     func_8003D080();
     init_hud();
-    D_800DC510 = 0;
+    gRaceState = RACE_INIT;
     gNumSpawnedShells = 0;
     D_800DC5B8 = 0;
     D_80152308 = 0;
@@ -254,7 +254,7 @@ void setup_race(void) {
 
 void func_80002DAC(void) {
 
-    CourseManager_SomeSounds();
+    CM_SomeSounds();
 
     // switch (gCurrentCourseId) {
     //     case COURSE_MARIO_RACEWAY:
@@ -323,8 +323,8 @@ void credits_spawn_actors(void) {
     gNextFreeMemoryAddress += 0x9000;
     destroy_all_actors();
     CM_CleanWorld();
-
-    CourseManager_CreditsSpawnActors();
+    CM_CreditsSpawnActors();
+    CM_BeginPlay();
 
     gNumPermanentActors = gNumActors;
 }

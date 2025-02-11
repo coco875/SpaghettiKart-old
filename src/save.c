@@ -11,6 +11,7 @@
 #include "staff_ghosts.h"
 #include "code_80057C60.h"
 #include "port/Game.h"
+#include "buffers.h"
 
 /*** macros ***/
 #define PFS_COMPANY_CODE(c0, c1) ((u16) (((c0) << 8) | ((c1))))
@@ -32,9 +33,7 @@ s8 sControllerPak2State = BAD;
 // default time trial records in little endian form
 const u8 D_800F2E60[4] = { 0xc0, 0x27, 0x09, 0x00 };
 // osPfsFindFile -> gGameName ("MARIOKART64" in nosFont)
-const u8 gGameName[] = {
-    0x26, 0x1a, 0x2b, 0x22, 0x28, 0x24, 0x1a, 0x2b, 0x2d, 0x16, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00
-};
+const u8 gGameName[] = "MARIOKART64";
 // ext_name param to osPfsFindFile (four total bytes, but only one is setable)
 const u8 gExtCode[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
@@ -473,7 +472,6 @@ void func_800B559C(s32 arg0) {
                       bestRecord->bestThreelaps[0], 0x38);
 }
 
-#ifdef NON_MATCHING
 /**
  * This one is weird. Its some type of checksum calculator, seemingly for the
  * best time trial records. But the number of bytes it operates over is
@@ -483,26 +481,19 @@ void func_800B559C(s32 arg0) {
  *
  * But only unknown bytes 7 and 8 ever get set, so why the extra 3, and why in chunks of 17?
  **/
-s32 func_800B578C(s32 arg0) {
-    u8* var_a2;
-    s32 var_a0;
-    s32 var_v0;
-    s32 var_v1;
-    var_a2 = &gSaveData.onlyBestTimeTrialRecords[arg0].bestThreelaps[0][0];
-    var_v1 = 0;
-    for (var_v0 = 0; var_v0 < 3;) {
-        ++var_v0;
-        for (var_a0 = 0; var_a0 != 0x11; var_a0++) {
-            if (var_a0) {}
-            var_v1 += (((*var_a2++) + 1) * var_v0) + var_a0;
+u8 func_800B578C(s32 arg0) {
+    u8* times = (u8*) &gSaveData.onlyBestTimeTrialRecords[arg0];
+    s32 checksum = 0;
+    s32 i;
+    s32 j;
+
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 0x11; j++) {
+            checksum += (times[i * 0x11 + j] + 1) * (i + 1) + j;
         }
-        var_a2 += 0x11;
     }
-    return (var_v1 % 256) & 0xFF;
+    return (checksum % 256);
 }
-#else
-GLOBAL_ASM("asm/non_matchings/save/func_800B578C.s")
-#endif
 
 s32 func_800B5888(s32 arg0) {
     s32 tmp = gSaveData.onlyBestTimeTrialRecords[arg0].unknownBytes[6] + 90;
@@ -567,6 +558,7 @@ s32 validate_save_data_checksum_backup(void) {
 // Check if controller has a Controller Pak connected.
 // Return PAK if it does, otherwise return NO_PAK.
 s32 check_for_controller_pak(s32 controller) {
+    return PAK;
     u8 controllerBitpattern = 0;
     UNUSED s32 phi_v0;
 
@@ -749,12 +741,12 @@ s32 func_800B6088(s32 arg0) {
                               (u8*) temp_v1);
 }
 
-u8 func_800B60E8(s32 page) {
+u8 func_800B60E8(s32 page, u8* data) {
     s32 i;
     u32 checksum = 0;
     u8* addr;
 
-    for (i = 0, addr = (u8*) &((u8*) D_800DC714)[page * 256]; i < 256; i++) {
+    for (i = 0, addr = (u8*) &(data)[page * 256]; i < 256; i++) {
         checksum += (*addr++ * (page + 1) + i);
     }
     return checksum;
@@ -784,8 +776,9 @@ s32 func_800B6178(s32 arg0) {
             temp_s3->unk_07[var_s0] = var_s0;
         }
     } else {
-        var_v0 = osPfsReadWriteFile(&gControllerPak1FileHandle, gControllerPak1FileNote, 1U, (arg0 * 0x3C00) + 0x100,
-                                    0x00003C00, (u8*) D_800DC714);
+        var_v0 =
+            osPfsReadWriteFile(&gControllerPak1FileHandle, gControllerPak1FileNote, 1U,
+                               (arg0 * (sizeof(u8) * 0x1000)) + 0x100, sizeof(u8) * 0x1000, (u8*) sReplayGhostBuffer);
         if (var_v0 == 0) {
             temp_s3->ghostDataSaved = 1;
             if (gGamestate == 4) {
@@ -794,7 +787,7 @@ s32 func_800B6178(s32 arg0) {
             temp_s3->unk_00 = D_80162DFC;
             temp_s3->characterId = (u8) D_80162DE0;
             for (var_s0 = 0; var_s0 < 0x3C; var_s0++) {
-                temp_s3->unk_07[var_s0] = func_800B60E8(var_s0);
+                temp_s3->unk_07[var_s0] = func_800B60E8(var_s0, (u8*) sReplayGhostBuffer);
             }
             var_v0 = func_800B6088(arg0);
         }
@@ -850,7 +843,7 @@ s32 func_800B63F0(s32 arg0) {
             phi_s1 = (u8*) &D_8018EE10[arg0];
 
             while (temp_s0 < 0x3C) {
-                if (phi_s1[7] != func_800B60E8(temp_s0)) {
+                if (phi_s1[7] != func_800B60E8(temp_s0, (u8*) sReplayGhostBuffer)) {
                     phi_s3 = 1;
                     break;
                 }
@@ -873,14 +866,16 @@ s32 func_800B64EC(s32 arg0) {
         return -1;
     }
 
-    temp_v0 = osPfsReadWriteFile(&gControllerPak1FileHandle, gControllerPak1FileNote, PFS_READ, (arg0 * 0x3C00) + 0x100,
-                                 0x3C00, (u8*) D_800DC714);
+    sReplayGhostDecompressed = (u32*) &D_802BFB80.arraySize8[0][D_80162DC8][3];
+    temp_v0 =
+        osPfsReadWriteFile(&gControllerPak1FileHandle, gControllerPak1FileNote, PFS_READ,
+                           (arg0 * (sizeof(u8) * 0x1000)) + 0x100, sizeof(u8) * 0x1000, (u8*) sReplayGhostDecompressed);
     if (temp_v0 == 0) {
         // clang-format off
         phi_s1 = (u8 *) &D_8018EE10[arg0]; temp_s0 = 0; while (1) {
             // clang-format on
 
-            if (phi_s1[7] != func_800B60E8(temp_s0)) {
+            if (phi_s1[7] != func_800B60E8(temp_s0, (u8*) sReplayGhostDecompressed)) {
                 D_8018EE10[arg0].ghostDataSaved = 0;
                 return -2;
             }
@@ -911,12 +906,13 @@ s32 func_800B65F4(s32 arg0, s32 arg1) {
         default:
             return -1;
     }
-    writeStatus = osPfsReadWriteFile(&gControllerPak2FileHandle, gControllerPak2FileNote, 0U, (arg0 * 0x3C00) + 0x100,
-                                     0x00003C00, (u8*) D_800DC714);
+    writeStatus =
+        osPfsReadWriteFile(&gControllerPak2FileHandle, gControllerPak2FileNote, 0U,
+                           (arg0 * (sizeof(u8) * 0x1000)) + 0x100, sizeof(u8) * 0x1000, (u8*) sReplayGhostBuffer);
     if (writeStatus == 0) {
         temp_s3 = &((struct_8018EE10_entry*) gSomeDLBuffer)[arg0];
         for (i = 0; i < 0x3C; i++) {
-            if (temp_s3->unk_07[i] != func_800B60E8(i)) {
+            if (temp_s3->unk_07[i] != func_800B60E8(i, (u8*) sReplayGhostBuffer)) {
                 temp_s3->ghostDataSaved = 0;
                 return -2;
             }
@@ -1008,7 +1004,7 @@ s32 func_800B6A68(void) {
     s32 i;
 
     ret = osPfsAllocateFile(&gControllerPak1FileHandle, gCompanyCode, gGameCode, (u8*) &gGameName, (u8*) &gExtCode,
-                            0x7900, &gControllerPak1FileNote);
+                            sizeof(u8) * 0x1000 * 2 + 0x100, &gControllerPak1FileNote);
     if (ret == 0) {
         for (i = 0; i < 2; i++) {
             func_800B69BC(i);

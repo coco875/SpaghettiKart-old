@@ -1072,7 +1072,26 @@ void splash_menu_act(struct Controller* controller, u16 controllerIdx) {
                 }
                 if (btnAndStick & D_JPAD) {
                     play_sound2(SOUND_MENU_CURSOR_MOVE);
+                    gDebugMenuSelection = DEBUG_MENU_CC;
+                }
+                break;
+            }
+            case DEBUG_MENU_CC: {
+                if ((btnAndStick & R_JPAD) && (gCCSelection < 3)) {
+                    gCCSelection += 1;
+                    play_sound2(SOUND_MENU_CURSOR_MOVE);
+                }
+                if ((btnAndStick & L_JPAD) && (gCCSelection > 0)) {
+                    gCCSelection -= 1;
+                    play_sound2(SOUND_MENU_CURSOR_MOVE);
+                }
+                if (btnAndStick & U_JPAD) {
+                    gDebugMenuSelection = DEBUG_MENU_COURSE;
+                    play_sound2(SOUND_MENU_CURSOR_MOVE);
+                }
+                if (btnAndStick & D_JPAD) {
                     gDebugMenuSelection = DEBUG_MENU_SCREEN_MODE;
+                    play_sound2(SOUND_MENU_CURSOR_MOVE);
                 }
                 break;
             }
@@ -1088,7 +1107,7 @@ void splash_menu_act(struct Controller* controller, u16 controllerIdx) {
                     gScreenModeSelection = sScreenModePlayerTable[gScreenModeListIndex];
                 }
                 if (btnAndStick & U_JPAD) {
-                    gDebugMenuSelection = DEBUG_MENU_COURSE;
+                    gDebugMenuSelection = DEBUG_MENU_CC;
                     play_sound2(SOUND_MENU_CURSOR_MOVE);
                 }
                 if (btnAndStick & D_JPAD) {
@@ -1725,14 +1744,14 @@ void course_select_menu_act(struct Controller* controller, u16 controllerIdx) {
                 if ((btnAndStick & R_JPAD) != 0) {
                     sTempCupSelection = WorldNextCup();
                     //++gCupSelection;
-                    reset_cycle_flash_menu();
-                    play_sound2(SOUND_MENU_CURSOR_MOVE);
+                    //reset_cycle_flash_menu();
+                    //play_sound2(SOUND_MENU_CURSOR_MOVE);
                 }
                 if (((btnAndStick & L_JPAD) != 0)) {
                     sTempCupSelection = WorldPreviousCup();
                     //--gCupSelection;
-                    reset_cycle_flash_menu();
-                    play_sound2(SOUND_MENU_CURSOR_MOVE);
+                    //reset_cycle_flash_menu();
+                    //play_sound2(SOUND_MENU_CURSOR_MOVE);
                 }
 
                 D_800DC540 = GetCupIndex();
@@ -1866,7 +1885,7 @@ void load_menu_states(s32 menuSelection) {
         case START_MENU: {
             gIsMirrorMode = 0;
             gEnableDebugMode = CVarGetInteger("gEnableDebugMode", 0);
-            CourseManager_SetCup(GetMushroomCup());
+            CM_SetCup(GetMushroomCup());
             gCupSelection = MUSHROOM_CUP;
             gCourseIndexInCup = 0;
             gTimeTrialDataCourseIndex = 0;
@@ -1977,13 +1996,13 @@ void load_menu_states(s32 menuSelection) {
         case 3:
         case COURSE_SELECT_MENU: {
             if (gModeSelection == BATTLE) {
-                CourseManager_SetCup(GetBattleCup());
+                CM_SetCup(GetBattleCup());
                 // gCupSelection = BATTLE_CUP;
                 D_800DC540 = 4;
                 gSubMenuSelection = SUB_MENU_MAP_SELECT_BATTLE_COURSE;
             } else {
                 if (GetCup() == GetBattleCup()) {
-                    CourseManager_SetCup(GetMushroomCup());
+                    CM_SetCup(GetMushroomCup());
                     // gCupSelection = MUSHROOM_CUP;
                 }
                 gSubMenuSelection = SUB_MENU_MAP_SELECT_CUP;

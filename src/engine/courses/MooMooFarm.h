@@ -29,13 +29,8 @@ public:
 //                  course_texture* textures, const char* displaylists, size_t dlSize);
     virtual void Load() override;
     virtual void LoadTextures() override;
-    virtual void SpawnActors() override;
-    virtual void SpawnVehicles() override;
+    virtual void BeginPlay() override;
     virtual void MinimapSettings() override;
-    virtual void InitCourseObjects() override;
-    virtual void UpdateCourseObjects() override;
-    virtual void RenderCourseObjects(s32 cameraId) override;
-    virtual void SomeSounds() override;
     virtual void WhatDoesThisDo(Player* player, int8_t playerId) override;
     virtual void WhatDoesThisDoAI(Player* player, int8_t playerId) override;
     virtual void MinimapFinishlinePosition() override;

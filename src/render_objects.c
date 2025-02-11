@@ -43,7 +43,6 @@
 #include "port/Game.h"
 #include "port/Engine.h"
 
-#include "engine/Engine.h"
 #include "engine/courses/Course.h"
 #include "engine/Matrix.h"
 
@@ -685,12 +684,6 @@ void load_texture_and_tlut(u8* tlut, u8* texture, s32 width, s32 height) {
     gSPDisplayList(gDisplayListHead++, D_0D007D78);
     gDPLoadTLUT_pal256(gDisplayListHead++, tlut);
     rsp_load_texture(texture, width, height);
-}
-
-void func_80046F60(u8* tlut, u8* arg1, s32 arg2, s32 arg3, s32 arg4) {
-    gSPDisplayList(gDisplayListHead++, D_0D007D78);
-    gDPLoadTLUT_pal256(gDisplayListHead++, tlut);
-    rsp_load_texture_mask(arg1, arg2, arg3, arg4);
 }
 
 void func_80047068(u8* tlut, u8* texture, Vtx* arg2, UNUSED s32 arg3, s32 arg4, s32 width, s32 height) {
@@ -1655,18 +1648,59 @@ void render_texture_rectangle_wide(s32 x, s32 y, s32 width, s32 height, s32 arg4
                 }
                 break;
             default:
-                if ((xl - (width / 2)) < (SCREEN_WIDTH / 2)) {
-                    coordX = (s32) OTRGetDimensionFromLeftEdge(xl) << 2;
-                    coordX2 = (s32) (xh2) << 2;
-                } else {
-                    coordX = (s32) OTRGetDimensionFromRightEdge(xl) << 2;
-                    coordX2 = (s32) OTRGetDimensionFromRightEdge(xh2) << 2;
-                }
+                coordX = (s32) OTRGetDimensionFromRightEdge(xl) << 2;
+                coordX2 = (s32) OTRGetDimensionFromRightEdge(xh2) << 2;
                 gSPWideTextureRectangle(gDisplayListHead++, coordX, yl, coordX2, yh2, G_TX_RENDERTILE, arg4 << 5,
                                         (arg5 << 5), 1 << 10, 1 << 10);
                 break;
         }
     }
+    // gSPTextureRectangle(gDisplayListHead++, xl, yl, xh2, yh2, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5), 1 << 10,
+    //                     1 << 10);
+}
+
+void render_texture_rectangle_wide_left(s32 x, s32 y, s32 width, s32 height, s32 arg4, s32 arg5, s32 arg6) {
+    s32 xh = (((x + width) - 1));
+    s32 yh = (((y + height) - 1) << 2);
+    s32 xl = ((x));
+    s32 yl = y << 2;
+
+    s32 xh2 = (((x + width)));
+    s32 yh2 = ((y + height) << 2);
+
+    // if center of image is to the left side of the screen then align left,
+    // otherwise align right
+
+    s32 coordX = 0;
+    s32 coordX2 = 0;
+
+    switch (gScreenModeSelection) {
+        case SCREEN_MODE_3P_4P_SPLITSCREEN:
+            if (gPlayerCount == 3) {
+                // Center item in area of screen
+                s32 center = (s32) ((OTRGetDimensionFromLeftEdge(SCREEN_WIDTH) - SCREEN_WIDTH) / 2) +
+                                ((SCREEN_WIDTH / 4) + (SCREEN_WIDTH / 2));
+                s32 coordX = (s32) (center - (width / 2)) << 2;
+                s32 coordX2 = (s32) (center + (width / 2)) << 2;
+                gSPWideTextureRectangle(gDisplayListHead++, coordX, yl, coordX2, yh2, G_TX_RENDERTILE, arg4 << 5,
+                                        (arg5 << 5), 1 << 10, 1 << 10);
+            } else { // 4 players
+                s32 renderWidth = SCREEN_WIDTH;
+                s32 center = (renderWidth / 2);
+                coordX = (s32) (center - (width / 2)) << 2;
+                coordX2 = (s32) (center + (width / 2)) << 2;
+                gSPWideTextureRectangle(gDisplayListHead++, coordX, yl, coordX2, yh2, G_TX_RENDERTILE, arg4 << 5,
+                                        (arg5 << 5), 1 << 10, 1 << 10);
+            }
+            break;
+        default:
+            coordX = (s32) OTRGetDimensionFromLeftEdge(xl) << 2;
+            coordX2 = (s32) OTRGetDimensionFromLeftEdge(xh2) << 2;
+            gSPWideTextureRectangle(gDisplayListHead++, coordX, yl, coordX2, yh2, G_TX_RENDERTILE, arg4 << 5,
+                                    (arg5 << 5), 1 << 10, 1 << 10);
+            break;
+    }
+
     // gSPTextureRectangle(gDisplayListHead++, xl, yl, xh2, yh2, G_TX_RENDERTILE, arg4 << 5, (arg5 << 5), 1 << 10,
     //                     1 << 10);
 }
@@ -1726,6 +1760,31 @@ void func_8004B97C_wide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     }
 }
 
+void func_8004B97C_wide_left(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    UNUSED s32 pad[2];
+    s32 sp2C;
+    s32 var_a1;
+    s32 var_v0;
+    s32 var_v1;
+
+    if ((-arg2 < arg0) && (-arg3 < arg1)) {
+        var_v0 = 0;
+        var_v1 = 0;
+        sp2C = arg0;
+        var_a1 = arg1;
+        if (arg0 < 0) {
+            var_v1 = -arg0;
+            sp2C = 0;
+        }
+        if (arg1 < 0) {
+            var_v0 = -arg1;
+            var_a1 = 0;
+        }
+        render_texture_rectangle_wide_left(sp2C, var_a1, arg2 - var_v1, arg3 - var_v0, var_v1, var_v0, arg4);
+    }
+}
+
+// extra mode minimap
 void func_8004BA08(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     UNUSED s32 pad[2];
     s32 sp2C;
@@ -1746,7 +1805,7 @@ void func_8004BA08(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
             phi_v0 = -arg1;
             phi_a1 = 0;
         }
-        render_texture_rectangle(sp2C, phi_a1, arg2 - phi_v1, arg3 - phi_v0, phi_v1 + arg2, phi_v0, arg4);
+        render_texture_rectangle_wide(sp2C, phi_a1, arg2 - phi_v1, arg3 - phi_v0, phi_v1 + arg2, phi_v0, arg4);
     }
 }
 
@@ -1915,6 +1974,27 @@ void func_8004C268(u32 arg0, u32 arg1, u8* texture, u32 width, u32 arg4, u32 hei
     }
 }
 
+void func_8004C268_wide(u32 arg0, u32 arg1, u8* texture, u32 width, u32 arg4, u32 height, s32 arg6) {
+    s32 i;
+    u8* img2;
+
+    arg0 -= (width / 2);
+    arg1 -= (arg4 / 2);
+    img2 = texture;
+
+    for (i = 0; (u32) i < (arg4 / height); i++) {
+        load_texture_block_rgba16_mirror(img2, width, height);
+        func_8004B97C_wide_left(arg0, arg1, width, height, arg6);
+//! @todo fakematch?
+#ifdef AVOID_UB
+        img2 += (width * height) * 2;
+#else
+        img2 += (width * height) * 2 ^ ((arg4 / height) * 0);
+#endif
+        arg1 += height;
+    }
+}
+
 UNUSED void func_8004C354() {
 }
 
@@ -2010,6 +2090,12 @@ void func_8004C9D8(s32 arg0, s32 arg1, s32 arg2, u8* texture, s32 arg4, s32 arg5
     gSPDisplayList(gDisplayListHead++, D_0D007F38);
     set_transparency(arg2);
     func_8004C268(arg0, arg1, texture, arg4, arg5, arg7, 1);
+}
+
+void func_8004C9D8_wide(s32 arg0, s32 arg1, s32 arg2, u8* texture, s32 arg4, s32 arg5, UNUSED s32 arg6, s32 arg7) {
+    gSPDisplayList(gDisplayListHead++, D_0D007F38);
+    set_transparency(arg2);
+    func_8004C268_wide(arg0, arg1, texture, arg4, arg5, arg7, 1);
 }
 
 void func_8004CA58(s32 arg0, s32 arg1, f32 arg2, u8* texture, s32 arg4, s32 arg5) {
@@ -2595,15 +2681,15 @@ void func_8004EB38(s32 playerId) {
         func_8004F950((s32) temp_s0->lap2CompletionTimeX, (s32) temp_s0->timerY, 0x00000050, (s32) temp_s0->someTimer);
     }
     if ((u8) temp_s0->unk_7E != 0) {
-        func_8004C9D8((s32) temp_s0->lapAfterImage1X, temp_s0->lapY + 3, 0x00000080, (u8*) common_texture_hud_lap,
+        func_8004C9D8_wide((s32) temp_s0->lapAfterImage1X, temp_s0->lapY + 3, 0x00000080, (u8*) common_texture_hud_lap,
                       0x00000020, 8, 0x00000020, 8);
-        func_8004C9D8(temp_s0->lapAfterImage1X + 0x1C, (s32) temp_s0->lapY, 0x00000080,
+        func_8004C9D8_wide(temp_s0->lapAfterImage1X + 0x1C, (s32) temp_s0->lapY, 0x00000080,
                       (u8*) gHudLapTextures[temp_s0->alsoLapCount], 0x00000020, 0x00000010, 0x00000020, 0x00000010);
     }
     if ((u8) temp_s0->unk_7F != 0) {
-        func_8004C9D8((s32) temp_s0->lapAfterImage2X, temp_s0->lapY + 3, 0x00000050, (u8*) common_texture_hud_lap,
+        func_8004C9D8_wide((s32) temp_s0->lapAfterImage2X, temp_s0->lapY + 3, 0x00000050, (u8*) common_texture_hud_lap,
                       0x00000020, 8, 0x00000020, 8);
-        func_8004C9D8(temp_s0->lapAfterImage2X + 0x1C, (s32) temp_s0->lapY, 0x00000050,
+        func_8004C9D8_wide(temp_s0->lapAfterImage2X + 0x1C, (s32) temp_s0->lapY, 0x00000050,
                       (u8*) gHudLapTextures[temp_s0->alsoLapCount], 0x00000020, 0x00000010, 0x00000020, 0x00000010);
     }
 }
@@ -2631,9 +2717,9 @@ void func_8004EF9C(s32 arg0) {
     s16 temp_t0;
     s16 temp_v0;
 
-    temp_v0 = CourseManager_GetProps()->MinimapDimensions.X;
-    temp_t0 = CourseManager_GetProps()->MinimapDimensions.Z;
-    func_8004D37C(0x00000104, 0x0000003C, CourseManager_GetProps()->MinimapTexture, 0x000000FF, 0x000000FF, 0x000000FF,
+    temp_v0 = CM_GetProps()->MinimapDimensions.X;
+    temp_t0 = CM_GetProps()->MinimapDimensions.Z;
+    func_8004D37C(0x00000104, 0x0000003C, CM_GetProps()->MinimapTexture, 0x000000FF, 0x000000FF, 0x000000FF,
                   0x000000FF, temp_v0, temp_t0, temp_v0, temp_t0);
 }
 
@@ -2663,7 +2749,7 @@ void set_minimap_finishline_position(s32 arg0) {
     }
 
     //! @todo Get course minimap props from course.
-    CourseManager_MinimapFinishlinePosition();
+    CM_MinimapFinishlinePosition();
     draw_hud_2d_texture_8x8(var_f2, var_f0, (u8*) common_texture_minimap_finish_line);
 }
 
@@ -3339,7 +3425,7 @@ void func_800518F8(s32 objectIndex, s16 arg1, s16 arg2) {
             func_80044DA0(gObjectList[objectIndex].activeTexture, gObjectList[objectIndex].textureWidth,
                           gObjectList[objectIndex].textureHeight);
         }
-        func_80042330(arg1, arg2, 0U, gObjectList[objectIndex].sizeScaling);
+        func_80042330_unchanged(arg1, arg2, 0U, gObjectList[objectIndex].sizeScaling);
         gSPVertex(gDisplayListHead++, gObjectList[objectIndex].vertex, 4, 0);
         gSPDisplayList(gDisplayListHead++, common_rectangle_display);
     }
@@ -3353,7 +3439,7 @@ void func_800519D4(s32 objectIndex, s16 arg1, s16 arg2) {
                           gObjectList[objectIndex].textureHeight);
         }
         func_8004B138(0x000000FF, 0x000000FF, 0x000000FF, gObjectList[objectIndex].primAlpha);
-        func_80042330(arg1, arg2, 0U, gObjectList[objectIndex].sizeScaling);
+        func_80042330_unchanged(arg1, arg2, 0U, gObjectList[objectIndex].sizeScaling);
         gSPVertex(gDisplayListHead++, gObjectList[objectIndex].vertex, 4, 0);
         gSPDisplayList(gDisplayListHead++, common_rectangle_display);
     }
@@ -3367,14 +3453,14 @@ void func_80051ABC(s16 arg0, s32 arg1) {
     D_8018D228 = 0xFF;
     gSPDisplayList(gDisplayListHead++, D_0D007A60);
     if ((u8) D_8018D230 != 0) {
-        func_8004B414(0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF);
+        func_8004B414(255, 255, 255, 255);
         for (var_s0 = 0; var_s0 < D_8018D1F0; var_s0++) {
             objectIndex = D_8018CC80[arg1 + var_s0];
             object = &gObjectList[objectIndex];
             func_800519D4(objectIndex, object->unk_09C, arg0 - object->unk_09E);
         }
     } else {
-        func_8004B6C4(0x000000FF, 0x000000FF, 0x000000FF);
+        func_8004B6C4(255, 255, 255);
         for (var_s0 = 0; var_s0 < D_8018D1F0; var_s0++) {
             objectIndex = D_8018CC80[arg1 + var_s0];
             object = &gObjectList[objectIndex];
@@ -3393,28 +3479,30 @@ void func_80051C60(s16 arg0, s32 arg1) {
         if (GetCourse() == GetKoopaTroopaBeach()) {
             var_s5 = arg0;
         } else if (GetCourse() == GetMooMooFarm()) {
-            var_s5 = arg0 - 0x10;
+            var_s5 = arg0 - 16;
         } else if (GetCourse() == GetYoshiValley()) {
-            var_s5 = arg0 - 0x10;
+            var_s5 = arg0 - 16;
         } else {
-            var_s5 = arg0 + 0x10;
+            var_s5 = arg0 + 16;
         }
     } else if (GetCourse() == GetKoopaTroopaBeach()) {
         var_s5 = arg0 * 2;
     } else {
-        var_s5 = arg0 + 0x20;
+        var_s5 = arg0 + 32;
     }
+
     D_8018D228 = 0xFF;
     gSPDisplayList(gDisplayListHead++, D_0D007A60);
+
     if ((u8) D_8018D230 != 0) {
-        func_8004B414(0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF);
+        func_8004B414(255, 255, 255, 255);
         for (var_s0 = 0; var_s0 < D_8018D1F0; var_s0++) {
             objectIndex = D_8018CC80[arg1 + var_s0];
             object = &gObjectList[objectIndex];
             func_800519D4(objectIndex, object->unk_09C, (var_s5 - object->unk_09E) / 2);
         }
     } else {
-        func_8004B6C4(0x000000FF, 0x000000FF, 0x000000FF);
+        func_8004B6C4(255, 255, 255);
         for (var_s0 = 0; var_s0 < D_8018D1F0; var_s0++) {
             objectIndex = D_8018CC80[arg1 + var_s0];
             object = &gObjectList[objectIndex];
@@ -3484,83 +3572,6 @@ void func_800520C0(s32 arg0) {
         D_800E45C0[0].l[0].l.dir[2] = D_800E45C0[1].l[0].l.dir[2] = D_800E45C0[2].l[0].l.dir[2] =
             D_800E45C0[3].l[0].l.dir[2] = 0;
     }
-}
-
-void func_800523B8(s32 objectIndex, s32 arg1, u32 arg2) {
-    UNUSED s32 pad[2];
-    Object* object;
-    Camera* camera = &camera1[arg1];
-
-    object = &gObjectList[objectIndex];
-    object->orientation[1] = func_800418AC(object->pos[0], object->pos[2], camera->pos);
-    func_800484BC(object->pos, object->orientation, object->sizeScaling, object->primAlpha, (u8*) object->activeTLUT,
-                  object->activeTexture, object->vertex, 0x00000030, 0x00000028, 0x00000030, 0x00000028);
-    if ((is_obj_flag_status_active(objectIndex, 0x00000020) != 0) && (arg2 < 0x15F91U)) {
-        func_8004A630(&D_8018C830, object->pos, 0.4f);
-    }
-}
-
-void render_object_boos(s32 arg0) {
-    u32 temp_s2;
-    s32 someIndex;
-    s32 objectIndex;
-
-    for (someIndex = 0; someIndex < NUM_BOOS; someIndex++) {
-        objectIndex = indexObjectList3[someIndex];
-        if (gObjectList[objectIndex].state >= 2) {
-            temp_s2 = func_8008A364(objectIndex, arg0, 0x4000U, 0x00000320);
-            if (CVarGetInteger("gNoCulling", 0) == 1) {
-                temp_s2 = MIN(temp_s2, 0x15F91U);
-            }
-            if (is_obj_flag_status_active(objectIndex, VISIBLE) != 0) {
-                func_800523B8(objectIndex, arg0, temp_s2);
-            }
-        }
-    }
-}
-
-void render_object_bat(s32 cameraId) {
-    s32 var_s2;
-    s32 objectIndex;
-    Camera* temp_s7;
-
-    objectIndex = indexObjectList1[0];
-    temp_s7 = &camera1[cameraId];
-    func_80046F60(gObjectList[objectIndex].activeTLUT, gObjectList[objectIndex].activeTexture, 0x00000020, 0x00000040,
-                  5);
-    D_80183E80[0] = gObjectList[objectIndex].orientation[0];
-    D_80183E80[2] = gObjectList[objectIndex].orientation[2];
-    if ((D_8018CFB0 != 0) || (D_8018CFC8 != 0)) {
-        for (var_s2 = 0; var_s2 < 40; var_s2++) {
-            objectIndex = gObjectParticle2[var_s2];
-            if (objectIndex == -1) {
-                continue;
-            }
-
-            if ((gObjectList[objectIndex].state >= 2) && (gMatrixHudCount < 0x2EF)) {
-                D_80183E80[1] =
-                    func_800418AC(gObjectList[objectIndex].pos[0], gObjectList[objectIndex].pos[2], temp_s7->pos);
-                func_800431B0(gObjectList[objectIndex].pos, D_80183E80, gObjectList[objectIndex].sizeScaling,
-                              D_0D0062B0);
-            }
-        }
-    }
-    if ((D_8018CFE8 != 0) || (D_8018D000 != 0)) {
-        for (var_s2 = 0; var_s2 < 30; var_s2++) {
-            objectIndex = gObjectParticle3[var_s2];
-            if (objectIndex == -1) {
-                continue;
-            }
-
-            if ((gObjectList[objectIndex].state >= 2) && (gMatrixHudCount < 0x2EF)) {
-                D_80183E80[1] =
-                    func_800418AC(gObjectList[objectIndex].pos[0], gObjectList[objectIndex].pos[2], temp_s7->pos);
-                func_800431B0(gObjectList[objectIndex].pos, D_80183E80, gObjectList[objectIndex].sizeScaling,
-                              D_0D0062B0);
-            }
-        }
-    }
-    gSPTexture(gDisplayListHead++, 0x0001, 0x0001, 0, G_TX_RENDERTILE, G_OFF);
 }
 
 void func_8005285C(s32 arg0) {
@@ -3945,89 +3956,6 @@ void func_800557B4(s32 objectIndex, u32 arg1, u32 arg2) {
     }
 }
 
-void render_object_train_penguins(s32 cameraId) {
-    s32 i;
-    s32 objectIndex;
-    s32 temp_s1;
-    s32 var_a3;
-    u16 var_s1;
-    u32 var_s3;
-
-    if (gPlayerCountSelection1 == 1) {
-        var_s3 = 0x0003D090;
-    } else if (gPlayerCountSelection1 == 2) {
-        var_s3 = 0x00027100;
-    } else {
-        var_s3 = 0x00015F90;
-    }
-    for (i = 0; i < NUM_PENGUINS; i++) {
-        objectIndex = indexObjectList1[i];
-        if (gObjectList[objectIndex].state >= 2) {
-            if (gPlayerCountSelection1 == 1) {
-                var_s1 = 0x4000;
-                if (i == 0) {
-                    var_a3 = 0x000005DC;
-                } else if (func_80072320(objectIndex, 8) != 0) {
-                    var_a3 = 0x00000320;
-                } else {
-                    var_a3 = 0x000003E8;
-                }
-            } else {
-                if (func_80072320(objectIndex, 8) != 0) {
-                    var_a3 = 0x000001F4;
-                    var_s1 = 0x4000;
-                } else {
-                    var_a3 = 0x00000258;
-                    var_s1 = 0x5555;
-                }
-            }
-            temp_s1 = func_8008A364(objectIndex, cameraId, var_s1, var_a3);
-            if (is_obj_flag_status_active(objectIndex, VISIBLE) != 0) {
-                func_800557B4(objectIndex, (u32) temp_s1, var_s3);
-            }
-        }
-    }
-}
-
-void func_80055AB8(s32 objectIndex, s32 cameraId) {
-    Camera* camera;
-
-    camera = &camera1[cameraId];
-    if (gObjectList[objectIndex].state >= 2) {
-        if (is_obj_flag_status_active(objectIndex, 0x00100000) != 0) {
-            D_80183E40[0] = gObjectList[objectIndex].pos[0];
-            D_80183E40[1] = gObjectList[objectIndex].pos[1] + 16.0;
-            D_80183E40[2] = gObjectList[objectIndex].pos[2];
-            D_80183E80[0] = 0;
-            D_80183E80[1] =
-                func_800418AC(gObjectList[objectIndex].pos[0], gObjectList[objectIndex].pos[2], camera->pos);
-            D_80183E80[2] = 0x8000;
-            func_800468E0(D_80183E40, D_80183E80, 0.54f, d_course_rainbow_road_sphere, D_0D0062B0, 0x00000020,
-                          0x00000040, 0x00000020, 0x00000040, 5);
-        } else {
-            rsp_set_matrix_transformation(gObjectList[objectIndex].pos, gObjectList[objectIndex].direction_angle,
-                                          gObjectList[objectIndex].sizeScaling);
-            gSPDisplayList(gDisplayListHead++, D_0D0077D0);
-            render_animated_model((Armature*) gObjectList[objectIndex].model,
-                                  (Animation**) gObjectList[objectIndex].vertex, 0,
-                                  (s16) gObjectList[objectIndex].textureListIndex);
-        }
-    }
-}
-
-void render_object_chain_chomps(s32 cameraId) {
-    s32 var_s1;
-    s32 objectIndex;
-
-    for (var_s1 = 0; var_s1 < NUM_CHAIN_CHOMPS; var_s1++) {
-        objectIndex = indexObjectList2[var_s1];
-        func_8008A1D0(objectIndex, cameraId, 0x000005DC, 0x000009C4);
-        if (is_obj_flag_status_active(objectIndex, VISIBLE) != 0) {
-            func_80055AB8(objectIndex, cameraId);
-        }
-    }
-}
-
 void func_80055EF4(s32 objectIndex, UNUSED s32 arg1) {
     Object* object;
 
@@ -4156,23 +4084,17 @@ void func_800568A0(s32 objectIndex, s32 playerId) {
 }
 
 void func_800569F4(s32 playerIndex) {
-    s32 objectIndex;
-
-    objectIndex = gIndexObjectBombKart[playerIndex];
-    init_object(objectIndex, 0);
-    gObjectList[objectIndex].primAlpha = 0;
+    CM_DisplayBattleBombKart(playerIndex, 0);
 }
 
-void func_80056A40(s32 playerIndex, s32 arg1) {
-    s32 objectIndex;
 
-    objectIndex = gIndexObjectBombKart[playerIndex];
-    init_object(objectIndex, 0);
-    gObjectList[objectIndex].primAlpha = (s16) arg1;
+void func_80056A40(s32 playerIndex, s32 arg1) {
+    CM_DisplayBattleBombKart(playerIndex, arg1);
 }
 
 void func_80056A94(s32 playerIndex) {
-    func_80072428(gIndexObjectBombKart[playerIndex]);
+    //func_80072428(gIndexObjectBombKart[playerIndex]);
+    CM_DisplayBattleBombKart(playerIndex, 0);
 }
 
 void render_battle_bomb_karts(s32 cameraId) {

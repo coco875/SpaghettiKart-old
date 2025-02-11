@@ -1,5 +1,5 @@
 #ifndef GCC
-#define D_800DC510_AS_U16
+#define gRaceState_AS_U16
 #endif
 #include <libultraship.h>
 #include <libultra/vi.h>
@@ -177,8 +177,8 @@ OSMesg gPIMesgBuf[32];
 OSMesgQueue gPIMesgQueue;
 
 s32 gGamestate = 0xFFFF;
-// D_800DC510 is externed as an s32 in other files. D_800DC514 is only used in main.c, likely a developer mistake.
-u16 D_800DC510 = 0;
+// gRaceState is externed as an s32 in other files. D_800DC514 is only used in main.c, likely a developer mistake.
+u16 gRaceState = RACE_INIT;
 u16 D_800DC514 = 0;
 u16 creditsRenderMode = 0; // Renders the whole track. Displays red if used in normal race mode.
 u16 gDemoMode = DEMO_MODE_INACTIVE;
@@ -193,7 +193,7 @@ s32 gPlayerCountSelection1 = 2;
 s32 gModeSelection = GRAND_PRIX;
 s32 D_800DC540 = 0;
 s32 D_800DC544 = 0;
-s32 gCCSelection = CC_50;
+s32 gCCSelection = CC_150;
 s32 gGlobalTimer = 0;
 UNUSED s32 D_800DC550 = 0;
 UNUSED s32 D_800DC554 = 0;
@@ -367,12 +367,17 @@ void update_controller(s32 index) {
     }
 
     // Prevents pause menu intereference while controlling flycam
-    if ((CVarGetInteger("gFreecam", 0) == 1) && (gFreecamControllerType == 0) && (gGamestate == RACING)) {
+    // Freecam only works with controller 1
+    if ((CVarGetInteger("gFreecam", 0) == 1) && (gGamestate == RACING) && (index == 0)) {
+        freecam_update_controller();
         return;
     }
 
     controller->rawStickX = gControllerPads[index].stick_x;
     controller->rawStickY = gControllerPads[index].stick_y;
+
+    controller->rightRawStickX = gControllerPads[index].right_stick_x;
+    controller->rightRawStickY = gControllerPads[index].right_stick_y;
 
     if ((gControllerPads[index].button & 4) != 0) {
         gControllerPads[index].button |= Z_TRIG;
@@ -693,10 +698,6 @@ void calculate_updaterate(void) {
     }
 }
 
-
-
-
-
 void display_debug_info(void) {
     u16 rotY;
     if (!gEnableDebugMode) {
@@ -779,7 +780,7 @@ void process_game_tick(void) {
     func_8028F474();
     func_80059AC8();
     update_course_actors();
-    CourseManager_TickActors();
+    CM_TickActors();
     func_802966A0();
     func_8028FCBC();
 }

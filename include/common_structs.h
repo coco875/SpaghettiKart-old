@@ -66,6 +66,8 @@ struct D_80150158 {
 struct Controller {
     s16 rawStickX;
     s16 rawStickY;
+    s16 rightRawStickX;
+    s16 rightRawStickY;
     u16 button;          // HeldButton
     u16 buttonPressed;   // OnTriggered
     u16 buttonDepressed; // OffTriggered
@@ -361,7 +363,7 @@ typedef struct {
     /* 0x0238 */ s16 unk_238;
     /* 0x023A */ s16 unk_23A;
     /* 0x023C */ f32 unk_23C;
-    /* 0x0240 */ s32 unk_240;
+    /* 0x0240 */ s32 tyreSpeed;
     /* 0x0244 */ u16 animFrameSelector[4]; // [0] Active texture group
     /* 0x024C */ u16 animGroupSelector[4]; // Based on screen
     /* 0x0254 */ u16 characterId;

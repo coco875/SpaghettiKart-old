@@ -6,6 +6,7 @@
 #include "MarioRaceway.h"
 #include "World.h"
 #include "engine/actors/AFinishline.h"
+#include "engine/objects/Object.h"
 #include "engine/objects/BombKart.h"
 
 extern "C" {
@@ -147,7 +148,7 @@ void MarioRaceway::Load() {
         // d_course_mario_raceway_packed_dl_8E8
         generate_collision_mesh_with_defaults(segmented_gfx_to_virtual((void*)0x070008E8));
     } else {
-        if (CVarGetInteger("gDisableLod", 0) == true) {
+        if (CVarGetInteger("gDisableLod", 1) == true) {
             generate_collision_mesh_with_defaults(segmented_gfx_to_virtual((void*)0x070008E8));
         } else {
             // d_course_mario_raceway_packed_dl_2D68
@@ -173,13 +174,11 @@ void MarioRaceway::LoadTextures() {
     dma_textures(gTexturePiranhaPlant9, 0x000003E8U, 0x00000800U);
 }
 
-void MarioRaceway::SpawnActors() {
+void MarioRaceway::BeginPlay() {
     struct Actor* actor;
     Vec3f position;
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     Vec3s rotation = { 0, 0, 0 };
-
-    gWorldInstance.AddActor(new AFinishline());
 
     spawn_foliage((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_mario_raceway_tree_spawns));
     spawn_piranha_plants((struct ActorSpawnData*)LOAD_ASSET_RAW(d_course_mario_raceway_piranha_plant_spawns));
@@ -190,19 +189,16 @@ void MarioRaceway::SpawnActors() {
     vec3f_set(position, 2520.0f, 0.0f, 1240.0f);
     position[0] *= gCourseDirection;
     add_actor_to_empty_slot(position, rotation, velocity, ACTOR_MARIO_SIGN);
-}
 
-void MarioRaceway::SpawnVehicles() {
     if (gModeSelection == VERSUS) {
         Vec3f pos = {0, 0, 0};
-
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][40], 40, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][100], 100, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][265], 265, 3, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][285], 285, 1, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][420], 420, 1, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f);
-        gWorldInstance.AddBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f);
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][40], 40, 3, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][100], 100, 3, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][265], 265, 3, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][285], 285, 1, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][420], 420, 1, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f));
+        gWorldInstance.AddObject(new OBombKart(pos, &D_80164550[0][0], 0, 0, 0.8333333f));
     }
 }
 
