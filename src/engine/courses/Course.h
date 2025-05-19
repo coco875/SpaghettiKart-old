@@ -111,8 +111,8 @@ typedef struct Properties {
         // PathSizes - Assuming _struct_gCoursePathSizes_0x10 can be serialized similarly
         // j["PathSizes"] = PathSizes; // Implement your serialization logic here
 
-        j["D_0D009418"] = { D_0D009418[0], D_0D009418[1], D_0D009418[2], D_0D009418[3] };
-        j["D_0D009568"] = { D_0D009568[0], D_0D009568[1], D_0D009568[2], D_0D009568[3] };
+        j["CurveTargetSpeed"] = { CurveTargetSpeed[0], CurveTargetSpeed[1], CurveTargetSpeed[2], CurveTargetSpeed[3] };
+        j["NormalTargetSpeed"] = { NormalTargetSpeed[0], NormalTargetSpeed[1], NormalTargetSpeed[2], NormalTargetSpeed[3] };
         j["D_0D0096B8"] = { D_0D0096B8[0], D_0D0096B8[1], D_0D0096B8[2], D_0D0096B8[3] };
         j["OffTrackTargetSpeed"] = { OffTrackTargetSpeed[0], OffTrackTargetSpeed[1], OffTrackTargetSpeed[2], OffTrackTargetSpeed[3] };
 
@@ -178,15 +178,15 @@ typedef struct Properties {
 
         // Deserialize PathSizes and other custom structs if needed
 
-        D_0D009418[0] = j.at("D_0D009418")[0].get<float>();
-        D_0D009418[1] = j.at("D_0D009418")[1].get<float>();
-        D_0D009418[2] = j.at("D_0D009418")[2].get<float>();
-        D_0D009418[3] = j.at("D_0D009418")[3].get<float>();
+        CurveTargetSpeed[0] = j.at("CurveTargetSpeed")[0].get<float>();
+        CurveTargetSpeed[1] = j.at("CurveTargetSpeed")[1].get<float>();
+        CurveTargetSpeed[2] = j.at("CurveTargetSpeed")[2].get<float>();
+        CurveTargetSpeed[3] = j.at("CurveTargetSpeed")[3].get<float>();
 
-        D_0D009568[0] = j.at("D_0D009568")[0].get<float>();
-        D_0D009568[1] = j.at("D_0D009568")[1].get<float>();
-        D_0D009568[2] = j.at("D_0D009568")[2].get<float>();
-        D_0D009568[3] = j.at("D_0D009568")[3].get<float>();
+        NormalTargetSpeed[0] = j.at("NormalTargetSpeed")[0].get<float>();
+        NormalTargetSpeed[1] = j.at("NormalTargetSpeed")[1].get<float>();
+        NormalTargetSpeed[2] = j.at("NormalTargetSpeed")[2].get<float>();
+        NormalTargetSpeed[3] = j.at("NormalTargetSpeed")[3].get<float>();
 
         D_0D0096B8[0] = j.at("D_0D0096B8")[0].get<float>();
         D_0D0096B8[1] = j.at("D_0D0096B8")[1].get<float>();

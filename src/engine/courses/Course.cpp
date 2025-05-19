@@ -4,7 +4,7 @@
 #include "MarioRaceway.h"
 #include "ChocoMountain.h"
 #include "port/Game.h"
-#include "port/resource/type/TrackPathPoint.h"
+#include "port/resource/type/TrackPathPointData.h"
 #include "port/resource/type/TrackSections.h"
 
 extern "C" {
@@ -231,10 +231,10 @@ void Course::TestPath() {
     Vec3s rot = {0, 0, 0};
     Vec3f vel = {0, 0, 0};
 
-    for (size_t i = 0; i < gWaypointCountByPathIndex[0]; i++) {
-        x = D_80164550[0][i].posX;
-        y = D_80164550[0][i].posY;
-        z = D_80164550[0][i].posZ;
+    for (size_t i = 0; i < gPathCountByPathIndex[0]; i++) {
+        x = gTrackPaths[0][i].posX;
+        y = gTrackPaths[0][i].posY;
+        z = gTrackPaths[0][i].posZ;
 
         if (((x & 0xFFFF) == 0x8000) && ((y & 0xFFFF) == 0x8000) && ((z & 0xFFFF) == 0x8000)) {
             break;

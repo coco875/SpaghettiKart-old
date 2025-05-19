@@ -1,5 +1,5 @@
 #include "TrackPathPointFactory.h"
-#include "../type/TrackPathPoint.h"
+#include "../type/TrackPathPointData.h"
 #include "spdlog/spdlog.h"
 #include "libultraship/libultra/gbi.h"
 #include "tinyxml2.h"
@@ -12,18 +12,18 @@ ResourceFactoryBinaryTrackPathPointsV0::ReadResource(std::shared_ptr<Ship::File>
         return nullptr;
     }
 
-    auto section = std::make_shared<TrackPathPoints>(initData);
+    auto section = std::make_shared<TrackPathPointData>(initData);
     auto reader = std::get<std::shared_ptr<Ship::BinaryReader>>(file->Reader);
 
     uint32_t count = reader->ReadUInt32();
     section->TrackPathPointList.reserve(count);
 
     for (uint32_t i = 0; i < count; i++) {
-        TrackPathPointData data;
+        TrackPathPoint data;
         data.posX = reader->ReadInt16();
         data.posY = reader->ReadInt16();
         data.posZ = reader->ReadInt16();
-        data.trackSegment = reader->ReadUInt16();
+        data.trackSectionId = reader->ReadUInt16();
 
         section->TrackPathPointList.push_back(data);
     }
@@ -46,16 +46,16 @@ ResourceFactoryXMLTrackPathPointsV0::ReadResource(std::shared_ptr<Ship::File> fi
 
     while (path != nullptr) {
 
-        std::vector<TrackPathPointData> waypointPath; // Temporary container for this path
+        std::vector<TrackPathPoint> waypointPath; // Temporary container for this path
 
         auto pointElem = path->FirstChildElement("Point");
 
         while (pointElem != nullptr) {
-            TrackPathPointData point;
+            TrackPathPoint point;
             point.posX = pointElem->IntAttribute("X");
             point.posY = pointElem->IntAttribute("Y");
             point.posZ = pointElem->IntAttribute("Z");
-            point.trackSegment = pointElem->IntAttribute("ID");
+            point.trackSectionId = pointElem->IntAttribute("ID");
 
             waypointPath.push_back(point); // Push to temp vector
 
