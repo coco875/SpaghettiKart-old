@@ -133,10 +133,10 @@ PodiumCeremony::PodiumCeremony() {
     Props.D_0D009808[2] = 5.75f;
     Props.D_0D009808[3] = 6.3333334f;
 
-    Props.PathTable[0] = (TrackWaypoint*)LOAD_ASSET_RAW(podium_ceremony_path);
-    Props.PathTable[1] = (TrackWaypoint*)LOAD_ASSET_RAW(podium_ceremony_path_2);
-    Props.PathTable[2] = (TrackWaypoint*)LOAD_ASSET_RAW(podium_ceremony_path_3);
-    Props.PathTable[3] = (TrackWaypoint*)LOAD_ASSET_RAW(podium_ceremony_path_4);
+    Props.PathTable[0] = (TrackPathPoint*)LOAD_ASSET_RAW(podium_ceremony_path);
+    Props.PathTable[1] = (TrackPathPoint*)LOAD_ASSET_RAW(podium_ceremony_path_2);
+    Props.PathTable[2] = (TrackPathPoint*)LOAD_ASSET_RAW(podium_ceremony_path_3);
+    Props.PathTable[3] = (TrackPathPoint*)LOAD_ASSET_RAW(podium_ceremony_path_4);
 
     Props.PathTable2[0] = NULL;
     Props.PathTable2[1] = NULL;

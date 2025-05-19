@@ -104,15 +104,15 @@ YoshiValley::YoshiValley() {
     Props.D_0D009808[2] = 5.75f;
     Props.D_0D009808[3] = 6.3333334f;
 
-    Props.PathTable[0] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_unknown_waypoints);
-    Props.PathTable[1] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_unknown_waypoints_2);
-    Props.PathTable[2] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_unknown_waypoints_3);
-    Props.PathTable[3] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_unknown_waypoints_4);
+    Props.PathTable[0] = (TrackPathPoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_unknown_waypoints);
+    Props.PathTable[1] = (TrackPathPoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_unknown_waypoints_2);
+    Props.PathTable[2] = (TrackPathPoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_unknown_waypoints_3);
+    Props.PathTable[3] = (TrackPathPoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_unknown_waypoints_4);
 
-    Props.PathTable2[0] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_track_waypoints);
-    Props.PathTable2[1] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_track_waypoints_2);
-    Props.PathTable2[2] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_track_waypoints_3);
-    Props.PathTable2[3] = (TrackWaypoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_track_waypoints_4);
+    Props.PathTable2[0] = (TrackPathPoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_track_waypoints);
+    Props.PathTable2[1] = (TrackPathPoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_track_waypoints_2);
+    Props.PathTable2[2] = (TrackPathPoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_track_waypoints_3);
+    Props.PathTable2[3] = (TrackPathPoint*)LOAD_ASSET_RAW(d_course_yoshi_valley_track_waypoints_4);
 
     Props.CloudTexture = (u8*) LOAD_ASSET_RAW(gTextureExhaust0);
     Props.Clouds = gYoshiValleyMooMooFarmClouds;

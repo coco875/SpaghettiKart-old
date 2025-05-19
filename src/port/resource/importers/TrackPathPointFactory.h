@@ -11,7 +11,7 @@ class ResourceFactoryBinaryTrackPathPointsV0 : public Ship::ResourceFactoryBinar
                                                   std::shared_ptr<Ship::ResourceInitData> initData) override;
 };
 
-class ResourceFactoryXMLTrackWaypointsV0 : public Ship::ResourceFactoryXML {
+class ResourceFactoryXMLTrackPathPointsV0 : public Ship::ResourceFactoryXML {
   public:
     std::shared_ptr<Ship::IResource> ReadResource(std::shared_ptr<Ship::File> file,
                                                   std::shared_ptr<Ship::ResourceInitData> initData) override;

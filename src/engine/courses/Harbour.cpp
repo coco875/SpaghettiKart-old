@@ -54,7 +54,7 @@ extern "C" {
     #include "course.h"
 }
 
-TrackWaypoint harbour_path[] = {
+TrackPathPoint harbour_path[] = {
     {16,-121,-34,0},
     {27,-121,-60,0},
     {31,-121,-83,0},
@@ -558,10 +558,10 @@ Harbour::Harbour() {
     Props.D_0D0096B8[2] = 4.5f;
     Props.D_0D0096B8[3] = 5.0833334f;
 
-    Props.D_0D009808[0] = 3.75f;
-    Props.D_0D009808[1] = 5.1666665f;
-    Props.D_0D009808[2] = 5.75f;
-    Props.D_0D009808[3] = 6.3333334f;
+    Props.OffTrackTargetSpeed[0] = 3.75f;
+    Props.OffTrackTargetSpeed[1] = 5.1666665f;
+    Props.OffTrackTargetSpeed[2] = 5.75f;
+    Props.OffTrackTargetSpeed[3] = 6.3333334f;
 
     Props.PathTable[0] = harbour_path;
     Props.PathTable[1] = NULL;

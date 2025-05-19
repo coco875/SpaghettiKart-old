@@ -4,7 +4,7 @@
 #include "MarioRaceway.h"
 #include "ChocoMountain.h"
 #include "port/Game.h"
-#include "port/resource/type/TrackWaypoint.h"
+#include "port/resource/type/TrackPathPoint.h"
 #include "port/resource/type/TrackSections.h"
 
 extern "C" {
@@ -115,11 +115,11 @@ void Course::LoadO2R(std::string trackPath) {
             size_t i = 0;
             for (auto& path : paths) {
                 if (i == 0) {
-                    Props.PathTable[0] = (TrackWaypoint*)path.data();
+                    Props.PathTable[0] = (TrackPathPoint*)path.data();
                     Props.PathTable[1] = NULL;
                     Props.PathTable[2] = NULL;
                     Props.PathTable[3] = NULL;
-                    Props.PathTable2[0] = (TrackWaypoint*)path.data();
+                    Props.PathTable2[0] = (TrackPathPoint*)path.data();
                     Props.PathTable2[1] = NULL;
                     Props.PathTable2[2] = NULL;
                     Props.PathTable2[3] = NULL;

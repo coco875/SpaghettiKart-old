@@ -54,7 +54,7 @@ extern "C" {
     extern Gfx test_course_dls[];
     extern Vtx mario_Plane_001_mesh_vtx_1[];
     extern Gfx mario_Plane_001_mesh[];
-    extern TrackWaypoint test_course_path[];
+    extern TrackPathPoint test_course_path[];
     extern TrackSections test_course_addr[];
 }
 
