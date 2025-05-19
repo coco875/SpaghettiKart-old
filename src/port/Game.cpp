@@ -3,7 +3,7 @@
 #include "Game.h"
 #include "port/Engine.h"
 
-#include <Fast3D/gfx_pc.h>
+#include <graphic/Fast3D/Fast3dWindow.h>
 #include "engine/World.h"
 #include "engine/courses/Course.h"
 #include "engine/courses/MarioRaceway.h"
@@ -26,8 +26,9 @@
 #include "engine/courses/DoubleDeck.h"
 #include "engine/courses/DKJungle.h"
 #include "engine/courses/BigDonut.h"
+#include "engine/courses/Harbour.h"
 #include "engine/courses/TestCourse.h"
-#include "engine/actors/AFinishline.h"
+#include "engine/actors/Finishline.h"
 
 #include "engine/courses/PodiumCeremony.h"
 
@@ -41,6 +42,12 @@
 #include "engine/objects/Lakitu.h"
 
 #include "Smoke.h"
+
+#include "engine/HM_Intro.h"
+
+#include "engine/editor/Editor.h"
+#include "engine/editor/EditorMath.h"
+#include "engine/editor/SceneManager.h"
 
 extern "C" {
 #include "main.h"
@@ -83,6 +90,7 @@ DoubleDeck* gDoubleDeck;
 DKJungle* gDkJungle;
 BigDonut* gBigDonut;
 PodiumCeremony* gPodiumCeremony;
+Harbour* gHarbour;
 TestCourse* gTestCourse;
 
 Cup* gMushroomCup;
@@ -92,6 +100,12 @@ Cup* gSpecialCup;
 Cup* gBattleCup;
 
 ModelLoader gModelLoader;
+
+HarbourMastersIntro gMenuIntro;
+
+Editor::Editor gEditor;
+
+s32 gTrophyIndex = NULL;
 
 void CustomEngineInit() {
 
@@ -116,6 +130,7 @@ void CustomEngineInit() {
     gDkJungle = new DKJungle();
     gBigDonut = new BigDonut();
     gPodiumCeremony = new PodiumCeremony();
+    gHarbour = new Harbour();
     gTestCourse = new TestCourse();
 
     /* Add all courses to the global course list */
@@ -139,6 +154,7 @@ void CustomEngineInit() {
     gWorldInstance.AddCourse(gDoubleDeck);
     gWorldInstance.AddCourse(gDkJungle);
     gWorldInstance.AddCourse(gBigDonut);
+    gWorldInstance.AddCourse(gHarbour);
     gWorldInstance.AddCourse(gTestCourse);
 
     gMushroomCup = new Cup("mk:mushroom_cup", "mushroom cup",
@@ -183,6 +199,26 @@ void CustomEngineInit() {
 }
 
 extern "C" {
+
+void HM_InitIntro() {
+    gMenuIntro.HM_InitIntro();
+}
+
+void HM_TickIntro() {
+    gMenuIntro.HM_TickIntro();
+}
+
+void HM_DrawIntro() {
+    gMenuIntro.HM_DrawIntro();
+}
+
+void CM_SpawnFromLevelProps() {
+    // Spawning actors needs to be delayed to the correct time.
+    // And loadlevel needs to happen asap
+
+    //Editor::LoadLevel(nullptr);
+   // Editor::SpawnFromLevelProps();
+}
 
 World* GetWorld(void) {
     return &gWorldInstance;
@@ -318,7 +354,9 @@ void CM_RenderCourse(struct UnkStruct_800DC5EC* arg0) {
     if (gWorldInstance.CurrentCourse->IsMod() == false) {
         if ((CVarGetInteger("gFreecam", 0) == true)) {
             // Render credits courses
-            func_8029569C();
+            //gSPClearGeometryMode(gDisplayListHead++, G_LIGHTING);
+            //gSPSetGeometryMode(gDisplayListHead++, G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH);
+            render_credits();
             return;
         }
     }
@@ -347,9 +385,22 @@ void CM_DrawActors(Camera* camera, struct Actor* actor) {
     }
 }
 
+void CM_DrawStaticMeshActors() {
+    gWorldInstance.DrawStaticMeshActors();
+}
+
 void CM_BeginPlay() {
-    if (gWorldInstance.CurrentCourse) {
-        gWorldInstance.CurrentCourse->BeginPlay();
+    Course* course = gWorldInstance.CurrentCourse;
+
+    if (course) {
+        // Do not spawn finishline in credits or battle mode. And if bSpawnFinishline.
+        if ((gGamestate != CREDITS_SEQUENCE) && (gGamestate != BATTLE) && (course->bSpawnFinishline)) {
+            gWorldInstance.AddActor(new AFinishline(course->FinishlineSpawnPoint));
+        }
+
+        gEditor.AddLight("Sun", nullptr, D_800DC610[1].l->l.dir);
+
+        course->BeginPlay();
     }
 }
 
@@ -371,6 +422,18 @@ void CM_DrawObjects(s32 cameraId) {
     if (gWorldInstance.CurrentCourse) {
         gWorldInstance.DrawObjects(cameraId);
     }
+}
+
+void CM_TickEditor() {
+    gEditor.Tick();
+}
+
+void CM_DrawEditor() {
+    gEditor.Draw();
+}
+
+void CM_Editor_SetLevelDimensions(s16 minX, s16 maxX, s16 minZ, s16 maxZ, s16 minY, s16 maxY) {
+    gEditor.SetLevelDimensions(minX, maxX, minZ, maxZ, minY, maxY);
 }
 
 void CM_TickParticles() {
@@ -420,12 +483,6 @@ void CM_SomeCollisionThing(Player* player, Vec3f arg1, Vec3f arg2, Vec3f arg3, f
     }
 }
 
-void CM_MinimapSettings() {
-    if (gWorldInstance.CurrentCourse) {
-        gWorldInstance.CurrentCourse->MinimapSettings();
-    }
-}
-
 void CM_InitCourseObjects() {
     if (gWorldInstance.CurrentCourse) {
         gWorldInstance.CurrentCourse->InitCourseObjects();
@@ -468,12 +525,6 @@ void CM_WhatDoesThisDo(Player* player, int8_t playerId) {
 void CM_WhatDoesThisDoAI(Player* player, int8_t playerId) {
     if (gWorldInstance.CurrentCourse) {
         gWorldInstance.CurrentCourse->WhatDoesThisDoAI(player, playerId);
-    }
-}
-
-void CM_MinimapFinishlinePosition() {
-    if (gWorldInstance.CurrentCourse) {
-        gWorldInstance.CurrentCourse->MinimapFinishlinePosition();
     }
 }
 
@@ -611,14 +662,48 @@ void CM_DeleteActor(size_t index) {
  * Clean up actors and other game objects.
  */
 void CM_CleanWorld(void) {
+    World* world = &gWorldInstance;
+    for (auto& actor : world->Actors) {
+        delete actor;
+    }
+
+    for (auto& object : world->Objects) {
+        delete object;
+    }
+
+    for (auto& emitter : world->Emitters) {
+        delete emitter;
+    }
+
+    for (auto& actor : world->StaticMeshActors) {
+        delete actor;
+    }
+
+    gEditor.ClearObjects();
     gWorldInstance.Actors.clear();
+    gWorldInstance.StaticMeshActors.clear();
     gWorldInstance.Objects.clear();
     gWorldInstance.Emitters.clear();
     gWorldInstance.Lakitus.clear();
+    gWorldInstance.Reset();
 }
 
-struct Actor* CM_AddBaseActor(void) {
+struct Actor* CM_AddBaseActor() {
     return (struct Actor*) gWorldInstance.AddBaseActor();
+}
+
+void CM_AddEditorObject(struct Actor* actor, const char* name) {
+    gWorldInstance.AddEditorObject(actor, name);
+}
+
+void Editor_AddLight(s8* direction) {
+    static size_t i = 0;
+    gEditor.AddLight(("Light "+std::to_string(i)).c_str(), nullptr, direction);
+    i += 1;
+}
+
+void Editor_ClearMatrix() {
+    gEditor.ClearMatrixPool();
 }
 
 size_t CM_GetActorSize() {
@@ -631,6 +716,11 @@ void CM_ActorCollision(Player* player, Actor* actor) {
     if (a->IsMod()) {
         a->Collision(player, a);
     }
+}
+
+f32 CM_GetWaterLevel(Vec3f pos, Collision* collision) {
+    FVector fPos = {pos[0], pos[1], pos[2]};
+    return gWorldInstance.CurrentCourse->GetWaterLevel(fPos, collision);
 }
 
 void* GetMarioRaceway(void) {
@@ -774,6 +864,7 @@ extern "C"
     }
 
     thread5_game_loop();
+    gEditor.Load();
     while (WindowIsRunning()) {
         push_frame();
     }

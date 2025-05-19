@@ -182,6 +182,7 @@ enum { COURSE_ONE, COURSE_TWO, COURSE_THREE, COURSE_FOUR };
 #define CHARACTER_SELECT_MENU 12
 #define COURSE_SELECT_MENU 13
 #define RACING_DUPLICATE 14
+#define HARBOUR_MASTERS_MENU 15
 
 /**
  * @brief Options for gGameState gGotoMode and gGotoMenu
@@ -379,3 +380,11 @@ enum PLACE { FIRST_PLACE, SECOND_PLACE, THIRD_PLACE, FOURTH_PLACE };
 #define FACING_Z_AXIS 0x2000
 
 #endif // DEFINES_H
+
+/**
+ * 
+ * Laps
+ * 
+ */
+#define MIN_LAPS 0
+#define MAX_LAPS 3

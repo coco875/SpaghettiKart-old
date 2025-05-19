@@ -19,6 +19,7 @@ extern s8 gPlayerCount;
 size_t ACar::_count = 0;
 
 ACar::ACar(f32 speedA, f32 speedB, TrackPathPoint* path, uint32_t waypoint) {
+    Name = "Car";
     TrackPathPoint* temp_v0;
     u16 waypointOffset;
     s32 numWaypoints = gPathCountByPathIndex[0];

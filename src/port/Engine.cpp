@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include "StringHelper.h"
+#include "GameExtractor.h"
 #include "ui/ImguiUI.h"
 #include "libultraship/src/Context.h"
 #include "resource/type/ResourceType.h"
@@ -17,18 +18,25 @@
 #include "resource/importers/ActorSpawnDataFactory.h"
 #include "resource/importers/UnkActorSpawnDataFactory.h"
 #include "resource/importers/ArrayFactory.h"
-#include <Fast3D/Fast3dWindow.h>
+#include "resource/importers/MinimapFactory.h"
 #include <Fonts.h>
 #include "window/gui/resource/Font.h"
 #include "window/gui/resource/FontFactory.h"
+#include "SpaghettiGui.h"
 
-#include <Fast3D/gfx_pc.h>
-#include <Fast3D/gfx_rendering_api.h>
+#include <graphic/Fast3D/Fast3dWindow.h>
+#include <graphic/Fast3D/interpreter.h>
+//#include <Fast3D/gfx_rendering_api.h>
 #include <SDL2/SDL.h>
 
 #include <utility>
 
+#ifdef __SWITCH__
+#include <port/switch/SwitchImpl.h>
+#endif
+
 extern "C" {
+bool prevAltAssets = false;
 float gInterpolationStep = 0.0f;
 #include <macros.h>
 #include <DisplayListFactory.h>
@@ -41,25 +49,58 @@ float gInterpolationStep = 0.0f;
 #include "audio/GameAudio.h"
 }
 
+Fast::Interpreter* GetInterpreter() {
+    return static_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow())
+             ->GetInterpreterWeak()
+             .lock()
+             .get();
+}
+
 GameEngine* GameEngine::Instance;
 
 GameEngine::GameEngine() {
-    std::vector<std::string> OTRFiles;
-    if (const std::string spaghetti_path = Ship::Context::GetPathRelativeToAppDirectory("spaghetti.o2r");
-        std::filesystem::exists(spaghetti_path)) {
-        OTRFiles.push_back(spaghetti_path);
+
+    const std::string main_path = Ship::Context::GetPathRelativeToAppDirectory("mk64.o2r");
+    const std::string assets_path = Ship::Context::LocateFileAcrossAppDirs("spaghetti.o2r");
+  
+    std::vector<std::string> archiveFiles;
+
+#ifdef __SWITCH__
+    Ship::Switch::Init(Ship::PreInitPhase);
+    Ship::Switch::Init(Ship::PostInitPhase);
+#endif
+
+
+#ifdef _WIN32
+    AllocConsole();
+#endif
+
+    if (std::filesystem::exists(main_path)) {
+        archiveFiles.push_back(main_path);
+    } else {
+        if (ShowYesNoBox("No O2R Files", "No O2R files found. Generate one now?") == IDYES) {
+            if(!GenAssetFile()){
+                ShowMessage("Error", "An error occured, no O2R file was generated.\n\nExiting...");
+                exit(1);
+            } else {
+                archiveFiles.push_back(main_path);
+            }
+        } else {
+            exit(1);
+        }
     }
-    if (const std::string ship_otr_path = Ship::Context::GetPathRelativeToAppBundle("ship.o2r");
-        std::filesystem::exists(ship_otr_path)) {
-        OTRFiles.push_back(ship_otr_path);
+
+    if (std::filesystem::exists(assets_path)) {
+        archiveFiles.push_back(assets_path);
     }
+
     if (const std::string patches_path = Ship::Context::GetPathRelativeToAppDirectory("mods");
         !patches_path.empty() && std::filesystem::exists(patches_path)) {
         if (std::filesystem::is_directory(patches_path)) {
             for (const auto& p : std::filesystem::recursive_directory_iterator(patches_path)) {
                 auto ext = p.path().extension().string();
-                if (StringHelper::IEquals(ext, ".otr") || StringHelper::IEquals(ext, ".o2r")) {
-                    OTRFiles.push_back(p.path().generic_string());
+                if (StringHelper::IEquals(ext, ".zip") || StringHelper::IEquals(ext, ".o2r")) {
+                    archiveFiles.push_back(p.path().generic_string());
                 }
             }
         }
@@ -73,16 +114,22 @@ GameEngine::GameEngine() {
 
     auto controlDeck = std::make_shared<LUS::ControlDeck>();
 
-    this->context->InitResourceManager(OTRFiles, {}, 3); // without this line InitWindow fails in Gui::Init()
+    this->context->InitResourceManager(archiveFiles, {}, 3); // without this line InitWindow fails in Gui::Init()
     this->context->InitConsole(); // without this line the GuiWindow constructor fails in ConsoleWindow::InitElement()
 
-    auto wnd = std::make_shared<Fast::Fast3dWindow>(std::vector<std::shared_ptr<Ship::GuiWindow>>({}));
-    // auto wnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
+    auto gui = std::make_shared<Ship::SpaghettiGui>(std::vector<std::shared_ptr<Ship::GuiWindow>>({}));
+    auto wnd = std::make_shared<Fast::Fast3dWindow>(gui);
 
-    this->context->Init(OTRFiles, {}, 3, { 26800, 512, 1100 }, wnd, controlDeck);
+    //auto wnd = std::make_shared<Fast::Fast3dWindow>(std::vector<std::shared_ptr<Ship::GuiWindow>>({}));
+    //auto wnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
 
-    // this->context = Ship::Context::CreateInstance("Spaghettify", "skart64", "spaghettify.cfg.json", OTRFiles, {}, 3,
-    //                                               { 26800, 512, 1100 });
+    this->context->Init(archiveFiles, {}, 3, { 26800, 512, 1100 }, wnd, controlDeck);
+
+#ifndef __SWITCH__
+    Ship::Context::GetInstance()->GetLogger()->set_level(
+        (spdlog::level::level_enum) CVarGetInteger("gDeveloperTools.LogLevel", 1));
+    Ship::Context::GetInstance()->GetLogger()->set_pattern("[%H:%M:%S.%e] [%s:%#] [%l] %v");
+#endif
 
     wnd->SetRendererUCode(ucode_f3dex);
     this->context->InitGfxDebugger();
@@ -132,8 +179,14 @@ GameEngine::GameEngine() {
     loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryBinaryTrackSectionsV0>(),
                                     RESOURCE_FORMAT_BINARY, "TrackSections",
                                     static_cast<uint32_t>(MK64::ResourceType::TrackSection), 0);
+    loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryXMLTrackSectionsV0>(),
+                                    RESOURCE_FORMAT_XML, "TrackSections",
+                                    static_cast<uint32_t>(MK64::ResourceType::TrackSection), 0);
     loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryBinaryTrackPathPointsV0>(),
                                     RESOURCE_FORMAT_BINARY, "Waypoints",
+                                    static_cast<uint32_t>(MK64::ResourceType::Waypoints), 0);
+    loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryXMLTrackPathPointsV0>(),
+                                    RESOURCE_FORMAT_XML, "Paths",
                                     static_cast<uint32_t>(MK64::ResourceType::Waypoints), 0);
     loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryBinaryActorSpawnDataV0>(),
                                     RESOURCE_FORMAT_BINARY, "SpawnData",
@@ -141,6 +194,9 @@ GameEngine::GameEngine() {
     loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryBinaryUnkActorSpawnDataV0>(),
                                     RESOURCE_FORMAT_BINARY, "UnkSpawnData",
                                     static_cast<uint32_t>(MK64::ResourceType::UnkSpawnData), 0);
+    loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryBinaryMinimapV0>(),
+                                    RESOURCE_FORMAT_BINARY, "Minimap",
+                                    static_cast<uint32_t>(MK64::ResourceType::Minimap), 0);
 
     fontMono = CreateFontWithSize(16.0f, "fonts/Inconsolata-Regular.ttf");
     fontMonoLarger = CreateFontWithSize(20.0f, "fonts/Inconsolata-Regular.ttf");
@@ -149,6 +205,61 @@ GameEngine::GameEngine() {
     fontStandardLarger = CreateFontWithSize(20.0f, "fonts/Montserrat-Regular.ttf");
     fontStandardLargest = CreateFontWithSize(24.0f, "fonts/Montserrat-Regular.ttf");
     ImGui::GetIO().FontDefault = fontMono;
+}
+
+bool GameEngine::GenAssetFile() {
+    auto extractor = new GameExtractor();
+
+    if (!extractor->SelectGameFromUI()) {
+        ShowMessage("Error", "No ROM selected.\n\nExiting...");
+        exit(1);
+    }
+
+    auto game = extractor->ValidateChecksum();
+    if (!game.has_value()) {
+        ShowMessage("Unsupported ROM", "The provided ROM is not supported.\n\nCheck the readme for a list of supported versions.");
+        exit(1);
+    }
+
+    ShowMessage(("Found " + game.value()).c_str(), "The extraction process will now begin.\n\nThis may take a few minutes.", SDL_MESSAGEBOX_INFORMATION);
+
+    return extractor->GenerateOTR();
+}
+
+void GameEngine::ShowMessage(const char* title, const char* message, SDL_MessageBoxFlags type) {
+#if defined(__SWITCH__)
+    SPDLOG_ERROR(message);
+#else
+    SDL_ShowSimpleMessageBox(type, title, message, nullptr);
+    SPDLOG_ERROR(message);
+#endif
+}
+
+int GameEngine::ShowYesNoBox(const char* title, const char* box) {
+    int ret;
+#ifdef _WIN32
+    ret = MessageBoxA(nullptr, box, title, MB_YESNO | MB_ICONQUESTION);
+#elif defined(__SWITCH__)
+    SPDLOG_ERROR(box);
+    return IDYES;
+#else
+    SDL_MessageBoxData boxData = { 0 };
+    SDL_MessageBoxButtonData buttons[2] = { { 0 } };
+
+    buttons[0].buttonid = IDYES;
+    buttons[0].text = "Yes";
+    buttons[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+    buttons[1].buttonid = IDNO;
+    buttons[1].text = "No";
+    buttons[1].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+    boxData.numbuttons = 2;
+    boxData.flags = SDL_MESSAGEBOX_INFORMATION;
+    boxData.message = box;
+    boxData.title = title;
+    boxData.buttons = buttons;
+    SDL_ShowMessageBox(&boxData, &ret);
+#endif
+    return ret;
 }
 
 void GameEngine::Create() {
@@ -162,6 +273,9 @@ void GameEngine::Create() {
 
 void GameEngine::Destroy() {
     AudioExit();
+#ifdef __SWITCH__
+    Ship::Switch::Exit();
+#endif
 }
 
 bool ShouldClearTextureCacheAtEndOfFrame = false;
@@ -181,7 +295,6 @@ void GameEngine::StartFrame() const {
         default:
             break;
     }
-    this->context->GetWindow()->StartFrame();
 }
 
 // void GameEngine::ProcessFrame(void (*run_one_game_iter)()) const {
@@ -190,22 +303,31 @@ void GameEngine::StartFrame() const {
 // }
 
 void GameEngine::RunCommands(Gfx* Commands) {
-    gfx_run(Commands, {});
-    gfx_end_frame();
+    auto wnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
 
-    if (ShouldClearTextureCacheAtEndOfFrame) {
+    if (nullptr == wnd) {
+        return;
+    }
+
+    wnd->HandleEvents();
+
+    wnd->DrawAndRunGraphicsCommands(Commands, {});
+
+    bool curAltAssets = CVarGetInteger("gEnhancements.Mods.AlternateAssets", 0);
+    if (prevAltAssets != curAltAssets) {
+        prevAltAssets = curAltAssets;
+        Ship::Context::GetInstance()->GetResourceManager()->SetAltAssetsEnabled(curAltAssets);
         gfx_texture_cache_clear();
-        ShouldClearTextureCacheAtEndOfFrame = false;
     }
 }
 
 void GameEngine::ProcessGfxCommands(Gfx* commands) {
-    RunCommands(commands);
     auto wnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
     if (wnd != nullptr) {
         wnd->SetTargetFps(CVarGetInteger("gInterpolationFPS", 30));
         wnd->SetMaximumFrameLatency(1);
     }
+    RunCommands(commands);
 }
 
 // Audio
@@ -419,6 +541,7 @@ extern "C" void GameEngine_UnloadSequence(const uint8_t seqId) {
 }
 
 extern "C" float GameEngine_GetAspectRatio() {
+    auto gfx_current_dimensions = GetInterpreter()->mCurDimensions;
     return gfx_current_dimensions.aspect_ratio;
 }
 
@@ -492,7 +615,7 @@ extern "C" void Timer_SetValue(int32_t* address, int32_t value) {
 // }
 
 extern "C" float OTRGetAspectRatio() {
-    return gfx_current_dimensions.aspect_ratio;
+    return GetInterpreter()->mCurDimensions.aspect_ratio;
 }
 
 extern "C" float OTRGetDimensionFromLeftEdge(float v) {
@@ -535,10 +658,18 @@ extern "C" uint32_t OTRCalculateCenterOfAreaFromLeftEdge(int32_t center) {
 
 // Gets the width of the current render target area
 extern "C" uint32_t OTRGetGameRenderWidth() {
-    return gfx_current_dimensions.width;
+    return GetInterpreter()->mCurDimensions.width;
 }
 
 // Gets the height of the current render target area
 extern "C" uint32_t OTRGetGameRenderHeight() {
-    return gfx_current_dimensions.height;
+    return GetInterpreter()->mCurDimensions.height;
+}
+
+extern "C" uint32_t OTRGetGameViewportWidth() {
+    return GetInterpreter()->mGameWindowViewport.width;
+}
+
+extern "C" uint32_t OTRGetGameViewportHeight() {
+    return GetInterpreter()->mGameWindowViewport.height;
 }

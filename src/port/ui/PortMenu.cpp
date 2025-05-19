@@ -10,6 +10,10 @@
 #include <tuple>
 #include "ResolutionEditor.h"
 
+#ifdef __SWITCH__
+#include <port/switch/SwitchImpl.h>
+#endif
+
 extern "C" {
 extern s32 gGamestateNext;
 extern s32 gMenuSelection;
@@ -87,6 +91,14 @@ void PortMenu::AddSettings() {
     // General Settings
     AddSidebarEntry("Settings", "General", 3);
     WidgetPath path = { "Settings", "General", SECTION_COLUMN_1 };
+
+    static bool isFullscreen = false;
+    AddWidget(path, "Toggle Fullscreen", WIDGET_CHECKBOX)
+        .ValuePointer(&isFullscreen)
+        .PreFunc([](WidgetInfo& info) { isFullscreen = Ship::Context::GetInstance()->GetWindow()->IsFullscreen(); })
+        .Callback([](WidgetInfo& info) { Ship::Context::GetInstance()->GetWindow()->ToggleFullscreen(); })
+        .Options(CheckboxOptions().Tooltip("Toggles Fullscreen On/Off."));
+
     AddWidget(path, "Menu Theme", WIDGET_CVAR_COMBOBOX)
         .CVar("gSettings.Menu.Theme")
         .Options(ComboboxOptions()
@@ -175,7 +187,6 @@ void PortMenu::AddSettings() {
 
     // Graphics Settings
     static int32_t maxFps;
-    static bool isFullscreen = false;
     const char* tooltip = "";
     if (Ship::Context::GetInstance()->GetWindow()->GetWindowBackend() == Ship::WindowBackend::FAST3D_DXGI_DX11) {
         maxFps = 360;
@@ -189,11 +200,8 @@ void PortMenu::AddSettings() {
     }
     path.sidebarName = "Graphics";
     AddSidebarEntry("Settings", "Graphics", 3);
-    AddWidget(path, "Toggle Fullscreen", WIDGET_CHECKBOX)
-        .ValuePointer(&isFullscreen)
-        .PreFunc([](WidgetInfo& info) { isFullscreen = Ship::Context::GetInstance()->GetWindow()->IsFullscreen(); })
-        .Callback([](WidgetInfo& info) { Ship::Context::GetInstance()->GetWindow()->ToggleFullscreen(); })
-        .Options(CheckboxOptions().Tooltip("Toggles Fullscreen On/Off."));
+    AddWidget(path, "Renderer API (Needs reload)", WIDGET_VIDEO_BACKEND);
+
 #ifndef __APPLE__
     AddWidget(path, "Internal Resolution: %.0f%%", WIDGET_CVAR_SLIDER_FLOAT)
         .CVar(CVAR_INTERNAL_RESOLUTION)
@@ -236,21 +244,21 @@ void PortMenu::AddSettings() {
                 .DefaultValue(1));
 #endif
 
-    AddWidget(path, "Current FPS: %d", WIDGET_CVAR_SLIDER_INT)
-        .CVar("gInterpolationFPS")
-        .Callback([](WidgetInfo& info) {
-            int32_t defaultValue = std::static_pointer_cast<IntSliderOptions>(info.options)->defaultValue;
-            if (CVarGetInteger(info.cVar, defaultValue) == defaultValue) {
-                info.name = "Current FPS: Original (%d)";
-            } else {
-                info.name = "Current FPS: %d";
-            }
-        })
-        .PreFunc([](WidgetInfo& info) {
-            if (mPortMenu->disabledMap.at(DISABLE_FOR_MATCH_REFRESH_RATE_ON).active)
-                info.activeDisables.push_back(DISABLE_FOR_MATCH_REFRESH_RATE_ON);
-        })
-        .Options(IntSliderOptions().Tooltip(tooltip).Min(20).Max(maxFps).DefaultValue(20));
+    // AddWidget(path, "Current FPS: %d", WIDGET_CVAR_SLIDER_INT)
+    //     .CVar("gInterpolationFPS")
+    //     .Callback([](WidgetInfo& info) {
+    //         int32_t defaultValue = std::static_pointer_cast<IntSliderOptions>(info.options)->defaultValue;
+    //         if (CVarGetInteger(info.cVar, defaultValue) == defaultValue) {
+    //             info.name = "Current FPS: Original (%d)";
+    //         } else {
+    //             info.name = "Current FPS: %d";
+    //         }
+    //     })
+    //     .PreFunc([](WidgetInfo& info) {
+    //         if (mPortMenu->disabledMap.at(DISABLE_FOR_MATCH_REFRESH_RATE_ON).active)
+    //             info.activeDisables.push_back(DISABLE_FOR_MATCH_REFRESH_RATE_ON);
+    //     })
+    //     .Options(IntSliderOptions().Tooltip(tooltip).Min(20).Max(maxFps).DefaultValue(20));
     AddWidget(path, "Match Refresh Rate", WIDGET_BUTTON)
         .Callback([](WidgetInfo& info) {
             int hz = Ship::Context::GetInstance()->GetWindow()->GetCurrentRefreshRate();
@@ -276,7 +284,6 @@ void PortMenu::AddSettings() {
                      .Min(0)
                      .Max(360)
                      .DefaultValue(80));
-    AddWidget(path, "Renderer API (Needs reload)", WIDGET_VIDEO_BACKEND);
     AddWidget(path, "Enable Vsync", WIDGET_CVAR_CHECKBOX)
         .CVar(CVAR_VSYNC_ENABLED)
         .PreFunc([](WidgetInfo& info) { info.isHidden = mPortMenu->disabledMap.at(DISABLE_FOR_NO_VSYNC).active; })
@@ -365,14 +372,48 @@ void PortMenu::AddEnhancements() {
         .Options(CheckboxOptions().Tooltip("Disable wall collision."));
     AddWidget(path, "Min Height", WIDGET_CVAR_SLIDER_FLOAT)
         .CVar("gMinHeight")
-        .Options(FloatSliderOptions().Min(-50.0f).Max(50.0f).DefaultValue(0.0f).Tooltip(
-            "When Disable Wall Collision are enable what is the minimal height you can get."));
+        .Options(FloatSliderOptions().Min(-50.0f).Max(50.0f).DefaultValue(0.0f)
+                     .Tooltip("When Disable Wall Collision are enable what is the minimal height you can get."));
+
+    path = { "Enhancements", "HM64 Lab", SECTION_COLUMN_1 };
+    AddSidebarEntry("Enhancements", "HM64 Lab", 4);
+    AddWidget(path, "Enable HM64 Labs", WIDGET_CVAR_CHECKBOX)
+    .CVar("gEditorEnabled")
+    .Callback([](WidgetInfo& info) {
+        Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Tools")->ToggleVisibility();
+        Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Scene Explorer")->ToggleVisibility();
+        Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Content Browser")->ToggleVisibility();
+        Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Track Properties")->ToggleVisibility();
+        Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Properties")->ToggleVisibility();
+    })
+    .Options(UIWidgets::CheckboxOptions({{ .tooltip = "Edit the universe!"}}));
 }
+
+#ifdef __SWITCH__
+static const std::unordered_map<int32_t, const char*> switchCPUProfiles = {
+    { Ship::SwitchProfiles::MAXIMUM, "Maximum Performance" },
+    { Ship::SwitchProfiles::HIGH, "High Performance" },
+    { Ship::SwitchProfiles::BOOST, "Boost Performance" },
+    { Ship::SwitchProfiles::STOCK, "Stock Performance" },
+    { Ship::SwitchProfiles::POWERSAVINGM1, "Powersaving Mode 1" },
+    { Ship::SwitchProfiles::POWERSAVINGM2, "Powersaving Mode 2" },
+    { Ship::SwitchProfiles::POWERSAVINGM3, "Powersaving Mode 3" }
+};
+#endif
 
 void PortMenu::AddDevTools() {
     AddMenuEntry("Developer", "gSettings.Menu.DevToolsSidebarSection");
     AddSidebarEntry("Developer", "General", 3);
     WidgetPath path = { "Developer", "General", SECTION_COLUMN_1 };
+#ifdef __SWITCH__
+    AddWidget(path, "Switch CPU Profile", WIDGET_CVAR_COMBOBOX)
+    .CVar("gSwitchPerfMode")
+    .Options(ComboboxOptions()
+        .Tooltip("Switches the CPU profile to a different one")
+        .ComboMap(switchCPUProfiles)
+        .DefaultIndex(Ship::SwitchProfiles::STOCK))
+        .Callback([](WidgetInfo& info) { Ship::Switch::ApplyOverclock(); });
+#endif
     AddWidget(path, "Popout Menu", WIDGET_CVAR_CHECKBOX)
         .CVar("gSettings.Menu.Popout")
         .Options(CheckboxOptions().Tooltip("Changes the menu display from overlay to windowed."));
@@ -389,13 +430,6 @@ void PortMenu::AddDevTools() {
         .CVar("gGfxDebuggerEnabled")
         .Options(ButtonOptions().Tooltip(
             "Enables the Gfx Debugger window, allowing you to input commands. Type help for some examples"))
-        .WindowName("GfxDebuggerWindow");
-
-    path = { "Developer", "Game Info", SECTION_COLUMN_1 };
-    AddSidebarEntry("Developer", "Game Info", 1);
-    AddWidget(path, "Popout Game Info", WIDGET_WINDOW_BUTTON)
-        .CVar("gGameInfoEnabled")
-        .Options(ButtonOptions().Tooltip("Shows the game info window, contains player and actor information"))
         .WindowName("GfxDebuggerWindow");
 
     path = { "Developer", "Stats", SECTION_COLUMN_1 };
@@ -439,9 +473,13 @@ void PortMenu::InitElement() {
 
     disabledMap = {
         { DISABLE_FOR_FREE_CAM_ON,
-          { [](disabledInfo& info) -> bool { return CVarGetInteger("gFreecam", 0); }, "Free Cam is Enabled" } },
+          { [](disabledInfo& info) -> bool { return CVarGetInteger("gFreecam", 0); }, "Freecam is Enabled" } },
         { DISABLE_FOR_FREE_CAM_OFF,
-          { [](disabledInfo& info) -> bool { return !CVarGetInteger("gFreecam", 0); }, "Free Cam is Disabled" } },
+          { [](disabledInfo& info) -> bool { return !CVarGetInteger("gFreecam", 0); }, "Freecam is Disabled" } },
+        { DISABLE_FOR_EDITOR_ON,
+          { [](disabledInfo& info) -> bool { return CVarGetInteger("gEditorEnabled", 0); }, "Editor is Enabled" } },
+        { DISABLE_FOR_EDITOR_OFF,
+          { [](disabledInfo& info) -> bool { return !CVarGetInteger("gEditorEnabled", 0); }, "Editor is Disabled" } },
         { DISABLE_FOR_DEBUG_MODE_OFF,
           { [](disabledInfo& info) -> bool { return !CVarGetInteger("gEnableDebugMode", 0); },
             "Debug Mode is Disabled" } },
