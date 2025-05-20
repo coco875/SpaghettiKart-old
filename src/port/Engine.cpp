@@ -183,11 +183,11 @@ GameEngine::GameEngine() {
                                     RESOURCE_FORMAT_XML, "TrackSections",
                                     static_cast<uint32_t>(MK64::ResourceType::TrackSection), 0);
     loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryBinaryTrackPathPointsV0>(),
-                                    RESOURCE_FORMAT_BINARY, "Waypoints",
-                                    static_cast<uint32_t>(MK64::ResourceType::Waypoints), 0);
+                                    RESOURCE_FORMAT_BINARY, "Paths",
+                                    static_cast<uint32_t>(MK64::ResourceType::Paths), 0);
     loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryXMLTrackPathPointsV0>(),
                                     RESOURCE_FORMAT_XML, "Paths",
-                                    static_cast<uint32_t>(MK64::ResourceType::Waypoints), 0);
+                                    static_cast<uint32_t>(MK64::ResourceType::Paths), 0);
     loader->RegisterResourceFactory(std::make_shared<MK64::ResourceFactoryBinaryActorSpawnDataV0>(),
                                     RESOURCE_FORMAT_BINARY, "SpawnData",
                                     static_cast<uint32_t>(MK64::ResourceType::SpawnData), 0);
