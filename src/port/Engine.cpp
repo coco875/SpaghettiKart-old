@@ -298,6 +298,9 @@ void GameEngine::Destroy() {
 #ifdef __SWITCH__
     Ship::Switch::Exit();
 #endif
+    GameUI::Destroy();
+    delete GameEngine::Instance;
+    GameEngine::Instance = nullptr;
 }
 
 bool ShouldClearTextureCacheAtEndOfFrame = false;
@@ -507,8 +510,9 @@ ImFont* GameEngine::CreateFontWithSize(float size, std::string fontPath) {
         initData->Type = static_cast<uint32_t>(RESOURCE_TYPE_FONT);
         initData->ResourceVersion = 0;
         initData->Path = fontPath;
+        auto file = Ship::Context::GetInstance()->GetResourceManager()->LoadFileProcess(fontPath);
         std::shared_ptr<Ship::Font> fontData = std::static_pointer_cast<Ship::Font>(
-            Ship::Context::GetInstance()->GetResourceManager()->LoadResource(fontPath, false, initData));
+            Ship::Context::GetInstance()->GetResourceManager()->GetResourceLoader()->LoadResource(fontPath, file, initData));
         font = mImGuiIo->Fonts->AddFontFromMemoryTTF(fontData->Data, fontData->DataSize, size);
     }
     // FontAwesome fonts need to have their sizes reduced by 2.0f/3.0f in order to align correctly
