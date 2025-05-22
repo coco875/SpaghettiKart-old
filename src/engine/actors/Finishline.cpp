@@ -6,6 +6,7 @@
 #include "engine/Actor.h"
 #include "World.h"
 #include "assets/common_data.h"
+#include "src/port/Game.h"
 
 extern "C" {
 #include "macros.h"

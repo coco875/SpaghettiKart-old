@@ -82,6 +82,10 @@ u32 World::PreviousCup() {
     return 0;
 }
 
+void World::SetCupIndex(size_t index) {
+    CupIndex = index;
+}
+
 void World::SetCup(Cup* cup) {
     if (cup) {
         CurrentCup = cup;
