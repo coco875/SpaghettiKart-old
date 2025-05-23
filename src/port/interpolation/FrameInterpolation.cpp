@@ -12,6 +12,9 @@ extern "C" {
 #include "math_util.h"
 #include "math_util_2.h"
 #include "render_player.h"
+
+extern Mat4* gInterpolationMatrix;
+void mtxf_translate(Mat4, Vec3f);
 }
 /*
 Frame interpolation.
