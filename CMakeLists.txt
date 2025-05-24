@@ -267,6 +267,9 @@ FetchContent_MakeAvailable(dr_libs)
 # Libultraship Integration                                                     #
 #==============================================================================#
 
+set(EXCLUDE_MPQ_SUPPORT ON)
+add_compile_definitions(EXCLUDE_MPQ_SUPPORT=1)
+
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/src
