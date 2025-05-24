@@ -414,7 +414,7 @@ if(USE_NETWORKING)
 endif()
 
 option(USE_STANDALONE "Build as a standalone executable" OFF)
-option(BUILD_STORMLIB "Build with StormLib support" OFF)
+set(BUILD_STORMLIB OFF CACHE BOOL "")
 
 option(BUILD_SM64 "Build with Super Mario 64 support" OFF)
 option(BUILD_SF64 "Build with Star Fox 64 support" OFF)
@@ -637,7 +637,7 @@ include(ExternalProject)
 ExternalProject_Add(TorchExternal
     PREFIX TorchExternal
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/torch
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/torch
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/torch -DBUILD_STORMLIB=OFF
 )
 
 ExternalProject_Get_Property(TorchExternal install_dir)
