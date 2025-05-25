@@ -17,35 +17,6 @@
 s32 D_802B91C0[2] = { 13, 13 };
 Vec3f D_802B91C8 = { 0.0f, 0.0f, 0.0f };
 
-// Mtx gIdentityMatrix = {
-//     toFixedPointMatrix(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0),
-// };
-
-// This functions looks similar to a segment of code from func_802A4A0C in skybox_and_splitscreen.c
-UNUSED s32 func_802B4F60(UNUSED s32 arg0, Vec3f arg1, UNUSED s32 arg2, UNUSED f32 arg3, UNUSED f32 arg4) {
-    Mat4 sp30;
-    f32 sp2C;
-    f32 sp28;
-    Vec3f sp1C;
-    vec3f_copy_return(sp1C, arg1);
-    sp28 = sp1C[0];
-    sp2C = sp1C[1];
-    // wut?
-    if (sp2C && sp2C) {};
-    sp2C = ((sp30[0][3] * sp28) + (sp30[1][3] * sp2C) + (sp30[2][3] * sp1C[2])) + sp30[3][3];
-    // double wut?
-    if (sp28 && sp28) {};
-    mtxf_translate_vec3f_mat4(sp1C, sp30);
-    if (0.0f >= sp2C) {
-        return 0;
-    } else {
-        return 1;
-    }
-}
-
-UNUSED void func_802B4FF0() {
-}
-
 /**
  * Inserts matrix into the rsp. Position, rotation and mode of where to render the next object and check number of
  * object already render Note that gMatrixObjectCount gets reset at the beginning of the game loop. So no cleanup needs
@@ -111,12 +82,6 @@ u32 func_802B5258(Vec3f arg0, Vec3s arg1) {
     return atan2s(temp_v1, temp_v2);
 }
 
-void vec3f_set(Vec3f arg0, f32 arg1, f32 arg2, f32 arg3) {
-    arg0[0] = arg1;
-    arg0[1] = arg2;
-    arg0[2] = arg3;
-}
-
 void vec3s_set(Vec3s arg0, s16 arg1, s16 arg2, s16 arg3) {
     arg0[0] = arg1;
     arg0[1] = arg2;
@@ -135,25 +100,10 @@ void vec3s_set(Vec3s arg0, s16 arg1, s16 arg2, s16 arg3) {
 #endif
 #endif
 
-void* vec3f_copy_return(Vec3f dest, Vec3f src) {
-    dest[0] = src[0];
-    dest[1] = src[1];
-    dest[2] = src[2];
-    //! @warning function returns address of local variable
-    return &dest;
-}
-
 void vec3s_copy(Vec3s dest, Vec3s src) {
     dest[0] = src[0];
     dest[1] = src[1];
     dest[2] = src[2];
-}
-
-UNUSED void* vec3f_set_return(Vec3f dest, f32 x, f32 y, f32 z) {
-    dest[0] = x;
-    dest[1] = y;
-    dest[2] = z;
-    return &dest;
 }
 
 // Copy mat1 to mat2

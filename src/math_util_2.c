@@ -16,6 +16,7 @@
 #include "port/Engine.h"
 #include "engine/Matrix.h"
 #include "port/interpolation/FrameInterpolation.h"
+#include <cglm/cglm.h>
 
 #pragma intrinsic(sqrtf)
 
@@ -52,12 +53,6 @@ UNUSED s32 func_80040EA4(s32* arg0, s32 arg1) {
         phi_v1 = 1;
     }
     return phi_v1;
-}
-
-void vec3f_copy(Vec3f dest, Vec3f arg1) {
-    dest[0] = arg1[0];
-    dest[1] = arg1[1];
-    dest[2] = arg1[2];
 }
 
 s32 f32_step_up_towards(f32* value, f32 target, f32 step) {
@@ -330,13 +325,6 @@ s32 f32_step_towards(f32* value, f32 target, f32 step) {
         }
     }
     return targetReached;
-}
-
-Vec3f* vec3f_set_xyz(Vec3f arg0, f32 arg1, f32 arg2, f32 arg3) {
-    arg0[0] = arg1;
-    arg0[1] = arg2;
-    arg0[2] = arg3;
-    return (Vec3f*) &arg0;
 }
 
 Vec3f* vec3f_normalize(Vec3f dest) {
@@ -943,17 +931,17 @@ UNUSED void mtxf_mult_third_column(Mat4 arg0, f32 arg1) {
 
 void set_transform_matrix(Mat4 dest, Vec3f orientationVector, Vec3f positionVector, u16 rotationAngle,
                           f32 scaleFactor) {
-    Vec3f sp44;
-    Vec3f sp38;
-    Vec3f sp2C;
-
+    Vec3f sp44 = {sins(rotationAngle), 0.0f, coss(rotationAngle)};
+    
     FrameInterpolation_RecordSetTransformMatrix(dest, orientationVector, positionVector, rotationAngle, scaleFactor);
-    vec3f_set_xyz(sp44, sins(rotationAngle), 0.0f, coss(rotationAngle));
     vec3f_normalize(orientationVector);
+    Vec3f sp38;
     vec3f_cross_product(sp38, orientationVector, sp44);
     vec3f_normalize(sp38);
+    Vec3f sp2C;
     vec3f_cross_product(sp2C, sp38, orientationVector);
     vec3f_normalize(sp2C);
+
     dest[0][0] = sp38[0] * scaleFactor;
     dest[0][1] = sp38[1] * scaleFactor;
     dest[0][2] = sp38[2] * scaleFactor;
