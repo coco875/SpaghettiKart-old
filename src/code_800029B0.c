@@ -233,17 +233,18 @@ void setup_race(void) {
     //     D_8015F8D0[1] = (f32) (gCurrentTrackPath->posY - 15);
     //     D_8015F8D0[2] = gCurrentTrackPath->posZ;
 
-    //     if (GetCourse() == GetToadsTurnpike()) {
-    //         D_8015F8D0[0] = (gIsMirrorMode != 0) ? gCurrentTrackPath->posX + 138.0f : gCurrentTrackPath->posX -
-    //         138.0f;
-    //     } else if (GetCourse() == GetWarioStadium()) {
-    //         D_8015F8D0[0] = (gIsMirrorMode != 0) ? gCurrentTrackPath->posX + 12.0f : gCurrentTrackPath->posX - 12.0f;
+    //     if (IsToadsTurnpike()) {
+    //         D_8015F8D0[0] = (gIsMirrorMode != 0) ? D_80164490->posX + 138.0f : D_80164490->posX - 138.0f;
+    //     } else if (IsWarioStadium()) {
+    //         D_8015F8D0[0] = (gIsMirrorMode != 0) ? D_80164490->posX + 12.0f : D_80164490->posX - 12.0f;
     //     } else {
     //         D_8015F8D0[0] = gCurrentTrackPath->posX;
     //     }
     // }
     if (!gDemoMode) {
-        func_800CA008(gPlayerCountSelection1 - 1, gCurrentCourseId + 4);
+        //! @warning this used to be gCurrentCourseId + 4
+        // Hopefully this is equivallent.
+        func_800CA008(gPlayerCountSelection1 - 1, GetCourseIndex() + 4);
         func_800CB2C4();
     }
 

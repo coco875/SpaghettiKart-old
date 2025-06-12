@@ -1097,7 +1097,7 @@ void regulate_cpu_speed(s32 playerId, f32 targetSpeed, Player* player) {
     if (!(player->effects & 0x80) && !(player->effects & 0x40) && !(player->effects & 0x20000) &&
         !(player->soundEffects & 0x400000) && !(player->soundEffects & 0x01000000) && !(player->soundEffects & 2) &&
         !(player->soundEffects & 4)) {
-        if (GetCourse() == GetPodiumCeremony()) {
+        if (IsPodiumCeremony()) {
             func_80007FA4(playerId, player, var_f2);
         } else if ((bStopAICrossing[playerId] == 1) && !(player->effects & (STAR_EFFECT | BOO_EFFECT))) {
             player_decelerate(player, 10.0f);
@@ -1162,7 +1162,7 @@ void regulate_cpu_speed(s32 playerId, f32 targetSpeed, Player* player) {
                 }
                 if (var_a1 != 1) {
                     if (var_f2 < targetSpeed) {
-                        if ((gDemoMode == 1) && (GetCourse() != GetPodiumCeremony())) {
+                        if ((gDemoMode == 1) && (!IsPodiumCeremony())) {
                             player_accelerate(player);
                         } else if (D_80163330[playerId] == 1) {
                             func_80007D04(playerId, player);
@@ -1471,15 +1471,15 @@ void update_player_path_completion(s32 playerId, Player* player) {
         gIsPlayerNewPathPoint = 1;
         update_player_completion(playerId);
     }
-    if (GetCourse() == GetPodiumCeremony()) {
+    if (IsPodiumCeremony()) {
         update_player_position_factor(playerId, sSomeNearestPathPoint, gPlayerPathIndex);
         return;
     }
     if ((sSomeNearestPathPoint < 0x14) || ((gPathCountByPathIndex[gPlayerPathIndex] - 0x14) < sSomeNearestPathPoint) ||
-        (GetCourse() == GetKalimariDesert())) {
+        (IsKalimariDesert())) {
         var_v1 = 0;
         var_t0 = 0;
-        if (GetCourse() == GetKalimariDesert()) {
+        if (IsKalimariDesert()) {
             D_801634EC = 0;
             if (player->effects & 0x200) {
                 D_801634EC = 1;
@@ -1533,7 +1533,7 @@ void update_player_path_completion(s32 playerId, Player* player) {
         }
     }
     gPreviousPlayerZ[playerId] = tempPos2;
-    if ((GetCourse() == GetYoshiValley()) && (gIsPlayerNewPathPoint == 1)) {
+    if ((IsYoshiValley()) && (gIsPlayerNewPathPoint == 1)) {
         yoshi_valley_cpu_path(playerId);
         if (((player->type & 0x4000) == 0) || (player->type & 0x1000)) {
             update_cpu_path_completion(playerId, player);
@@ -1695,9 +1695,9 @@ void update_player(s32 playerId) {
                 // func_80013054();
             }
             //}
-            if (GetCourse() == GetDkJungle()) {
+            if (IsDkJungle()) {
                 // handle_paddle_boats_interactions(player);
-            } else if (GetCourse() == GetToadsTurnpike()) {
+            } else if (IsToadsTurnpike()) {
                 handle_box_trucks_interactions(playerId, player);
                 handle_school_buses_interactions(playerId, player);
                 handle_tanker_trucks_interactions(playerId, player);
@@ -1708,11 +1708,11 @@ void update_player(s32 playerId) {
                 player->unk_044 &= ~0x0001;
             }
             update_player_path_completion(playerId, player);
-            if ((GetCourse() != GetPodiumCeremony()) && ((D_80163240[playerId] == 1) || (playerId == 0))) {
+            if ((!IsPodiumCeremony()) && ((D_80163240[playerId] == 1) || (playerId == 0))) {
                 set_places();
             }
             if (player->type & 0x1000) {
-                if ((gIsPlayerNewPathPoint == 1) && (GetCourse() != GetPodiumCeremony())) {
+                if ((gIsPlayerNewPathPoint == 1) && (!IsPodiumCeremony())) {
                     cpu_behaviour(playerId);
                 }
                 if ((playerId & 1) != (gIncrementUpdatePlayer & 1)) {
@@ -1729,11 +1729,11 @@ void update_player(s32 playerId) {
                         break;
                 }
                 D_801631E0[playerId] = 0;
-                if ((player->effects & 0x1000) && (GetCourse() != GetPodiumCeremony())) {
+                if ((player->effects & 0x1000) && (!IsPodiumCeremony())) {
                     D_801631E0[playerId] = 1;
                 }
-                if ((D_801646CC == 1) || (player->type & 0x800) || (GetCourse() == GetPodiumCeremony())) {
-                    if (GetCourse() != GetToadsTurnpike()) {
+                if ((D_801646CC == 1) || (player->type & 0x800) || (IsPodiumCeremony())) {
+                    if (!IsToadsTurnpike()) {
                         gPlayerTrackPositionFactorInstruction[playerId].target = 0.0f;
                     }
                     gPlayerTrackPositionFactorInstruction[playerId].unkC = 0.0f;
@@ -1755,9 +1755,9 @@ void update_player(s32 playerId) {
 
                 // Old vehicle draw method was here
 
-                if ((GetCourse() == GetYoshiValley()) || (GetCourse() == GetPodiumCeremony())) {
+                if ((IsYoshiValley()) || (IsPodiumCeremony())) {
                     gPlayerTrackPositionFactorInstruction[playerId].target = 0.0f;
-                } else if (GetCourse() == GetToadsTurnpike()) {
+                } else if (IsToadsTurnpike()) {
                     // update_player_track_position_factor_from_box_trucks(playerId);
                     // update_player_track_position_factor_from_buses(playerId);
                     // update_player_track_position_factor_from_tanker_truck(playerId);
@@ -1869,10 +1869,10 @@ void update_player(s32 playerId) {
                 }
                 gIsPlayerInCurve[playerId] = are_in_curve(playerId, sSomeNearestPathPoint);
                 determine_ideal_cpu_position_offset(playerId, sSomeNearestPathPoint);
-                if (GetCourse() != GetPodiumCeremony()) {
+                if (!IsPodiumCeremony()) {
                     if (gNumPathPointsTraversed[playerId] < 0xB) {
                         stackPadding1A = gCurrentNearestPathPoint;
-                        if ((gNumPathPointsTraversed[playerId] > 0) && (GetCourse() == GetToadsTurnpike())) {
+                        if ((gNumPathPointsTraversed[playerId] > 0) && (IsToadsTurnpike())) {
                             stackPadding1A += 0x14;
                             stackPadding1A %= gSelectedPathCount;
                             set_track_offset_position(stackPadding1A, 0.0f, 0);
@@ -1906,7 +1906,7 @@ void update_player(s32 playerId) {
                         }
                     }
                 }
-                if (GetCourse() == GetPodiumCeremony()) {
+                if (IsPodiumCeremony()) {
                     switch (D_80163410[playerId]) { /* switch 3; irregular */
                         case 3:                     /* switch 3 */
                             gOffsetPosition[0] = D_80163418[playerId];
@@ -2360,7 +2360,7 @@ s16 find_closest_path_point_track_section(f32 posX, f32 posY, f32 posZ, u16 trac
     considerWaypoint = &pathWaypoints[0];
     for (considerWaypointIndex = 0; considerWaypointIndex < pathWaypointCount;
          considerWaypointIndex++, considerWaypoint++) {
-        if ((considerWaypoint->trackSectionId == trackSectionId) || (GetCourse() == GetPodiumCeremony())) {
+        if ((considerWaypoint->trackSectionId == trackSectionId) || (IsPodiumCeremony())) {
             var_t1 = 1;
             x_dist = (f32) considerWaypoint->posX - posX;
             y_dist = (f32) considerWaypoint->posY - posY;
@@ -2526,7 +2526,7 @@ void tweak_path_index_wario_stadium(UNUSED f32 posX, f32 posY, UNUSED f32 posZ, 
     s16 var_v0;
 
     var_v0 = *waypointIndex;
-    if ((GetCourse() == GetWarioStadium()) && (var_v0 >= 0x475) && (var_v0 < 0x480) && (posY < 0.0f)) {
+    if ((IsWarioStadium()) && (var_v0 >= 0x475) && (var_v0 < 0x480) && (posY < 0.0f)) {
         var_v0 = 0x0398;
     }
     *waypointIndex = var_v0;
@@ -2730,11 +2730,11 @@ void determine_ideal_cpu_position_offset(s32 arg0, u16 arg1) {
     sp2C = cpu_track_position_factor(arg0);
     thing = arg1;
 
-    if (GetCourse() == GetPodiumCeremony()) {
+    if (IsPodiumCeremony()) {
         var_a2 = 1;
-    } else if (GetCourse() == GetToadsTurnpike()) {
+    } else if (IsToadsTurnpike()) {
         var_a2 = 7;
-    } else if (GetCourse() == GetYoshiValley()) {
+    } else if (IsYoshiValley()) {
     } else {
         if (temp_v1 < 6) {
             var_a2 = 8;
@@ -2972,11 +2972,11 @@ void set_bomb_kart_spawn_positions(void) {
 
     for (var_s3 = 0; var_s3 < NUM_BOMB_KARTS_VERSUS; var_s3++) {
         // bombKartSpawn = &gBombKartSpawns[gCurrentCourseId][var_s3];
-        if (GetCourse() == GetYoshiValley()) {
+        if (IsYoshiValley()) {
             startingXPos = bombKartSpawn->startingXPos;
             startingZPos = bombKartSpawn->startingZPos;
             startingYPos = spawn_actor_on_surface(startingXPos, 2000.0f, startingZPos);
-        } else if (GetCourse() == GetPodiumCeremony()) {
+        } else if (IsPodiumCeremony()) {
             temp_v0 = &gTrackPaths[3][bombKartSpawn->waypointIndex];
             startingXPos = temp_v0->posX;
             startingYPos = temp_v0->posY;
@@ -3078,7 +3078,7 @@ void func_8000DF8C(s32 bombKartId) {
         return;
     }
 
-    if (((bombKart->unk_4A != 1) || (GetCourse() == GetPodiumCeremony()))) {
+    if (((bombKart->unk_4A != 1) || (IsPodiumCeremony()))) {
         var_f22 = bombKart->bombPos[0];
         var_f20 = bombKart->bombPos[1];
         var_f24 = bombKart->bombPos[2];
@@ -3089,7 +3089,7 @@ void func_8000DF8C(s32 bombKartId) {
         var_s1 = bombKart->circleTimer;
         if ((sp7E != 0) && (sp7E != 4)) {
             if (1) {}
-            if (GetCourse() == GetPodiumCeremony()) {
+            if (IsPodiumCeremony()) {
                 if (D_8016347E == 1) {
                     var_v0 = gPlayerFour;
                     temp_f0 = var_f22 - var_v0->pos[0];
@@ -3113,7 +3113,7 @@ void func_8000DF8C(s32 bombKartId) {
                         if ((((temp_f0 * temp_f0) + (temp_f2 * temp_f2)) + (temp_f12 * temp_f12)) < 25.0f) {
                             sp7E = 4;
                             var_s1 = 0;
-                            if (GetCourse() == GetFrappeSnowland()) {
+                            if (IsFrappeSnowland()) {
                                 var_v0->soundEffects |= 0x01000000;
                             } else {
                                 var_v0->soundEffects |= 0x400000;
@@ -3530,7 +3530,7 @@ void init_players(void) {
         gPreviousAngleSteering[i] = 0;
         D_80162FF8[i] = 0;
         D_80163010[i] = 0;
-        if (GetCourse() != GetPodiumCeremony()) {
+        if (!IsPodiumCeremony()) {
             update_player_position_factor(i, 0, 0);
         }
         //! todo: @BUG this doesn't seem right. This variable is metadata.
@@ -3615,7 +3615,7 @@ void init_players(void) {
             }
         }
     }
-    if ((gDemoUseController == 1) && (GetCourse() != GetPodiumCeremony())) {
+    if ((gDemoUseController == 1) && (!IsPodiumCeremony())) {
         for (i = 0; i < NUM_PLAYERS; i++) {
             D_80163330[i] = 0;
         }
@@ -3699,7 +3699,7 @@ void load_track_path(s32 pathIndex) {
     if (CM_GetProps()->AIMaximumSeparation >= 1.0f) {
         pathDest = gTrackPaths[pathIndex];
         bInvalidPath = 1;
-        if (GetCourse() != GetPodiumCeremony()) {
+        if (!IsPodiumCeremony()) {
 
             TrackPathPoint* pathSrc = CM_GetProps()->PathTable2[pathIndex];
             if (pathSrc == NULL) {
@@ -3943,7 +3943,7 @@ void analyze_curved_path(s32 pathIndex) {
             } else {
                 break;
             }
-            if (gCurrentCourseId == COURSE_AWARD_CEREMONY) {
+            if (IsPodiumCeremony()) {
                 break;
             }
         }
@@ -3998,7 +3998,7 @@ s32 func_80011014(TrackPathPoint* pathDest, TrackPathPoint* path, s32 numPathPoi
     var_s0 = 0;
     temp_f20 = (f32) path[0].posX;
     temp_f22 = (f32) path[0].posZ;
-    var_f28 = func_80010F40(temp_f20, 2000.0f, temp_f22, gCurrentCourseId, 0);
+    var_f28 = func_80010F40(temp_f20, 2000.0f, temp_f22, 0, 0);
 
     for (i = 0; i < numPathPoints; i++) {
         point1 = &path[i % numPathPoints];
@@ -4033,10 +4033,10 @@ s32 func_80011014(TrackPathPoint* pathDest, TrackPathPoint* path, s32 numPathPoi
                 if (gIsMirrorMode) {
                     // temp_f12 = -temp_f24_2;
                     pathDest->posX = (s16) -temp_f24_2;
-                    var_f20_2 = func_80010FA0(-temp_f24_2, var_f28, x1_2, gCurrentCourseId, var_s0);
+                    var_f20_2 = func_80010FA0(-temp_f24_2, var_f28, x1_2, 0, var_s0);
                 } else {
                     pathDest->posX = (s16) temp_f24_2;
-                    var_f20_2 = func_80010FA0(temp_f24_2, var_f28, x1_2, gCurrentCourseId, var_s0);
+                    var_f20_2 = func_80010FA0(temp_f24_2, var_f28, x1_2, 0, var_s0);
                 }
 
                 pathDest->posZ = (s16) temp_f22;
@@ -4046,11 +4046,11 @@ s32 func_80011014(TrackPathPoint* pathDest, TrackPathPoint* path, s32 numPathPoi
                     var_f20_2 = var_f28;
                 } else {
 
-                    if (GetCourse() == GetRainbowRoad()) {
+                    if (IsRainbowRoad()) {
                         if (var_f20_2 < (var_f28 - 15.0)) {
                             var_f20_2 = (f32) var_f28 - 15.0;
                         }
-                    } else if (GetCourse() == GetWarioStadium()) {
+                    } else if (IsWarioStadium()) {
                         if ((var_s0 >= 1140) && (var_s0 <= 1152)) {
                             var_f20_2 = var_f28;
                         } else {
@@ -4058,7 +4058,7 @@ s32 func_80011014(TrackPathPoint* pathDest, TrackPathPoint* path, s32 numPathPoi
                                 var_f20_2 = (f32) (var_f28 - 4.0);
                             }
                         }
-                    } else if (GetCourse() == GetDkJungle()) {
+                    } else if (IsDkJungle()) {
                         if ((var_s0 > 204) && (var_s0 < 220)) {
                             var_f20_2 = var_f28;
                         } else {
@@ -4693,7 +4693,7 @@ void func_80013054(void) {
 
 void check_ai_crossing_distance(s32 playerId) {
     bStopAICrossing[playerId] = 0;
-    if (GetCourse() == GetKalimariDesert()) {
+    if (IsKalimariDesert()) {
         if ((!(D_801631E0[playerId] != 0)) ||
             (set_vehicle_render_distance_flags(gPlayers[playerId].pos, TRAIN_CROSSING_AI_DISTANCE, 0))) {
 
@@ -5889,7 +5889,7 @@ void func_80016C3C(UNUSED s32 playerId, UNUSED f32 arg1, s32 cameraId) {
         D_80164688[cameraId] = -0.1f;
     }
     D_80163DD8[cameraId] = 0;
-    if (GetCourse() == GetYoshiValley()) {
+    if (IsYoshiValley()) {
         D_80163DD8[cameraId] = random_int(4U);
         D_80164688[cameraId] = 0.0f;
     }
@@ -5963,8 +5963,7 @@ void func_80017054(Camera* camera, UNUSED Player* player, UNUSED s32 index, s32 
     sp56 = gNearestPathPointByCameraId[cameraId];
     gNearestPathPointByCameraId[cameraId] =
         func_8000D33C(camera->pos[0], camera->pos[1], camera->pos[2], gNearestPathPointByCameraId[cameraId], pathIndex);
-    // if (GetCourse() == GetYoshiValley()) {
-    if (gCurrentCourseId == 4) {
+    if (IsYoshiValley()) {
         if ((sp56 != gNearestPathPointByCameraId[cameraId]) && (gNearestPathPointByCameraId[cameraId] == 1)) {
             pathIndex = (D_80163DD8[cameraId] = random_int(4U));
             gNearestPathPointByCameraId[cameraId] = func_8000D33C(camera->pos[0], camera->pos[1], camera->pos[2],
@@ -6651,7 +6650,7 @@ void func_80019D2C(Camera* camera, Player* player, s32 arg2) {
     s32 nearestWaypoint;
 
     playerId = camera->playerId;
-    if ((gIncrementUpdatePlayer != 0) && (GetCourse() == GetLuigiRaceway())) {
+    if ((gIncrementUpdatePlayer != 0) && (IsLuigiRaceway())) {
         calculate_camera_up_vector(camera, arg2);
         nearestWaypoint = gNearestPathPointByPlayerId[playerId];
         if (((nearestWaypoint >= 0x65) && (nearestWaypoint < 0xFA)) ||
@@ -6796,7 +6795,7 @@ void func_8001A220(UNUSED s32 arg0, s32 cameraId) {
 }
 
 s32 func_8001A310(s32 waypoint, s32 arg1) {
-    if ((GetCourse() == GetBowsersCastle()) && (arg1 != 0) && (waypoint >= 0xE7) && (waypoint < 0x1C2)) {
+    if ((IsBowsersCastle()) && (arg1 != 0) && (waypoint >= 0xE7) && (waypoint < 0x1C2)) {
         arg1 = 0;
     }
     return arg1;
@@ -7627,7 +7626,7 @@ void func_8001BE78(void) {
 void func_8001C05C(void) {
     init_segment_racing();
     gCurrentCourseId = COURSE_AWARD_CEREMONY;
-    SetCourseByClass(GetPodiumCeremony());
+    SelectPodiumCeremony();
     D_8016347C = 0;
     D_8016347E = 0;
     D_80163480 = 0;
@@ -7700,7 +7699,7 @@ void func_8001C14C(void) {
 }
 
 void render_bomb_karts_wrap(s32 cameraId) {
-    if (GetCourse() == GetPodiumCeremony()) {
+    if (IsPodiumCeremony()) {
         if (gBombKarts[0].waypointIndex >= 16) {
             render_bomb_karts(PLAYER_FOUR);
         }

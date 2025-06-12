@@ -244,25 +244,25 @@ void PortMenu::AddSettings() {
                 .DefaultValue(1));
 #endif
 
-    // AddWidget(path, "Current FPS: %d", WIDGET_CVAR_SLIDER_INT)
-    //     .CVar("gInterpolationFPS")
-    //     .Callback([](WidgetInfo& info) {
-    //         int32_t defaultValue = std::static_pointer_cast<IntSliderOptions>(info.options)->defaultValue;
-    //         if (CVarGetInteger(info.cVar, defaultValue) == defaultValue) {
-    //             info.name = "Current FPS: Original (%d)";
-    //         } else {
-    //             info.name = "Current FPS: %d";
-    //         }
-    //     })
-    //     .PreFunc([](WidgetInfo& info) {
-    //         if (mPortMenu->disabledMap.at(DISABLE_FOR_MATCH_REFRESH_RATE_ON).active)
-    //             info.activeDisables.push_back(DISABLE_FOR_MATCH_REFRESH_RATE_ON);
-    //     })
-    //     .Options(IntSliderOptions().Tooltip(tooltip).Min(20).Max(maxFps).DefaultValue(20));
+    AddWidget(path, "Current FPS: %d", WIDGET_CVAR_SLIDER_INT)
+        .CVar("gInterpolationFPS")
+        .Callback([](WidgetInfo& info) {
+            int32_t defaultValue = std::static_pointer_cast<IntSliderOptions>(info.options)->defaultValue;
+            if (CVarGetInteger(info.cVar, defaultValue) == defaultValue) {
+                info.name = "Current FPS: Original (%d)";
+            } else {
+                info.name = "Current FPS: %d";
+            }
+        })
+        .PreFunc([](WidgetInfo& info) {
+            if (mPortMenu->disabledMap.at(DISABLE_FOR_MATCH_REFRESH_RATE_ON).active)
+                info.activeDisables.push_back(DISABLE_FOR_MATCH_REFRESH_RATE_ON);
+        })
+        .Options(IntSliderOptions().Tooltip(tooltip).Min(30).Max(maxFps).DefaultValue(30));
     AddWidget(path, "Match Refresh Rate", WIDGET_BUTTON)
         .Callback([](WidgetInfo& info) {
             int hz = Ship::Context::GetInstance()->GetWindow()->GetCurrentRefreshRate();
-            if (hz >= 20 && hz <= 360) {
+            if (hz >= 30 && hz <= 360) {
                 CVarSetInteger("gInterpolationFPS", hz);
                 Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
             }
@@ -372,21 +372,23 @@ void PortMenu::AddEnhancements() {
         .Options(CheckboxOptions().Tooltip("Disable wall collision."));
     AddWidget(path, "Min Height", WIDGET_CVAR_SLIDER_FLOAT)
         .CVar("gMinHeight")
-        .Options(FloatSliderOptions().Min(-50.0f).Max(50.0f).DefaultValue(0.0f)
-                     .Tooltip("When Disable Wall Collision are enable what is the minimal height you can get."));
+        .Options(FloatSliderOptions().Min(-50.0f).Max(50.0f).DefaultValue(0.0f).Tooltip(
+            "When Disable Wall Collision are enable what is the minimal height you can get."));
 
+#if not defined(__SWITCH__) and not defined(__WIIU__)
     path = { "Enhancements", "HM64 Lab", SECTION_COLUMN_1 };
     AddSidebarEntry("Enhancements", "HM64 Lab", 4);
     AddWidget(path, "Enable HM64 Labs", WIDGET_CVAR_CHECKBOX)
-    .CVar("gEditorEnabled")
-    .Callback([](WidgetInfo& info) {
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Tools")->ToggleVisibility();
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Scene Explorer")->ToggleVisibility();
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Content Browser")->ToggleVisibility();
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Track Properties")->ToggleVisibility();
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Properties")->ToggleVisibility();
-    })
-    .Options(UIWidgets::CheckboxOptions({{ .tooltip = "Edit the universe!"}}));
+        .CVar("gEditorEnabled")
+        .Callback([](WidgetInfo& info) {
+            Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Tools")->ToggleVisibility();
+            Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Scene Explorer")->ToggleVisibility();
+            Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Content Browser")->ToggleVisibility();
+            Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Track Properties")->ToggleVisibility();
+            Ship::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Properties")->ToggleVisibility();
+        })
+        .Options(UIWidgets::CheckboxOptions({ { .tooltip = "Edit the universe!" } }));
+#endif
 }
 
 #ifdef __SWITCH__
@@ -407,11 +409,11 @@ void PortMenu::AddDevTools() {
     WidgetPath path = { "Developer", "General", SECTION_COLUMN_1 };
 #ifdef __SWITCH__
     AddWidget(path, "Switch CPU Profile", WIDGET_CVAR_COMBOBOX)
-    .CVar("gSwitchPerfMode")
-    .Options(ComboboxOptions()
-        .Tooltip("Switches the CPU profile to a different one")
-        .ComboMap(switchCPUProfiles)
-        .DefaultIndex(Ship::SwitchProfiles::STOCK))
+        .CVar("gSwitchPerfMode")
+        .Options(ComboboxOptions()
+                     .Tooltip("Switches the CPU profile to a different one")
+                     .ComboMap(switchCPUProfiles)
+                     .DefaultIndex(Ship::SwitchProfiles::STOCK))
         .Callback([](WidgetInfo& info) { Ship::Switch::ApplyOverclock(); });
 #endif
     AddWidget(path, "Popout Menu", WIDGET_CVAR_CHECKBOX)
@@ -420,6 +422,17 @@ void PortMenu::AddDevTools() {
     AddWidget(path, "Debug Mode", WIDGET_CVAR_CHECKBOX)
         .CVar("gEnableDebugMode")
         .Options(CheckboxOptions().Tooltip("Enables Debug Mode."));
+    AddWidget(path, "Modify Interpolation Target FPS", WIDGET_CVAR_CHECKBOX)
+        .CVar("gModifyInterpolationTargetFPS")
+        .Options(CheckboxOptions().Tooltip("Enables Debug Mode."));
+    AddWidget(path, "Interpolation Target FPS", WIDGET_CVAR_SLIDER_INT)
+        .CVar("gInterpolationTargetFPS")
+        .PreFunc([](WidgetInfo& info) { info.isHidden = !CVarGetInteger("gModifyInterpolationTargetFPS", 0); })
+        .Options(IntSliderOptions()
+                     .Tooltip("Sets the target FPS for interpolation. When Modify Interpolation Target FPS are enable")
+                     .Min(15)
+                     .Max(360)
+                     .DefaultValue(60));
     AddWidget(path, "Render Collision", WIDGET_CVAR_CHECKBOX)
         .CVar("gRenderCollisionMesh")
         .Options(CheckboxOptions().Tooltip("Renders the collision mesh instead of the course mesh"));
