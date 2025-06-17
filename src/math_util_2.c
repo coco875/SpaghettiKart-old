@@ -579,6 +579,7 @@ UNUSED void mtxf_rotate_z_scale_x_y(Mat4 dest, u16 angle, f32 scale) {
 void mtxf_translation_x_y_rotate_z_scale_x_y(Mat4 dest, s32 x, s32 y, u16 angle, f32 scale) {
     f32 sin_theta = sins(angle);
     f32 cos_theta = coss(angle) * scale;
+    FrameInterpolation_RecordMatrixPosRotScaleXY(dest, x, y, angle, scale);
 
     dest[2][0] = 0.0f;
     dest[0][0] = cos_theta;
@@ -725,7 +726,7 @@ void func_80042330_portrait(s32 x, s32 y, u16 angle, f32 scale, s16 lapCount) {
     Mat4 matrix;
     // printf("panel %d %d %d\n", x, (s32)OTRGetDimensionFromLeftEdge(x), (s32)OTRGetDimensionFromLeftEdge(0));
 
-    if ((gHUDModes != 2) && (D_801657E2 == 0) || (CVarGetInteger("gImprovements", 0) == true)) {
+    if ((gHUDModes != 2) && (D_801657E2 == 0) || (CVarGetInteger("gBetterResultPortraits", 0) == true)) {
         if (x < (SCREEN_WIDTH / 2)) {
             x = (s32) OTRGetDimensionFromLeftEdge(x);
         } else {
