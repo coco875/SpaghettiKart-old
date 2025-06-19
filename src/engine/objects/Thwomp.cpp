@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "port/Game.h"
+#include "port/interpolation/FrameInterpolation.h"
 
 extern "C" {
 #include "macros.h"
@@ -137,8 +138,13 @@ void OThwomp::Tick60fps() { // func_80081210
         OThwomp::AddParticles(_objectIndex);
     }
 
+
+
     if (_idx == 0) {
         for (var_s4 = 0; var_s4 < gObjectParticle2_SIZE; var_s4++) {
+            // @port: Tag the transform.
+            FrameInterpolation_RecordOpenChild("Thwomp_part", (uintptr_t) var_s4);
+
             objectIndex = gObjectParticle2[var_s4];
             if (objectIndex == DELETED_OBJECT_ID) {
                 continue;
@@ -151,6 +157,9 @@ void OThwomp::Tick60fps() { // func_80081210
                 continue;
             }
             delete_object_wrapper(&gObjectParticle2[var_s4]);
+
+            // @port Pop the transform id.
+            FrameInterpolation_RecordCloseChild();
         }
     }
 }
