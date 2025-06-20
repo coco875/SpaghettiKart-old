@@ -4242,6 +4242,7 @@ void adjust_img_colour(s32 index, s32 screenSize, s32 r, s32 g, s32 b) {
 }
 
 u16* func_8009B8C4(u64* arg0) {
+    return arg0;
     UNUSED s32 pad[2];
     s32 offset;
     s32 found;
