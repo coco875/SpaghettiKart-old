@@ -4,6 +4,22 @@ cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 project(Spaghettify VERSION 0.1.0 LANGUAGES C CXX ASM)
 include(FetchContent)
 
+set(NATO_PHONETIC_ALPHABET
+  "Alfa" "Bravo" "Charlie" "Delta" "Echo" "Foxtrot" "Golf" "Hotel"
+  "India" "Juliett" "Kilo" "Lima" "Mike" "November" "Oscar" "Papa"
+  "Quebec" "Romeo" "Sierra" "Tango" "Uniform" "Victor" "Whiskey"
+  "Xray" "Yankee" "Zulu"
+)
+
+ Use the patch number to select the correct word
+list(GET NATO_PHONETIC_ALPHABET ${PATCH_INDEX} PROJECT_PATCH_WORD)
+
+# Get the patch version number from the project version
+math(EXPR PATCH_INDEX "${PROJECT_VERSION_PATCH}")
+
+set(PROJECT_BUILD_NAME "Alfredo ${PROJECT_PATCH_WORD}" CACHE STRING "" FORCE)
+set(PROJECT_TEAM "github.com/harbourmasters" CACHE STRING "" FORCE)
+
 if(APPLE)
   enable_language(OBJCXX)
 endif()
@@ -16,9 +32,9 @@ set(CMAKE_CXX_STANDARD 20 CACHE STRING "The C++ standard to use")
 set(CMAKE_C_STANDARD 11 CACHE STRING "The C standard to use")
 set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Spaghettify)
 set(PROJECT_TEAM "MegaMech")
-set(PROJECT_VERSION_MAJOR 1)
+set(PROJECT_VERSION_MAJOR 0)
 set(PROJECT_VERSION_MINOR 0)
-set(PROJECT_VERSION_PATCH 0)
+set(PROJECT_VERSION_PATCH 9)
 #add_compile_options(-fsanitize=address)
 #add_link_options(-fsanitize=address)
 
@@ -115,6 +131,8 @@ if (UNIX AND NOT APPLE)
 find_package(OpenGL REQUIRED)
 endif()
 
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/properties.h.in ${CMAKE_CURRENT_SOURCE_DIR}/properties.h @ONLY)
+
 # Include directories
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -188,6 +206,7 @@ file(GLOB_RECURSE ALL_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     "src/enhancements/freecam/*.h"
     "src/engine/*.cpp"
     "src/engine/*.h"
+    "Resource.rc"
 )
 
 list(APPEND ALL_FILES ${ALL_FILES_ROOT})
