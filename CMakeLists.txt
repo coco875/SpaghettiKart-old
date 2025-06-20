@@ -342,6 +342,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
             "NDEBUG"
         ">"
         "INCLUDE_GAME_PRINTF;"
+        "NOMINMAX"
         "UNICODE;"
         "_UNICODE;"
         "_CRT_SECURE_NO_WARNINGS;"
