@@ -11,7 +11,7 @@ set(NATO_PHONETIC_ALPHABET
   "Xray" "Yankee" "Zulu"
 )
 
- Use the patch number to select the correct word
+# Use the patch number to select the correct word
 list(GET NATO_PHONETIC_ALPHABET ${PATCH_INDEX} PROJECT_PATCH_WORD)
 
 # Get the patch version number from the project version
